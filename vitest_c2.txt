@@ -1,0 +1,686 @@
+
+ RUN  v4.1.0 c:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform
+      Running tests with seed "1774314572437"
+
+ ↓ tests/smoke/production-smoke.test.ts (7 tests | 7 skipped)
+ ✓ tests/integration/ApiEndToEnd.test.ts (2 tests) 6ms
+ ✓ tests/smoke.test.ts (1 test) 4ms
+ ✓ tests/unit/core/domain/event-intelligence/engine/stages/DependencyResolutionStage.test.ts (2 tests) 6ms
+ ✓ tests/unit/cache/CacheManager.test.ts (8 tests) 45ms
+ ✓ tests/unit/persistence/DataLoader.test.ts (7 tests) 78ms
+ ✓ tests/unit/core/domain/event-intelligence/engine/InferenceEngine.test.ts (2 tests) 10ms
+stderr | tests/integration/notifications/notification-pipeline.test.ts
+GoTrueClient@sb-localhost-auth-token:1 (2.100.0) 2026-03-24T01:09:36.087Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+ ❯ tests/integration/notifications/template-rendering.test.ts (7 tests | 3 failed) 25ms
+     × should register all 12 templates 8ms
+       ✓ should render without errors 0ms
+       ✓ should include required content in subject 0ms
+       × should include required content in HTML 3ms
+       ✓ should render without errors 1ms
+       ✓ should include required content in subject 1ms
+       × should include required content in HTML 7ms
+stderr | tests/integration/notifications/notification-pipeline.test.ts
+GoTrueClient@sb-localhost-auth-token:2 (2.100.0) 2026-03-24T01:09:36.140Z Multiple GoTrueClient instances detected in the same browser context. It is not an error, but this should be avoided as it may produce undefined behavior when used concurrently under the same storage key.
+
+ ↓ tests/integration/repositories/SupabaseOrderRepository.test.ts (4 tests | 4 skipped)
+stdout | tests/performance/benchmark.test.ts > Performance Benchmarks > should measure pricing calculation performance
+
+⚡ Calculated 10000 pricings in 13.77ms
+
+stdout | tests/performance/benchmark.test.ts > Performance Benchmarks > should handle 1000 concurrent reads efficiently
+
+⚡ Executed 1000 reads in 0.99ms
+
+stdout | tests/performance/benchmark.test.ts > Performance Benchmarks > should create 100 orders in < 100ms (in-memory)
+
+⚡ Created 100 orders in 2.23ms
+
+ ✓ tests/performance/benchmark.test.ts (3 tests) 27ms
+ ❯ tests/integration/notifications/notification-pipeline.test.ts (1 test | 1 failed) 12ms
+       × should send email to client when routed with correct payload 9ms
+ ❯ tests/integration/persistence/mapper-roundtrip.test.ts (3 tests | 2 failed) 17ms
+       ✓ should preserve all fields through toPersistence → toDomain 4ms
+       × should preserve pricing through toPersistence → toDomain 1ms
+       × should preserve items array through round-trip 9ms
+ ↓ tests/integration/complete-db-integration.test.ts (2 tests | 2 skipped)
+{"level":30,"time":1774314576422,"pid":18564,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","type":"command","msg":"AssignProviderToOrder started"}
+{"level":30,"time":1774314576425,"pid":18564,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","duration_ms":3.8,"success":true,"msg":"AssignProviderToOrder completed"}
+{"level":30,"time":1774314576426,"pid":18564,"hostname":"ZBOOK16","name":"dropservice","handler":"AttachQuotationToOrder","type":"command","msg":"AttachQuotationToOrder started"}
+{"level":30,"time":1774314576427,"pid":18564,"hostname":"ZBOOK16","name":"dropservice","handler":"AttachQuotationToOrder","duration_ms":0.3,"success":true,"msg":"AttachQuotationToOrder completed"}
+ ✓ tests/integration/business-flows/complete-order-cycle.test.ts (1 test) 13ms
+{"level":30,"time":1774314576457,"pid":38948,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateQuotation","type":"command","msg":"CreateQuotation started"}
+{"level":30,"time":1774314576462,"pid":38948,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateQuotation","duration_ms":6.33,"success":true,"msg":"CreateQuotation completed"}
+{"level":30,"time":1774314576463,"pid":38948,"hostname":"ZBOOK16","name":"dropservice","handler":"RejectQuotation","type":"command","msg":"RejectQuotation started"}
+{"level":30,"time":1774314576463,"pid":38948,"hostname":"ZBOOK16","name":"dropservice","handler":"RejectQuotation","duration_ms":0.61,"success":true,"msg":"RejectQuotation completed"}
+{"level":30,"time":1774314576464,"pid":38948,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateQuotation","type":"command","msg":"CreateQuotation started"}
+{"level":30,"time":1774314576465,"pid":38948,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateQuotation","duration_ms":0.25,"success":true,"msg":"CreateQuotation completed"}
+{"level":30,"time":1774314576467,"pid":38948,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateQuotation","type":"command","msg":"CreateQuotation started"}
+{"level":30,"time":1774314576467,"pid":38948,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateQuotation","duration_ms":0.18,"success":true,"msg":"CreateQuotation completed"}
+{"level":30,"time":1774314576468,"pid":38948,"hostname":"ZBOOK16","name":"dropservice","handler":"ApproveQuotation","type":"command","msg":"ApproveQuotation started"}
+{"level":30,"time":1774314576468,"pid":38948,"hostname":"ZBOOK16","name":"dropservice","handler":"ApproveQuotation","duration_ms":0.54,"success":true,"msg":"ApproveQuotation completed"}
+ ✓ tests/integration/business-flows/quotation-flow.test.ts (2 tests) 19ms
+ ✓ tests/integration/persistence/enriched-queries.test.ts (3 tests) 14ms
+stdout | tests/performance/dataloader-benchmarks.test.ts > DataLoader Performance Benchmarks > should demonstrate cache efficiency
+DataLoader Cache Duration (100 hits): 1ms
+
+ ✓ tests/integration/migration/post-migration-verification.test.ts (5 tests) 273ms
+stdout | tests/performance/dataloader-benchmarks.test.ts > DataLoader Performance Benchmarks > should demonstrate latency reduction by batching
+DataLoader Batch Duration: 77ms (vs ~2500ms serial)
+
+ ✓ tests/performance/dataloader-benchmarks.test.ts (2 tests) 100ms
+ ✓ tests/unit/core/domain/event-intelligence/engine/stages/BaseMappingStage.test.ts (2 tests) 6ms
+{"level":30,"time":1774314579023,"pid":23580,"hostname":"ZBOOK16","name":"test","component":"OutboxProcessor","msg":"Starting outbox processing cycle"}
+{"level":30,"time":1774314579037,"pid":23580,"hostname":"ZBOOK16","name":"test","component":"OutboxProcessor","msg":"Starting outbox processing cycle"}
+{"level":30,"time":1774314579035,"pid":23580,"hostname":"ZBOOK16","name":"test","component":"OutboxProcessor","msg":"No pending events found in outbox"}
+{"level":30,"time":1774314579038,"pid":23580,"hostname":"ZBOOK16","name":"test","component":"OutboxProcessor","msg":"Found 1 pending events to process"}
+ ✓ tests/integration/OutboxReliability.test.ts (2 tests) 23ms
+{"level":30,"time":1774314579194,"pid":43308,"hostname":"ZBOOK16","name":"dropservice","handler":"NotifyClientOnOrderUpdateHandler","type":"command","msg":"NotifyClientOnOrderUpdateHandler started"}
+{"level":30,"time":1774314579210,"pid":43308,"hostname":"ZBOOK16","name":"test","msg":"Persisting 1 events to outbox"}
+{"level":30,"time":1774314579195,"pid":43308,"hostname":"ZBOOK16","name":"dropservice","handler":"NotifyClientOnOrderUpdateHandler","duration_ms":2.93,"success":true,"msg":"NotifyClientOnOrderUpdateHandler completed"}
+ ❯ tests/integration/OrderNotificationFlow.test.ts (2 tests | 1 failed) 24ms
+     ✓ should persist event to outbox when published 3ms
+     × should trigger both email and webhook when notification handler is executed 19ms
+ ✓ tests/unit/core/domain/event-intelligence/engine/stages/QuantityScalingStage.test.ts (4 tests) 6ms
+ ↓ tests/integration/repositories/full-integration.test.ts (2 tests | 2 skipped)
+ ✓ tests/integration/security/rbac-enforcement.test.ts (4 tests) 6ms
+{"level":30,"time":1774314579366,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579368,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":3.41,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579368,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":30,"time":1774314579368,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":0.52,"success":true,"msg":"TransitionOrderState completed"}
+{"level":30,"time":1774314579369,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":40,"time":1774314579369,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":0.18,"error":"Illegal state transition attempted: CANCELLED -> IN_PRODUCTION","success":false,"msg":"TransitionOrderState failed"}
+{"level":30,"time":1774314579371,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579371,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.17,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579371,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":40,"time":1774314579371,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":0.11,"error":"Illegal state transition attempted: QUOTATION_PENDING -> COMPLETED","success":false,"msg":"TransitionOrderState failed"}
+{"level":30,"time":1774314579373,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579373,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.21,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579374,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"GetOrderById","type":"query","msg":"GetOrderById started"}
+{"level":30,"time":1774314579374,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"GetOrderById","duration_ms":0.24,"success":true,"msg":"GetOrderById completed"}
+{"level":30,"time":1774314579374,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":30,"time":1774314579375,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":0.11,"success":true,"msg":"TransitionOrderState completed"}
+{"level":30,"time":1774314579375,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":30,"time":1774314579375,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":0.13,"success":true,"msg":"TransitionOrderState completed"}
+{"level":30,"time":1774314579375,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":30,"time":1774314579375,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":0.13,"success":true,"msg":"TransitionOrderState completed"}
+{"level":30,"time":1774314579375,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":30,"time":1774314579375,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":0.09,"success":true,"msg":"TransitionOrderState completed"}
+{"level":30,"time":1774314579375,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":30,"time":1774314579375,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":0.08,"success":true,"msg":"TransitionOrderState completed"}
+{"level":30,"time":1774314579376,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":30,"time":1774314579376,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":0.12,"success":true,"msg":"TransitionOrderState completed"}
+{"level":30,"time":1774314579376,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":30,"time":1774314579376,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":0.1,"success":true,"msg":"TransitionOrderState completed"}
+{"level":30,"time":1774314579376,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"GetOrderById","type":"query","msg":"GetOrderById started"}
+{"level":30,"time":1774314579376,"pid":1620,"hostname":"ZBOOK16","name":"dropservice","handler":"GetOrderById","duration_ms":0.03,"success":true,"msg":"GetOrderById completed"}
+ ✓ tests/integration/business-flows/order-lifecycle.test.ts (3 tests) 18ms
+ ✓ tests/regression/sprint2-regression.test.ts (4 tests) 13ms
+{"level":30,"time":1774314579473,"pid":5312,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":30,"time":1774314579474,"pid":5312,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","type":"command","msg":"TransitionOrderState started"}
+{"level":30,"time":1774314579475,"pid":5312,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":0.51,"success":true,"msg":"TransitionOrderState completed"}
+{"level":30,"time":1774314579475,"pid":5312,"hostname":"ZBOOK16","name":"dropservice","handler":"TransitionOrderState","duration_ms":2.53,"success":true,"msg":"TransitionOrderState completed"}
+ ✓ tests/performance/concurrency-stress.test.ts (2 tests) 11ms
+stdout | tests/performance/v1-v2-comparison.test.ts > V1 vs V2 Performance Comparison > should benchmark concurrent request handling
+
+⚡ Concurrent Performance
+   Concurrency:  50
+   Total Time:   2.12ms
+   Avg per req:  0.04ms
+   Success:      50/50
+
+{"level":30,"time":1774314579492,"pid":39008,"hostname":"ZBOOK16","name":"dropservice","endpoint":"/api/orders","recommendation":"increase","v1Requests":100,"v2Requests":100,"msg":"Migration report generated"}
+stdout | tests/performance/v1-v2-comparison.test.ts > V1 vs V2 Performance Comparison > should generate valid migration report after benchmark
+
+📊 Migration Report
+   V1 Requests:  100
+   V1 Avg:       248ms
+   V1 P95:       293ms
+   V2 Requests:  100
+   V2 Avg:       143ms
+   V2 P95:       176ms
+   Latency Diff: -104ms
+   V2 Better:    true
+   Recommendation: increase
+
+stdout | tests/performance/v1-v2-comparison.test.ts > V1 vs V2 Performance Comparison > should measure v2 handler performance
+
+⚡ V2 Handler Performance
+   Iterations: 100
+   Average:    0.02ms
+   P50:        0.01ms
+   P95:        0.04ms
+   P99:        0.11ms
+   Min:        0.01ms
+   Max:        0.11ms
+
+ ✓ tests/performance/v1-v2-comparison.test.ts (3 tests) 14ms
+{"level":30,"time":1774314579558,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579560,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":3.94,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":2.11,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":2.01,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.98,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.93,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.88,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.83,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.82,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.79,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.74,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.69,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.67,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.67,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.66,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.65,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.64,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.63,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.63,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.6,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579562,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":1.59,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579565,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"AdminDashboard","type":"query","msg":"AdminDashboard started"}
+{"level":30,"time":1774314579565,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"AdminDashboard","duration_ms":0.57,"success":true,"msg":"AdminDashboard completed"}
+{"level":30,"time":1774314579567,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579567,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.3,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579570,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579570,"pid":26376,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.29,"success":true,"msg":"ListOrdersByClient completed"}
+ ✓ tests/performance/query-optimization-benchmark.test.ts (4 tests) 19ms
+{"level":30,"time":1774314579633,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":2.84,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.11,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.07,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.09,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.07,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579635,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579636,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.13,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579636,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579636,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579636,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579636,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.21,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579636,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579636,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.2,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579636,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579636,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.09,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.05,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.05,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.04,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.05,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.04,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.04,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.04,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.04,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.05,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.06,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.05,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.09,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579637,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.05,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.06,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.15,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.07,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.07,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.09,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579638,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.07,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.07,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.13,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.09,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.12,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579639,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.11,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.05,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.1,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.05,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.05,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.04,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.06,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.04,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579640,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579641,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.6,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579641,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579641,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.14,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579641,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579641,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.08,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579641,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","type":"query","msg":"ListOrdersByClient started"}
+{"level":30,"time":1774314579641,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"ListOrdersByClient","duration_ms":0.06,"success":true,"msg":"ListOrdersByClient completed"}
+{"level":30,"time":1774314579644,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579644,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.43,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.09,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.05,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.06,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.06,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.09,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.06,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579645,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.07,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.05,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.06,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579646,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.06,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+ ✓ tests/performance/handler-benchmarks.test.ts (2 tests) 22ms
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.11,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.02,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.05,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579647,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.02,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.05,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1774314579648,"pid":41060,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"success":true,"msg":"CreateOrder completed"}
+ ✓ tests/unit/cache/CacheKeyBuilder.test.ts (7 tests) 5ms
+ ✓ tests/unit/cache/CachedOrderRepository.test.ts (3 tests) 7ms
+stdout | tests/performance/cache-benchmarks.test.ts > Cache Performance Benchmarks > should scale prefix invalidation linearly
+Invalidation: 5000 entries in 1ms
+
+stdout | tests/performance/cache-benchmarks.test.ts > Cache Performance Benchmarks > should handle extremely low latency reads
+Read latency: 0ms per op (20ms total)
+
+stdout | tests/performance/cache-benchmarks.test.ts > Cache Performance Benchmarks > should handle high throughput writes
+Throughput: 3975511 ops/sec (3ms)
+
+ ✓ tests/performance/cache-benchmarks.test.ts (3 tests) 36ms
+{"level":30,"time":1774314580843,"pid":40196,"hostname":"ZBOOK16","name":"dropservice","configSessionId":"session-123","email":"e@e.com","msg":"Iniciando conversión a RFQ"}
+{"level":30,"time":1774314580845,"pid":40196,"hostname":"ZBOOK16","name":"dropservice","quoteSessionId":"quote-id-999","msg":"Conversión a RFQ completada con éxito"}
+{"level":30,"time":1774314580847,"pid":40196,"hostname":"ZBOOK16","name":"dropservice","configSessionId":"session-123","email":"esteban@test.com","msg":"Iniciando conversión a RFQ"}
+{"level":30,"time":1774314580847,"pid":40196,"hostname":"ZBOOK16","name":"dropservice","quoteSessionId":"quote-id-789","msg":"Conversión a RFQ completada con éxito"}
+ ✓ tests/unit/core/application/services/InferenceToRFQService.test.ts (2 tests) 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/integration/notifications/notification-pipeline.test.ts > Notification Pipeline — End-to-End Integration > Order Notifications > should send email to client when routed with correct payload
+TypeError: Cannot read properties of undefined (reading 'logger')
+ ❯ new WebhookDispatcher src/infrastructure/notifications/webhook/WebhookDispatcher.ts:32:24
+     30|     timeoutMs?: number;
+     31|   }) {
+     32|     this.logger = deps.logger.child({ component: 'WebhookDispatcher' }…
+       |                        ^
+     33|     this.metrics = deps.metrics;
+     34|     this.timeoutMs = deps.timeoutMs ?? 30_000;
+ ❯ tests/integration/notifications/notification-pipeline.test.ts:110:31
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/integration/notifications/template-rendering.test.ts > Template Rendering — Visual QA > should register all 12 templates
+AssertionError: expected undefined to be 12 // Object.is equality
+
+- Expected:
+12
+
++ Received:
+undefined
+
+ ❯ tests/integration/notifications/template-rendering.test.ts:17:26
+     15|
+     16|   it('should register all 12 templates', () => {
+     17|     expect(engine.count).toBe(12);
+       |                          ^
+     18|   });
+     19|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  tests/integration/notifications/template-rendering.test.ts > Template Rendering — Visual QA > Template: ORDER_CREATED_CLIENT > should include required content in HTML
+AssertionError: expected '<!DOCTYPE html>\n<html lang="es" dir=…' to contain '200,000'
+
+- Expected
++ Received
+
+- 200,000
++ <!DOCTYPE html>
++ <html lang="es" dir="ltr">
++ <head>
++   <meta charset="UTF-8" />
++   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++   <meta name="color-scheme" content="dark" />
++   <meta name="supported-color-schemes" content="dark" />
++   <title>🎉 Pedido #550e8400 creado exitosamente</title>
++   <style>
++     @media only screen and (max-width: 620px) {
++       .container { width: 100% !important; padding: 16px !important; }
++       .content { padding: 20px !important; }
++       .header { padding: 16px 20px !important; }
++       .cta-button { display: block !important; text-align: center !important; }
++     }
++   </style>
++ </head>
++ <body style="margin:0;padding:0;background-color:#050505;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
++   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#050505;">
++     <tr>
++       <td align="center" style="padding:24px 16px;">
++         <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="background-color:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);">
++           <div style="padding:20px;background:#0a0a0a;color:#fff;border-radius:12px;">
++     <h1 style="color:#6366f1;">Nuevo Pedido Creado</h1>
++     <p>Hola <strong>María García</strong>,</p>
++     <p>Tu pedido <strong>#550e8400</strong> ha sido recibido correctamente.</p>
++     <div style="background:rgba(255,255,255,0.05);padding:15px;border-radius:8px;">
++       <p>Tipo: Boda</p>
++       <p>Fecha: 15 de septiembre de 2026</p>
++     </div>
++   </div>
++           <tr>
++             <td style="padding:16px 32px;background-color:#080808;border-top:1px solid rgba(255,255,255,0.04);">
++               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
++                 <tr>
++                   <td style="color:#555;font-size:12px;line-height:18px;">
++                     <p style="margin:0;">DropService Platform &copy; 2026</p>
++                     <p style="margin:4px 0 0;">Este email fue enviado automáticamente. No respondas directamente.</p>
++                   </td>
++                 </tr>
++               </table>
++             </td>
++           </tr>
++         </table>
++       </td>
++     </tr>
++   </table>
++ </body>
++ </html>
+
+ ❯ tests/integration/notifications/template-rendering.test.ts:76:31
+     74|         const result = engine.resolve(testCase.id, testCase.vars);
+     75|         for (const expected of testCase.checks.html) {
+     76|           expect(result.html).toContain(expected);
+       |                               ^
+     77|         }
+     78|       });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  tests/integration/notifications/template-rendering.test.ts > Template Rendering — Visual QA > Template: QUOTATION_SENT_CLIENT > should include required content in HTML
+AssertionError: expected '<!DOCTYPE html>\n<html lang="es" dir=…' to contain 'Aprobar'
+
+- Expected
++ Received
+
+- Aprobar
++ <!DOCTYPE html>
++ <html lang="es" dir="ltr">
++ <head>
++   <meta charset="UTF-8" />
++   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
++   <meta name="color-scheme" content="dark" />
++   <meta name="supported-color-schemes" content="dark" />
++   <title>📄 Tu cotización está lista — Pedido #1a2b3c4d</title>
++   <style>
++     @media only screen and (max-width: 620px) {
++       .container { width: 100% !important; padding: 16px !important; }
++       .content { padding: 20px !important; }
++       .header { padding: 16px 20px !important; }
++       .cta-button { display: block !important; text-align: center !important; }
++     }
++   </style>
++ </head>
++ <body style="margin:0;padding:0;background-color:#050505;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;">
++   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#050505;">
++     <tr>
++       <td align="center" style="padding:24px 16px;">
++         <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="background-color:#0a0a0a;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.06);">
++           <div style="padding:20px;background:#0a0a0a;color:#fff;border-radius:12px;">
++     <h1 style="color:#10b981;">Cotización Lista</h1>
++     <p>Hola <strong>Ana Martínez</strong>,</p>
++     <p>Ya puedes revisar la cotización para tu pedido <strong>#1a2b3c4d</strong>.</p>
++     <h2 style="color:#10b981;">Total: $85,000 MXN</h2>
++   </div>
++           <tr>
++             <td style="padding:16px 32px;background-color:#080808;border-top:1px solid rgba(255,255,255,0.04);">
++               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
++                 <tr>
++                   <td style="color:#555;font-size:12px;line-height:18px;">
++                     <p style="margin:0;">DropService Platform &copy; 2026</p>
++                     <p style="margin:4px 0 0;">Este email fue enviado automáticamente. No respondas directamente.</p>
++                   </td>
++                 </tr>
++               </table>
++             </td>
++           </tr>
++         </table>
++       </td>
++     </tr>
++   </table>
++ </body>
++ </html>
+
+ ❯ tests/integration/notifications/template-rendering.test.ts:76:31
+     74|         const result = engine.resolve(testCase.id, testCase.vars);
+     75|         for (const expected of testCase.checks.html) {
+     76|           expect(result.html).toContain(expected);
+       |                               ^
+     77|         }
+     78|       });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  tests/integration/persistence/mapper-roundtrip.test.ts > Mapper Round-Trip — Data Integrity > QuotationMapper > should preserve pricing through toPersistence → toDomain
+Error: Cannot get error from a Success result
+ ❯ Success.getError src/core/shared/Result.ts:21:11
+     19|
+     20|   getError(): never {
+     21|     throw new Error('Cannot get error from a Success result')
+       |           ^
+     22|   }
+     23|
+ ❯ createTestQuotation tests/setup/test-factories.ts:119:63
+ ❯ tests/integration/persistence/mapper-roundtrip.test.ts:39:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  tests/integration/persistence/mapper-roundtrip.test.ts > Mapper Round-Trip — Data Integrity > QuotationMapper > should preserve items array through round-trip
+Error: Cannot get error from a Success result
+ ❯ Success.getError src/core/shared/Result.ts:21:11
+     19|
+     20|   getError(): never {
+     21|     throw new Error('Cannot get error from a Success result')
+       |           ^
+     22|   }
+     23|
+ ❯ createTestQuotation tests/setup/test-factories.ts:119:63
+ ❯ tests/integration/persistence/mapper-roundtrip.test.ts:59:24
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  tests/integration/OrderNotificationFlow.test.ts > OrderNotificationFlow Integration > should trigger both email and webhook when notification handler is executed
+AssertionError: expected "vi.fn()" to be called with arguments: [ ObjectContaining{…} ]
+
+Received:
+
+  1st vi.fn() call:
+
+  [
+-   ObjectContaining {
+-     "subject": StringContaining "order-456",
++   {
++     "html": "
++     <div style=\"font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;\">
++       <h2 style=\"color: #333;\">Actualización de tu pedido</h2>
++       <p>Hola <strong>Juan Perez</strong>,</p>
++       <p>Te informamos que tu pedido <strong>#order-45</strong> ha cambiado su estado a:</p>
++       <div style=\"background: #f4f4f4; padding: 15px; border-radius: 5px; font-size: 1.2em; text-align: center; margin: 20px 0;\">
++         <strong>DELIVERED</strong>
++       </div>
++       <p>Puedes ver más detalles en tu panel de cliente.</p>
++       <hr style=\"border: 0; border-top: 1px solid #eee; margin: 20px 0;\">
++       <p style=\"font-size: 0.8em; color: #888;\">Este es un mensaje automático, por favor no respondas a este correo.</p>
++     </div>
++   ",
++     "subject": "Actualización de pedido #order-45",
+      "to": "juan@example.com",
+    },
+  ]
+
+
+Number of calls: 1
+
+ ❯ tests/integration/OrderNotificationFlow.test.ts:71:35
+     69|
+     70|     expect(result.isSuccess()).toBe(true)
+     71|     expect(mockEmailService.send).toHaveBeenCalledWith(expect.objectCo…
+       |                                   ^
+     72|       to: 'juan@example.com',
+     73|       subject: expect.stringContaining('order-456')
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+
+ Test Files  4 failed | 26 passed | 4 skipped (34)
+      Tests  7 failed | 89 passed | 15 skipped (111)
+   Start at  22:09:32
+   Duration  8.29s (transform 4.33s, setup 7.13s, import 6.62s, tests 868ms, environment 78.56s)
+
+
+---STDERR---

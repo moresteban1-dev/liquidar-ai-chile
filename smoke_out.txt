@@ -1,0 +1,10 @@
+
+ RUN  v4.1.0 c:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform
+
+ ✓ tests/smoke.test.ts (1 test) 2ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  21:54:58
+   Duration  200ms (transform 20ms, setup 0ms, import 27ms, tests 2ms, environment 0ms)
+
