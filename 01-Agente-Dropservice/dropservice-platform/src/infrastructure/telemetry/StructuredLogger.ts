@@ -52,6 +52,15 @@ export class StructuredLogger {
     const errorObj = error instanceof Error ? error : new Error(String(error ?? 'Unknown error'))
     this.logger.error({ ...context, error: errorObj.message, stack: errorObj.stack }, message)
   }
+
+  fatal(message: string, error?: unknown, context?: Record<string, unknown>): void {
+    const errorObj = error instanceof Error ? error : new Error(String(error ?? 'Unknown error'))
+    this.logger.fatal({ ...context, error: errorObj.message, stack: errorObj.stack }, message)
+  }
+
+  withContext(context: Record<string, unknown>): StructuredLogger {
+    return this.child(context);
+  }
 }
 
 export const logger = new StructuredLogger()

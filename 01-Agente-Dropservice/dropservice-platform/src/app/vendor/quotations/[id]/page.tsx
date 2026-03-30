@@ -1,4 +1,5 @@
 import { fetchQuotationDetail } from '@/infrastructure/http/server-data/serverFetch';
+import { UserRole } from '@/core/domain/auth/UserRole';
 import { notFound, redirect } from 'next/navigation';
 import { getServerSession } from '@/infrastructure/http/server-data/getServerSession';
 import { VendorQuotationDetailClient } from './VendorQuotationDetailClient';
@@ -8,7 +9,7 @@ export default async function VendorQuotationDetailPage({ params }: { params: Pr
     const { id } = await params;
     const session = await getServerSession();
 
-    if (!session || session.role !== 'provider') {
+    if (!session || session.role !== UserRole.VENDOR) {
         redirect('/login');
     }
 

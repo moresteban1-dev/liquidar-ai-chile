@@ -15,7 +15,7 @@ export class ListQuotationsByOrderHandler extends InstrumentedHandler<{ orderId:
   protected async handle(query: { orderId: string }): Promise<Result<Quotation[], string>> {
     const quotationsResult = await this.quotationRepository.findByOrder(new UniqueEntityID(query.orderId))
     if (quotationsResult.isFailure()) return quotationsResult as any
-    return new Success(quotationsResult.value || [])
+    return new Success(quotationsResult.getValue() || [])
   }
 
   protected extractSpanAttributes(query: { orderId: string }) {

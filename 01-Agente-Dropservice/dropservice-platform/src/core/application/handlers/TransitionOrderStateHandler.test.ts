@@ -71,7 +71,7 @@ describe('TransitionOrderStateHandler', () => {
             const result = await handler.handle(command);
 
             expect(result.isFailure()).toBe(true);
-            expect(result.error.code).toBe('NOT_FOUND');
+            expect(result.getError().code).toBe('NOT_FOUND');
         });
     });
 });

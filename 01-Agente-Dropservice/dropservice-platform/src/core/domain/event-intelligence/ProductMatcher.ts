@@ -1,6 +1,6 @@
 import { InferredNeed } from './types';
 import { CatalogItem } from '../catalog/CatalogTypes';
-import { CatalogRepository } from '../../application/ports/CatalogRepository';
+import { ICatalogRepository as CatalogRepository } from '../../application/ports/ICatalogRepository';
 import { Logger } from '../ports/Logger';
 
 /**

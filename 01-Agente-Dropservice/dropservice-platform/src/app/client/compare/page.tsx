@@ -16,13 +16,9 @@ export const dynamic = 'force-dynamic';
  * /client/compare — Quotation comparison page.
  */
 export default async function ComparePage() {
-    let user;
-    try {
-        const auth = await requireRole(UserRole.CLIENT);
-        user = auth.user;
-    } catch {
-        redirect('/login');
-    }
+    const auth = await requireRole(UserRole.CLIENT);
+    if (auth.isFailure()) redirect('/login');
+    const { user } = auth.getValue();
 
     const quotations = await getClientQuotationsForComparison(user.id);
 

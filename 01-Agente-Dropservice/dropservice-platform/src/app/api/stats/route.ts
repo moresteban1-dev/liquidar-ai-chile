@@ -12,7 +12,9 @@ export const revalidate = 60; // Cache dashboard stats for 60 seconds
 
 export const GET = withAuth(async (_request, user) => {
     try {
-        const supabase = await createApiClient();
+        const clientResult = await createApiClient();
+    if (clientResult.isFailure()) return NextResponse.json({ error: clientResult.getError().message }, { status: 401 });
+    const supabase = clientResult.getValue();
 
         if (user.role !== UserRole.ADMIN) {
             return NextResponse.json({ error: 'Solo administradores' }, { status: 403 });

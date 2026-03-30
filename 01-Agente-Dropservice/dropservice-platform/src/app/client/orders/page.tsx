@@ -6,6 +6,7 @@
  */
 
 import { Suspense } from 'react';
+import { UserRole } from '@/core/domain/auth/UserRole';
 import { redirect } from 'next/navigation';
 import { getServerSession } from '@/infrastructure/http/server-data/getServerSession';
 import { fetchOrders } from '@/infrastructure/http/server-data/serverFetch';
@@ -41,7 +42,7 @@ interface Order {
 export default async function ClientOrdersPage({ searchParams }: PageProps) {
   const session = await getServerSession();
   if (!session) redirect('/login');
-  if (session.role !== 'client') redirect('/unauthorized');
+  if (session.role !== UserRole.CLIENT) redirect('/unauthorized');
 
   const params = await searchParams;
 
@@ -80,7 +81,7 @@ async function OrdersList({
   search,
 }: {
   userId: string;
-  role: 'admin' | 'provider' | 'client';
+  role: UserRole;
   page: number;
   status?: string | undefined;
   search?: string | undefined;

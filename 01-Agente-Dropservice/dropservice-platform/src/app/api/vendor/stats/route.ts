@@ -11,7 +11,9 @@ import { UserRole } from '@/core/domain/auth/UserRole';
 
 export const GET = withAuth(async (_request, user) => {
     try {
-        const supabase = await createApiClient();
+        const clientResult = await createApiClient();
+    if (clientResult.isFailure()) return NextResponse.json({ error: clientResult.getError().message }, { status: 401 });
+    const supabase = clientResult.getValue();
 
         if (user.role !== UserRole.VENDOR) {
             return NextResponse.json({ error: 'Solo proveedores' }, { status: 403 });

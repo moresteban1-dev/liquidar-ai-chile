@@ -5,7 +5,7 @@ import { QuotationPricing } from '../../../domain/aggregates/order/QuotationPric
 import { DomainError } from '@core/domain/errors/DomainError';
 import { UniqueEntityID } from '@core/shared/UniqueEntityID';
 import { IOrderRepository } from '@app/ports/IOrderRepository';
-import { IEventPublisher } from '@core/application/ports/events/IEventPublisher';
+import { IEventPublisher } from '@/core/application/ports/IEventPublisher';
 import { ICommand } from '@core/shared/ICommand';
 import { ICommandHandler } from '@core/shared/ICommandHandler';
 import { AppError } from '@core/shared/AppError';
@@ -64,13 +64,13 @@ export class CreateOrderHandler implements ICommandHandler<CreateOrderCommand, O
             // 1. Create Domain Entity (Pure Logic)
             const priceResult = Money.create(command.priceAmount, 'USD');
             if (priceResult.isFailure()) {
-                return fail(AppError.businessRule(`Invalid Price: ${priceResult.error}`));
+                return fail(AppError.businessRule(`Invalid Price: ${priceResult.getError()}`));
             }
 
             // Calculate pricing - Using the provider cost as base
             const pricingResult = QuotationPricing.fromSimpleMarkup(priceResult.unwrap(), 20, 19);
             if (pricingResult.isFailure()) {
-                return fail(AppError.businessRule(pricingResult.error));
+                return fail(AppError.businessRule(pricingResult.getError()));
             }
 
             const orderResult = Order.create({
@@ -85,14 +85,14 @@ export class CreateOrderHandler implements ICommandHandler<CreateOrderCommand, O
             });
 
             if (orderResult.isFailure()) {
-                return fail(AppError.businessRule(orderResult.error));
+                return fail(AppError.businessRule(orderResult.getError()));
             }
             const order = orderResult.unwrap();
 
             // 2. Persist (Side Effect)
             const savedResult = await this.orderRepository.save(order);
             if (savedResult.isFailure()) {
-                return fail(AppError.from(new Error(savedResult.error)));
+                return fail(AppError.from(new Error(savedResult.getError().message)));
             }
 
             // 3. Publish Events (Side Effect)
@@ -101,7 +101,7 @@ export class CreateOrderHandler implements ICommandHandler<CreateOrderCommand, O
               const publishResult = await this.eventPublisher.publishMany(events);
               if (publishResult.isFailure()) {
                   // We log but don't fail the whole use case as persistence was successful
-                  console.warn('Events published with partial failures:', publishResult.error);
+                  console.warn('Events published with partial failures:', publishResult.getError());
               }
             }
 
@@ -135,20 +135,20 @@ export class CreateOrderHandler implements ICommandHandler<CreateOrderCommand, O
             });
 
             if (orderResult.isFailure()) {
-                return fail(AppError.businessRule(orderResult.error));
+                return fail(AppError.businessRule(orderResult.getError()));
             }
             const order = orderResult.unwrap();
 
             const savedResult = await this.orderRepository.save(order);
             if (savedResult.isFailure()) {
-                return fail(AppError.from(new Error(savedResult.error)));
+                return fail(AppError.from(new Error(savedResult.getError().message)));
             }
 
             const events = order.pullDomainEvents();
             if (events.length > 0) {
                 const publishResult = await this.eventPublisher.publishMany(events);
                 if (publishResult.isFailure()) {
-                    console.warn('Events published with partial failures:', publishResult.error);
+                    console.warn('Events published with partial failures:', publishResult.getError());
                 }
             }
 

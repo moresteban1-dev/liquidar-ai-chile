@@ -60,7 +60,7 @@ describe('Quotation Workflow - Complete Lifecycle', () => {
       commandName: 'CreateOrderCommand'
     });
 
-    if (orderResult.isFailure()) throw new Error(orderResult.error.message);
+    if (orderResult.isFailure()) throw new Error(orderResult.getError().message);
     const order = orderResult.unwrap();
 
     order.transition('QUOTATION_PENDING');
@@ -86,7 +86,7 @@ describe('Quotation Workflow - Complete Lifecycle', () => {
       estimatedDeliveryDays: 3
     });
 
-    if (createResult.isFailure()) throw new Error(createResult.error.message);
+    if (createResult.isFailure()) throw new Error(createResult.getError().message);
     const quotation = createResult.unwrap();
 
     // Submit
@@ -185,7 +185,7 @@ describe('Quotation Workflow - Complete Lifecycle', () => {
         estimatedDeliveryDays: 3
       });
 
-      if (createResult2.isFailure()) throw new Error(createResult2.error.message);
+      if (createResult2.isFailure()) throw new Error(createResult2.getError().message);
       const quotation2 = createResult2.unwrap();
       
       await submitQuotationHandler.handle({

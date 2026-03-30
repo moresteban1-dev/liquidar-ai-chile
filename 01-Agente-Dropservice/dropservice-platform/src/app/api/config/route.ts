@@ -34,7 +34,9 @@ const DEFAULT_CONFIG = {
  */
 export const GET = withAuth(async (_request, user) => {
     try {
-        const supabase = await createApiClient();
+        const clientResult = await createApiClient();
+    if (clientResult.isFailure()) return NextResponse.json({ error: clientResult.getError().message }, { status: 401 });
+    const supabase = clientResult.getValue();
 
         if (user.role !== UserRole.ADMIN) {
             return NextResponse.json({ error: 'No autorizado / Solo administradores' }, { status: 403 });
@@ -94,7 +96,9 @@ export const GET = withAuth(async (_request, user) => {
  */
 export const PATCH = withAuth(async (request, user) => {
     try {
-        const supabase = await createApiClient();
+        const clientResult = await createApiClient();
+    if (clientResult.isFailure()) return NextResponse.json({ error: clientResult.getError().message }, { status: 401 });
+    const supabase = clientResult.getValue();
 
         if (user.role !== UserRole.ADMIN) {
             return NextResponse.json({ error: 'No autorizado' }, { status: 403 });

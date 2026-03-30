@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js'
 import { DomainEvent } from '@/core/shared/DomainEvent'
-import { IEventPublisher } from '@/core/application/ports/events/IEventPublisher'
+import { IEventPublisher } from '@/core/application/ports/IEventPublisher'
 import { Result, Success, Failure } from '@/core/shared/Result'
 import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger'
 

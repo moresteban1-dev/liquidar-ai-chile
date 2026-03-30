@@ -1,6 +1,6 @@
 import crypto from 'crypto'
 import { EventHandler } from '../EventProcessor'
-import { INotificationService } from '@/core/application/ports/services/INotificationService'
+import { INotificationService } from '@/core/application/ports/INotificationService';
 import { logger } from '@/infrastructure/telemetry/StructuredLogger'
 
 export class OrderCreatedNotificationHandler implements EventHandler {

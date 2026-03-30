@@ -16,7 +16,9 @@ export const GET = withAuth(async (_request, _user, params) => {
         const id = params?.id;
         if (!id) return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
 
-        const supabase = await createApiClient();
+        const clientResult = await createApiClient();
+    if (clientResult.isFailure()) return NextResponse.json({ error: clientResult.getError().message }, { status: 401 });
+    const supabase = clientResult.getValue();
 
         const { data: service, error } = await supabase
             .from('services')
@@ -45,7 +47,9 @@ export const PUT = withAuth(async (request, user, params) => {
         const id = params?.id;
         if (!id) return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
 
-        const supabase = await createApiClient();
+        const clientResult = await createApiClient();
+    if (clientResult.isFailure()) return NextResponse.json({ error: clientResult.getError().message }, { status: 401 });
+    const supabase = clientResult.getValue();
 
         if (user.role !== UserRole.ADMIN) {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -90,7 +94,9 @@ export const DELETE = withAuth(async (_request, user, params) => {
         const id = params?.id;
         if (!id) return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
 
-        const supabase = await createApiClient();
+        const clientResult = await createApiClient();
+    if (clientResult.isFailure()) return NextResponse.json({ error: clientResult.getError().message }, { status: 401 });
+    const supabase = clientResult.getValue();
 
         if (user.role !== UserRole.ADMIN) {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

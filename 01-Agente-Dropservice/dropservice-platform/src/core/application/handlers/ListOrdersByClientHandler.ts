@@ -3,6 +3,7 @@ import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IOrderRepository } from '@app/ports/IOrderRepository'
 import { Pagination, PaginatedResult } from '@/core/shared/Pagination'
 import { ListOrdersByClientQuery } from '../queries/ListOrdersByClientQuery'
+import { AppError } from '@/core/shared/AppError'
 
 export interface OrderSummaryDTO {
   id: string
@@ -24,7 +25,7 @@ export interface OrderSummaryDTO {
 }
 
 export class ListOrdersByClientHandler
-  extends InstrumentedHandler<ListOrdersByClientQuery, PaginatedResult<OrderSummaryDTO>> {
+  extends InstrumentedHandler<ListOrdersByClientQuery, PaginatedResult<OrderSummaryDTO>, AppError> {
 
   protected handlerName = 'ListOrdersByClient'
   protected operationType = 'query' as const
@@ -35,15 +36,15 @@ export class ListOrdersByClientHandler
 
   protected async handle(
     query: ListOrdersByClientQuery
-  ): Promise<Result<PaginatedResult<OrderSummaryDTO>, string>> {
+  ): Promise<Result<PaginatedResult<OrderSummaryDTO>, AppError>> {
     if (!query.clientId || query.clientId.trim().length === 0) {
-      return new Failure('Client ID is required')
+      return new Failure(AppError.validation('Client ID is required'))
     }
 
     const paginationResult = Pagination.create(query.pagination)
-    if (paginationResult.isFailure()) return new Failure(paginationResult.error)
+    if (paginationResult.isFailure()) return new Failure(AppError.internal(paginationResult.getError()))
 
-    const pagination = paginationResult.value
+    const pagination = paginationResult.getValue()
 
     const queryResult = await this.orderRepository.findByClientIdEnriched(
       query.clientId,
@@ -58,7 +59,7 @@ export class ListOrdersByClientHandler
 
     if (queryResult.isFailure()) return queryResult as any
 
-    const { orders, total } = queryResult.value
+    const { orders, total } = queryResult.getValue()
 
     const dtos: OrderSummaryDTO[] = orders.map(order => {
       const dto: OrderSummaryDTO = {

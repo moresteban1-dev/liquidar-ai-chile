@@ -5,10 +5,11 @@ import {
   OrderListResult,
   EnrichedOrderDetail,
   DashboardStats
-} from '@/core/application/ports/repositories/IOrderRepository';
+} from '@/core/application/ports/IOrderRepository';
 import { Order } from '@/core/domain/aggregates/order/Order';
 import { UniqueEntityID } from '@/core/shared/UniqueEntityID';
 import { Result } from '@/core/shared/Result';
+import { AppError } from '@/core/shared/AppError';
 import { CacheManager, CacheTTL } from '@/infrastructure/cache/CacheManager';
 import { CacheKeys, InvalidationPatterns } from '@/infrastructure/cache/CacheKeyBuilder';
 import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger';
@@ -36,7 +37,7 @@ export class CachedOrderRepository implements IOrderRepository {
 
   // ── Write Operations (delegate + invalidate) ────────
 
-  async save(order: Order): Promise<Result<void, string>> {
+  async save(order: Order): Promise<Result<void, AppError>> {
     const result = await this.inner.save(order);
     if (result.isFailure()) return result;
 
@@ -59,7 +60,7 @@ export class CachedOrderRepository implements IOrderRepository {
     return result;
   }
 
-  async delete(id: UniqueEntityID): Promise<Result<void, string>> {
+  async delete(id: UniqueEntityID): Promise<Result<void, AppError>> {
     // Get context for invalidation before deleting
     const orderResult = await this.inner.findById(id);
     
@@ -87,7 +88,7 @@ export class CachedOrderRepository implements IOrderRepository {
 
   // ── Read Operations (cache-through) ────────────────
 
-  async findById(id: UniqueEntityID): Promise<Result<Order | null, string>> {
+  async findById(id: UniqueEntityID): Promise<Result<Order | null, AppError>> {
     const key = CacheKeys.orderDetail(id.toString());
 
     return this.cache.getOrSet(
@@ -100,7 +101,7 @@ export class CachedOrderRepository implements IOrderRepository {
   async findByClientIdEnriched(
     clientId: string,
     options: OrderListOptions = {},
-  ): Promise<Result<OrderListResult, string>> {
+  ): Promise<Result<OrderListResult, AppError>> {
     const key = CacheKeys.orderList('client', clientId, {
       page: options.page,
       limit: options.limit,
@@ -125,7 +126,7 @@ export class CachedOrderRepository implements IOrderRepository {
   async findByProviderIdEnriched(
     providerId: string,
     options: OrderListOptions = {},
-  ): Promise<Result<OrderListResult, string>> {
+  ): Promise<Result<OrderListResult, AppError>> {
     const key = CacheKeys.orderList('provider', providerId, {
       page: options.page,
       limit: options.limit,
@@ -146,7 +147,7 @@ export class CachedOrderRepository implements IOrderRepository {
 
   async findAllEnriched(
     options: OrderListOptions = {},
-  ): Promise<Result<OrderListResult, string>> {
+  ): Promise<Result<OrderListResult, AppError>> {
     const key = CacheKeys.orderList('admin', 'all', {
       page: options.page,
       limit: options.limit,
@@ -168,7 +169,7 @@ export class CachedOrderRepository implements IOrderRepository {
     );
   }
 
-  async findByIdEnriched(id: string): Promise<Result<EnrichedOrderDetail | null, string>> {
+  async findByIdEnriched(id: string): Promise<Result<EnrichedOrderDetail | null, AppError>> {
     const key = CacheKeys.orderDetailEnriched(id);
 
     return this.cache.getOrSet(
@@ -181,7 +182,7 @@ export class CachedOrderRepository implements IOrderRepository {
     );
   }
 
-  async getDashboardStats(): Promise<Result<DashboardStats, string>> {
+  async getDashboardStats(): Promise<Result<DashboardStats, AppError>> {
     const key = CacheKeys.dashboardStats();
 
     return this.cache.getOrSet(
@@ -196,29 +197,29 @@ export class CachedOrderRepository implements IOrderRepository {
 
   // ── Other IOrderRepository methods (proxied) ──────
 
-  async query(options: OrderQueryOptions): Promise<Result<{ data: Order[]; total: number }, string>> {
+  async query(options: OrderQueryOptions): Promise<Result<{ data: Order[]; total: number }, AppError>> {
     // We could cache this but query filters are complex. 
     // Usually better to use the Enriched methods for hot paths.
     return this.inner.query(options);
   }
 
-  async findActiveOrdersByClient(clientId: UniqueEntityID): Promise<Result<Order[], string>> {
+  async findActiveOrdersByClient(clientId: UniqueEntityID): Promise<Result<Order[], AppError>> {
     return this.inner.findActiveOrdersByClient(clientId);
   }
 
-  async findByProvider(providerId: UniqueEntityID): Promise<Result<Order[], string>> {
+  async findByProvider(providerId: UniqueEntityID): Promise<Result<Order[], AppError>> {
     return this.inner.findByProvider(providerId);
   }
 
-  async findByState(state: string): Promise<Result<Order[], string>> {
+  async findByState(state: string): Promise<Result<Order[], AppError>> {
     return this.inner.findByState(state);
   }
 
-  async countActive(): Promise<Result<number, string>> {
+  async countActive(): Promise<Result<number, AppError>> {
     return this.inner.countActive();
   }
 
-  async createFromQuotation(quotationId: string, price: number): Promise<Result<string, string>> {
+  async createFromQuotation(quotationId: string, price: number): Promise<Result<string, AppError>> {
     const result = await this.inner.createFromQuotation(quotationId, price);
     if (result.isSuccess()) {
       // Invalidate dashboard/lists as a new order might have been created
@@ -226,5 +227,18 @@ export class CachedOrderRepository implements IOrderRepository {
       this.cache.delete(CacheKeys.dashboardStats());
     }
     return result;
+  }
+
+  async getOrderWithBrief(orderId: string): Promise<Result<{
+    id: string;
+    quotationId: string;
+    brief: string;
+    requirements?: string;
+  } | null, AppError>> {
+    return this.inner.getOrderWithBrief(orderId);
+  }
+
+  async updateInternalNotes(orderId: string, notes: string): Promise<Result<void, AppError>> {
+    return this.inner.updateInternalNotes(orderId, notes);
   }
 }

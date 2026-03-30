@@ -17,7 +17,7 @@ export class AdminDashboardHandler
     // 1. Get aggregated stats in a single RPC call (N+1 eliminated)
     const statsResult = await this.orderRepository.getDashboardStats()
     if (statsResult.isFailure()) return statsResult as any
-    const stats = statsResult.value
+    const stats = statsResult.getValue()
 
     // 2. Get recent orders with enriched data (JOINs used)
     const recentResult = await this.orderRepository.findAllEnriched({
@@ -26,7 +26,7 @@ export class AdminDashboardHandler
       sortOrder: 'desc'
     })
 
-    const recentOrders = recentResult.isSuccess() ? recentResult.value.orders.map(order => ({
+    const recentOrders = recentResult.isSuccess() ? recentResult.getValue().orders.map(order => ({
       id: order.orderId.toString(),
       clientId: order.clientId.toString(),
       state: order.state,
@@ -49,7 +49,7 @@ export class AdminDashboardHandler
       limit: 20
     })
 
-    const upcomingEvents = upcomingResult.isSuccess() ? upcomingResult.value.orders.map(order => ({
+    const upcomingEvents = upcomingResult.isSuccess() ? upcomingResult.getValue().orders.map(order => ({
       id: order.orderId.toString(),
       eventDate: order.eventDate.toISOString(),
       daysUntil: order.daysUntilEvent,

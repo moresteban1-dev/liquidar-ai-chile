@@ -9,7 +9,9 @@ import { withAuth } from '@/lib/api/with-auth';
 
 export const GET = withAuth(async (_request, user) => {
     try {
-        const supabase = await createApiClient();
+        const clientResult = await createApiClient();
+    if (clientResult.isFailure()) return NextResponse.json({ error: clientResult.getError().message }, { status: 401 });
+    const supabase = clientResult.getValue();
 
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

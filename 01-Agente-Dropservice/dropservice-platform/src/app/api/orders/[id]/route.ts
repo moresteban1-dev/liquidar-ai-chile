@@ -25,14 +25,14 @@ export const DELETE = withAuth(async (request, user, params) => {
     const result = await handler.execute({
       orderId,
       performedBy: user.id,
-      performedByRole: user.role.toLowerCase() as 'admin'|'client'|'provider',
+      performedByRole: (user.role.toLowerCase() === 'admin' ? 'admin' : 'client') as 'admin'|'client',
       reason
     })
 
     if (result.isFailure()) {
       return NextResponse.json(
         { error: result.getError() },
-        { status: result.getError().toLowerCase().includes('not found') ? 404 : 400 }
+        { status: result.getError().message.toLowerCase().includes('not found') ? 404 : 400 }
       )
     }
 

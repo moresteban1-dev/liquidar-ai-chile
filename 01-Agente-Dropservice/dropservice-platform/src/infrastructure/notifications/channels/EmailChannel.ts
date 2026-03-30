@@ -1,5 +1,5 @@
-import { INotificationChannel, ChannelNotification, ChannelResult, NotificationChannelType } from '@/core/application/ports/services/INotificationChannel';
-import { IEmailProvider, EmailRecipient } from '@/core/application/ports/services/IEmailProvider';
+import { INotificationChannel, ChannelNotification, ChannelResult, NotificationChannelType } from '@/core/application/ports/INotificationChannel';
+import { IEmailProvider, EmailRecipient } from '@/core/application/ports/IEmailProvider';
 import { TemplateEngine } from '../email/TemplateEngine';
 import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger';
 import { MetricsCollector } from '@/infrastructure/telemetry/MetricsCollector';
@@ -38,14 +38,21 @@ export class EmailChannel implements INotificationChannel {
 
     try {
       const templateVars: any = notification.payload || {};
-      const { subject, html } = await this.templateEngine.resolve(
+      const templateResult = await this.templateEngine.resolve(
         notification.eventType,
         templateVars
       );
 
+      if (templateResult.isFailure()) {
+        this.logger.error('Failed to resolve email template', new Error(templateResult.getError().message));
+        return { channel: 'email', status: 'failed', successCount: 0, failureCount: 1, results: [] };
+      }
+
+      const { subject, html } = templateResult.getValue();
+
       const emailRecipients: EmailRecipient[] = recipients
-        .filter(r => !!r.email)
-        .map(r => {
+        .filter((r: NotificationRecipient) => !!r.email)
+        .map((r: NotificationRecipient) => {
           const recipient: any = { email: r.email! };
           if (r.name) recipient.name = r.name;
           return recipient as EmailRecipient;

@@ -7,6 +7,7 @@
 
 import { Suspense } from 'react';
 import { notFound, redirect } from 'next/navigation';
+import { UserRole } from '@/core/domain/auth/UserRole';
 import { getServerSession } from '@/infrastructure/http/server-data/getServerSession';
 import { fetchOrderDetail } from '@/infrastructure/http/server-data/serverFetch';
 import { SkeletonOrderDetail } from '@/components/ui/skeleton';
@@ -40,7 +41,7 @@ export default async function OrderDetailPage({ params }: PageProps) {
   );
 }
 
-async function OrderContent({ orderId, userRole }: { orderId: string; userRole: string }) {
+async function OrderContent({ orderId, userRole }: { orderId: string; userRole: UserRole }) {
   const order = await fetchOrderDetail(orderId, userRole);
 
   if (!order) notFound();

@@ -199,26 +199,40 @@ export class SupabaseQuotationRepository implements IQuotationRepository {
     }
   }
 
-  async getAdminQuotationView(quotationId: string): Promise<Result<any, AppError>> {
-    try {
-        const { data, error } = await this.client
-            .from('quotations')
-            .select(`
-                *,
-                client:profiles!quotations_client_id_fkey(id, name, phone),
-                service:services(name, description, image_url),
-                requested_items:quotation_requested_items(*),
-                provider_items:quotation_provider_items(*),
-                client_items:quotation_client_items(*),
-                provider_bids(*, provider:profiles(*, provider_profiles(*)))
-            `)
-            .eq('id', quotationId)
-            .single();
+    async getAdminQuotationView(quotationId: string): Promise<Result<any, AppError>> {
+        try {
+            const { data, error } = await this.client
+                .from('quotations')
+                .select(`
+                    *,
+                    client:profiles!quotations_client_id_fkey(id, name, phone),
+                    service:services(name, description, image_url),
+                    requested_items:quotation_requested_items(*),
+                    provider_items:quotation_provider_items(*),
+                    client_items:quotation_client_items(*),
+                    provider_bids(*, provider:profiles(*, provider_profiles(*)))
+                `)
+                .eq('id', quotationId)
+                .single();
 
-        if (error || !data) return Result.fail(AppError.notFound('Cotización', quotationId));
-        return Result.ok(data);
-    } catch (error) {
-        return Result.fail(AppError.from(error));
+            if (error || !data) return Result.fail(AppError.notFound('Cotización', quotationId));
+            return Result.ok(data);
+        } catch (error) {
+            return Result.fail(AppError.from(error));
+        }
     }
-  }
+
+    async updateInternalNotes(quotationId: string, notes: string): Promise<Result<void, AppError>> {
+        try {
+            const { error } = await this.client
+                .from('quotations')
+                .update({ internal_notes: notes })
+                .eq('id', quotationId);
+
+            if (error) return Result.fail(AppError.internal(`Error al actualizar notas: ${error.message}`));
+            return Result.ok(undefined);
+        } catch (error) {
+            return Result.fail(AppError.from(error));
+        }
+    }
 }

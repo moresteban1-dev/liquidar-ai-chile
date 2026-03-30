@@ -16,9 +16,9 @@ export class AssignProviderToOrderHandler extends InstrumentedHandler<AssignProv
   protected async handle(command: AssignProviderToOrderCommand): Promise<Result<Order, string>> {
     const orderResult = await this.orderRepository.findById(new UniqueEntityID(command.orderId))
     if (orderResult.isFailure()) return orderResult as any
-    if (!orderResult.value) return new Failure('Order not found')
+    if (!orderResult.getValue()) return new Failure('Order not found')
 
-    const order = orderResult.value
+    const order = orderResult.getValue()
     const assignResult = order.assignProvider(new UniqueEntityID(command.providerId))
     if (assignResult.isFailure()) return assignResult as any
 

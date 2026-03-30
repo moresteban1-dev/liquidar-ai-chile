@@ -4,6 +4,7 @@ import { IOrderRepository } from '@app/ports/IOrderRepository'
 import { Pagination, PaginatedResult } from '@/core/shared/Pagination'
 import { OrderSummaryDTO } from './ListOrdersByClientHandler'
 import { PaginationParams } from '@/core/shared/Pagination'
+import { AppError } from '@/core/shared/AppError'
 
 export interface ListOrdersByProviderQuery {
   providerId: string
@@ -15,7 +16,7 @@ export interface ListOrdersByProviderQuery {
 }
 
 export class ListOrdersByProviderHandler
-  extends InstrumentedHandler<ListOrdersByProviderQuery, PaginatedResult<OrderSummaryDTO>> {
+  extends InstrumentedHandler<ListOrdersByProviderQuery, PaginatedResult<OrderSummaryDTO>, AppError> {
 
   protected handlerName = 'ListOrdersByProvider'
   protected operationType = 'query' as const
@@ -26,15 +27,15 @@ export class ListOrdersByProviderHandler
 
   protected async handle(
     query: ListOrdersByProviderQuery
-  ): Promise<Result<PaginatedResult<OrderSummaryDTO>, string>> {
+  ): Promise<Result<PaginatedResult<OrderSummaryDTO>, AppError>> {
     if (!query.providerId || query.providerId.trim().length === 0) {
-      return new Failure('Provider ID is required')
+      return new Failure(AppError.validation('Provider ID is required'))
     }
 
     const paginationResult = Pagination.create(query.pagination)
-    if (paginationResult.isFailure()) return new Failure(paginationResult.error)
+    if (paginationResult.isFailure()) return new Failure(AppError.internal(paginationResult.getError()))
 
-    const pagination = paginationResult.value
+    const pagination = paginationResult.getValue()
 
     const queryResult = await this.orderRepository.query({
       filters: {
@@ -50,7 +51,7 @@ export class ListOrdersByProviderHandler
 
     if (queryResult.isFailure()) return queryResult as any
 
-    const { data: orders, total } = queryResult.value
+    const { data: orders, total } = queryResult.getValue()
 
     const dtos: OrderSummaryDTO[] = orders.map(order => ({
       id: order.orderId.toString(),

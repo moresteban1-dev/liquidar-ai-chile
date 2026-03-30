@@ -1,5 +1,5 @@
 import { IQuotationRepository as QuotationRepository } from '@app/ports/IQuotationRepository';
-import { CatalogRepository } from '@app/ports/CatalogRepository';
+import { ICatalogRepository as CatalogRepository } from '@app/ports/ICatalogRepository';
 import { AIBrokerPort } from '@app/ports/AIBrokerPort';
 import { Result, ok, fail } from '@core/shared/Result';
 import { AppError } from '@core/shared/AppError';

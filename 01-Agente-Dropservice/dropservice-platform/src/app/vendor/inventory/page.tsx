@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { UserRole } from '@/core/domain/auth/UserRole';
 import InventoryDashboard from './components/InventoryDashboard';
 import InventoryTable from './components/InventoryTable';
 import AddItemModal from './components/AddItemModal';
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 export default async function InventoryPage() {
     const session = await getServerSession();
 
-    if (!session || session.role !== 'provider') {
+    if (!session || session.role !== UserRole.VENDOR) {
         redirect('/login');
     }
 

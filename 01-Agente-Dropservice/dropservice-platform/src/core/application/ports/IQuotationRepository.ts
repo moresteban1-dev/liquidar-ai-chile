@@ -47,5 +47,10 @@ export interface IQuotationRepository {
     /**
      * Retrieves a specialized view for the admin panel.
      */
-    getAdminQuotationView(quotationId: string): Promise<any>;
+    getAdminQuotationView(quotationId: string): Promise<Result<any, AppError>>;
+
+    /**
+     * Updates internal notes for a quotation.
+     */
+    updateInternalNotes(quotationId: string, notes: string): Promise<Result<void, AppError>>;
 }

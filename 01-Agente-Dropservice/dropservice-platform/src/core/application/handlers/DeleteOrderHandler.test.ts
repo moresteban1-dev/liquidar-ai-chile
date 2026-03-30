@@ -29,7 +29,7 @@ describe('DeleteOrderHandler', () => {
       priceAmount: 10000
     })
 
-    const order = result.value
+    const order = result.getValue()
 
     if (state === 'QUOTATION_PENDING') {
       order.transition('QUOTATION_PENDING')
@@ -98,7 +98,7 @@ describe('DeleteOrderHandler', () => {
       expect(result.isSuccess()).toBe(true)
 
       const found = await orderRepository.findById(order.orderId)
-      expect(found.value).toBeNull()
+      expect(found.getValue()).toBeNull()
     })
 
     it('should delete QUOTATION_PENDING order (auto-cancel)', async () => {
@@ -124,7 +124,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.error).toContain('PAYMENT_RECEIVED')
+      expect(result.getError()).toContain('PAYMENT_RECEIVED')
     })
 
     it('should reject deleting IN_PRODUCTION order', async () => {
@@ -137,7 +137,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.error).toContain('IN_PRODUCTION')
+      expect(result.getError()).toContain('IN_PRODUCTION')
     })
 
     it('should reject deleting COMPLETED order', async () => {
@@ -150,7 +150,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.error).toContain('COMPLETED')
+      expect(result.getError()).toContain('COMPLETED')
     })
 
     it('should reject non-existent order', async () => {
@@ -161,7 +161,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.error).toContain('not found')
+      expect(result.getError()).toContain('not found')
     })
   })
 
@@ -188,7 +188,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.error).toContain('DRAFT')
+      expect(result.getError()).toContain('DRAFT')
     })
 
     it('should reject client deleting others order', async () => {
@@ -201,7 +201,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.error).toContain('own orders')
+      expect(result.getError()).toContain('own orders')
     })
   })
 })

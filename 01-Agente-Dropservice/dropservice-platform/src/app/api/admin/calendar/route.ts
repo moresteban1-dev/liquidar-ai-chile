@@ -7,7 +7,9 @@ import { adminRoute, MiddlewareContext } from '@/infrastructure/http/middleware/
  * Aggregates confirmed orders to visualize equipment usage timeline.
  */
 export const GET = adminRoute(async (_req: NextRequest, _ctx: MiddlewareContext) => {
-    const supabase = await createApiClient();
+    const clientResult = await createApiClient();
+    if (clientResult.isFailure()) return NextResponse.json({ error: clientResult.getError().message }, { status: 401 });
+    const supabase = clientResult.getValue();
 
     // 1. Fetch confirmed orders with items
     const { data: orders, error } = await supabase

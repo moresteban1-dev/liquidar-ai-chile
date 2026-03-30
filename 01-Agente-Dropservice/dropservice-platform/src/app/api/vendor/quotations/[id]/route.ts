@@ -9,7 +9,9 @@ export const GET = withAuth(async (_request, user, params) => {
         const id = params?.id;
         if (!id) return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
 
-        const supabase = await createApiClient();
+        const clientResult = await createApiClient();
+    if (clientResult.isFailure()) return NextResponse.json({ error: clientResult.getError().message }, { status: 401 });
+    const supabase = clientResult.getValue();
 
         if (user.role !== UserRole.VENDOR) {
             return NextResponse.json({ error: 'No autorizado' }, { status: 401 });

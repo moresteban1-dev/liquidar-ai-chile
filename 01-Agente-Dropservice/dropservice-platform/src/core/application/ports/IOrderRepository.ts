@@ -106,4 +106,19 @@ export interface IOrderRepository {
   findByState(state: string): Promise<Result<Order[], AppError>>
   countActive(): Promise<Result<number, AppError>>
   createFromQuotation(quotationId: string, price: number): Promise<Result<string, AppError>>
+
+  /**
+   * Retrieves an order with its quotation brief for AI analysis.
+   */
+  getOrderWithBrief(orderId: string): Promise<Result<{
+    id: string;
+    quotationId: string;
+    brief: string;
+    requirements?: string;
+  } | null, AppError>>;
+
+  /**
+   * Updates internal notes for an order.
+   */
+  updateInternalNotes(orderId: string, notes: string): Promise<Result<void, AppError>>;
 }

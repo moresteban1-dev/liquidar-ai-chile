@@ -32,13 +32,9 @@ export const dynamic = 'force-dynamic';
  * active quotations with action alerts, and Suspense streaming.
  */
 export default async function ClientDashboardPage() {
-    let user;
-    try {
-        const auth = await requireRole(UserRole.CLIENT);
-        user = auth.user;
-    } catch {
-        redirect('/login');
-    }
+    const auth = await requireRole(UserRole.CLIENT);
+    if (auth.isFailure()) redirect('/login');
+    const { user } = auth.getValue();
 
     return (
         <div className="space-y-6">

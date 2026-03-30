@@ -302,4 +302,51 @@ export class SupabaseOrderRepository implements IOrderRepository {
       return Result.ok(data as string)
     })
   }
+
+  async getOrderWithBrief(orderId: string): Promise<Result<{
+    id: string;
+    quotationId: string;
+    brief: string;
+    requirements?: string;
+  } | null, AppError>> {
+    return instrumentedQuery('SELECT_BRIEF', 'orders', async () => {
+      const { data, error } = await this.client
+        .from('orders')
+        .select(`
+          id,
+          quotation_id,
+          deliverable_notes,
+          quotations(brief)
+        `)
+        .eq('id', orderId)
+        .single();
+
+      if (error) {
+        if (error.code === 'PGRST116') return Result.ok(null)
+        return Result.fail(AppError.internal(`Database error: ${error.message}`))
+      }
+
+      const quotations = data.quotations as any;
+      const brief = Array.isArray(quotations) ? quotations[0]?.brief : (quotations?.brief || '');
+
+      return Result.ok({
+        id: data.id,
+        quotationId: data.quotation_id,
+        brief: brief,
+        requirements: data.deliverable_notes
+      })
+    })
+  }
+
+  async updateInternalNotes(orderId: string, notes: string): Promise<Result<void, AppError>> {
+    return instrumentedQuery('UPDATE_NOTES', 'orders', async () => {
+      const { error } = await this.client
+        .from('orders')
+        .update({ internal_notes: notes })
+        .eq('id', orderId)
+
+      if (error) return Result.fail(AppError.internal(`Database error: ${error.message}`))
+      return Result.ok(undefined)
+    })
+  }
 }

@@ -1,4 +1,5 @@
 import { Result } from '@core/shared/Result'
+import { AppError } from '@core/shared/AppError'
 import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IQuotationRepository } from '@app/ports/IQuotationRepository'
 import { IDomainEventBus } from '@app/ports/IDomainEventBus'
@@ -15,19 +16,21 @@ export class SendQuotationToClientHandler extends InstrumentedHandler<SendQuotat
     private readonly eventBus: IDomainEventBus
   ) { super() }
 
-  protected async handle(command: SendQuotationToClientCommand): Promise<Result<Quotation, string>> {
+  public async handle(
+    command: SendQuotationToClientCommand,
+  ): Promise<Result<Quotation, AppError>> {
     const quotationRes = await this.quotationRepository.findById(new UniqueEntityID(command.quotationId))
     if (quotationRes.isFailure()) return Result.fail(quotationRes.getError())
     
     const quotation = quotationRes.getValue()
-    if (!quotation) return Result.fail('Cotización no encontrada')
+    if (!quotation) return Result.fail(AppError.notFound('Cotización', command.quotationId))
 
     if (command.adminNotes) {
       quotation.addAdminNotes(command.adminNotes)
     }
 
     const sendRes = quotation.sendToClient()
-    if (sendRes.isFailure()) return Result.fail(sendRes.getError())
+    if (sendRes.isFailure()) return Result.fail(AppError.validation(sendRes.getError()))
 
     const saveResult = await this.quotationRepository.save(quotation)
     if (saveResult.isFailure()) return Result.fail(saveResult.getError())

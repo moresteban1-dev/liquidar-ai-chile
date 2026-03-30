@@ -1,6 +1,6 @@
 // src/infrastructure/notifications/channels/WebhookChannel.ts
 
-import { INotificationChannel, ChannelNotification, ChannelResult, NotificationChannelType } from '@/core/application/ports/services/INotificationChannel';
+import { INotificationChannel, ChannelNotification, ChannelResult, NotificationChannelType } from '@/core/application/ports/INotificationChannel';
 import { WebhookDispatcher, WebhookConfig } from '../webhook/WebhookDispatcher';
 import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger';
 import { createClient } from '@supabase/supabase-js';

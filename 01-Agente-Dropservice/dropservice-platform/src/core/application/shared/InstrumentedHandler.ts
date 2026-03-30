@@ -2,8 +2,9 @@ import { Result } from '@/core/shared/Result'
 import { withSpan } from '@/infrastructure/telemetry/Tracer'
 import { logger } from '@/infrastructure/telemetry/StructuredLogger'
 import { metricsCollector } from '@/infrastructure/telemetry/MetricsCollector'
+import { AppError } from '@/core/shared/AppError'
 
-export abstract class InstrumentedHandler<TCommand, TResult, TError = string> {
+export abstract class InstrumentedHandler<TCommand, TResult, TError = AppError> {
   protected abstract handlerName: string
   protected abstract operationType: 'command' | 'query'
 
@@ -36,7 +37,7 @@ export abstract class InstrumentedHandler<TCommand, TResult, TError = string> {
 
           } else {
             const error = result.getError()
-            const errorMessage = typeof error === 'string' ? error : (error as any).message || 'Unknown error'
+            const errorMessage = (error instanceof AppError) ? error.message : (typeof error === 'string' ? error : (error as any).message || 'Unknown error')
             
             logger.warn(`${this.handlerName} failed`, {
               handler: this.handlerName,

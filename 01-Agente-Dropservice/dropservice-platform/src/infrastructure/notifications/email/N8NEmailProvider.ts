@@ -1,6 +1,6 @@
 // src/infrastructure/notifications/email/N8NEmailProvider.ts
 
-import { IEmailProvider, EmailSendOptions, EmailResult } from '@/core/application/ports/services/IEmailProvider';
+import { IEmailProvider, EmailSendOptions, EmailResult } from '@/core/application/ports/IEmailProvider';
 import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger';
 import { MetricsCollector } from '@/infrastructure/telemetry/MetricsCollector';
 
