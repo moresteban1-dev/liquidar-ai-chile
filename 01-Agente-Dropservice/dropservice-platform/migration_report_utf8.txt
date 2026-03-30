@@ -1,0 +1,135 @@
+﻿ÔòöÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòù
+Ôòæ  ­ƒöä MIGRACI├ôN DE ESTADOS: Spanish ÔåÆ English      Ôòæ
+Ôòæ  Modo: DRY RUN (preview)             Ôòæ
+ÔòÜÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòØ
+
+­ƒÆí Ejecutar con --apply para aplicar cambios realmente
+
+­ƒôé Archivos a escanear: 737
+
+­ƒôä src\app\admin\finance\page.tsx
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (1x)
+
+­ƒôä src\app\admin\orders\AdminOrdersClient.tsx
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+
+­ƒôä src\app\admin\page.tsx
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+
+­ƒôä src\app\api\admin\calendar\route.ts
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (1x)
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (1x)
+
+­ƒôä src\app\api\admin\stats\finance\route.ts
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (1x)
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (1x)
+
+­ƒôä src\app\api\client\stats\route.ts
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (1x)
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (2x)
+
+­ƒôä src\app\api\orders\[id]\transition\route.ts
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (3x)
+
+­ƒôä src\app\api\vendor\stats\route.ts
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (2x)
+
+­ƒôä src\app\api\webhooks\payments\callback\route.ts
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (2x)
+   Ô£Å´©Å  APROBADA ÔåÆ APPROVED (1x)
+
+­ƒôä src\app\client\orders\ClientOrdersClient.tsx
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (2x)
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (2x)
+
+­ƒôä src\app\client\orders\OrderFilters.tsx
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (1x)
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (1x)
+
+­ƒôä src\app\client\orders\[id]\page.tsx
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (1x)
+
+­ƒôä src\app\client\quotations\[id]\page.tsx
+   Ô£Å´©Å  APROBADA ÔåÆ APPROVED (2x)
+
+­ƒôä src\app\vendor\orders\VendorOrdersClient.tsx
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+
+­ƒôä src\app\vendor\orders\[id]\page.tsx
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+
+­ƒôä src\app\vendor\quotations\[id]\VendorQuotationDetailClient.tsx
+   Ô£Å´©Å  ENVIADA ÔåÆ SENT_TO_CLIENT (2x)
+
+­ƒôä src\components\admin\orders\OrdersTable.tsx
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (1x)
+
+­ƒôä src\components\dashboard\client\recent-quotes.tsx
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+   Ô£Å´©Å  APROBADA ÔåÆ APPROVED (1x)
+
+­ƒôä src\core\application\services\PdfService.ts
+   Ô£Å´©Å  APROBADA ÔåÆ APPROVED (1x)
+
+­ƒôä src\core\domain\entities\Order.ts
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (1x)
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (1x)
+   Ô£Å´©Å  REEMBOLSADA ÔåÆ REFUNDED (1x)
+
+­ƒôä src\core\types.ts
+   Ô£Å´©Å  RECHAZADA ÔåÆ REJECTED (1x)
+
+­ƒôä src\lib\dashboard\admin-data.service.ts
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (1x)
+
+­ƒôä src\lib\order-fsm.test.ts
+   Ô£Å´©Å  PENDIENTE_PAGO ÔåÆ PENDING_PAYMENT (3x)
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (1x)
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (1x)
+
+­ƒôä src\lib\order-fsm.ts
+   Ô£Å´©Å  PENDIENTE_PAGO ÔåÆ PENDING_PAYMENT (2x)
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (2x)
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (2x)
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (1x)
+   Ô£Å´©Å  CANCELADA ÔåÆ CANCELLED (3x)
+   Ô£Å´©Å  REEMBOLSADA ÔåÆ REFUNDED (2x)
+   Ô£Å´©Å  EN_DISPUTA ÔåÆ DISPUTED (8x)
+
+­ƒôä src\lib\quotation-fsm.ts
+   Ô£Å´©Å  APROBADA ÔåÆ APPROVED (3x)
+   Ô£Å´©Å  RECHAZADA ÔåÆ REJECTED (2x)
+
+­ƒôä src\lib\types.ts
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (2x)
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (2x)
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (1x)
+   Ô£Å´©Å  REEMBOLSADA ÔåÆ REFUNDED (1x)
+   Ô£Å´©Å  PENDIENTE_REVISION ÔåÆ PENDING_REVIEW (1x)
+   Ô£Å´©Å  APROBADA ÔåÆ APPROVED (1x)
+   Ô£Å´©Å  RECHAZADA ÔåÆ REJECTED (1x)
+
+­ƒôä src\types\order.ts
+   Ô£Å´©Å  PENDIENTE_PAGO ÔåÆ PENDING_PAYMENT (2x)
+   Ô£Å´©Å  PAGADA ÔåÆ PAID (5x)
+   Ô£Å´©Å  ENTREGADA ÔåÆ DELIVERED (4x)
+   Ô£Å´©Å  COMPLETADA ÔåÆ COMPLETED (2x)
+   Ô£Å´©Å  CANCELADA ÔåÆ CANCELLED (2x)
+   Ô£Å´©Å  REEMBOLSADA ÔåÆ REFUNDED (2x)
+   Ô£Å´©Å  EN_DISPUTA ÔåÆ DISPUTED (2x)
+
+ÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+­ƒôè Resumen:
+   Archivos escaneados:  737
+   Archivos modificados: 27
+   Total reemplazos:     106
+
+­ƒÆí Para aplicar: npx tsx scripts/migrate-statuses.ts --apply

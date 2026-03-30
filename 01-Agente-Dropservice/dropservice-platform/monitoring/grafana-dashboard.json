@@ -1,0 +1,57 @@
+{
+  "dashboard": {
+    "title": "Dropservice Platform - Production",
+    "tags": ["production", "dropservice"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "title": "Request Rate (RPM)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total[5m])) * 60",
+            "legendFormat": "Requests per minute"
+          }
+        ]
+      },
+      {
+        "title": "API Latency (P95)",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "P95 Latency"
+          }
+        ]
+      },
+      {
+        "title": "Error Rate",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "sum(rate(http_requests_total{status=~\"5..\"}[5m])) / sum(rate(http_requests_total[5m]))",
+            "legendFormat": "Error rate"
+          }
+        ]
+      },
+      {
+        "title": "Business Metrics",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "sum(increase(orders_created_total[1h]))",
+            "legendFormat": "Orders (last hour)"
+          },
+          {
+            "expr": "sum(increase(quotations_sent_total[1h]))",
+            "legendFormat": "Quotations sent"
+          },
+          {
+            "expr": "sum(increase(payments_received_total[1h]))",
+            "legendFormat": "Payments received"
+          }
+        ]
+      }
+    ]
+  }
+}

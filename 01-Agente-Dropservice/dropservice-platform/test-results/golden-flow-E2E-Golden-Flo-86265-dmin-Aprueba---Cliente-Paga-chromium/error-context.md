@@ -1,0 +1,73 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - link "DS Dropservice" [ref=e5] [cursor=pointer]:
+        - /url: /client
+        - generic [ref=e7]: DS
+        - generic [ref=e8]: Dropservice
+      - navigation [ref=e9]:
+        - link "Dashboard" [ref=e10] [cursor=pointer]:
+          - /url: /client
+          - img [ref=e11]
+          - text: Dashboard
+        - link "Explorar" [ref=e16] [cursor=pointer]:
+          - /url: /client/browse
+          - img [ref=e17]
+          - text: Explorar
+        - link "Mis Cotizaciones" [ref=e19] [cursor=pointer]:
+          - /url: /client/quotations
+          - img [ref=e20]
+          - text: Mis Cotizaciones
+          - img [ref=e23]
+        - link "Mis Pedidos" [ref=e25] [cursor=pointer]:
+          - /url: /client/orders
+          - img [ref=e26]
+          - text: Mis Pedidos
+    - generic [ref=e30]:
+      - banner [ref=e31]:
+        - button "Notificaciones" [ref=e33]:
+          - img
+        - button "Menú de usuario" [ref=e34]:
+          - generic [ref=e36]: UN
+          - generic [ref=e37]:
+            - generic [ref=e38]: Usuario Nuevo
+            - generic [ref=e39]: Cliente
+      - main [ref=e40]:
+        - generic [ref=e42]:
+          - generic [ref=e44]: 🎉
+          - heading "¡Solicitud Recibida!" [level=1] [ref=e45]
+          - paragraph [ref=e46]: Hemos recibido tu solicitud de cotización correctamente.
+          - generic [ref=e47]:
+            - paragraph [ref=e48]: Código de Seguimiento
+            - paragraph [ref=e49]: QUO-2026-JCYD
+          - link "Volver al Inicio" [ref=e50] [cursor=pointer]:
+            - /url: /
+            - button "Volver al Inicio" [ref=e51]
+  - button "Contactar Soporte" [ref=e53]:
+    - img
+    - generic [ref=e55]: Soporte AI
+  - region "Notifications alt+T":
+    - list:
+      - listitem [ref=e57]:
+        - img [ref=e59]
+        - generic [ref=e61]:
+          - generic [ref=e62]: ¡Solicitud recibida!
+          - generic [ref=e63]: Solicitud de reserva recibida. Te enviaremos la cotización pronto.
+  - generic [ref=e68] [cursor=pointer]:
+    - button "Open Next.js Dev Tools" [ref=e69]:
+      - img [ref=e70]
+    - generic [ref=e73]:
+      - button "Open issues overlay" [ref=e74]:
+        - generic [ref=e75]:
+          - generic [ref=e76]: "1"
+          - generic [ref=e77]: "2"
+        - generic [ref=e78]:
+          - text: Issue
+          - generic [ref=e79]: s
+      - button "Collapse issues badge" [ref=e80]:
+        - img [ref=e81]
+  - alert [ref=e83]
+```

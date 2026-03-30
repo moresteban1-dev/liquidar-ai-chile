@@ -1,0 +1,88 @@
+╔══════════════════════════════════════════╗
+║  CENSO FORENSE — 247 ERRORES RESTANTES  ║
+╚══════════════════════════════════════════╝
+
+═══ 1. POR TIPO DE ERROR ═══
+   59 | TS6133
+   34 | TS2339
+   33 | TS2322
+   31 | TS2345
+   27 | TS18048
+    9 | TS2307
+    8 | TS2532
+    7 | TS6138
+    6 | TS2554
+    4 | TS2365
+    3 | TS2353
+    3 | TS2724
+    3 | TS4114
+    2 | TS2783
+    2 | TS2305
+    2 | TS2459
+    2 | TS18046
+    2 | TS2511
+    2 | TS2420
+    1 | TS7030
+    1 | TS2741
+    1 | TS2551
+    1 | TS2488
+    1 | TS2362
+    1 | TS2719
+    1 | TS7006
+    1 | TS2739
+
+═══ 2. POR DIRECTORIO ═══
+   18 | src/core/application/services
+   13 | src/core/application/handlers
+   11 | src/components/vendor
+   11 | src/core/application/handlers/quotations
+   10 | src/infrastructure/migration
+    8 | src/app/client/components/v2
+    8 | src/workers
+    6 | src/components/ui
+    6 | src/core/domain/event-intelligence
+    5 | src/infrastructure/ai/flows
+    5 | src/infrastructure/persistence/supabase/mappers
+    5 | src/infrastructure/telemetry
+    4 | src/app/admin/components
+    4 | src/app/api/admin/feature-flags
+    4 | src/components/layout
+    4 | src/core/domain/aggregates/quotation
+    4 | src/core/domain/services
+    4 | src/infrastructure/events/handlers
+    4 | src/infrastructure/notifications
+    4 | src/lib/dashboard
+    4 | src/lib
+    4 | src/lib/validators
+    3 | src/app/api/catalog/items
+    3 | src/components/admin
+    3 | src/components/admin/catalog
+
+═══ 3. TOP 20 ARCHIVOS CON MÁS ERRORES ═══
+    9 | src/infrastructure/migration/RolloutController.ts
+    8 | src/core/application/services/AIBrokerService.ts
+    7 | src/components/vendor/ProviderQuotationForm.tsx
+    6 | src/core/domain/event-intelligence/ProductMatcher.ts
+    5 | src/app/client/components/v2/client-onboarding.tsx
+    4 | src/app/api/admin/feature-flags/route.ts
+    4 | src/components/layout/ShadcnDashboardLayout.tsx
+    4 | src/components/ui/sparkline.tsx
+    4 | src/core/application/handlers/quotations/ApplyMarkup.ts
+    4 | src/core/application/handlers/quotations/AssignProvider.ts
+    4 | src/core/application/handlers/UpdateQuotationHandler.ts
+    4 | src/core/domain/aggregates/quotation/QuotationItem.ts
+    4 | src/core/domain/services/OptimizationEngine.ts
+    4 | src/infrastructure/events/handlers/NotificationEventHandler.ts
+    4 | src/lib/validators/quote-schema.ts
+    3 | src/app/admin/components/admin-payments-panel.tsx
+    3 | src/app/api/catalog/items/route.ts
+    3 | src/app/client/components/v2/event-calendar.tsx
+    3 | src/components/ai/SalesAgentChat.tsx
+    3 | src/components/vendor/CatalogItemPicker.tsx
+
+═══ 4. PRODUCCIÓN vs TESTS ═══
+Producción: 245
+Tests:      2
+
+═══ 9. TOTAL CONFIRMADO ═══
+Total: 247

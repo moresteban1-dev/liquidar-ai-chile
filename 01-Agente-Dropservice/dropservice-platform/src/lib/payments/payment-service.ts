@@ -1,0 +1,525 @@
+// ============================================================
+// lib/payments/payment-service.ts
+// ============================================================
+
+import { DI_KEYS, container } from '@/infrastructure/di/bindings';
+import { logger } from '@infrastructure/telemetry/StructuredLogger';
+import { createClient } from '@/lib/supabase/server';
+import { createServiceRoleClient } from '@/lib/supabase/api';
+import { getGatewayService } from './gateway-factory';
+import { decryptConfig } from './encryption';
+import {
+    CreatePaymentRequest,
+    CreatePaymentResponse,
+    Payment,
+    PaymentStatus,
+    GatewaySlug,
+    BankAccountData,
+    PaymentGateway,
+    GatewayConfig,
+    ManualTransferConfig,
+} from '@/types/payments';
+
+export class PaymentService {
+
+    // ─── Obtener Gateways Activos ──────────────────────────────
+    static async getActiveGateways(): Promise<PaymentGateway[]> {
+        const supabase = createServiceRoleClient();
+
+        const { data, error } = await supabase
+            .from('payment_gateways')
+            .select('*')
+            .eq('is_active', true);
+
+        if (error) throw new Error(`Error al obtener gateways: ${error.message}`);
+
+        // Desencriptar para uso interno (opcional) o mantener encriptado
+        return (data || []).map((gw: Record<string, unknown>) => {
+            // La config viene encriptada de la BD
+            const decryptedConfig = decryptConfig(gw.config as Record<string, unknown>);
+            return {
+                ...gw,
+                config: this.sanitizeConfig(gw.slug as GatewaySlug, decryptedConfig),
+            } as unknown as PaymentGateway;
+        });
+    }
+
+    // ─── Obtener Configuración Interna (Decrypted) ─────────────
+    private static async getGatewayConfig(slug: GatewaySlug) {
+        const supabase = await createClient();
+        const { data, error } = await supabase
+            .from('payment_gateways')
+            .select('*')
+            .eq('slug', slug)
+            .single();
+
+        if (error || !data) throw new Error('Gateway no encontrado');
+
+        // Desencriptar credenciales para usar con SDKs
+        const config = decryptConfig(data.config as Record<string, unknown>);
+        return { ...data, config: config as unknown as GatewayConfig };
+    }
+
+    // ─── Crear Pago ────────────────────────────────────────────
+    // Nota: userId viene del auth context
+    static async createPayment(
+        userId: string,
+        request: CreatePaymentRequest
+    ): Promise<CreatePaymentResponse> {
+        const supabase = await createClient();
+
+        // 1. Obtener gateway y config desencriptada
+        const gateway = await this.getGatewayConfig(request.gateway_slug);
+
+        if (!gateway.is_active) {
+            throw new Error('Método de pago no disponible');
+        }
+
+        // 2. Calcular expiración
+        // 2. Calcular expiración
+        const isManual = request.gateway_slug === 'manual_transfer';
+        const manualConfig = isManual ? (gateway.config as ManualTransferConfig) : null;
+
+        const expiresAt =
+            isManual && manualConfig
+                ? new Date(
+                    Date.now() +
+                    manualConfig.expiration_hours * 60 * 60 * 1000
+                ).toISOString()
+                : new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+
+        // 3. Crear registro de pago en BD
+        const { data: payment, error: payError } = await supabase
+            .from('payments')
+            .insert({
+                order_id: request.order_id,
+                user_id: userId,
+                gateway_slug: request.gateway_slug,
+                amount: request.amount,
+                currency: request.currency || 'CLP',
+                status: 'pending',
+                expires_at: expiresAt,
+                metadata: {},
+            })
+            .select()
+            .single();
+
+        if (payError || !payment) {
+            throw new Error(`Error al crear pago: ${payError?.message}`);
+        }
+
+        // 4. Log de creación (sin await para no bloquear)
+        this.createLog(payment.id, 'payment_created', null, 'pending', userId);
+
+        // 5. Procesar según gateway
+        const gatewayService = getGatewayService(request.gateway_slug);
+
+        try {
+            const result = await gatewayService.createPayment({
+                payment: payment as Payment,
+                config: gateway.config,
+                returnUrl: request.return_url || `${process.env.NEXT_PUBLIC_APP_URL}/payments/success`,
+                cancelUrl: request.cancel_url || `${process.env.NEXT_PUBLIC_APP_URL}/payments/cancel`,
+            });
+
+            // 6. Actualizar pago con datos de la pasarela
+            const newStatus: PaymentStatus =
+                request.gateway_slug === 'manual_transfer' ? 'pending' : 'processing';
+
+            await supabase
+                .from('payments')
+                .update({
+                    external_id: result.external_id,
+                    status: newStatus,
+                    metadata: { ...payment.metadata, ...result.metadata },
+                })
+                .eq('id', payment.id);
+
+            this.createLog(
+                payment.id, 'gateway_initiated', 'pending', newStatus, null,
+                { external_id: result.external_id }
+            );
+
+            // 7. Preparar respuesta
+            const response: CreatePaymentResponse = {
+                payment_id: payment.id,
+                status: newStatus,
+                redirect_url: result.redirect_url, // undefined for Manual
+                expires_at: expiresAt,
+            };
+
+            // Si es transferencia manual, incluir datos bancarios
+            if (request.gateway_slug === 'manual_transfer') {
+                response.bank_data = await this.getBankData();
+                response.message = (gateway.config as ManualTransferConfig).instructions;
+            }
+
+            return response;
+
+        } catch (error) {
+            // Marcar pago como fallido
+            await supabase
+                .from('payments')
+                .update({ status: 'rejected' })
+                .eq('id', payment.id);
+
+            this.createLog(
+                payment.id, 'gateway_error', 'pending', 'rejected', null,
+                { error: String(error) }
+            );
+
+            throw error;
+        }
+    }
+
+    // ─── Obtener Datos Bancarios ───────────────────────────────
+    static async getBankData(): Promise<BankAccountData> {
+        const supabase = await createClient();
+
+        const { data, error } = await supabase
+            .from('platform_settings')
+            .select('setting_value')
+            .eq('setting_key', 'bank_account_data')
+            .single();
+
+        if (error || !data) {
+            throw new Error('Datos bancarios no configurados');
+        }
+
+        return data.setting_value as BankAccountData;
+    }
+
+    // ─── Procesar Webhook ──────────────────────────────────────
+    static async processWebhook(
+        gatewaySlug: GatewaySlug,
+        eventType: string,
+        payload: Record<string, unknown>
+    ): Promise<void> {
+        const supabase = createServiceRoleClient();
+
+        // 1. Registrar evento
+        const { data: event } = await supabase
+            .from('webhook_events')
+            .insert({
+                gateway_slug: gatewaySlug,
+                event_type: eventType,
+                payload,
+                processed: false,
+            })
+            .select()
+            .single();
+
+        try {
+            // 2. Encontrar el pago relacionado
+            const externalRef = this.extractExternalReference(gatewaySlug, payload);
+
+            const { data: payment } = await supabase
+                .from('payments')
+                .select('*')
+                .or(`external_id.eq.${externalRef},id.eq.${externalRef}`)
+                .single(); // Use single() carefully, maybe limit 1?
+
+            if (!payment) {
+                throw new Error(`Pago no encontrado para ref: ${externalRef}`);
+            }
+
+            // 3. Obtener configuración del gateway
+            const gateway = await this.getGatewayConfig(gatewaySlug);
+
+            // 4. Verificar pago con la pasarela
+            const gatewayService = getGatewayService(gatewaySlug);
+            const result = await gatewayService.verifyPayment({
+                payment: payment as Payment,
+                config: gateway.config,
+                webhookData: payload,
+            });
+
+            // 5. Actualizar estado del pago
+            const oldStatus = payment.status;
+
+            const hasMetadataChanges = JSON.stringify(payment.metadata) !== JSON.stringify({ ...payment.metadata, ...result.metadata });
+
+            // Only update if status changed or we have new metadata
+            if (oldStatus !== result.status || hasMetadataChanges) {
+                const { data: updatedRows, error } = await supabase
+                    .from('payments')
+                    .update({
+                        status: result.status,
+                        metadata: { ...payment.metadata, ...result.metadata },
+                        paid_at: result.status === 'approved' ? new Date().toISOString() : payment.paid_at,
+                    })
+                    .eq('id', payment.id)
+                    .eq('status', oldStatus)
+                    .select();
+
+                if (error) throw error;
+                if (!updatedRows || updatedRows.length === 0) {
+                    logger.warn(`Concurrencia en webhook: el pago id ${payment.id} ya no estaba en estado ${oldStatus}`);
+                    return;
+                }
+
+                // 6. Log
+                this.createLog(
+                    payment.id,
+                    `webhook_${eventType}`,
+                    oldStatus,
+                    result.status,
+                    null,
+                    { webhook_event_id: event?.id }
+                );
+
+                // 7. Marcar evento como procesado
+                await supabase
+                    .from('webhook_events')
+                    .update({ processed: true, payment_id: payment.id })
+                    .eq('id', event?.id);
+
+                // 8. Disparar acciones post-pago
+                if (result.status === 'approved' && oldStatus !== 'approved') {
+                    await this.onPaymentApproved(payment.id, payment.order_id);
+                }
+            } else {
+                // processed anyway
+                await supabase
+                    .from('webhook_events')
+                    .update({ processed: true, payment_id: payment.id })
+                    .eq('id', event?.id);
+            }
+
+        } catch (error) {
+            // Registrar error en el evento
+            await supabase
+                .from('webhook_events')
+                .update({
+                    processed: false,
+                    error_message: String(error),
+                })
+                .eq('id', event?.id);
+
+            throw error;
+        }
+    }
+
+    // ─── Confirmar Transferencia Manual (Admin) ────────────────
+    static async confirmManualTransfer(
+        paymentId: string,
+        adminId: string,
+        action: 'approve' | 'reject',
+        notes?: string
+    ): Promise<void> {
+        const supabase = await createClient();
+
+        const { data: payment } = await supabase
+            .from('payments')
+            .select('*')
+            .eq('id', paymentId)
+            .eq('gateway_slug', 'manual_transfer')
+            .single();
+
+        if (!payment) throw new Error('Pago no encontrado');
+        if (payment.status !== 'pending_review') {
+            throw new Error('Este pago no está pendiente de revisión');
+        }
+
+        const newStatus: PaymentStatus =
+            action === 'approve' ? 'approved' : 'rejected';
+
+        await supabase
+            .from('payments')
+            .update({
+                status: newStatus,
+                paid_at: action === 'approve' ? new Date().toISOString() : null,
+                metadata: {
+                    ...payment.metadata,
+                    admin_notes: notes,
+                    reviewed_by: adminId,
+                    reviewed_at: new Date().toISOString(),
+                },
+            })
+            .eq('id', paymentId);
+
+        this.createLog(
+            paymentId,
+            `manual_${action}`,
+            'pending_review',
+            newStatus,
+            adminId,
+            { notes }
+        );
+
+        if (action === 'approve') {
+            await this.onPaymentApproved(paymentId, payment.order_id);
+        }
+    }
+
+    // ─── Subir Comprobante (Usuario) ───────────────────────────
+    static async uploadReceipt(
+        paymentId: string,
+        userId: string,
+        receiptFile: File,
+        transferData: {
+            sender_name: string;
+            sender_rut: string;
+            sender_bank: string;
+            transfer_date: string;
+        }
+    ): Promise<void> {
+        const supabase = await createClient();
+
+        // 1. Verificar que el pago pertenece al usuario
+        const { data: payment } = await supabase
+            .from('payments')
+            .select('*')
+            .eq('id', paymentId)
+            .eq('user_id', userId)
+            .eq('gateway_slug', 'manual_transfer')
+            .single();
+
+        if (!payment) throw new Error('Pago no encontrado');
+
+        // 2. Subir archivo a Supabase Storage
+        const fileName = `receipts/${paymentId}/${Date.now()}-${receiptFile.name}`;
+        const { error: uploadError } = await supabase
+            .storage
+            .from('payment-receipts')
+            .upload(fileName, receiptFile, {
+                cacheControl: '3600',
+                upsert: false,
+            });
+
+        if (uploadError) throw new Error('Error al subir comprobante');
+
+        // 3. Obtener URL pública
+        const { data: { publicUrl } } = supabase
+            .storage
+            .from('payment-receipts')
+            .getPublicUrl(fileName);
+
+        // 4. Actualizar pago
+        await supabase
+            .from('payments')
+            .update({
+                status: 'pending_review',
+                metadata: {
+                    ...payment.metadata,
+                    transfer_receipt_url: publicUrl,
+                    ...transferData,
+                },
+            })
+            .eq('id', paymentId);
+
+        this.createLog(
+            paymentId, 'receipt_uploaded', payment.status, 'pending_review', userId
+        );
+    }
+
+    // ─── Acciones Post-Pago ────────────────────────────────────
+    private static async onPaymentApproved(
+        _paymentId: string,
+        orderId: string
+    ): Promise<void> {
+        const supabase = createServiceRoleClient();
+
+        // Obtener la orden para encontrar la cotización relacionada
+        const { data: orderEntity } = await supabase
+            .from('orders')
+            .select('quotation_id')
+            .eq('id', orderId)
+            .single();
+
+        if (orderEntity && orderEntity.quotation_id) {
+            // FIX ADITIVO: Delega la transición al QuotationService para usar la FSM y logs asociados.
+            const { diContainer } = await import('@infrastructure/di/CoreContainer');
+            await diContainer.getQuotationService().transitionQuotation(
+                orderEntity.quotation_id,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                'PAID' as any, // QuotationStatus.PAID
+                { internalNotes: 'Pago procesado automáticamente por webhook' }
+            );
+        } else {
+            logger.warn(`No quotation associated for order ${orderId} during payment approval.`);
+        }
+
+        // EVENT: trigger notification email
+        const { data: orderDetails } = await supabase
+            .from('orders')
+            .select(`
+                code,
+                client:profiles!orders_client_id_fkey(email, name)
+            `)
+            .eq('id', orderId)
+            .single();
+
+        if (orderDetails) {
+            const clientData = Array.isArray(orderDetails.client) ? orderDetails.client[0] : orderDetails.client;
+            if (clientData?.email) {
+                const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/client/orders/${orderId}`;
+                const emailService = await container.resolve<any>(DI_KEYS.EmailService);
+                await emailService.sendPaymentConfirmation(clientData.email, orderDetails.code, dashboardUrl);
+            }
+        }
+        // EVENT: trigger provider notification
+    }
+
+    // ─── Helpers ───────────────────────────────────────────────
+    private static async createLog(
+        paymentId: string,
+        action: string,
+        oldStatus: PaymentStatus | null,
+        newStatus: PaymentStatus,
+        performedBy: string | null,
+        details: Record<string, unknown> = {}
+    ) {
+        try {
+            // Log creation shouldn't fail the transaction, use service role if no user
+            const supabase = performedBy ? await createClient() : createServiceRoleClient();
+            await supabase.from('payment_logs').insert({
+                payment_id: paymentId,
+                action,
+                old_status: oldStatus,
+                new_status: newStatus,
+                performed_by: performedBy,
+                details,
+            });
+        } catch (e) {
+            logger.error("Failed to create log", e as Error);
+        }
+    }
+
+    private static extractExternalReference(
+        slug: GatewaySlug,
+        payload: Record<string, unknown>
+    ): string {
+        switch (slug) {
+            case 'webpay':
+                const wpPayload = payload as { token_ws?: string };
+                return wpPayload.token_ws || '';
+            case 'khipu':
+                const khPayload = payload as { payment_id?: string, notification_token?: string };
+                return khPayload.payment_id || khPayload.notification_token || '';
+            case 'flow':
+                const flPayload = payload as { token?: string, flowOrder?: string | number };
+                return flPayload.token || flPayload.flowOrder?.toString() || '';
+            default:
+                return '';
+        }
+    }
+
+    private static sanitizeConfig(
+        _slug: string,
+        config: Record<string, unknown>
+    ): Record<string, unknown> {
+        // No exponer credenciales al frontend
+        const sanitized = { ...config };
+        const sensitiveKeys = [
+            'access_token', 'api_key', 'webhook_secret',
+            'public_key', 'commerce_code',
+        ];
+        for (const key of sensitiveKeys) {
+            if (key in sanitized) {
+                sanitized[key] = sanitized[key] ? '••••••••' : '';
+            }
+        }
+        return sanitized;
+    }
+}

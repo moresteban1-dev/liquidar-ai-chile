@@ -1,0 +1,238 @@
+scripts/baseline.ts(12,89): error TS2551: Property 'catch' does not exist on type 'string'. Did you mean 'match'?
+scripts/baseline.ts(12,95): error TS7006: Parameter 'e' implicitly has an 'any' type.
+scripts/baseline.ts(13,57): error TS7006: Parameter 'line' implicitly has an 'any' type.
+scripts/baseline.ts(16,21): error TS18046: 'e' is of type 'unknown'.
+scripts/baseline.ts(16,56): error TS7006: Parameter 'line' implicitly has an 'any' type.
+scripts/diagnose.ts(44,32): error TS2339: Property 'results' does not exist on type 'DiagnosticReport'.
+scripts/diagnose.ts(44,45): error TS7006: Parameter 'r' implicitly has an 'any' type.
+scripts/diagnose.ts(45,37): error TS2339: Property 'results' does not exist on type 'DiagnosticReport'.
+scripts/diagnose.ts(45,53): error TS7006: Parameter 'r' implicitly has an 'any' type.
+scripts/diagnose.ts(45,77): error TS7006: Parameter 'f' implicitly has an 'any' type.
+scripts/diagnostics/engine.ts(181,9): error TS18048: 'counts.critical' is possibly 'undefined'.
+scripts/diagnostics/reporter.ts(3,33): error TS6196: 'ScanResult' is declared but never used.
+scripts/diagnostics/reporter.ts(3,45): error TS6196: 'Severity' is declared but never used.
+scripts/diagnostics/scanners/domain.scanner.ts(88,11): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(89,12): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(90,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(91,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(92,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(93,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(94,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(102,89): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(114,11): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(115,12): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(116,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(117,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(125,75): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(251,13): error TS2532: Object is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(252,14): error TS2532: Object is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(259,73): error TS2532: Object is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(320,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(320,45): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(324,34): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/domain.scanner.ts(330,55): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(358,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(358,45): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(363,31): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/domain.scanner.ts(364,28): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/domain.scanner.ts(365,24): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/domain.scanner.ts(372,65): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(399,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(402,38): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/domain.scanner.ts(403,41): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/domain.scanner.ts(410,94): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(523,11): error TS2532: Object is possibly 'undefined'.
+scripts/diagnostics/scanners/domain.scanner.ts(524,12): error TS2532: Object is possibly 'undefined'.
+scripts/diagnostics/scanners/infrastructure.scanner.ts(74,11): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/infrastructure.scanner.ts(75,12): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/infrastructure.scanner.ts(91,96): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/infrastructure.scanner.ts(104,11): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/infrastructure.scanner.ts(170,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/infrastructure.scanner.ts(170,45): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/infrastructure.scanner.ts(174,34): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/infrastructure.scanner.ts(211,38): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/infrastructure.scanner.ts(212,12): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/infrastructure.scanner.ts(231,48): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/security.scanner.ts(61,12): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/security.scanner.ts(61,38): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/security.scanner.ts(62,11): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/security.scanner.ts(63,11): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/security.scanner.ts(70,83): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/security.scanner.ts(96,15): error TS2532: Object is possibly 'undefined'.
+scripts/diagnostics/scanners/security.scanner.ts(185,12): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/security.scanner.ts(186,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/security.scanner.ts(187,13): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/security.scanner.ts(188,48): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/security.scanner.ts(195,76): error TS18048: 'line' is possibly 'undefined'.
+scripts/diagnostics/scanners/typescript.scanner.ts(43,25): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/typescript.scanner.ts(44,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/typescript.scanner.ts(46,34): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/typescript.scanner.ts(48,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/typescript.scanner.ts(49,26): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/typescript.scanner.ts(55,37): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/typescript.scanner.ts(56,28): error TS18048: 'message' is possibly 'undefined'.
+scripts/diagnostics/scanners/typescript.scanner.ts(57,9): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/typescript.scanner.ts(59,24): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/typescript.scanner.ts(60,37): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/typescript.scanner.ts(61,41): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/typescript.scanner.ts(62,40): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/diagnostics/scanners/typescript.scanner.ts(83,19): error TS18048: 'file' is possibly 'undefined'.
+scripts/diagnostics/scanners/typescript.scanner.ts(165,36): error TS6133: 'message' is declared but its value is never read.
+scripts/error-census-final.ts(27,26): error TS2532: Object is possibly 'undefined'.
+scripts/final-ai-audit.ts(18,15): error TS6133: 'catalog' is declared but its value is never read.
+scripts/final-ai-audit.ts(19,15): error TS6133: 'pricing' is declared but its value is never read.
+scripts/final-ai-audit.ts(20,15): error TS6133: 'sla' is declared but its value is never read.
+scripts/fix-imports-exact.ts(80,25): error TS18048: 'line' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(84,26): error TS2532: Object is possibly 'undefined'.
+scripts/fix-imports-exact.ts(86,15): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(155,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(156,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(167,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(168,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(261,42): error TS2532: Object is possibly 'undefined'.
+scripts/fix-imports-exact.ts(292,45): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(293,24): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(293,52): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(324,43): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(325,22): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(325,50): error TS18048: 'exp' is possibly 'undefined'.
+scripts/forensic-scan.ts(229,112): error TS2532: Object is possibly 'undefined'.
+scripts/forensic-scan.ts(230,108): error TS2532: Object is possibly 'undefined'.
+scripts/kill-unused-vars-pro.ts(23,24): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/kill-unused-vars-pro.ts(24,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/kill-unused-vars.ts(1,1): error TS6133: 'execSync' is declared but its value is never read.
+scripts/kill-unused-vars.ts(25,24): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/kill-unused-vars.ts(26,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/migrate-logs.ts(19,41): error TS6133: 'match' is declared but its value is never read.
+scripts/migrate-logs.ts(23,43): error TS6133: 'match' is declared but its value is never read.
+scripts/migrate-logs.ts(27,42): error TS6133: 'match' is declared but its value is never read.
+scripts/migration/pre-migration-check.ts(68,19): error TS6133: 'errorLogs' is declared but its value is never read.
+scripts/seed-knowledge-graph.ts(2,1): error TS6133: 'uuidv4' is declared but its value is never read.
+scripts/seed-production.ts(3,1): error TS6133: 'bcrypt' is declared but its value is never read.
+scripts/seed-production.ts(83,45): error TS2532: Object is possibly 'undefined'.
+scripts/validate-env.ts(55,13): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+scripts/validate-env.ts(55,28): error TS7006: Parameter 'err' implicitly has an 'any' type.
+scripts/verify-ai-flow.ts(2,1): error TS6133: 'container' is declared but its value is never read.
+scripts/verify-ai-flow.ts(6,1): error TS6133: 'logger' is declared but its value is never read.
+scripts/verify-payments.ts(32,20): error TS2532: Object is possibly 'undefined'.
+scripts/verify_e2e_fixes.ts(4,41): error TS2307: Cannot find module '../src/infrastructure/repositories/SupabaseOrderRepository' or its corresponding type declarations.
+scripts/verify_e2e_fixes.ts(5,45): error TS2307: Cannot find module '../src/infrastructure/repositories/SupabaseQuotationRepository' or its corresponding type declarations.
+scripts/verify_e2e_fixes.ts(6,41): error TS2307: Cannot find module '../src/core/use-cases/quotations/ApproveQuotation' or its corresponding type declarations.
+scripts/verify_e2e_fixes.ts(7,35): error TS2307: Cannot find module '../src/core/types/branded' or its corresponding type declarations.
+scripts/verify_e2e_fixes.ts(24,75): error TS18047: 'clientAuth.user' is possibly 'null'.
+src/app/api/categories/route.ts(3,35): error TS2307: Cannot find module '@core/application/ports/CatalogRepository' or its corresponding type declarations.
+src/app/api/categories/route.ts(16,52): error TS7006: Parameter 'cat' implicitly has an 'any' type.
+src/app/api/services/route.ts(3,35): error TS2307: Cannot find module '@core/application/ports/CatalogRepository' or its corresponding type declarations.
+src/app/client/orders/[id]/QuotationActions.tsx(19,3): error TS6133: 'orderId' is declared but its value is never read.
+src/app/client/orders/ClientOrdersClient.tsx(18,5): error TS6133: 'Box' is declared but its value is never read.
+src/app/client/orders/ClientOrdersClient.tsx(22,5): error TS6133: 'RotateCcw' is declared but its value is never read.
+src/app/vendor/orders/VendorOrdersClient.tsx(15,5): error TS6133: 'Briefcase' is declared but its value is never read.
+src/app/vendor/orders/VendorOrdersClient.tsx(18,5): error TS6133: 'AlertCircle' is declared but its value is never read.
+src/components/admin/AvailabilityCalendar.tsx(105,30): error TS2532: Object is possibly 'undefined'.
+src/components/admin/catalog/CatalogCategoryForm.tsx(24,27): error TS6133: 'ItemType' is declared but its value is never read.
+src/components/admin/users/columns.tsx(56,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/components/admin/users/columns.tsx(77,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/components/ai/SalesAgentChat.tsx(16,23): error TS2339: Property 'append' does not exist on type 'UseChatHelpers<UIMessage<unknown, UIDataTypes, UITools>>'.
+src/components/ai/SalesAgentChat.tsx(91,40): error TS2339: Property 'content' does not exist on type 'UIMessage<unknown, UIDataTypes, UITools>'.
+src/components/checkout/ManualTransferForm.tsx(62,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/components/features/admin/event-intelligence/InferenceTestDashboard.tsx(115,67): error TS2339: Property 'serviceName' does not exist on type 'InferredNeed'.
+src/components/quoter/steps/Step4Preferences.tsx(39,33): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/components/shared/ProfileForm.tsx(64,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/components/vendor/ProviderBankForm.tsx(72,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/core/application/handlers/CreateOrderHandler.ts(4,33): error TS2307: Cannot find module '@/core/application/ports/events/IEventPublisher' or its corresponding type declarations.
+src/core/application/handlers/order/CreateOrderUseCase.ts(8,33): error TS2307: Cannot find module '@core/application/ports/events/IEventPublisher' or its corresponding type declarations.
+src/core/application/handlers/quotations/AutoMatchProviderItems.ts(2,35): error TS2307: Cannot find module '@app/ports/CatalogRepository' or its corresponding type declarations.
+src/core/application/services/SLAService.ts(6,18): error TS6133: 'ok' is declared but its value is never read.
+src/core/application/services/SLAService.ts(6,22): error TS6133: 'fail' is declared but its value is never read.
+src/core/domain/event-intelligence/ProductMatcher.ts(3,35): error TS2307: Cannot find module '../../application/ports/CatalogRepository' or its corresponding type declarations.
+src/core/domain/pricing/PricingCalculator.ts(17,49): error TS2724: '"./TaxConfig"' has no exported member named 'calculateIVA'. Did you mean 'calculateTax'?
+src/core/domain/pricing/PricingCalculator.ts(17,63): error TS2305: Module '"./TaxConfig"' has no exported member 'calculateTotalWithIVA'.
+src/infrastructure/analytics/posthog-provider.tsx(21,15): error TS6133: '__handleRouteChange' is declared but its value is never read.
+src/infrastructure/cache/semantic-cache.ts(26,28): error TS2532: Object is possibly 'undefined'.
+src/infrastructure/cache/semantic-cache.ts(64,28): error TS2532: Object is possibly 'undefined'.
+src/infrastructure/events/handlers/NotificationEventHandler.ts(3,38): error TS2307: Cannot find module '@/core/application/ports/services/INotificationService' or its corresponding type declarations.
+src/infrastructure/events/SupabaseEventPublisher.ts(3,33): error TS2307: Cannot find module '@/core/application/ports/events/IEventPublisher' or its corresponding type declarations.
+src/infrastructure/migration/MigrationMonitor.ts(236,5): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+src/infrastructure/notifications/channels/EmailChannel.ts(1,99): error TS2307: Cannot find module '@/core/application/ports/services/INotificationChannel' or its corresponding type declarations.
+src/infrastructure/notifications/channels/EmailChannel.ts(2,48): error TS2307: Cannot find module '@/core/application/ports/services/IEmailProvider' or its corresponding type declarations.
+src/infrastructure/notifications/channels/EmailChannel.ts(47,17): error TS7006: Parameter 'r' implicitly has an 'any' type.
+src/infrastructure/notifications/channels/EmailChannel.ts(48,14): error TS7006: Parameter 'r' implicitly has an 'any' type.
+src/infrastructure/notifications/channels/WebhookChannel.ts(3,99): error TS2307: Cannot find module '@/core/application/ports/services/INotificationChannel' or its corresponding type declarations.
+src/infrastructure/notifications/email/N8NEmailProvider.ts(3,63): error TS2307: Cannot find module '@/core/application/ports/services/IEmailProvider' or its corresponding type declarations.
+src/infrastructure/notifications/email/ResendEmailProvider.ts(3,63): error TS2307: Cannot find module '@/core/application/ports/services/IEmailProvider' or its corresponding type declarations.
+src/infrastructure/notifications/email/ResendEmailProvider.ts(46,30): error TS7006: Parameter 'r' implicitly has an 'any' type.
+src/infrastructure/notifications/email/ResilientEmailProvider.ts(3,63): error TS2307: Cannot find module '@/core/application/ports/services/IEmailProvider' or its corresponding type declarations.
+src/infrastructure/notifications/NotificationRouter.ts(3,38): error TS2307: Cannot find module '@/core/application/ports/services/INotificationService' or its corresponding type declarations.
+src/infrastructure/notifications/NotificationRouter.ts(4,74): error TS2307: Cannot find module '@/core/application/ports/services/INotificationChannel' or its corresponding type declarations.
+src/infrastructure/notifications/WebhookService.ts(28,5): error TS2322: Type 'unknown' is not assignable to type 'boolean'.
+src/infrastructure/notifications/WebhookService.ts(28,12): error TS2554: Expected 3 arguments, but got 2.
+src/infrastructure/persistence/mappers/QuotationV2Mapper.ts(7,1): error TS6133: 'DomainMapper' is declared but its value is never read.
+src/infrastructure/persistence/supabase/repositories/CachedOrderRepository.ts(8,8): error TS2307: Cannot find module '@/core/application/ports/repositories/IOrderRepository' or its corresponding type declarations.
+src/infrastructure/redis/client.ts(29,9): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/infrastructure/telemetry/DashboardCollector.ts(257,74): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/infrastructure/telemetry/DashboardCollector.ts(258,24): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/infrastructure/telemetry/instrumentation.ts(43,22): error TS2322: Type 'import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@opentelemetry/sdk-trace-base/build/src/SpanProcessor").SpanProcessor' is not assignable to type 'import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@opentelemetry/sdk-trace-node/node_modules/@opentelemetry/sdk-trace-base/build/src/SpanProcessor").SpanProcessor'.
+  Types of property 'onStart' are incompatible.
+    Type '(span: import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@opentelemetry/sdk-trace-base/build/src/Span").Span, parentContext: import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@opentelemetry/api/build/src/context/types").C...' is not assignable to type '(span: import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@opentelemetry/sdk-trace-node/node_modules/@opentelemetry/sdk-trace-base/build/src/Span").Span, parentContext: import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@op...'.
+      Types of parameters 'span' and 'span' are incompatible.
+        Type 'Span & ReadableSpan' is missing the following properties from type 'Span': _spanContext, instrumentationLibrary, _droppedAttributesCount, _droppedEventsCount, and 13 more.
+src/lib/ai/rag/retriever.ts(25,9): error TS2322: Type 'number[] | undefined' is not assignable to type 'RecordValues'.
+  Type 'undefined' is not assignable to type 'number[]'.
+src/lib/dashboard/admin-data.service.ts(297,17): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/dashboard/admin-data.service.ts(503,35): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/dashboard/admin-data.service.ts(600,17): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/dashboard/vendor-data.service.ts(431,36): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/logger.ts(2,25): error TS2307: Cannot find module '@infrastructure/telemetry/logger-types' or its corresponding type declarations.
+src/lib/logger.ts(37,26): error TS2339: Property 'fatal' does not exist on type 'StructuredLogger'.
+src/lib/observability/request-context.ts(2,33): error TS2307: Cannot find module '@infrastructure/telemetry/logger-types' or its corresponding type declarations.
+src/lib/observability/request-context.ts(33,39): error TS2339: Property 'correlationId' does not exist on type 'RequestContextProps'.
+src/lib/payments/gateways/khipu.ts(14,7): error TS6133: '__KHIPU_SLA_HOURS' is declared but its value is never read.
+src/lib/rate-limit.ts(17,98): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Record<string, unknown>'.
+src/tests/mocks/InMemoryEventPublisher.ts(1,33): error TS2307: Cannot find module '@/core/application/ports/events/IEventPublisher' or its corresponding type declarations.
+src/workers/ai-broker.worker.ts(19,28): error TS2339: Property 'withContext' does not exist on type 'StructuredLogger'.
+src/workers/ai.worker.ts(21,28): error TS2339: Property 'withContext' does not exist on type 'StructuredLogger'.
+src/workers/email.worker.ts(12,28): error TS2339: Property 'withContext' does not exist on type 'StructuredLogger'.
+src/workers/index.ts(36,16): error TS2339: Property 'fatal' does not exist on type 'StructuredLogger'.
+src/workers/negotiator.worker.ts(4,51): error TS2307: Cannot find module '@infrastructure/di/use-case-factory' or its corresponding type declarations.
+src/workers/negotiator.worker.ts(20,28): error TS2339: Property 'withContext' does not exist on type 'StructuredLogger'.
+src/workers/qasentinel.worker.ts(4,51): error TS2307: Cannot find module '@infrastructure/di/use-case-factory' or its corresponding type declarations.
+src/workers/qasentinel.worker.ts(21,28): error TS2339: Property 'withContext' does not exist on type 'StructuredLogger'.

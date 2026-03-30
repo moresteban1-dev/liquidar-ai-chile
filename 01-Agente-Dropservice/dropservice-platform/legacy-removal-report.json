@@ -1,0 +1,11 @@
+{
+  "removed": [
+    "src/core/application/services/availability-service.ts",
+    "src/core/application/services/image-storage.ts"
+  ],
+  "notFound": [
+    "src/core/domain/catalog/catalog-types.ts",
+    "src/core/application/services/catalog-service.ts"
+  ],
+  "errors": []
+}

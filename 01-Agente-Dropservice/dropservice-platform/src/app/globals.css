@@ -1,0 +1,531 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0
+    }
+
+    to {
+      height: var(--radix-accordion-content-height)
+    }
+  }
+
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height)
+    }
+
+    to {
+      height: 0
+    }
+  }
+
+  /* Dashboard Micro-Animations */
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+
+    100% {
+      background-position: 200% 0;
+    }
+  }
+}
+
+/* 
+ * Drop-Servicing Platform - Design System
+ * Aesthetic: Lavender-Tinted Premium
+ * Palette: Indigo-washed neutrals + Electric Indigo Accent
+ */
+
+:root {
+  /* Core Palette — Indigo-washed grays (not neutral slate) */
+  --slate-50: #eef0ff;
+  /* Lavender background — the signature tint */
+  --slate-100: #e0e4f8;
+  /* Slightly deeper lavender for secondary surfaces */
+  --slate-200: #c7d2fe;
+  /* Indigo-tinted borders */
+  --slate-300: #a5b4fc;
+  /* Stronger indigo-wash */
+  --slate-400: #818cf8;
+  /* Muted indigo */
+  --slate-500: #6366f1;
+  /* Mid indigo */
+  --slate-600: #475569;
+  /* Keep readable dark for body text */
+  --slate-700: #334155;
+  /* Dark text */
+  --slate-800: #1e293b;
+  /* Very dark */
+  --slate-900: #0f172a;
+  /* Heading text */
+  --slate-950: #020617;
+
+  /* Accent - Electric Indigo */
+  --indigo-500: #6366f1;
+  --indigo-600: #4f46e5;
+
+  /* Semantic Variables (ShadCN + Custom) */
+  --background: var(--slate-50);
+  --foreground: var(--slate-900);
+
+  /* Card - Pure white for max contrast against lavender bg */
+  --card: #ffffff;
+  --card-foreground: var(--slate-900);
+
+  /* Popover */
+  --popover: #ffffff;
+  --popover-foreground: var(--slate-900);
+
+  /* Primary Action */
+  --primary: var(--indigo-600);
+  --primary-foreground: #ffffff;
+
+  /* Secondary / Muted — lavender tinted */
+  --secondary: #e8ebfa;
+  --secondary-foreground: var(--slate-900);
+
+  --muted: #e8ebfa;
+  --muted-foreground: #6b7194;
+
+  /* Accent (Hover states, subtle highlights) */
+  --accent: #e0e4f8;
+  --accent-foreground: var(--slate-900);
+
+  /* Destructive */
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  /* Borders & Inputs — indigo-tinted */
+  --border: #c7d2fe;
+  --input: #dde3f7;
+  --ring: var(--indigo-600);
+
+  /* Radius */
+  --radius: 0.75rem;
+
+  /* Chart Colors */
+  --chart-1: var(--indigo-500);
+  --chart-2: #818cf8;
+  --chart-3: #a5b4fc;
+  --chart-4: #10b981;
+  --chart-5: #f59e0b;
+}
+
+.dark {
+  /* Dark Mode — Softened Indigo (professional, not overwhelming) */
+  --background: #121629;
+  --foreground: #f1f5f9;
+  /* Slate-100 for better brightness checking */
+
+  --card: #1a1f3d;
+  --card-foreground: #f1f5f9;
+
+  --popover: #1a1f3d;
+  --popover-foreground: #f1f5f9;
+
+  --primary: var(--indigo-500);
+  --primary-foreground: #ffffff;
+
+  --secondary: #222847;
+  --secondary-foreground: #f1f5f9;
+
+  --muted: #1e243d;
+  /* Slightly darker than card for depth */
+  --muted-foreground: #a8b5c4;
+  /* Boosted from #94a3b8 for better contrast on section titles and metadata */
+
+  --accent: #232946;
+  --accent-foreground: #f1f5f9;
+
+  --destructive: #991b1b;
+  --destructive-foreground: #fef2f2;
+
+  --border: #2e345a;
+  --input: #2e345a;
+  --ring: var(--indigo-500);
+
+  --chart-1: var(--indigo-500);
+  --chart-2: #818cf8;
+  --chart-3: #4f46e5;
+  --chart-4: #34d399;
+  --chart-5: #fbbf24;
+}
+
+/* Base Styles */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased selection:bg-indigo-100 selection:text-indigo-900 dark:selection:bg-indigo-900 dark:selection:text-indigo-100;
+  }
+}
+
+/* Typography Utilities */
+@layer utilities {
+  .font-sans {
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  .font-mono {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
+    font-variant-numeric: tabular-nums;
+    /* Critical for financial data */
+  }
+
+  /* Solid Card Surface — Indigo-tinted borders */
+  .glass {
+    @apply bg-white dark:bg-[#1a1f3d] border border-[#c7d2fe] dark:border-[#2e345a] shadow-sm;
+  }
+
+  /* Thumb Zone Helper (Mobile) */
+  .thumb-zone {
+    @apply fixed bottom-0 left-0 right-0 p-4 z-50 bg-gradient-to-t from-background to-transparent pointer-events-none;
+  }
+
+  .thumb-zone>* {
+    @apply pointer-events-auto;
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* Day 3 Optimization Styles               */
+  /* ═══════════════════════════════════════ */
+
+  .skeleton-line {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.03) 25%,
+      rgba(255, 255, 255, 0.06) 50%,
+      rgba(255, 255, 255, 0.03) 75%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+
+  /* Dark mode specific skeleton adjustments */
+  .dark .skeleton-line {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(255, 255, 255, 0.1) 50%,
+      rgba(255, 255, 255, 0.05) 75%
+    );
+    background-size: 200% 100%;
+  }
+
+  .skeleton-card, .skeleton-stat-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .skeleton-table-header { margin-bottom: 4px; }
+  .skeleton-table-row { margin-bottom: 2px; }
+
+  @keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Glassmorphism Classes */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Table Adjustments */
+  .order-table {
+    @apply w-full border-collapse;
+  }
+
+  .order-table th {
+    @apply text-left p-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider border-b border-border bg-muted/30;
+  }
+
+  .order-table td {
+    @apply p-4 text-sm border-b border-border/50 transition-colors;
+  }
+
+  .order-table tr:hover td {
+    @apply bg-accent/30;
+  }
+
+  /* ═══════════════════════════════════════ */
+  /* Day 6 Operational Tooling Styles          */
+  /* ═══════════════════════════════════════ */
+
+  .operations-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+  }
+
+  .operations-section {
+    @apply bg-white dark:bg-[#1a1f3d] border border-[#c7d2fe] dark:border-[#2e345a] shadow-sm p-6 rounded-xl;
+  }
+
+  .operations-section.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .section-title {
+    @apply text-lg font-bold mb-4 flex items-center gap-2;
+  }
+
+  /* Health Panel */
+  .health-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .health-status-indicator {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: white;
+  }
+
+  .health-meta {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .health-components {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .health-component {
+    padding: 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: color-mix(in srgb, var(--muted), transparent 90%);
+  }
+
+  .health-healthy { border-left: 3px solid #10b981; }
+  .health-degraded { border-left: 3px solid #f59e0b; }
+  .health-unhealthy { border-left: 3px solid #ef4444; }
+
+  .component-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .component-name { font-weight: 600; font-size: 14px; }
+  .component-latency { font-size: 12px; color: var(--muted-foreground); margin-left: auto; }
+
+  .component-details {
+    font-size: 12px;
+  }
+
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 3px 0;
+  }
+
+  .detail-key { color: var(--muted-foreground); }
+  .detail-value { color: var(--foreground); }
+
+  /* Metrics Grid */
+  .health-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .metric-card {
+    padding: 16px;
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--muted), transparent 95%);
+    border: 1px solid var(--border);
+    transition: transform 0.2s ease;
+  }
+
+  .metric-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .metric-warn { border-left: 3px solid #f59e0b; }
+  .metric-ok { border-left: 3px solid #10b981; }
+  .metric-title { font-size: 12px; color: var(--muted-foreground); margin: 0 0 4px; }
+  .metric-value { font-size: 24px; font-weight: 700; margin: 0; color: var(--foreground); }
+  .metric-subtitle { font-size: 11px; color: var(--muted-foreground); margin: 4px 0 0; }
+
+  .health-actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Cache Monitor */
+  .cache-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .cache-stat {
+    @apply text-center p-4 rounded-lg bg-muted/20 border border-border/50;
+  }
+  .cache-stat-value { display: block; font-size: 24px; font-weight: 700; color: var(--primary); }
+  .cache-stat-label { font-size: 11px; color: var(--muted-foreground); text-transform: uppercase; }
+
+  .cache-ratio-bar {
+    display: flex;
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    background: var(--muted);
+  }
+
+  .ratio-hits { background: #10b981; }
+  .ratio-misses { background: #ef4444; }
+  .ratio-labels { display: flex; justify-content: space-between; margin-bottom: 16px; }
+
+  .cache-actions { display: flex; gap: 8px; }
+
+  /* Event Queue */
+  .queue-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; margin-bottom: 16px; }
+
+  .queue-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    background: color-mix(in srgb, var(--muted), transparent 80%);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .queue-stat-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-bottom: 6px;
+  }
+
+  .queue-stat-value { font-weight: 700; font-size: 20px; }
+  .queue-stat-label { font-size: 10px; color: var(--muted-foreground); text-transform: uppercase; }
+
+  .queue-alert {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #ef4444;
+    margin-bottom: 12px;
+  }
+
+  .queue-actions { display: flex; gap: 8px; }
+
+  /* Log Viewer */
+  .log-filters {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .filter-select {
+    @apply bg-card border border-border rounded-md px-3 py-1.5 text-sm outline-none focus:ring-1 focus:ring-primary;
+  }
+
+  .log-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    align-items: center;
+    margin-top: 16px;
+  }
+
+  /* Webhook Manager */
+  .webhook-events { display: flex; flex-wrap: wrap; gap: 4px; }
+  .action-buttons-inline { display: flex; gap: 6px; }
+
+  /* Buttons */
+  .btn-sm { @apply px-3 py-1.5 text-xs; }
+  .btn-xs { @apply px-2 py-1 text-[10px]; }
+  .btn-outline { @apply border border-border bg-transparent hover:bg-muted transition-colors; }
+  .btn-outline-danger { @apply border border-destructive/50 text-destructive hover:bg-destructive/10 transition-colors; }
+  .btn-outline-success { @apply border border-green-500/50 text-green-500 hover:bg-green-500/10 transition-colors; }
+}
+
+@media (max-width: 768px) {
+  .operations-grid { grid-template-columns: 1fr; }
+  .health-components { grid-template-columns: 1fr 1fr; }
+  .health-metrics-grid { grid-template-columns: 1fr 1fr; }
+}

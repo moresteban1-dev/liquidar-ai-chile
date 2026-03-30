@@ -1,0 +1,11 @@
+Baseline - 2026-03-27T19:24:42.181Z
+
+Errores TSC Totales: 60
+
+Archivos que importan Quotation de UI: 1
+  - src\app\admin\quotations\AdminQuotationsClient.tsx
+
+Archivos que importan Order de UI: 1
+  - src\app\admin\orders\AdminOrdersClient.tsx
+
+Throws en Infrastructure: 12

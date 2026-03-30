@@ -1,0 +1,26 @@
+
+C:\Users\Esteban\Desktop\Skill IA\01-Agente-Dropservice\dropservice-platform\scripts\auto_fix_lint.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\Esteban\Desktop\Skill IA\01-Agente-Dropservice\dropservice-platform\scripts\fix_jsx_comments.js
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+C:\Users\Esteban\Desktop\Skill IA\01-Agente-Dropservice\dropservice-platform\src\components\admin\quotations\QuotationHistoryTimeline.tsx
+  56:94  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  58:25  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+  58:40  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`         react/no-unescaped-entities
+  70:90  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  72:43  error  'index' is defined but never used                                       @typescript-eslint/no-unused-vars
+
+C:\Users\Esteban\Desktop\Skill IA\01-Agente-Dropservice\dropservice-platform\src\components\features\ai\NegotiationChatbot.tsx
+  45:48  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  47:43  error  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+
+C:\Users\Esteban\Desktop\Skill IA\01-Agente-Dropservice\dropservice-platform\src\components\quoter\steps\Step4Preferences.tsx
+  157:343  error  Comments inside children section of tag should be placed inside braces  react/jsx-no-comment-textnodes
+  159:212  error  Unexpected any. Specify a different type                                @typescript-eslint/no-explicit-any
+
+✖ 13 problems (13 errors, 0 warnings)
+

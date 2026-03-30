@@ -1,0 +1,30 @@
+﻿scripts/collect_raw_data.ts(26,22): error TS2538: Type 'undefined' cannot be used as an index type.
+scripts/collect_raw_data.ts(26,37): error TS2538: Type 'undefined' cannot be used as an index type.
+scripts/collect_raw_data.ts(38,19): error TS2532: Object is possibly 'undefined'.
+scripts/diagnostics/engine.ts(181,9): error TS18048: 'counts.critical' is possibly 'undefined'.
+scripts/diagnostics/reporter.ts(3,33): error TS6196: 'ScanResult' is declared but never used.
+scripts/diagnostics/reporter.ts(3,45): error TS6196: 'Severity' is declared but never used.
+scripts/diagnostics/scanners/security.scanner.ts(96,15): error TS2532: Object is possibly 'undefined'.
+scripts/error-census-final.ts(27,26): error TS2532: Object is possibly 'undefined'.
+scripts/final-ai-audit.ts(18,15): error TS6133: 'catalog' is declared but its value is never read.
+scripts/final-ai-audit.ts(19,15): error TS6133: 'pricing' is declared but its value is never read.
+scripts/final-ai-audit.ts(20,15): error TS6133: 'sla' is declared but its value is never read.
+scripts/fix-imports-exact.ts(80,25): error TS18048: 'line' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(84,26): error TS2532: Object is possibly 'undefined'.
+scripts/fix-imports-exact.ts(86,15): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(155,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(156,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(167,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(168,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(261,42): error TS2532: Object is possibly 'undefined'.
+scripts/fix-imports-exact.ts(292,45): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(293,24): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(293,52): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(324,43): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(325,22): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(325,50): error TS18048: 'exp' is possibly 'undefined'.

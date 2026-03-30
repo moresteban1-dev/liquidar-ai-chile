@@ -1,0 +1,372 @@
+﻿src/actions/dashboard.ts(5,10): error TS2724: '"@/lib/supabase/api"' has no exported member named '_createApiClient'. Did you mean 'createApiClient'?
+src/actions/event-intelligence.ts(37,3): error TS6133: 'prevState' is declared but its value is never read.
+src/actions/quotations/admin-mutations.ts(8,10): error TS2724: '"@/lib/supabase/api"' has no exported member named '_createServiceRoleClient'. Did you mean 'createServiceRoleClient'?
+src/app/admin/catalog/page.tsx(15,17): error TS2322: Type '{ initialItems: { success: boolean; data: CatalogItem[]; error?: undefined; } | { success: boolean; error: string; data?: undefined; }; initialCategories: { success: boolean; data: CatalogCategory[]; error?: undefined; } | { ...; }; }' is not assignable to type 'IntrinsicAttributes'.
+  Property 'initialItems' does not exist on type 'IntrinsicAttributes'.
+src/app/admin/components/admin-payments-panel.tsx(140,88): error TS18048: 'statusInfo' is possibly 'undefined'.
+src/app/admin/components/admin-payments-panel.tsx(141,54): error TS18048: 'statusInfo' is possibly 'undefined'.
+src/app/admin/components/admin-payments-panel.tsx(142,54): error TS18048: 'statusInfo' is possibly 'undefined'.
+src/app/admin/components/analytics-charts.tsx(28,21): error TS2322: Type '(value: number | undefined) => [string, string]' is not assignable to type 'Formatter<ValueType, NameType> & ((value: ValueType, name: NameType, item: TooltipPayloadEntry, index: number, payload: TooltipPayload) => ReactNode | [...])'.
+  Type '(value: number | undefined) => [string, string]' is not assignable to type 'Formatter<ValueType, NameType>'.
+    Types of parameters 'value' and 'value' are incompatible.
+      Type 'ValueType | undefined' is not assignable to type 'number | undefined'.
+        Type 'string' is not assignable to type 'number'.
+src/app/admin/error.tsx(42,57): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Record<string, unknown> | undefined'.
+src/app/admin/leads/[id]/LeadDetailClient.tsx(146,21): error TS2322: Type '"neutral"' is not assignable to type '"link" | "default" | "primary" | "destructive" | "outline" | "secondary" | "ghost" | null | undefined'.
+src/app/admin/OptimizationPanel.tsx(3,10): error TS2724: '"react"' has no exported member named '_Suspense'. Did you mean 'Suspense'?
+src/app/admin/services/[id]/page.tsx(83,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/app/admin/settings/page.tsx(4,33): error TS2724: '"lucide-react"' has no exported member named '_Tags'. Did you mean 'Tags'?
+src/app/admin/settings/page.tsx(4,40): error TS2724: '"lucide-react"' has no exported member named '_Package'. Did you mean 'Package'?
+src/app/api/admin/feature-flags/route.ts(18,3): error TS2345: Argument of type '(_request: NextRequest, { __user }: { __user: AuthenticatedUser; }) => Promise<NextResponse<unknown>>' is not assignable to parameter of type '(request: NextRequest, context: { params: Promise<Record<string, string>>; user: AuthenticatedUser; }) => Promise<NextResponse<unknown>>'.
+  Types of parameters '__1' and 'context' are incompatible.
+    Property '__user' is missing in type '{ params: Promise<Record<string, string>>; user: AuthenticatedUser; }' but required in type '{ __user: AuthenticatedUser; }'.
+src/app/api/admin/feature-flags/route.ts(20,5): error TS6133: '__user' is declared but its value is never read.
+src/app/api/admin/feature-flags/route.ts(42,3): error TS2345: Argument of type '(request: NextRequest, { __user }: { __user: AuthenticatedUser; }) => Promise<NextResponse<unknown>>' is not assignable to parameter of type '(request: NextRequest, context: { params: Promise<Record<string, string>>; user: AuthenticatedUser; }) => Promise<NextResponse<unknown>>'.
+  Types of parameters '__1' and 'context' are incompatible.
+    Property '__user' is missing in type '{ params: Promise<Record<string, string>>; user: AuthenticatedUser; }' but required in type '{ __user: AuthenticatedUser; }'.
+src/app/api/admin/feature-flags/route.ts(44,5): error TS6133: '__user' is declared but its value is never read.
+src/app/api/admin/migration/status/route.ts(15,5): error TS6133: 'request' is declared but its value is never read.
+src/app/api/admin/migration/status/route.ts(31,11): error TS2783: 'flagName' is specified more than once, so this usage will be overwritten.
+src/app/api/admin/stats/analytics/route.ts(54,48): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/api/admin/stats/analytics/route.ts(54,64): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/api/ai/jobs/[jobId]/route.ts(7,5): error TS6133: 'request' is declared but its value is never read.
+src/app/api/ai/negotiation-chat/route.ts(37,31): error TS2532: Object is possibly 'undefined'.
+src/app/api/catalog/items/route.ts(25,15): error TS6133: '__search' is declared but its value is never read.
+src/app/api/catalog/items/route.ts(26,15): error TS6133: '__categoryId' is declared but its value is never read.
+src/app/api/catalog/items/route.ts(28,29): error TS2554: Expected 3 arguments, but got 1.
+src/app/api/client/quotations/[id]/route.ts(10,5): error TS6133: 'request' is declared but its value is never read.
+src/app/api/cron/process-events/route.ts(10,9): error TS6133: '__authHeader' is declared but its value is never read.
+src/app/api/cron/process-events/route.ts(11,9): error TS6133: '__isCron' is declared but its value is never read.
+src/app/api/orders/[id]/quotations/route.ts(23,13): error TS6133: 'pagination' is declared but its value is never read.
+src/app/api/quotations/[id]/approve/route.ts(6,5): error TS6133: 'req' is declared but its value is never read.
+src/app/api/quotations/[id]/reject/route.ts(6,5): error TS6133: 'req' is declared but its value is never read.
+src/app/api/quotations/[id]/route.ts(9,3): error TS6133: 'req' is declared but its value is never read.
+src/app/api/quotations/[id]/send-to-client/route.ts(21,15): error TS6133: 'user' is declared but its value is never read.
+src/app/api/quotations/[id]/send-to-client/route.ts(26,13): error TS6133: 'validatedData' is declared but its value is never read.
+src/app/api/quotations/[id]/submit/route.ts(6,5): error TS6133: 'req' is declared but its value is never read.
+src/app/api/quotations/[id]/transition/route.ts(163,13): error TS2783: 'success' is specified more than once, so this usage will be overwritten.
+src/app/api/upload/route.ts(55,13): error TS2339: Property '__data' does not exist on type '{ data: { id: string; path: string; fullPath: string; }; error: null; } | { data: null; error: StorageError; }'.
+src/app/api/upload/route.ts(55,13): error TS6133: '__data' is declared but its value is never read.
+src/app/api/vendor/quotations/[id]/route.ts(7,5): error TS6133: 'request' is declared but its value is never read.
+src/app/client/components/v2/client-onboarding.tsx(63,15): error TS7030: Not all code paths return a value.
+src/app/client/components/v2/client-onboarding.tsx(95,22): error TS18048: 'currentStep' is possibly 'undefined'.
+src/app/client/components/v2/client-onboarding.tsx(110,108): error TS18048: 'currentStep' is possibly 'undefined'.
+src/app/client/components/v2/client-onboarding.tsx(115,77): error TS18048: 'currentStep' is possibly 'undefined'.
+src/app/client/components/v2/client-onboarding.tsx(117,26): error TS18048: 'currentStep' is possibly 'undefined'.
+src/app/client/components/v2/event-calendar.tsx(62,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/client/components/v2/event-calendar.tsx(62,40): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/client/components/v2/event-calendar.tsx(63,21): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/app/client/loading.tsx(2,29): error TS2724: '"@/components/ui/card"' has no exported member named '_CardHeader'. Did you mean 'CardHeader'?
+src/app/client/orders/[id]/QuotationActions.tsx(9,10): error TS2724: '"react"' has no exported member named '_useState'. Did you mean 'useState'?
+src/app/client/orders/[id]/QuotationActions.tsx(19,3): error TS6133: 'orderId' is declared but its value is never read.
+src/app/client/quotations/[id]/page.tsx(71,30): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/app/client/quotations/[id]/page.tsx(139,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/app/vendor/components/vendor-performance-panel.tsx(82,33): error TS2322: Type '(value: number | undefined) => [string, string]' is not assignable to type 'Formatter<ValueType, NameType> & ((value: ValueType, name: NameType, item: TooltipPayloadEntry, index: number, payload: TooltipPayload) => ReactNode | [...])'.
+  Type '(value: number | undefined) => [string, string]' is not assignable to type 'Formatter<ValueType, NameType>'.
+    Types of parameters 'value' and 'value' are incompatible.
+      Type 'ValueType | undefined' is not assignable to type 'number | undefined'.
+        Type 'string' is not assignable to type 'number'.
+src/app/vendor/inventory/components/InventoryTable.tsx(33,49): error TS2339: Property '__providerId' does not exist on type 'Props'.
+src/app/vendor/inventory/components/InventoryTable.tsx(33,49): error TS6133: '__providerId' is declared but its value is never read.
+src/app/vendor/inventory/page.tsx(74,33): error TS2741: Property 'averageCost' is missing in type 'import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/src/infrastructure/http/server-data/serverFetch").InventoryStats' but required in type 'import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/src/core/domain/provider/ProviderInventoryTypes").InventoryStats'.
+src/app/vendor/inventory/page.tsx(80,33): error TS2322: Type '{ id: any; itemId: any; providerId: any; costPerUnit: any; availableQuantity: any; isAvailable: any; notes: any; equipmentCondition: any; status: any; }[]' is not assignable to type 'ProviderInventoryItem[]'.
+  Type '{ id: any; itemId: any; providerId: any; costPerUnit: any; availableQuantity: any; isAvailable: any; notes: any; equipmentCondition: any; status: any; }' is missing the following properties from type 'ProviderInventoryItem': minRentalDays, advanceBookingDays, createdAt, updatedAt
+src/app/vendor/quotations/[id]/VendorQuotationDetailClient.tsx(27,47): error TS2339: Property '__id' does not exist on type 'Props'.
+src/app/vendor/quotations/[id]/VendorQuotationDetailClient.tsx(27,47): error TS6133: '__id' is declared but its value is never read.
+src/components/admin/AvailabilityCalendar.tsx(105,30): error TS2532: Object is possibly 'undefined'.
+src/components/admin/catalog/CatalogCategoryForm.tsx(24,27): error TS2724: '"@core/domain/catalog/CatalogTypes"' has no exported member named '_ItemType'. Did you mean 'ItemType'?
+src/components/admin/catalog/CatalogCategoryForm.tsx(24,38): error TS2724: '"@core/domain/catalog/CatalogTypes"' has no exported member named '_CatalogStatus'. Did you mean 'CatalogStatus'?
+src/components/admin/catalog/CatalogManager.tsx(192,37): error TS2532: Object is possibly 'undefined'.
+src/components/admin/catalog/CatalogManager.tsx(217,30): error TS2339: Property 'basePrice' does not exist on type 'CatalogItem'.
+src/components/admin/catalog/CatalogManager.tsx(218,67): error TS2339: Property 'basePrice' does not exist on type 'CatalogItem'.
+src/components/admin/catalog/MediaUploader.tsx(5,1): error TS6133: 'Button' is declared but its value is never read.
+src/components/admin/FinanceGraphs.tsx(30,21): error TS2322: Type '(value: number | undefined) => string' is not assignable to type 'Formatter<ValueType, NameType> & ((value: ValueType, name: NameType, item: TooltipPayloadEntry, index: number, payload: TooltipPayload) => ReactNode | [...])'.
+  Type '(value: number | undefined) => string' is not assignable to type 'Formatter<ValueType, NameType>'.
+    Types of parameters 'value' and 'value' are incompatible.
+      Type 'ValueType | undefined' is not assignable to type 'number | undefined'.
+        Type 'string' is not assignable to type 'number'.
+src/components/admin/FinanceGraphs.tsx(57,21): error TS2322: Type '(value: number | undefined) => string' is not assignable to type 'Formatter<ValueType, NameType> & ((value: ValueType, name: NameType, item: TooltipPayloadEntry, index: number, payload: TooltipPayload) => ReactNode | [...])'.
+  Type '(value: number | undefined) => string' is not assignable to type 'Formatter<ValueType, NameType>'.
+    Types of parameters 'value' and 'value' are incompatible.
+      Type 'ValueType | undefined' is not assignable to type 'number | undefined'.
+        Type 'string' is not assignable to type 'number'.
+src/components/admin/quotations/ProviderMatchingPanel.tsx(6,10): error TS2724: '"@/components/ui/button"' has no exported member named '_Button'. Did you mean 'Button'?
+src/components/admin/quotations/ProviderMatchingPanel.tsx(10,10): error TS2724: '"sonner"' has no exported member named '_toast'. Did you mean 'toast'?
+src/components/admin/settings/SettingsForm.tsx(57,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/components/admin/users/columns.tsx(56,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/components/admin/users/columns.tsx(77,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/components/ai/SalesAgentChat.tsx(16,23): error TS2339: Property 'append' does not exist on type 'UseChatHelpers<UIMessage<unknown, UIDataTypes, UITools>>'.
+src/components/ai/SalesAgentChat.tsx(18,9): error TS2353: Object literal may only specify known properties, and 'initialMessages' does not exist in type 'UseChatOptions<UIMessage<unknown, UIDataTypes, UITools>>'.
+src/components/ai/SalesAgentChat.tsx(91,40): error TS2339: Property 'content' does not exist on type 'UIMessage<unknown, UIDataTypes, UITools>'.
+src/components/checkout/ManualTransferForm.tsx(62,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/components/features/admin/event-intelligence/InferenceTestDashboard.tsx(115,67): error TS2339: Property 'serviceName' does not exist on type 'InferredNeed'.
+src/components/layout/ShadcnDashboardLayout.tsx(36,5): error TS6133: 'Bell' is declared but its value is never read.
+src/components/layout/ShadcnDashboardLayout.tsx(43,5): error TS6133: 'Tag' is declared but its value is never read.
+src/components/layout/ShadcnDashboardLayout.tsx(100,11): error TS6133: '__unreadCount' is declared but its value is never read.
+src/components/layout/ShadcnDashboardLayout.tsx(100,13): error TS2339: Property '__unreadCount' does not exist on type 'NotificationContextType'.
+src/components/quoter/steps/Step4Preferences.tsx(39,33): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/components/shared/ProfileForm.tsx(64,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/components/ui/smart-datetime-picker.tsx(123,18): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/components/ui/smart-datetime-picker.tsx(130,22): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/components/ui/sparkline.tsx(47,39): error TS2532: Object is possibly 'undefined'.
+src/components/ui/sparkline.tsx(47,93): error TS2532: Object is possibly 'undefined'.
+src/components/ui/sparkline.tsx(79,21): error TS2532: Object is possibly 'undefined'.
+src/components/ui/sparkline.tsx(80,21): error TS2532: Object is possibly 'undefined'.
+src/components/vendor/CatalogItemPicker.tsx(12,38): error TS2724: '"react"' has no exported member named '_useMemo'. Did you mean 'useMemo'?
+src/components/vendor/CatalogItemPicker.tsx(43,54): error TS2339: Property '__compact' does not exist on type 'Props'.
+src/components/vendor/CatalogItemPicker.tsx(43,54): error TS6133: '__compact' is declared but its value is never read.
+src/components/vendor/ProviderBankForm.tsx(72,26): error TS2345: Argument of type 'unknown' is not assignable to parameter of type 'string'.
+src/components/vendor/ProviderQuotationForm.tsx(87,48): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/components/vendor/ProviderQuotationForm.tsx(153,27): error TS18048: 'item' is possibly 'undefined'.
+src/components/vendor/ProviderQuotationForm.tsx(154,18): error TS18048: 'item' is possibly 'undefined'.
+src/components/vendor/ProviderQuotationForm.tsx(154,35): error TS18048: 'item' is possibly 'undefined'.
+src/components/vendor/ProviderQuotationForm.tsx(158,24): error TS18048: 'item' is possibly 'undefined'.
+src/components/vendor/ProviderQuotationForm.tsx(158,58): error TS18048: 'item' is possibly 'undefined'.
+src/components/vendor/ProviderQuotationForm.tsx(159,42): error TS18048: 'item' is possibly 'undefined'.
+src/core/application/handlers/CreateQuotationHandler.ts(20,22): error TS6138: Property 'eventPublisher' is declared but its value is never read.
+src/core/application/handlers/CreateQuotationHandler.ts(44,46): error TS2345: Argument of type '{ orderId: UniqueEntityID; providerId: UniqueEntityID; status: string; pricing: QuotationPricing; serviceDescription: string; includes: string[]; excludes: never[]; validUntil: Date; estimatedDeliveryDays: number; createdAt: Date; }' is not assignable to parameter of type 'Omit<QuotationProps, "updatedAt">'.
+  Type '{ orderId: UniqueEntityID; providerId: UniqueEntityID; status: string; pricing: QuotationPricing; serviceDescription: string; includes: string[]; excludes: never[]; validUntil: Date; estimatedDeliveryDays: number; createdAt: Date; }' is missing the following properties from type 'Omit<QuotationProps, "updatedAt">': clientId, eventDate, requestedItems, providerItems, and 17 more.
+src/core/application/handlers/CreateQuotationHandler.ts(63,105): error TS2322: Type 'number' is not assignable to type 'string'.
+src/core/application/handlers/DeleteOrderHandler.ts(6,24): error TS2307: Cannot find module '@/core/domain/aggregates/order/_Order' or its corresponding type declarations.
+src/core/application/handlers/ListQuotationsByOrderHandler.ts(16,61): error TS2551: Property 'findByOrderId' does not exist on type 'IQuotationRepository'. Did you mean 'findByOrder'?
+src/core/application/handlers/NotifyClientOnOrderUpdateHandler.ts(2,27): error TS2724: '"@/core/shared/Result"' has no exported member named '_Failure'. Did you mean 'Failure'?
+src/core/application/handlers/QuotationNotificationHandler.ts(1,10): error TS2305: Module '"@core/application/ports/repositories/EventBus"' has no exported member 'EventHandler'.
+src/core/application/handlers/QuotationNotificationHandler.ts(42,70): error TS2345: Argument of type 'Result<string | null, string>' is not assignable to parameter of type 'string'.
+  Type 'Failure<string>' is not assignable to type 'string'.
+src/core/application/handlers/quotations/ApplyMarkup.ts(6,34): error TS2307: Cannot find module '@core/domain/aggregates/quotation/_QuotationStatus' or its corresponding type declarations.
+src/core/application/handlers/quotations/ApplyMarkup.ts(45,34): error TS2322: Type 'Failure<string>' is not assignable to type 'Result<void, AppError>'.
+  Type 'Failure<string>' is not assignable to type 'Failure<AppError>'.
+    Type 'string' is not assignable to type 'AppError'.
+src/core/application/handlers/quotations/ApplyMarkup.ts(50,13): error TS2322: Type 'string' is not assignable to type 'QuotationStatus'.
+src/core/application/handlers/quotations/ApplyMarkup.ts(51,13): error TS2322: Type 'string' is not assignable to type 'QuotationStatus'.
+src/core/application/handlers/quotations/ApproveQuotation.ts(39,27): error TS2365: Operator '<=' cannot be applied to types 'Money' and 'number'.
+src/core/application/handlers/quotations/ApproveQuotation.ts(45,17): error TS2345: Argument of type 'Money' is not assignable to parameter of type 'number'.
+src/core/application/handlers/quotations/AssignProvider.ts(5,34): error TS2307: Cannot find module '@core/domain/aggregates/quotation/_QuotationStatus' or its corresponding type declarations.
+src/core/application/handlers/quotations/AssignProvider.ts(9,10): error TS2724: '"@core/domain/aggregates/quotation/Quotation"' has no exported member named 'QuotationItem'. Did you mean 'Quotation'?
+src/core/application/handlers/quotations/AssignProvider.ts(52,13): error TS2322: Type 'string' is not assignable to type 'QuotationStatus'.
+src/core/application/handlers/quotations/AssignProvider.ts(53,13): error TS2322: Type 'string' is not assignable to type 'QuotationStatus'.
+src/core/application/handlers/quotations/AutoMatchProviderItems.ts(12,10): error TS2724: '"@core/domain/aggregates/quotation/Quotation"' has no exported member named 'QuotationItem'. Did you mean 'Quotation'?
+src/core/application/handlers/TransitionOrderStateHandler.ts(5,17): error TS2459: Module '"@/core/domain/aggregates/order/Order"' declares 'OrderState' locally, but it is not exported.
+src/core/application/handlers/UpdateQuotationHandler.ts(24,45): error TS2339: Property 'providerCost' does not exist on type 'UpdateQuotationCommand'.
+src/core/application/handlers/UpdateQuotationHandler.ts(24,67): error TS2339: Property 'currency' does not exist on type 'UpdateQuotationCommand'.
+src/core/application/handlers/UpdateQuotationHandler.ts(27,75): error TS2345: Argument of type '{ commissionRate: any; }' is not assignable to parameter of type '{ commissionRate: number; platformFeeRate: number; taxRate: number; }'.
+  Type '{ commissionRate: any; }' is missing the following properties from type '{ commissionRate: number; platformFeeRate: number; taxRate: number; }': platformFeeRate, taxRate
+src/core/application/handlers/UpdateQuotationHandler.ts(27,101): error TS2339: Property 'commissionRate' does not exist on type 'UpdateQuotationCommand'.
+src/core/application/ports/PlatformConfigRepository.ts(2,10): error TS2724: '"../../domain/config/PlatformConfigTypes"' has no exported member named '_PlatformConfigRecord'. Did you mean 'PlatformConfigRecord'?
+src/core/application/services/AIBrokerService.ts(37,65): error TS2345: Argument of type 'string' is not assignable to parameter of type 'UniqueEntityID'.
+src/core/application/services/AIBrokerService.ts(46,41): error TS2339: Property 'length' does not exist on type 'Result<ProviderProfile[], AppError>'.
+  Property 'length' does not exist on type 'Failure<AppError>'.
+src/core/application/services/AIBrokerService.ts(55,64): error TS2339: Property 'brief' does not exist on type 'Result<Quotation | null, string>'.
+  Property 'brief' does not exist on type 'Failure<string>'.
+src/core/application/services/AIBrokerService.ts(55,94): error TS2339: Property 'serviceName' does not exist on type 'Result<Quotation | null, string>'.
+  Property 'serviceName' does not exist on type 'Failure<string>'.
+src/core/application/services/AIBrokerService.ts(55,133): error TS2339: Property 'priceBudget' does not exist on type 'Result<Quotation | null, string>'.
+  Property 'priceBudget' does not exist on type 'Failure<string>'.
+src/core/application/services/AIBrokerService.ts(58,29): error TS2488: Type 'Result<ProviderProfile[], AppError>' must have a '[Symbol.iterator]()' method that returns an iterator.
+src/core/application/services/AIBrokerService.ts(140,65): error TS2307: Cannot find module '@infrastructure/persistence/supabase/repositories/SupabaseProviderRepository' or its corresponding type declarations.
+src/core/application/services/AIBrokerService.ts(148,17): error TS2554: Expected 1 arguments, but got 0.
+src/core/application/services/FinancialReporter.ts(2,10): error TS2724: '"@core/domain/aggregates/quotation/QuotationEvents"' has no exported member named '_MarginApplied'. Did you mean 'MarginApplied'?
+src/core/application/services/FinancialReporter.ts(14,13): error TS6133: 'eventStore' is declared but its value is never read.
+src/core/application/services/InferenceToRFQService.ts(120,59): error TS2322: Type 'Promise<CatalogItem[]>' is not assignable to type 'Promise<Result<unknown, any>>'.
+  Type 'CatalogItem[]' is not assignable to type 'Result<unknown, any>'.
+    Type 'CatalogItem[]' is missing the following properties from type 'Success<unknown>': kind, value, success, data, and 8 more.
+src/core/application/services/InferenceToRFQService.ts(123,11): error TS18046: 'bestMatches' is of type 'unknown'.
+src/core/application/services/InferenceToRFQService.ts(126,26): error TS18046: 'bestMatches' is of type 'unknown'.
+src/core/application/services/notification.service.ts(78,9): error TS2322: Type 'Result<void, AppError>' is not assignable to type 'void'.
+  Type 'Failure<AppError>' is not assignable to type 'void'.
+src/core/application/services/notification.service.ts(82,9): error TS2322: Type 'Result<void, AppError>' is not assignable to type 'void'.
+  Type 'Failure<AppError>' is not assignable to type 'void'.
+src/core/application/services/PdfService.ts(18,13): error TS6133: 'doc' is declared but its value is never read.
+src/core/application/services/quotation-service.ts(22,17): error TS6138: Property 'eventBus' is declared but its value is never read.
+src/core/application/services/VariantGeneratorService.ts(2,52): error TS2724: '"../../domain/quote/QuoteTypes"' has no exported member named '_QuoteItemRequested'. Did you mean 'QuoteItemRequested'?
+src/core/application/use-cases/NegotiateProviderBidUseCase.ts(45,65): error TS2345: Argument of type 'string' is not assignable to parameter of type 'UniqueEntityID'.
+src/core/application/use-cases/NegotiateProviderBidUseCase.ts(52,41): error TS2339: Property 'priceCost' does not exist on type 'Result<Quotation | null, string>'.
+  Property 'priceCost' does not exist on type 'Failure<string>'.
+src/core/application/use-cases/NegotiateProviderBidUseCase.ts(53,47): error TS2339: Property 'serviceName' does not exist on type 'Result<Quotation | null, string>'.
+  Property 'serviceName' does not exist on type 'Failure<string>'.
+src/core/domain/aggregates/order/Deadline.ts(9,19): error TS2511: Cannot create an instance of an abstract class.
+src/core/domain/aggregates/order/Deadline.ts(23,19): error TS2511: Cannot create an instance of an abstract class.
+src/core/domain/aggregates/quotation/QuotationItem.ts(18,13): error TS2322: Type 'Failure<QuotationItem>' is not assignable to type 'Result<QuotationItem>'.
+  Type 'Failure<QuotationItem>' is not assignable to type 'Failure<string>'.
+    Type 'QuotationItem' is not assignable to type 'string'.
+src/core/domain/aggregates/quotation/QuotationItem.ts(18,47): error TS2345: Argument of type 'string' is not assignable to parameter of type 'QuotationItem'.
+src/core/domain/aggregates/quotation/QuotationItem.ts(21,13): error TS2322: Type 'Failure<QuotationItem>' is not assignable to type 'Result<QuotationItem>'.
+  Type 'Failure<QuotationItem>' is not assignable to type 'Failure<string>'.
+    Type 'QuotationItem' is not assignable to type 'string'.
+src/core/domain/aggregates/quotation/QuotationItem.ts(21,47): error TS2345: Argument of type 'string' is not assignable to parameter of type 'QuotationItem'.
+src/core/domain/errors/BusinessRuleViolationError.ts(17,10): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'DomainError'.
+src/core/domain/errors/InvalidStateTransitionError.ts(17,10): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'DomainError'.
+src/core/domain/event-intelligence/ProductMatcher.ts(28,24): error TS2339: Property 'length' does not exist on type 'Result<CatalogItem[], Error>'.
+  Property 'length' does not exist on type 'Failure<Error>'.
+src/core/domain/event-intelligence/ProductMatcher.ts(31,31): error TS2339: Property 'length' does not exist on type 'Result<CatalogItem[], Error>'.
+  Property 'length' does not exist on type 'Failure<Error>'.
+src/core/domain/event-intelligence/ProductMatcher.ts(33,9): error TS2322: Type 'Result<CatalogItem[], Error>' is not assignable to type 'CatalogItem[]'.
+  Type 'Failure<Error>' is missing the following properties from type 'CatalogItem[]': length, pop, push, concat, and 33 more.
+src/core/domain/event-intelligence/ProductMatcher.ts(43,22): error TS2339: Property 'length' does not exist on type 'Result<CatalogItem[], Error>'.
+  Property 'length' does not exist on type 'Failure<Error>'.
+src/core/domain/event-intelligence/ProductMatcher.ts(46,29): error TS2339: Property 'length' does not exist on type 'Result<CatalogItem[], Error>'.
+  Property 'length' does not exist on type 'Failure<Error>'.
+src/core/domain/event-intelligence/ProductMatcher.ts(48,9): error TS2322: Type 'Result<CatalogItem[], Error>' is not assignable to type 'CatalogItem[]'.
+  Type 'Failure<Error>' is missing the following properties from type 'CatalogItem[]': length, pop, push, concat, and 33 more.
+src/core/domain/events/QuotationRejected.ts(22,10): error TS4114: This member must have an 'override' modifier because it overrides a member in the base class 'DomainEvent'.
+src/core/domain/pricing/PricingCalculator.ts(17,10): error TS2724: '"./TaxConfig"' has no exported member named '_DEFAULT_IVA_RATE'. Did you mean 'DEFAULT_IVA_RATE'?
+src/core/domain/services/OptimizationEngine.ts(24,13): error TS2365: Operator '>' cannot be applied to types 'number | Money' and 'number'.
+src/core/domain/services/OptimizationEngine.ts(26,28): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+src/core/domain/services/OptimizationEngine.ts(33,13): error TS2365: Operator '<' cannot be applied to types 'number | Money' and 'number'.
+src/core/domain/services/OptimizationEngine.ts(33,29): error TS2365: Operator '>' cannot be applied to types 'number | Money' and 'number'.
+src/core/shared/ResilienceProxy.ts(18,13): error TS6133: 'lastFailureTime' is declared but its value is never read.
+src/core/validation/schemas.ts(8,47): error TS2339: Property 'max' does not exist on type 'ZodPipe<ZodString, ZodTransform<string, string>>'.
+src/infrastructure/ai/flows/bias-analysis.flow.ts(30,39): error TS2345: Argument of type '"BIAS_ANALYSIS"' is not assignable to parameter of type '"SUPERVISOR_ROUTING" | "GENERAL_CHAT" | "CATALOG_MATCHING" | "NEGOTIATOR_ANALYSIS" | "QA_REVIEW"'.
+src/infrastructure/ai/flows/bias-analysis.flow.ts(31,9): error TS2353: Object literal may only specify known properties, and 'depth' does not exist in type '{ systemPrompt: string; data: Record<string, unknown>; lastMessage: string; } & { data: Record<string, unknown>; history: string; lastMessage: string; } & { profile: EventProfile; requestedItems: InferredNeed[]; catalog: CatalogItem[]; } & { ...; } & { ...; }'.
+src/infrastructure/ai/flows/bias-analysis.flow.ts(36,5): error TS2322: Type 'Result<{ summary: string; overallBiasScore: number; biasesDetected: { type: string; name: string; description: string; confidence: number; severity: "low" | "medium" | "high" | "critical"; textEvidence: string; debiasingSuggestion: string; }[]; objectivityScore: number; recommendations: string[]; }, AppError>' is not assignable to type 'Result<{ summary: string; overallBiasScore: number; biasesDetected: { type: string; name: string; description: string; confidence: number; severity: "low" | "medium" | "high" | "critical"; textEvidence: string; debiasingSuggestion: string; }[]; objectivityScore: number; recommendations: string[]; }>'.
+  Type 'Failure<AppError>' is not assignable to type 'Result<{ summary: string; overallBiasScore: number; biasesDetected: { type: string; name: string; description: string; confidence: number; severity: "low" | "medium" | "high" | "critical"; textEvidence: string; debiasingSuggestion: string; }[]; objectivityScore: number; recommendations: string[]; }>'.
+    Type 'Failure<AppError>' is not assignable to type 'Failure<string>'.
+      Type 'AppError' is not assignable to type 'string'.
+src/infrastructure/ai/flows/service-matching.flow.ts(40,9): error TS2353: Object literal may only specify known properties, and 'brief' does not exist in type '{ profile: EventProfile; requestedItems: InferredNeed[]; catalog: CatalogItem[]; }'.
+src/infrastructure/ai/flows/service-matching.flow.ts(45,5): error TS2719: Type 'import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/src/core/shared/Result").Result<{ summary: string; matches: { reasoning: string; confidence: number; providerProposal: { category: "SERVICIO" | "LOGISTICA"; concept: string; quantity: number; unitPriceNet: number; totalPriceNet: num...' is not assignable to type 'import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/src/core/shared/Result").Result<{ summary: string; matches: { reasoning: string; confidence: number; providerProposal: { category: "SERVICIO" | "LOGISTICA"; concept: string; quantity: number; unitPriceNet: number; totalPriceNet: num...'. Two different types with this name exist, but they are unrelated.
+  Type 'Failure<AppError>' is not assignable to type 'Result<{ summary: string; matches: { reasoning: string; confidence: number; providerProposal: { category: "SERVICIO" | "LOGISTICA"; concept: string; quantity: number; unitPriceNet: number; totalPriceNet: number; }; clientProposal: { ...; }; requestedItemId?: string | undefined; catalogItemId?: string | undefined; }[...'.
+    Type 'Failure<AppError>' is not assignable to type 'Failure<string>'.
+      Type 'AppError' is not assignable to type 'string'.
+src/infrastructure/analytics/posthog-provider.tsx(21,15): error TS6133: '__handleRouteChange' is declared but its value is never read.
+src/infrastructure/cache/semantic-cache.ts(26,28): error TS2532: Object is possibly 'undefined'.
+src/infrastructure/cache/semantic-cache.ts(64,28): error TS2532: Object is possibly 'undefined'.
+src/infrastructure/di/bindings.ts(120,12): error TS2554: Expected 3 arguments, but got 0.
+src/infrastructure/di/bindings.ts(136,54): error TS2554: Expected 1 arguments, but got 2.
+src/infrastructure/events/EventBusImpl.ts(2,25): error TS2305: Module '"@core/application/ports/repositories/EventBus"' has no exported member 'EventHandler'.
+src/infrastructure/events/EventProcessor.ts(2,10): error TS2724: '"@/infrastructure/telemetry/StructuredLogger"' has no exported member named '_logger'. Did you mean 'logger'?
+src/infrastructure/events/handlers/NotificationEventHandler.ts(35,32): error TS6138: Property 'notificationService' is declared but its value is never read.
+src/infrastructure/events/handlers/NotificationEventHandler.ts(45,32): error TS6138: Property 'notificationService' is declared but its value is never read.
+src/infrastructure/events/handlers/NotificationEventHandler.ts(54,32): error TS6138: Property 'notificationService' is declared but its value is never read.
+src/infrastructure/events/handlers/NotificationEventHandler.ts(63,32): error TS6138: Property 'notificationService' is declared but its value is never read.
+src/infrastructure/http/middleware/errorHandler.ts(11,42): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+src/infrastructure/http/middleware/errorHandler.ts(11,53): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/infrastructure/migration/MigrationMonitor.ts(236,5): error TS2322: Type 'number | undefined' is not assignable to type 'number'.
+  Type 'undefined' is not assignable to type 'number'.
+src/infrastructure/migration/RolloutController.ts(65,68): error TS18048: 'step' is possibly 'undefined'.
+src/infrastructure/migration/RolloutController.ts(126,42): error TS18048: 'nextStep' is possibly 'undefined'.
+src/infrastructure/migration/RolloutController.ts(133,22): error TS18048: 'nextStep' is possibly 'undefined'.
+src/infrastructure/migration/RolloutController.ts(140,31): error TS18048: 'nextStep' is possibly 'undefined'.
+src/infrastructure/migration/RolloutController.ts(141,22): error TS18048: 'nextStep' is possibly 'undefined'.
+src/infrastructure/migration/RolloutController.ts(171,42): error TS18048: 'previousStep' is possibly 'undefined'.
+src/infrastructure/migration/RolloutController.ts(176,11): error TS18048: 'previousStep' is possibly 'undefined'.
+src/infrastructure/migration/RolloutController.ts(181,61): error TS18048: 'previousStep' is possibly 'undefined'.
+src/infrastructure/migration/RolloutController.ts(182,22): error TS18048: 'previousStep' is possibly 'undefined'.
+src/infrastructure/notifications/channels/WebhookChannel.ts(13,20): error TS6133: 'logger' is declared but its value is never read.
+src/infrastructure/notifications/EmailService.ts(34,5): error TS2322: Type 'unknown' is not assignable to type 'boolean'.
+src/infrastructure/notifications/EmailService.ts(34,12): error TS2554: Expected 3 arguments, but got 2.
+src/infrastructure/notifications/WebhookService.ts(28,5): error TS2322: Type 'unknown' is not assignable to type 'boolean'.
+src/infrastructure/notifications/WebhookService.ts(28,12): error TS2554: Expected 3 arguments, but got 2.
+src/infrastructure/optimization/DeepOptimizationEngine.ts(150,18): error TS2339: Property 'recordGauge' does not exist on type 'MetricsCollector'.
+src/infrastructure/persistence/events/SupabaseEventStore.ts(9,11): error TS2416: Property 'appendEvents' in type 'SupabaseEventStore' is not assignable to the same property in base type 'EventStore'.
+  Type '(aggregateId: string, events: DomainEvent[], expectedVersion: number) => Promise<void>' is not assignable to type '(aggregateId: string, events: IDomainEvent[], expectedVersion: number) => Promise<Result<void, AppError>>'.
+    Type 'Promise<void>' is not assignable to type 'Promise<Result<void, AppError>>'.
+      Type 'void' is not assignable to type 'Result<void, AppError>'.
+src/infrastructure/persistence/events/SupabaseEventStore.ts(31,11): error TS2416: Property 'getEvents' in type 'SupabaseEventStore' is not assignable to the same property in base type 'EventStore'.
+  Type '(aggregateId: string) => Promise<DomainEvent[]>' is not assignable to type '(aggregateId: string) => Promise<Result<IDomainEvent[], AppError>>'.
+    Type 'Promise<DomainEvent[]>' is not assignable to type 'Promise<Result<IDomainEvent[], AppError>>'.
+      Type 'DomainEvent[]' is not assignable to type 'Result<IDomainEvent[], AppError>'.
+        Type 'DomainEvent[]' is missing the following properties from type 'Success<IDomainEvent[]>': kind, value, success, data, and 8 more.
+src/infrastructure/persistence/mappers/OrderMapper.ts(2,1): error TS6133: 'Money' is declared but its value is never read.
+src/infrastructure/persistence/read-models/SupabaseQuotationReadModel.ts(7,11): error TS2416: Property 'getQuotationSummary' in type 'SupabaseQuotationReadModel' is not assignable to the same property in base type 'ReadModelRepository'.
+  Type '(id: string) => Promise<QuotationSummary | null>' is not assignable to type '(id: string) => Promise<Result<QuotationSummary | null, AppError>>'.
+    Type 'Promise<QuotationSummary | null>' is not assignable to type 'Promise<Result<QuotationSummary | null, AppError>>'.
+      Type 'QuotationSummary | null' is not assignable to type 'Result<QuotationSummary | null, AppError>'.
+        Type 'null' is not assignable to type 'Result<QuotationSummary | null, AppError>'.
+src/infrastructure/persistence/read-models/SupabaseQuotationReadModel.ts(31,11): error TS2416: Property 'listRecentSummaries' in type 'SupabaseQuotationReadModel' is not assignable to the same property in base type 'ReadModelRepository'.
+  Type '(limit?: number) => Promise<QuotationSummary[]>' is not assignable to type '(limit: number) => Promise<Result<QuotationSummary[], AppError>>'.
+    Type 'Promise<QuotationSummary[]>' is not assignable to type 'Promise<Result<QuotationSummary[], AppError>>'.
+      Type 'QuotationSummary[]' is not assignable to type 'Result<QuotationSummary[], AppError>'.
+        Type 'QuotationSummary[]' is missing the following properties from type 'Success<QuotationSummary[]>': kind, value, success, data, and 8 more.
+src/infrastructure/persistence/read-models/SupabaseQuotationReadModel.ts(54,11): error TS2416: Property 'getFinancialStats' in type 'SupabaseQuotationReadModel' is not assignable to the same property in base type 'ReadModelRepository'.
+  Type '(startDate: Date, endDate: Date) => Promise<{ totalRevenue: number; totalQuotations: number; averageTicket: number; }>' is not assignable to type '(startDate: Date, endDate: Date) => Promise<Result<{ totalRevenue: number; totalQuotations: number; averageTicket: number; }, AppError>>'.
+    Type 'Promise<{ totalRevenue: number; totalQuotations: number; averageTicket: number; }>' is not assignable to type 'Promise<Result<{ totalRevenue: number; totalQuotations: number; averageTicket: number; }, AppError>>'.
+      Type '{ totalRevenue: number; totalQuotations: number; averageTicket: number; }' is not assignable to type 'Result<{ totalRevenue: number; totalQuotations: number; averageTicket: number; }, AppError>'.
+src/infrastructure/persistence/supabase/mappers/OrderMapper.ts(1,29): error TS2459: Module '"@core/domain/aggregates/order/Order"' declares 'OrderState' locally, but it is not exported.
+src/infrastructure/persistence/supabase/mappers/OrderMapper.ts(5,18): error TS2724: '"@core/shared/Result"' has no exported member named '_Failure'. Did you mean 'Failure'?
+src/infrastructure/persistence/supabase/mappers/OrderMapper.ts(110,27): error TS2339: Property 'cancelledAt' does not exist on type 'Order'.
+src/infrastructure/persistence/supabase/mappers/QuotationMapper.ts(75,13): error TS2739: Type '{ orderId: UniqueEntityID; providerId: UniqueEntityID; clientId: string; serviceId: string; code: string; status: string; serviceDescription: string; includes: never[]; ... 36 more ...; paidAt: Date | undefined; }' is missing the following properties from type 'QuotationProps': providerItems, clientItems
+src/infrastructure/persistence/supabase/mappers/QuotationMapper.ts(132,7): error TS2322: Type 'Success<Result<Quotation, string>>' is not assignable to type 'Result<Quotation, string>'.
+  Type 'Success<Result<Quotation, string>>' is not assignable to type 'Success<Quotation>'.
+    Type 'Result<Quotation, string>' is not assignable to type 'Quotation'.
+      Type 'Failure<string>' is missing the following properties from type 'Quotation': quotationId, orderId, providerId, status, and 76 more.
+src/infrastructure/persistence/supabase/repositories/InstrumentedRepository.ts(2,10): error TS2724: '"@/infrastructure/telemetry/StructuredLogger"' has no exported member named '_logger'. Did you mean 'logger'?
+src/infrastructure/redis/client.ts(29,9): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/infrastructure/resilience/CircuitBreaker.ts(29,11): error TS6133: 'lastStateChange' is declared but its value is never read.
+src/infrastructure/resilience/CircuitBreaker.ts(63,13): error TS2339: Property 'gauge' does not exist on type '{ increment(name: string, value?: number, tags?: Record<string, string>): void; record(name: string, value: number, tags?: Record<string, string>): void; recordRequest(method: string, path: string, duration: number): void; recordError(error: Error, context?: string | undefined): void; }'.
+src/infrastructure/services/SupabaseNotificationAdapter.ts(5,11): error TS2416: Property 'getNotifications' in type 'SupabaseNotificationAdapter' is not assignable to the same property in base type 'NotificationPort'.
+  Type '(userId: string, options?: { limit?: number | undefined; offset?: number | undefined; unreadOnly?: boolean | undefined; } | undefined) => Promise<{ notifications: ClientNotification[]; unreadCount: number; }>' is not assignable to type '(userId: string, options?: { limit?: number | undefined; offset?: number | undefined; unreadOnly?: boolean | undefined; } | undefined) => Promise<Result<{ notifications: ClientNotification[]; unreadCount: number; }, AppError>>'.
+    Type 'Promise<{ notifications: ClientNotification[]; unreadCount: number; }>' is not assignable to type 'Promise<Result<{ notifications: ClientNotification[]; unreadCount: number; }, AppError>>'.
+      Type '{ notifications: ClientNotification[]; unreadCount: number; }' is not assignable to type 'Result<{ notifications: ClientNotification[]; unreadCount: number; }, AppError>'.
+src/infrastructure/services/SupabaseNotificationAdapter.ts(40,11): error TS2416: Property 'getUnreadCount' in type 'SupabaseNotificationAdapter' is not assignable to the same property in base type 'NotificationPort'.
+  Type '(userId: string) => Promise<number>' is not assignable to type '(userId: string) => Promise<Result<number, AppError>>'.
+    Type 'Promise<number>' is not assignable to type 'Promise<Result<number, AppError>>'.
+      Type 'number' is not assignable to type 'Result<number, AppError>'.
+src/infrastructure/services/SupabaseNotificationAdapter.ts(50,11): error TS2416: Property 'markAsRead' in type 'SupabaseNotificationAdapter' is not assignable to the same property in base type 'NotificationPort'.
+  Type '(notificationId: string, userId: string) => Promise<void>' is not assignable to type '(notificationId: string, userId: string) => Promise<Result<void, AppError>>'.
+    Type 'Promise<void>' is not assignable to type 'Promise<Result<void, AppError>>'.
+      Type 'void' is not assignable to type 'Result<void, AppError>'.
+src/infrastructure/services/SupabaseNotificationAdapter.ts(59,11): error TS2416: Property 'markAllAsRead' in type 'SupabaseNotificationAdapter' is not assignable to the same property in base type 'NotificationPort'.
+  Type '(userId: string) => Promise<void>' is not assignable to type '(userId: string) => Promise<Result<void, AppError>>'.
+    Type 'Promise<void>' is not assignable to type 'Promise<Result<void, AppError>>'.
+      Type 'void' is not assignable to type 'Result<void, AppError>'.
+src/infrastructure/services/SupabaseNotificationAdapter.ts(68,11): error TS2416: Property 'createNotification' in type 'SupabaseNotificationAdapter' is not assignable to the same property in base type 'NotificationPort'.
+  Type '(input: CreateNotificationInput) => Promise<void>' is not assignable to type '(input: CreateNotificationInput) => Promise<Result<void, AppError>>'.
+    Type 'Promise<void>' is not assignable to type 'Promise<Result<void, AppError>>'.
+      Type 'void' is not assignable to type 'Result<void, AppError>'.
+src/infrastructure/shared/LoaderRegistry.ts(2,25): error TS2307: Cannot find module './_Result' or its corresponding type declarations.
+src/infrastructure/telemetry/DashboardCollector.ts(257,74): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/infrastructure/telemetry/DashboardCollector.ts(258,24): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/infrastructure/telemetry/instrumentation.ts(43,22): error TS2322: Type 'import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@opentelemetry/sdk-trace-base/build/src/SpanProcessor").SpanProcessor' is not assignable to type 'import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@opentelemetry/sdk-trace-node/node_modules/@opentelemetry/sdk-trace-base/build/src/SpanProcessor").SpanProcessor'.
+  Types of property 'onStart' are incompatible.
+    Type '(span: import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@opentelemetry/sdk-trace-base/build/src/Span").Span, parentContext: import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@opentelemetry/api/build/src/context/types").C...' is not assignable to type '(span: import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@opentelemetry/sdk-trace-node/node_modules/@opentelemetry/sdk-trace-base/build/src/Span").Span, parentContext: import("C:/Users/Esteban/Desktop/Skill IA/01-Agente-Dropservice/dropservice-platform/node_modules/@op...'.
+      Types of parameters 'span' and 'span' are incompatible.
+        Type 'Span & ReadableSpan' is missing the following properties from type 'Span': _spanContext, instrumentationLibrary, _droppedAttributesCount, _droppedEventsCount, and 13 more.
+src/infrastructure/telemetry/MetricsCollector.ts(23,32): error TS6138: Property '_logger' is declared but its value is never read.
+src/infrastructure/telemetry/otel-sdk.ts(4,10): error TS2724: '"@opentelemetry/semantic-conventions"' has no exported member named '_SemanticResourceAttributes'. Did you mean 'SemanticResourceAttributes'?
+src/lib/ai/flow.ts(6,10): error TS2724: '"@infrastructure/ai/agents/types"' has no exported member named '_MessageSchema'. Did you mean 'MessageSchema'?
+src/lib/ai/rag/retriever.ts(25,17): error TS18048: 'queryEmbedding' is possibly 'undefined'.
+src/lib/dashboard/admin-data.service.ts(297,17): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/dashboard/admin-data.service.ts(503,35): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/dashboard/admin-data.service.ts(600,17): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/dashboard/vendor-data.service.ts(431,36): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/lib/logger.ts(2,25): error TS2307: Cannot find module '@infrastructure/telemetry/logger-types' or its corresponding type declarations.
+src/lib/logger.ts(37,26): error TS2339: Property 'fatal' does not exist on type 'StructuredLogger'.
+src/lib/observability/request-context.ts(2,33): error TS2307: Cannot find module '@infrastructure/telemetry/logger-types' or its corresponding type declarations.
+src/lib/observability/request-context.ts(26,18): error TS6133: 'ctx' is declared but its value is never read.
+src/lib/observability/request-context.ts(33,39): error TS2339: Property 'correlationId' does not exist on type 'RequestContextProps'.
+src/lib/order-fsm.ts(12,10): error TS2724: '"@core/domain/pricing/TaxConfig"' has no exported member named '_DEFAULT_IVA_RATE'. Did you mean 'DEFAULT_IVA_RATE'?
+src/lib/payments/gateways/khipu.ts(14,7): error TS6133: '__KHIPU_SLA_HOURS' is declared but its value is never read.
+src/lib/rate-limit.ts(17,98): error TS2345: Argument of type 'string' is not assignable to parameter of type 'Record<string, unknown>'.
+src/lib/validators/quote-schema.ts(9,26): error TS18048: 'body' is possibly 'undefined'.
+src/lib/validators/quote-schema.ts(10,43): error TS18048: 'body' is possibly 'undefined'.
+src/lib/validators/quote-schema.ts(10,55): error TS18048: 'body' is possibly 'undefined'.
+src/lib/validators/quote-schema.ts(20,42): error TS18048: 'dv' is possibly 'undefined'.
+src/middleware.ts(1,10): error TS2724: '"next/server"' has no exported member named '_NextResponse'. Did you mean 'NextResponse'?
+src/tests/mocks/InMemoryOrderRepository.ts(6,14): error TS2420: Class 'InMemoryOrderRepository' incorrectly implements interface 'IOrderRepository'.
+  Type 'InMemoryOrderRepository' is missing the following properties from type 'IOrderRepository': delete, findByClientIdEnriched, findByProviderIdEnriched, findAllEnriched, and 3 more.
+src/tests/mocks/InMemoryQuotationRepository.ts(6,14): error TS2420: Class 'InMemoryQuotationRepository' incorrectly implements interface 'IQuotationRepository'.
+  Type 'InMemoryQuotationRepository' is missing the following properties from type 'IQuotationRepository': getClientQuotationView, getAdminQuotationView
+src/workers/ai-broker.worker.ts(19,28): error TS2339: Property 'withContext' does not exist on type 'StructuredLogger'.
+src/workers/ai.worker.ts(21,28): error TS2339: Property 'withContext' does not exist on type 'StructuredLogger'.
+src/workers/email.worker.ts(12,28): error TS2339: Property 'withContext' does not exist on type 'StructuredLogger'.
+src/workers/index.ts(36,16): error TS2339: Property 'fatal' does not exist on type 'StructuredLogger'.
+src/workers/negotiator.worker.ts(4,51): error TS2307: Cannot find module '@infrastructure/di/use-case-factory' or its corresponding type declarations.
+src/workers/negotiator.worker.ts(20,28): error TS2339: Property 'withContext' does not exist on type 'StructuredLogger'.
+src/workers/qasentinel.worker.ts(4,51): error TS2307: Cannot find module '@infrastructure/di/use-case-factory' or its corresponding type declarations.
+src/workers/qasentinel.worker.ts(21,28): error TS2339: Property 'withContext' does not exist on type 'StructuredLogger'.

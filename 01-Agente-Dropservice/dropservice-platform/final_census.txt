@@ -1,0 +1,37 @@
+﻿
+> dropservice-platform@0.1.1 error-census
+> node scripts/error-census.js
+
+­ƒÜÇ Iniciando Censo de Errores (Health Audit)...
+
+­ƒôè RESULTADOS DEL CENSO:
+------------------------
+59    | TS6133
+34    | TS2339
+33    | TS2322
+31    | TS2345
+27    | TS18048
+9     | TS2307
+8     | TS2532
+7     | TS6138
+6     | TS2554
+4     | TS2365
+3     | TS2353
+3     | TS2724
+3     | TS4114
+2     | TS2783
+2     | TS2305
+2     | TS2459
+2     | TS18046
+2     | TS2511
+2     | TS2420
+1     | TS7030
+1     | TS2741
+1     | TS2551
+1     | TS2488
+1     | TS2362
+1     | TS2719
+1     | TS7006
+1     | TS2739
+------------------------
+TOTAL: 247 errores.

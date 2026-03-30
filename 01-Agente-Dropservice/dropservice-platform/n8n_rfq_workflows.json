@@ -1,0 +1,193 @@
+{
+    "name": "EventosChile RFQ Orchestration",
+    "nodes": [
+        {
+            "parameters": {
+                "path": "provider-assigned",
+                "responseMode": "lastNode",
+                "options": {}
+            },
+            "name": "Webhook: Provider Assigned",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                460,
+                200
+            ],
+            "webhookId": "provider-assigned"
+        },
+        {
+            "parameters": {
+                "url": "https://api.resend.com/emails",
+                "method": "POST",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "headerAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer {{ $env.RESEND_API_KEY }}"
+                        }
+                    ]
+                },
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "from",
+                            "value": "EventosChile <notificaciones@eventoschile.cl>"
+                        },
+                        {
+                            "name": "to",
+                            "value": "={{ $json.body.providerEmail || 'proveedor@test.com' }}"
+                        },
+                        {
+                            "name": "subject",
+                            "value": "Nueva Asignación de Cotización #{{ $json.body.quotationCode || 'PENDING' }}"
+                        },
+                        {
+                            "name": "html",
+                            "value": "<p>Hola,</p><p>Has sido seleccionado para cotizar un nuevo evento.</p><p><a href='https://eventoschile.cl/vendor/quotations'>Ir al Dashboard</a></p>"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "name": "Email Provider",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                680,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "path": "provider-bid-submitted",
+                "responseMode": "lastNode",
+                "options": {}
+            },
+            "name": "Webhook: Provider Bid",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                460,
+                400
+            ],
+            "webhookId": "provider-bid-submitted"
+        },
+        {
+            "parameters": {
+                "content": "⚡ Alerta Admin: Proveedor cotizó\n\nCotización ID: {{ $json.body.quotationId }}\nCosto: ${{ $json.body.cost }}\n\n[Ir a definir Margen](https://eventoschile.cl/admin/quotations/{{ $json.body.quotationId }})"
+            },
+            "name": "Notify Admin (Slack/Discord)",
+            "type": "n8n-nodes-base.discord",
+            "typeVersion": 2,
+            "position": [
+                680,
+                400
+            ],
+            "credentials": {
+                "discordWebhookApi": {
+                    "id": "YOUR_DISCORD_CREDENTIAL_ID",
+                    "name": "Discord Webhook Account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "path": "quotation-ready",
+                "responseMode": "lastNode",
+                "options": {}
+            },
+            "name": "Webhook: Client Ready",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                460,
+                600
+            ],
+            "webhookId": "quotation-ready"
+        },
+        {
+            "parameters": {
+                "url": "https://api.resend.com/emails",
+                "method": "POST",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "headerAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer {{ $env.RESEND_API_KEY }}"
+                        }
+                    ]
+                },
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "from",
+                            "value": "EventosChile <ventas@eventoschile.cl>"
+                        },
+                        {
+                            "name": "to",
+                            "value": "={{ $json.body.clientEmail || 'cliente@test.com' }}"
+                        },
+                        {
+                            "name": "subject",
+                            "value": "¡Tu Cotización está lista!"
+                        },
+                        {
+                            "name": "html",
+                            "value": "<h1>Propuesta Lista</h1><p>Hemos preparado tu cotización. El monto total es de <strong>${{ $json.body.totalClientPrice }}</strong>.</p><p><a href='https://eventoschile.cl/client/quotations/{{ $json.body.quotationId }}'>Ver y Pagar</a></p>"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "name": "Email Client",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 3,
+            "position": [
+                680,
+                600
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook: Provider Assigned": {
+            "main": [
+                [
+                    {
+                        "node": "Email Provider",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook: Provider Bid": {
+            "main": [
+                [
+                    {
+                        "node": "Notify Admin (Slack/Discord)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook: Client Ready": {
+            "main": [
+                [
+                    {
+                        "node": "Email Client",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

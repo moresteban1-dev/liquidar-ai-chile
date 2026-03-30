@@ -1,0 +1,100 @@
+﻿scripts/collect_raw_data.ts(26,22): error TS2538: Type 'undefined' cannot be used as an index type.
+scripts/collect_raw_data.ts(26,37): error TS2538: Type 'undefined' cannot be used as an index type.
+scripts/collect_raw_data.ts(38,19): error TS2532: Object is possibly 'undefined'.
+scripts/diagnostics/engine.ts(181,9): error TS18048: 'counts.critical' is possibly 'undefined'.
+scripts/diagnostics/reporter.ts(3,33): error TS6196: 'ScanResult' is declared but never used.
+scripts/diagnostics/reporter.ts(3,45): error TS6196: 'Severity' is declared but never used.
+scripts/diagnostics/scanners/security.scanner.ts(96,15): error TS2532: Object is possibly 'undefined'.
+scripts/error-census-final.ts(27,26): error TS2532: Object is possibly 'undefined'.
+scripts/final-ai-audit.ts(18,15): error TS6133: 'catalog' is declared but its value is never read.
+scripts/final-ai-audit.ts(19,15): error TS6133: 'pricing' is declared but its value is never read.
+scripts/final-ai-audit.ts(20,15): error TS6133: 'sla' is declared but its value is never read.
+scripts/fix-imports-exact.ts(80,25): error TS18048: 'line' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(84,26): error TS2532: Object is possibly 'undefined'.
+scripts/fix-imports-exact.ts(86,15): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(155,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(156,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(167,11): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(168,26): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/fix-imports-exact.ts(261,42): error TS2532: Object is possibly 'undefined'.
+scripts/fix-imports-exact.ts(292,45): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(293,24): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(293,52): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(324,43): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(325,22): error TS18048: 'exp' is possibly 'undefined'.
+scripts/fix-imports-exact.ts(325,50): error TS18048: 'exp' is possibly 'undefined'.
+scripts/forensic-scan.ts(229,112): error TS2532: Object is possibly 'undefined'.
+scripts/forensic-scan.ts(230,108): error TS2532: Object is possibly 'undefined'.
+scripts/kill-unused-vars-pro.ts(23,24): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/kill-unused-vars-pro.ts(24,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/kill-unused-vars.ts(1,1): error TS6133: 'execSync' is declared but its value is never read.
+scripts/kill-unused-vars.ts(25,24): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/kill-unused-vars.ts(26,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+scripts/migrate-logs.ts(19,41): error TS6133: 'match' is declared but its value is never read.
+scripts/migrate-logs.ts(23,43): error TS6133: 'match' is declared but its value is never read.
+scripts/migrate-logs.ts(27,42): error TS6133: 'match' is declared but its value is never read.
+scripts/migrate-routes-to-auth.ts(39,3): error TS2322: Type '(string | undefined)[]' is not assignable to type 'string[]'.
+  Type 'string | undefined' is not assignable to type 'string'.
+    Type 'undefined' is not assignable to type 'string'.
+scripts/migration/pre-migration-check.ts(68,19): error TS6133: 'errorLogs' is declared but its value is never read.
+scripts/seed-knowledge-graph.ts(2,1): error TS6133: 'uuidv4' is declared but its value is never read.
+scripts/seed-production.ts(3,1): error TS6133: 'bcrypt' is declared but its value is never read.
+scripts/seed-production.ts(83,45): error TS2532: Object is possibly 'undefined'.
+scripts/validate-env.ts(55,13): error TS2339: Property 'errors' does not exist on type 'ZodError<unknown>'.
+scripts/validate-env.ts(55,28): error TS7006: Parameter 'err' implicitly has an 'any' type.
+scripts/verify-ai-flow.ts(2,1): error TS6133: 'container' is declared but its value is never read.
+scripts/verify-ai-flow.ts(6,1): error TS6133: 'logger' is declared but its value is never read.
+scripts/verify-payments.ts(32,20): error TS2532: Object is possibly 'undefined'.
+scripts/verify_e2e_fixes.ts(4,41): error TS2307: Cannot find module '../src/infrastructure/repositories/SupabaseOrderRepository' or its corresponding type declarations.
+scripts/verify_e2e_fixes.ts(5,45): error TS2307: Cannot find module '../src/infrastructure/repositories/SupabaseQuotationRepository' or its corresponding type declarations.
+scripts/verify_e2e_fixes.ts(6,41): error TS2307: Cannot find module '../src/core/use-cases/quotations/ApproveQuotation' or its corresponding type declarations.
+scripts/verify_e2e_fixes.ts(7,35): error TS2307: Cannot find module '../src/core/types/branded' or its corresponding type declarations.
+scripts/verify_e2e_fixes.ts(24,75): error TS18047: 'clientAuth.user' is possibly 'null'.
+src/app/api/admin/feature-flags/route.ts(27,14): error TS2304: Cannot find name 'handleError'.
+src/app/api/admin/feature-flags/route.ts(65,14): error TS2304: Cannot find name 'handleError'.
+src/app/api/admin/stats/analytics/route.ts(13,37): error TS6133: 'req' is declared but its value is never read.
+src/app/api/admin/stats/analytics/route.ts(13,42): error TS6133: 'user' is declared but its value is never read.
+src/app/api/ai/agent/route.ts(1,10): error TS6133: 'NextRequest' is declared but its value is never read.
+src/app/api/ai/agent/route.ts(8,46): error TS6133: 'user' is declared but its value is never read.
+src/app/api/ai/jobs/[jobId]/route.ts(2,10): error TS6133: 'NextRequest' is declared but its value is never read.
+src/app/api/ai/jobs/[jobId]/route.ts(7,36): error TS6133: 'request' is declared but its value is never read.
+src/app/api/ai/jobs/[jobId]/route.ts(7,45): error TS6133: 'user' is declared but its value is never read.
+src/app/api/auth/register/route.ts(10,10): error TS6133: 'NextRequest' is declared but its value is never read.
+src/app/api/auth/register/route.ts(20,46): error TS6133: 'user' is declared but its value is never read.
+src/app/api/catalog/items/route.ts(17,36): error TS6133: 'request' is declared but its value is never read.
+src/app/api/categories/[id]/route.ts(7,27): error TS6133: 'getAuthUser' is declared but its value is never read.
+src/app/api/categories/[id]/route.ts(10,6): error TS6196: 'RouteContext' is declared but never used.
+src/app/api/categories/[id]/route.ts(52,39): error TS6133: 'request' is declared but its value is never read.
+src/app/api/categories/route.ts(4,25): error TS6133: 'withAuth' is declared but its value is never read.
+src/app/api/categories/route.ts(9,41): error TS6133: 'request' is declared but its value is never read.
+src/app/api/cron/expire-payments/route.ts(13,44): error TS6133: 'request' is declared but its value is never read.
+src/app/api/cron/expire-payments/route.ts(16,9): error TS2554: Expected 0 arguments, but got 2.
+src/app/api/orders/[id]/route.ts(28,7): error TS2322: Type '"admin" | "provider" | "client"' is not assignable to type '"admin" | "client"'.
+  Type '"provider"' is not assignable to type '"admin" | "client"'.
+src/app/api/orders/[id]/route.ts(35,37): error TS2339: Property 'toLowerCase' does not exist on type 'AppError'.
+src/app/api/quotations/[id]/bids/route.ts(12,36): error TS6133: 'request' is declared but its value is never read.
+src/app/api/quotations/[id]/client-items/route.ts(11,36): error TS6133: 'request' is declared but its value is never read.
+src/app/api/quotations/[id]/provider-items/route.ts(12,36): error TS6133: 'request' is declared but its value is never read.
+src/app/api/quotations/[id]/provider-quote/route.ts(119,35): error TS2551: Property 'catalog_item_id' does not exist on type 'ProviderItemPayload'. Did you mean 'catalogItemId'?
+src/app/api/quotations/[id]/route.ts(1,10): error TS6133: 'NextRequest' is declared but its value is never read.
+src/app/api/services/route.ts(3,35): error TS2307: Cannot find module '@core/application/ports/CatalogRepository' or its corresponding type declarations.
+src/app/api/stats/route.ts(59,45): error TS7006: Parameter 'sum' implicitly has an 'any' type.
+src/app/api/stats/route.ts(59,50): error TS7006: Parameter 'o' implicitly has an 'any' type.
+src/app/api/stats/route.ts(60,44): error TS7006: Parameter 'sum' implicitly has an 'any' type.
+src/app/api/stats/route.ts(60,49): error TS7006: Parameter 'o' implicitly has an 'any' type.
+src/app/api/stats/route.ts(63,21): error TS7006: Parameter 'o' implicitly has an 'any' type.
+src/app/api/stats/route.ts(64,22): error TS7006: Parameter 'sum' implicitly has an 'any' type.
+src/app/api/stats/route.ts(64,27): error TS7006: Parameter 'o' implicitly has an 'any' type.
+src/app/api/stats/route.ts(67,21): error TS7006: Parameter 'o' implicitly has an 'any' type.
+src/app/api/stats/route.ts(71,22): error TS7006: Parameter 'sum' implicitly has an 'any' type.
+src/app/api/stats/route.ts(71,27): error TS7006: Parameter 'o' implicitly has an 'any' type.
+src/app/api/webhooks/payments/callback/route.ts(2,10): error TS6133: 'NextRequest' is declared but its value is never read.

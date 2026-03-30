@@ -1,0 +1,23 @@
+# OpenCode Ignore - Optimized for Dropservice Platform
+# No indexar dependencias ni archivos de compilación
+node_modules/
+.next/
+dist/
+.git/
+*.log
+.vercel/
+
+# Ignorar assets binarios pesados (imágenes/videos)
+public/images/
+public/videos/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.ico
+
+# Ignorar archivos de configuración de sistemas de despliegue
+supabase/.branches/
+supabase/.temp/
+.opencode/

@@ -1,0 +1,25 @@
+# Dockerfile.worker
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Install dependencies (only production if possible, but we need devDeps for build usually)
+COPY package*.json ./
+RUN npm ci
+
+# Copy source
+COPY . .
+
+# Build (if necessary, or we can use ts-node/tsx directly for worker to save build complexity)
+# For production worker, compiling to JS is better.
+# Let's use robust approach: Build standard Next.js app (which compiles libs) 
+# OR use tsx for simplicity if performance permits. 
+# Given "World Class", we should probably transpile.
+# BUT, `src/workers` might not be part of Next.js build. 
+# Let's use `tsx` for now for simplicity and compatibility with current monorepo structure.
+# Improvements: Create a specific tsconfig.worker.json and build with tsc.
+
+# We will run with tsx for now to ensure all aliases (@/*) work out of the box without complex build config.
+# In a real enterprise scenario, we'd have a separate build step.
+
+CMD ["npx", "tsx", "src/workers/index.ts"]
