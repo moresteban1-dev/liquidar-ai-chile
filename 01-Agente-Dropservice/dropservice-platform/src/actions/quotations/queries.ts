@@ -34,8 +34,13 @@ export interface QuotationListItem {
  */
 export async function getRecentClientQuotations(limit = 4) {
     try {
-        const { user } = await requireRole(UserRole.CLIENT);
-        const supabase = await createApiClient();
+        const authResult = await requireRole(UserRole.CLIENT);
+        if (authResult.isFailure()) throw new Error(authResult.getError().message);
+        const { user } = authResult.getValue();
+
+        const clientResult = await createApiClient();
+        if (clientResult.isFailure()) throw new Error(clientResult.getError().message);
+        const supabase = clientResult.getValue();
 
         const { data, error } = await supabase
             .from('quotations')
@@ -92,8 +97,13 @@ export async function getRecentClientQuotations(limit = 4) {
  */
 export async function getClientQuotations() {
     try {
-        const { user } = await requireRole(UserRole.CLIENT);
-        const supabase = await createApiClient();
+        const authResult = await requireRole(UserRole.CLIENT);
+        if (authResult.isFailure()) throw new Error(authResult.getError().message);
+        const { user } = authResult.getValue();
+
+        const clientResult = await createApiClient();
+        if (clientResult.isFailure()) throw new Error(clientResult.getError().message);
+        const supabase = clientResult.getValue();
 
         const { data, error } = await supabase
             .from('quotations')
@@ -148,7 +158,8 @@ export async function getClientQuotations() {
  * Server-side only — used in RSC pages.
  */
 export async function getAdminQuotations(): Promise<QuotationListItem[]> {
-    await requireRole(UserRole.ADMIN);
+    const authResult = await requireRole(UserRole.ADMIN);
+    if (authResult.isFailure()) return [];
     const supabase = createServiceRoleClient();
 
     const { data, error } = await supabase
@@ -182,7 +193,9 @@ export async function getAdminQuotations(): Promise<QuotationListItem[]> {
  * Fetches quotations assigned to the current vendor.
  */
 export async function getVendorQuotations(): Promise<QuotationListItem[]> {
-    const { user } = await requireRole(UserRole.VENDOR);
+    const authResult = await requireRole(UserRole.VENDOR);
+    if (authResult.isFailure()) return [];
+    const { user } = authResult.getValue();
     const supabase = createServiceRoleClient();
 
     const { data, error } = await supabase
@@ -236,7 +249,9 @@ export interface VendorOrderItem {
  * Fetches orders assigned to the current vendor.
  */
 export async function getVendorOrders(): Promise<VendorOrderItem[]> {
-    const { user } = await requireRole(UserRole.VENDOR);
+    const authResult = await requireRole(UserRole.VENDOR);
+    if (authResult.isFailure()) return [];
+    const { user } = authResult.getValue();
     const supabase = createServiceRoleClient();
 
     const { data, error } = await supabase

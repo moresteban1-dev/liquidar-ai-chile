@@ -14,7 +14,9 @@ import { createQuotationId } from '@core/domain/types/branded';
 export async function approveQuote(quotationId: string): Promise<ActionResponse> {
     return withTracing('action.client_approve_quote', async (span) => {
         try {
-            const { user } = await requireRole(UserRole.CLIENT);
+            const authResult = await requireRole(UserRole.CLIENT);
+            if (authResult.isFailure()) return { success: false, error: authResult.getError().message };
+            const { user } = authResult.getValue();
             span.setAttribute('quotation.id', quotationId);
             span.setAttribute('client.id', user?.id || 'unknown');
 

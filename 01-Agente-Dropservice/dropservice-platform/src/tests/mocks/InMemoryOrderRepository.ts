@@ -9,30 +9,31 @@ import {
 } from '@app/ports/IOrderRepository';
 import { UniqueEntityID } from '@/core/shared/UniqueEntityID'
 import { Result, Success, Failure } from '@/core/shared/Result'
+import { AppError } from '@/core/shared/AppError'
 
 export class InMemoryOrderRepository implements IOrderRepository {
   private orders = new Map<string, Order>()
   public shouldFail = false
 
-  async findById(id: UniqueEntityID): Promise<Result<Order | null, string>> {
-    if (this.shouldFail) return new Failure('Repository error')
+  async findById(id: UniqueEntityID): Promise<Result<Order | null, AppError>> {
+    if (this.shouldFail) return new Failure(AppError.internal('Repository error'))
     return new Success(this.orders.get(id.toString()) || null)
   }
 
-  async save(order: Order): Promise<Result<void, string>> {
-    if (this.shouldFail) return new Failure('Repository error')
+  async save(order: Order): Promise<Result<void, AppError>> {
+    if (this.shouldFail) return new Failure(AppError.internal('Repository error'))
     this.orders.set(order.orderId.toString(), order)
     return new Success(undefined)
   }
 
-  async delete(id: UniqueEntityID): Promise<Result<void, string>> {
-    if (this.shouldFail) return new Failure('Repository error')
+  async delete(id: UniqueEntityID): Promise<Result<void, AppError>> {
+    if (this.shouldFail) return new Failure(AppError.internal('Repository error'))
     this.orders.delete(id.toString())
     return new Success(undefined)
   }
 
-  async query(options: OrderQueryOptions): Promise<Result<{ data: Order[]; total: number }, string>> {
-    if (this.shouldFail) return new Failure('Repository error')
+  async query(options: OrderQueryOptions): Promise<Result<{ data: Order[]; total: number }, AppError>> {
+    if (this.shouldFail) return new Failure(AppError.internal('Repository error'))
     let orders = Array.from(this.orders.values())
 
     if (options.filters) {
@@ -52,7 +53,7 @@ export class InMemoryOrderRepository implements IOrderRepository {
     return new Success({ data: orders.slice(offset, offset + pageSize), total })
   }
 
-  async findByClientIdEnriched(clientId: string, options?: OrderListOptions): Promise<Result<OrderListResult, string>> {
+  async findByClientIdEnriched(clientId: string, options?: OrderListOptions): Promise<Result<OrderListResult, AppError>> {
     const res = await this.query({ filters: { clientId }, page: options?.page, pageSize: options?.limit })
     if (res.isFailure()) return new Failure(res.error)
     return new Success({
@@ -63,7 +64,7 @@ export class InMemoryOrderRepository implements IOrderRepository {
     })
   }
 
-  async findByProviderIdEnriched(providerId: string, options?: OrderListOptions): Promise<Result<OrderListResult, string>> {
+  async findByProviderIdEnriched(providerId: string, options?: OrderListOptions): Promise<Result<OrderListResult, AppError>> {
     const res = await this.query({ filters: { providerId }, page: options?.page, pageSize: options?.limit })
     if (res.isFailure()) return new Failure(res.error)
     return new Success({
@@ -74,7 +75,7 @@ export class InMemoryOrderRepository implements IOrderRepository {
     })
   }
 
-  async findAllEnriched(options?: OrderListOptions): Promise<Result<OrderListResult, string>> {
+  async findAllEnriched(options?: OrderListOptions): Promise<Result<OrderListResult, AppError>> {
     const res = await this.query({ page: options?.page, pageSize: options?.limit })
     if (res.isFailure()) return new Failure(res.error)
     return new Success({
@@ -85,7 +86,7 @@ export class InMemoryOrderRepository implements IOrderRepository {
     })
   }
 
-  async findByIdEnriched(id: string): Promise<Result<EnrichedOrderDetail | null, string>> {
+  async findByIdEnriched(id: string): Promise<Result<EnrichedOrderDetail | null, AppError>> {
     const order = this.orders.get(id)
     if (!order) return new Success(null)
     return new Success({
@@ -96,7 +97,7 @@ export class InMemoryOrderRepository implements IOrderRepository {
     })
   }
 
-  async getDashboardStats(): Promise<Result<DashboardStats, string>> {
+  async getDashboardStats(): Promise<Result<DashboardStats, AppError>> {
     return new Success({
       totalOrders: this.orders.size,
       byStatus: {},
@@ -109,26 +110,29 @@ export class InMemoryOrderRepository implements IOrderRepository {
     })
   }
 
-  async findActiveOrdersByClient(clientId: UniqueEntityID): Promise<Result<Order[], string>> {
+  async findActiveOrdersByClient(clientId: UniqueEntityID): Promise<Result<Order[], AppError>> {
     const res = await this.query({ filters: { clientId: clientId.toString(), activeOnly: true }, pageSize: 100 })
-    return res.map(r => r.data)
+    if (res.isFailure()) return new Failure(res.error)
+    return new Success(res.value.data)
   }
 
-  async findByProvider(providerId: UniqueEntityID): Promise<Result<Order[], string>> {
+  async findByProvider(providerId: UniqueEntityID): Promise<Result<Order[], AppError>> {
     const res = await this.query({ filters: { providerId: providerId.toString() }, pageSize: 100 })
-    return res.map(r => r.data)
+    if (res.isFailure()) return new Failure(res.error)
+    return new Success(res.value.data)
   }
 
-  async findByState(state: string): Promise<Result<Order[], string>> {
+  async findByState(state: string): Promise<Result<Order[], AppError>> {
     const res = await this.query({ filters: { state }, pageSize: 100 })
-    return res.map(r => r.data)
+    if (res.isFailure()) return new Failure(res.error)
+    return new Success(res.value.data)
   }
 
-  async countActive(): Promise<Result<number, string>> {
+  async countActive(): Promise<Result<number, AppError>> {
     return new Success(Array.from(this.orders.values()).filter(o => o.isActive).length)
   }
 
-  async createFromQuotation(_quotationId: string, _price: number): Promise<Result<string, string>> {
+  async createFromQuotation(_quotationId: string, _price: number): Promise<Result<string, AppError>> {
     return new Success('new-order-id')
   }
 }

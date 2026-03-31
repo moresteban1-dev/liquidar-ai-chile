@@ -29,8 +29,9 @@ export interface OrderData {
  * Server-side only — used in RSC pages.
  */
 export async function getAdminOrders(): Promise<OrderData[]> {
-    const { user } = await requireRole(UserRole.ADMIN);
-    if (!user) return [];
+    const authResult = await requireRole(UserRole.ADMIN);
+    if (authResult.isFailure()) return [];
+    const { user } = authResult.getValue();
 
     const supabase = createServiceRoleClient();
 
@@ -74,8 +75,9 @@ export async function getAdminOrders(): Promise<OrderData[]> {
  * Fetches orders for client dashboard (own orders only).
  */
 export async function getClientOrders(): Promise<OrderData[]> {
-    const { user } = await requireRole(UserRole.CLIENT);
-    if (!user) return [];
+    const authResult = await requireRole(UserRole.CLIENT);
+    if (authResult.isFailure()) return [];
+    const { user } = authResult.getValue();
 
     const supabase = createServiceRoleClient();
 

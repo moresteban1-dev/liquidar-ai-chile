@@ -15,7 +15,8 @@ import { UserRole } from '@/core/domain/auth/UserRole';
 export async function assignProvider(quotationId: string, providerId: string): Promise<ActionResponse> {
     return withTracing('action.assign_provider', async (span) => {
         try {
-            await requireRole(UserRole.ADMIN);
+            const authResult = await requireRole(UserRole.ADMIN);
+            if (authResult.isFailure()) return { success: false, error: authResult.getError().message };
             span.setAttribute('quotation.id', quotationId);
             span.setAttribute('provider.id', providerId);
 
@@ -47,7 +48,9 @@ export async function assignProvider(quotationId: string, providerId: string): P
 export async function setMarkupAndApprove(quotationId: string, adminFee: number, totalClientPrice: number): Promise<ActionResponse> {
     return withTracing('action.set_markup', async (span) => {
         try {
-            const { user } = await requireRole(UserRole.ADMIN);
+            const authResult = await requireRole(UserRole.ADMIN);
+            if (authResult.isFailure()) return { success: false, error: authResult.getError().message };
+            const { user } = authResult.getValue();
             span.setAttribute('quotation.id', quotationId);
             span.setAttribute('admin_fee', adminFee);
 
@@ -88,7 +91,8 @@ export async function setMarkupAndApprove(quotationId: string, adminFee: number,
 export async function analyzeQuote(quotationId: string): Promise<{ success: boolean; data?: BiasAnalysisOutput; error?: string }> {
     return withTracing('action.analyze_quote', async (span) => {
         try {
-            await requireRole(UserRole.ADMIN);
+            const authResult = await requireRole(UserRole.ADMIN);
+            if (authResult.isFailure()) return { success: false, error: authResult.getError().message };
             span.setAttribute('quotation.id', quotationId);
 
             const { ApplicationRegistry } = await import('@infrastructure/di/ApplicationRegistry');

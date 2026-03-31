@@ -50,7 +50,9 @@ export interface VendorActiveOrder {
  */
 export async function getVendorKpisV2(): Promise<VendorKpiV2[]> {
     try {
-        const { user } = await requireRole(UserRole.VENDOR);
+        const authResult = await requireRole(UserRole.VENDOR);
+        if (authResult.isFailure()) throw new Error(authResult.getError().message);
+        const { user } = authResult.getValue();
         const supabase = createServiceRoleClient();
 
         const now = new Date();
@@ -130,7 +132,9 @@ export async function getVendorKpisV2(): Promise<VendorKpiV2[]> {
  */
 export async function getVendorOpportunities(): Promise<VendorOpportunity[]> {
     try {
-        const { user } = await requireRole(UserRole.VENDOR);
+        const authResult = await requireRole(UserRole.VENDOR);
+        if (authResult.isFailure()) throw new Error(authResult.getError().message);
+        const { user } = authResult.getValue();
         const supabase = createServiceRoleClient();
 
         const { data } = await supabase
@@ -181,7 +185,9 @@ export async function getVendorOpportunities(): Promise<VendorOpportunity[]> {
  */
 export async function getVendorActiveOrders(): Promise<VendorActiveOrder[]> {
     try {
-        const { user } = await requireRole(UserRole.VENDOR);
+        const authResult = await requireRole(UserRole.VENDOR);
+        if (authResult.isFailure()) throw new Error(authResult.getError().message);
+        const { user } = authResult.getValue();
         const supabase = createServiceRoleClient();
 
         const { data } = await supabase
@@ -244,7 +250,9 @@ export interface VendorPaymentRecord {
  */
 export async function getVendorPaymentHistory(): Promise<VendorPaymentRecord[]> {
     try {
-        const { user } = await requireRole(UserRole.VENDOR);
+        const authResult = await requireRole(UserRole.VENDOR);
+        if (authResult.isFailure()) throw new Error(authResult.getError().message);
+        const { user } = authResult.getValue();
         const supabase = createServiceRoleClient();
 
         // Get quotations where vendor was assigned and payment completed
@@ -307,7 +315,9 @@ export interface VendorFeedback {
  */
 export async function getVendorFeedbackReceived(): Promise<VendorFeedback[]> {
     try {
-        const { user } = await requireRole(UserRole.VENDOR);
+        const authResult = await requireRole(UserRole.VENDOR);
+        if (authResult.isFailure()) throw new Error(authResult.getError().message);
+        const { user } = authResult.getValue();
         const supabase = createServiceRoleClient();
 
         // Get quotation IDs where this vendor was assigned
@@ -377,7 +387,9 @@ export interface VendorPerformanceData {
  */
 export async function getVendorPerformanceMetrics(): Promise<VendorPerformanceData> {
     try {
-        const { user } = await requireRole(UserRole.VENDOR);
+        const authResult = await requireRole(UserRole.VENDOR);
+        if (authResult.isFailure()) throw new Error(authResult.getError().message);
+        const { user } = authResult.getValue();
         const supabase = createServiceRoleClient();
 
         const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
