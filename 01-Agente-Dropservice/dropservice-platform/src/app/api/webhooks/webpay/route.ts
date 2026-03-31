@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server';
 import { PaymentService } from '@/lib/payments/payment-service';
 import { createHmac, timingSafeEqual } from 'crypto';
-import { logger } from '@infrastructure/telemetry/StructuredLogger';
+import { logger } from '@/infrastructure/telemetry/StructuredLogger';
 import { withWebhookAuth } from '@/lib/api/with-auth';
+import { createServiceRoleClient } from '@/lib/supabase/api';
 
 /**
  * Verifies Webpay webhook signature using HMAC-SHA256.
@@ -16,8 +17,8 @@ function verifyWebpaySignature(
     secret: string | null,
 ): boolean {
     if (!secret) {
-        logger.warn('[Webpay Webhook] No WEBPAY_WEBHOOK_SECRET configured — skipping verification');
-        return true; // Allow in dev without secret
+        logger.error('[Webpay Webhook] CRITICAL: WEBPAY_WEBHOOK_SECRET is not configured. Rejecting all requests for safety.');
+        return false; 
     }
 
     if (!signature) {
@@ -34,7 +35,8 @@ function verifyWebpaySignature(
             Buffer.from(signature, 'hex'),
             Buffer.from(expectedSignature, 'hex'),
         );
-    } catch {
+    } catch (e) {
+        logger.error('[Webpay Webhook] Error comparing signatures', e as Error);
         return false;
     }
 }
@@ -66,6 +68,23 @@ export const POST = withWebhookAuth(async (request) => {
 
         // Process Webpay transaction webhook
         if (body.token_ws || body.TBK_TOKEN) {
+            const token = (body.token_ws || body.TBK_TOKEN) as string;
+            
+            // IDEMPOTENCIA AAA: Verificar si el token ya fue procesado con éxito
+            const supabase = createServiceRoleClient();
+            const { data: existingEvent } = await supabase
+                .from('webhook_events')
+                .select('id, processed')
+                .eq('gateway_slug', 'webpay')
+                .eq('payload->>token_ws', token) // Búsqueda profunda en JSONB
+                .eq('processed', true)
+                .maybeSingle();
+
+            if (existingEvent) {
+                logger.info(`[Webpay Webhook] Token ${token} already processed. Skipping duplicated execution.`);
+                return NextResponse.json({ received: true, duplicated: true });
+            }
+
             await PaymentService.processWebhook(
                 'webpay',
                 'transaction.confirmed',

@@ -8,6 +8,8 @@ import { Result, ok, fail } from '@core/shared/Result';
 import { Quotation } from '@core/domain/aggregates/quotation/Quotation';
 import { AppError } from '@core/shared/AppError';
 import { UniqueEntityID } from '@core/shared/UniqueEntityID';
+import { VALID_INTERNAL_TRANSITIONS } from '@/lib/quotation-fsm';
+import { BUSINESS_CONFIG } from '@/config/business-config';
 
 type TransitionData = {
     assignedProviderId?: string;
@@ -42,7 +44,15 @@ export class QuotationService {
             return fail(AppError.notFound('Quotation', quotationId));
         }
 
-        const previousStatus = quotation.status;
+        const previousStatus = quotation.status as unknown as keyof typeof VALID_INTERNAL_TRANSITIONS;
+        
+        // IDEMPOTENCIA & INTEGRIDAD AAA: Validar contra la FSM
+        const allowedTransitions = VALID_INTERNAL_TRANSITIONS[previousStatus] || [];
+        if (!allowedTransitions.includes(toInternalStatus as any) && previousStatus !== toInternalStatus) {
+            this.logger.error(`[FSM VIOLATION] Intent de transición ilegal: ${previousStatus} -> ${toInternalStatus} en Quotation ${quotationId}`);
+            return fail(AppError.businessRule(`Transición no permitida: ${previousStatus} -> ${toInternalStatus}`));
+        }
+
         let actionResult: Result<void, string> = ok(undefined);
 
         switch (toInternalStatus) {
@@ -119,7 +129,7 @@ export class QuotationService {
     async applyMarkup(
         quotationId: string,
         selectedBidId: string,
-        _markupPercentage: number = 50
+        _markupPercentage: number = BUSINESS_CONFIG.PRICING.DEFAULT_MARKUP_PERCENTAGE
     ): Promise<Result<Quotation, AppError>> {
         const quotationRes = await this.quotationRepository.findById(new UniqueEntityID(quotationId));
         if (quotationRes.isFailure()) return fail(quotationRes.getError());

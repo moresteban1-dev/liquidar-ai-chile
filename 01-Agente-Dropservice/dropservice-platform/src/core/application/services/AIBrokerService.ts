@@ -10,6 +10,7 @@ import { UniqueEntityID } from '@core/shared/UniqueEntityID';
 import type { QuotationService } from './quotation-service';
 import type { ConfidenceService } from './ConfidenceService';
 import type { AIAuditPort } from '@core/application/ports/AIAuditPort';
+import { BUSINESS_CONFIG } from '@/config/business-config';
 
 const aiBrokerSchema = z.object({
     matching_score: z.number().min(0).max(100).describe('Puntaje de afinidad entre el proveedor y la cotización (0-100).'),
@@ -83,10 +84,15 @@ export class AIBrokerService {
           Servicios en Inventario (Expertise): ${expertise}
           
           Asigna un score de idoneidad. Sé estricto. Si no hay relación semántica obvia entre el expertise y el requerimiento, la nota debe ser baja (< 40). Si calza perfecto, > 85.
+          
+          REGLAS DE ORO:
+          1. Ignora coincidencias parciales si el servicio principal es distinto.
+          2. Prioriza proveedores con experiencia específica en el rubro mencionado.
+          3. En caso de duda razonable, sube la nota para activar revisión humana (autonomy: suggest) en lugar de auto-asignación fallida.
         `;
 
                 const { object } = await this.aiGenerator.generateObject({
-                    model: 'gpt-4o-mini',
+                    model: BUSINESS_CONFIG.AI_BROKER.MODEL,
                     schema: aiBrokerSchema,
                     prompt,
                 });
@@ -110,8 +116,8 @@ export class AIBrokerService {
                 try {
                     const result = await this.quotationService.transitionQuotation(quotationId, QuotationStatus.AWAITING_CLIENT_PAYMENT, {
                         assignedProviderId: bestProvider.id,
-                        markupPercentage: 50,
-                        internalNotes: `Auto-asignado por AI Broker (Score: ${bestScore}/100)`
+                        markupPercentage: BUSINESS_CONFIG.PRICING.DEFAULT_MARKUP_PERCENTAGE,
+                        internalNotes: `Auto-asignado por AI Broker (Score: ${bestScore}/100) usando Modelo ${BUSINESS_CONFIG.AI_BROKER.MODEL}`
                     });
 
                     if (result.isFailure()) {

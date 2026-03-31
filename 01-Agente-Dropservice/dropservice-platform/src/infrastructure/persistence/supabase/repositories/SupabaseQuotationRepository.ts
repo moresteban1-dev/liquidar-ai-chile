@@ -4,7 +4,7 @@ import { Quotation } from '@core/domain/aggregates/quotation/Quotation'
 import { UniqueEntityID } from '@core/shared/UniqueEntityID'
 import { Result } from '@core/shared/Result'
 import { AppError } from '@core/shared/AppError'
-import { QuotationV2Mapper, QuotationAggregateRow } from '../../mappers/QuotationV2Mapper'
+import { QuotationV2Mapper } from '../../mappers/QuotationV2Mapper'
 import { logger } from '@infrastructure/telemetry/StructuredLogger'
 
 /**
@@ -20,35 +20,28 @@ export class SupabaseQuotationRepository implements IQuotationRepository {
 
   async findById(id: UniqueEntityID): Promise<Result<Quotation | null, AppError>> {
     try {
-      logger.debug('Buscando cotización por ID', { quotationId: id.toString() })
+      logger.debug('Buscando cotización por ID (Optimized Select)', { quotationId: id.toString() })
 
-      const { data: qRow, error: qError } = await this.client
+      // OPTIMIZACIÓN AAA: Única query para el agregado completo (Evita 4 roundtrips)
+      const { data, error } = await this.client
         .from('quotations')
-        .select('*')
+        .select(`
+          *,
+          requestedItems:quotation_requested_items(*),
+          providerItems:quotation_provider_items(*),
+          clientItems:quotation_client_items(*)
+        `)
         .eq('id', id.toString())
         .is('deleted_at', null)
-        .single()
+        .maybeSingle()
 
-      if (qError) {
-        if (qError.code === 'PGRST116') return Result.ok(null)
-        return Result.fail(AppError.internal(`Error de base de datos: ${qError.message}`))
+      if (error) {
+        return Result.fail(AppError.internal(`Error de base de datos: ${error.message}`))
       }
 
-      // Fetch related items for V2 Aggregate
-      const [reqItems, provItems, cliItems] = await Promise.all([
-        this.client.from('quotation_requested_items').select('*').eq('quotation_id', id.toString()),
-        this.client.from('quotation_provider_items').select('*').eq('quotation_id', id.toString()),
-        this.client.from('quotation_client_items').select('*').eq('quotation_id', id.toString())
-      ]);
+      if (!data) return Result.ok(null);
 
-      const aggregateRow: QuotationAggregateRow = {
-        quotation: qRow as any,
-        requestedItems: reqItems.data || [],
-        providerItems: provItems.data || [],
-        clientItems: cliItems.data || []
-      };
-
-      const domainRes = QuotationV2Mapper.toDomain(aggregateRow);
+      const domainRes = QuotationV2Mapper.toDomain(data as any);
       if (domainRes.isFailure()) {
           return Result.fail(AppError.internal(domainRes.getError()));
       }
@@ -98,9 +91,15 @@ export class SupabaseQuotationRepository implements IQuotationRepository {
 
   async findByOrder(orderId: UniqueEntityID): Promise<Result<Quotation[], AppError>> {
     try {
+      // OPTIMIZACIÓN AAA: Eliminado N+1. Una sola query para todas las cotizaciones con sus ítems.
       const { data, error } = await this.client
         .from('quotations')
-        .select('id')
+        .select(`
+          *,
+          requestedItems:quotation_requested_items(*),
+          providerItems:quotation_provider_items(*),
+          clientItems:quotation_client_items(*)
+        `)
         .eq('service_id', orderId.toString())
         .is('deleted_at', null)
         .order('created_at', { ascending: false })
@@ -109,7 +108,7 @@ export class SupabaseQuotationRepository implements IQuotationRepository {
 
       const quotations: Quotation[] = []
       for (const record of data || []) {
-        const res = await this.findById(new UniqueEntityID(record.id));
+        const res = QuotationV2Mapper.toDomain(record as any);
         if (res.isSuccess() && res.getValue()) {
           quotations.push(res.getValue()!);
         }
@@ -123,9 +122,15 @@ export class SupabaseQuotationRepository implements IQuotationRepository {
 
   async findByProvider(providerId: UniqueEntityID): Promise<Result<Quotation[], AppError>> {
     try {
+      // OPTIMIZACIÓN AAA: Eliminado N+1. Consulta atómica con joins.
       const { data, error } = await this.client
         .from('quotations')
-        .select('id')
+        .select(`
+          *,
+          requestedItems:quotation_requested_items(*),
+          providerItems:quotation_provider_items(*),
+          clientItems:quotation_client_items(*)
+        `)
         .eq('assigned_provider_id', providerId.toString())
         .is('deleted_at', null)
         .order('created_at', { ascending: false })
@@ -134,7 +139,7 @@ export class SupabaseQuotationRepository implements IQuotationRepository {
 
       const quotations: Quotation[] = []
       for (const record of data || []) {
-        const res = await this.findById(new UniqueEntityID(record.id));
+        const res = QuotationV2Mapper.toDomain(record as any);
         if (res.isSuccess() && res.getValue()) {
           quotations.push(res.getValue()!);
         }

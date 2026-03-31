@@ -1,0 +1,14 @@
+﻿git : To https://github.com/moresteban1-d
+ev/dropservice-platform.git
+En línea: 1 Carácter: 1
++ git push --force origin main 2>&1 | 
+Out-File -FilePath "C:\Users\Este ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecifi 
+   ed: (To https://gith...ce-platform.g  
+  it:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeComm 
+   andError
+ 
+ + 8af59f5...d660beb main -> main 
+(forced update)

@@ -14,9 +14,14 @@
  */
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { DEFAULT_IVA_RATE as _DEFAULT_IVA_RATE, calculateIVA, calculateTotalWithIVA } from './TaxConfig';
+import { DEFAULT_IVA_RATE as _DEFAULT_IVA_RATE, calculateTax, calculateGrossFromNet } from './TaxConfig';
+import { BUSINESS_CONFIG } from '@/config/business-config';
 
-// ─── Types ────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────
+
+function isSafeNumber(val: number): boolean {
+    return Number.isFinite(val) && val >= 0;
+}
 
 export interface MarkupResult {
     /** Original cost from provider */
@@ -77,10 +82,18 @@ export interface CommissionResult {
  * //   priceIva: 24700, priceTotal: 154700, marginPercentage: 30 }
  * ```
  */
-export function calculateMarkup(priceCost: number, markupPercentage: number = 30): MarkupResult {
+export function calculateMarkup(
+    priceCost: number, 
+    markupPercentage: number = BUSINESS_CONFIG.PRICING.DEFAULT_MARKUP_PERCENTAGE
+): MarkupResult {
+    // VALIDACIÓN DEFENSIVA AAA
+    if (!isSafeNumber(priceCost) || !isSafeNumber(markupPercentage)) {
+        throw new Error(`[Financial Error] Invalid pricing inputs: cost=${priceCost}, markup=${markupPercentage}`);
+    }
+
     const markupAmount = Math.round(priceCost * (markupPercentage / 100));
     const priceNet = priceCost + markupAmount;
-    const priceIva = calculateIVA(priceNet);
+    const priceIva = calculateTax(priceNet);
     const priceTotal = priceNet + priceIva;
 
     return {
@@ -102,6 +115,12 @@ export function calculateMarkup(priceCost: number, markupPercentage: number = 30
  */
 export function calculateCommission(input: CommissionInput): CommissionResult {
     const { method, subtotalServicesProvider, subtotalLogisticsProvider } = input;
+    
+    // VALIDACIÓN DEFENSIVA AAA
+    if (!isSafeNumber(subtotalServicesProvider) || !isSafeNumber(subtotalLogisticsProvider)) {
+        throw new Error('[Financial Error] Provider subtotals must be safe positive numbers');
+    }
+
     const totalProviderNet = subtotalServicesProvider + subtotalLogisticsProvider;
 
     let commissionServicesNet = 0;
@@ -136,7 +155,7 @@ export function calculateCommission(input: CommissionInput): CommissionResult {
 
     const totalCommissionNet = commissionServicesNet + commissionLogisticsNet;
     const totalNet = totalProviderNet + totalCommissionNet;
-    const totalIva = calculateIVA(totalNet);
+    const totalIva = calculateTax(totalNet);
     const totalWithIva = totalNet + totalIva;
 
     return {
@@ -158,7 +177,7 @@ export function calculateCommission(input: CommissionInput): CommissionResult {
  * @returns Total with IVA
  */
 export function applyIVA(amount: number): number {
-    return calculateTotalWithIVA(amount);
+    return calculateGrossFromNet(amount);
 }
 
 /**
