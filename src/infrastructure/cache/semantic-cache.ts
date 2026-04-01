@@ -23,6 +23,7 @@ export class SemanticCache {
                 embedder: AI_MODELS.embedding,
                 content: prompt,
             });
+            if (!embeddingResponse[0]) return null;
             const vector = embeddingResponse[0].embedding;
 
             // 2. Query Pinecone
