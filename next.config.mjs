@@ -3,6 +3,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: false,
   
   // Excluir módulos pesados del bundle de Edge
   // En Next.js 15, serverComponentsExternalPackages se mueve a la raíz como serverExternalPackages
@@ -16,13 +17,14 @@ const nextConfig = {
   ],
 
   // Configuración de webpack
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, defaultLoaders }) => {
     // Ignorar warnings de dependencias opcionales
     config.ignoreWarnings = [
       { module: /opentelemetry/ },
       { module: /genkit/ },
       { module: /bullmq/ },
       { message: /Critical dependency/ },
+      { message: /Serializing big strings/ },
     ];
 
     // Optimizaciones para servidor
@@ -34,6 +36,11 @@ const nextConfig = {
         'bullmq': 'bullmq',
         'ioredis': 'ioredis',
       });
+      
+      config.optimization = {
+        ...config.optimization,
+        moduleIds: 'deterministic',
+      };
     }
 
     // Fallbacks para módulos de Node.js en cliente
