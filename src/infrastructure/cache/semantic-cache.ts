@@ -62,6 +62,7 @@ export class SemanticCache {
                 embedder: AI_MODELS.embedding,
                 content: prompt,
             });
+            if (!embeddingResponse[0]) return;
             const vector = embeddingResponse[0].embedding;
 
             // 2. Upsert to Pinecone
