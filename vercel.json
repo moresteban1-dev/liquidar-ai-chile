@@ -1,0 +1,22 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "installCommand": "npm ci",
+  
+  "build": {
+    "env": {
+      "NEXT_TELEMETRY_DISABLED": "1",
+      "NODE_OPTIONS": "--max-old-space-size=4096"
+    }
+  },
+  
+  "functions": {
+    "src/app/api/**/*": {
+      "maxDuration": 300,
+      "memory": 1024
+    }
+  },
+  
+  "regions": ["iad1"]
+}
