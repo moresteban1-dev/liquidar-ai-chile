@@ -1,6 +1,6 @@
 {
-  "buildCommand": "next build --webpack",
-  "outputDirectory": ".next",
+  "buildCommand": "cd 01-Agente-Dropservice/dropservice-platform && npm ci",
+  "outputDirectory": "01-Agente-Dropservice/dropservice-platform/.next",
   "framework": "nextjs",
   "installCommand": "npm ci",
   
@@ -13,8 +13,8 @@
   },
   
   "functions": {
-    "src/app/api/**/*": {
-      "maxDuration": 30,
+    "01-Agente-Dropservice/dropservice-platform/src/app/api/**/*": {
+      "maxDuration": 300,
       "memory": 1024
     }
   },
