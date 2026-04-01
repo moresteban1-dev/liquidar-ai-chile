@@ -23,6 +23,10 @@ export const createClient = () => {
                 getUser: async () => ({ data: { user: null }, error: new Error('Missing Supabase Config') }),
                 getSession: async () => ({ data: { session: null }, error: new Error('Missing Supabase Config') }),
                 onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => { } } } }),
+                signInWithPassword: async () => ({ data: { user: null, session: null }, error: new Error('Missing Supabase Config') }),
+                signInWithOAuth: async () => ({ data: { user: null, session: null }, error: new Error('Missing Supabase Config') }),
+                signOut: async () => ({ error: null }),
+                updateUser: async () => ({ data: { user: null }, error: new Error('Missing Supabase Config') }),
             },
             from: () => ({
                 select: () => ({
