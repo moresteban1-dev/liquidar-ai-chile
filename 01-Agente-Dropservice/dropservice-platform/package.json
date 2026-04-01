@@ -23,7 +23,7 @@
     "@genkit-ai/core": "^1.16.1",
     "@genkit-ai/flow": "^0.5.17",
     "@genkit-ai/googleai": "^1.28.0",
-    "@hookform/resolvers": "^3.11.0",
+    "@hookform/resolvers": "^3.10.0",
     "@next/bundle-analyzer": "15.1.7",
     "@opentelemetry/resources": "^2.5.1",
     "@opentelemetry/sdk-trace-node": "^2.5.1",
