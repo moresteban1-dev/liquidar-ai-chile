@@ -3,7 +3,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: false,
   
   // Excluir módulos pesados del bundle de Edge
   // En Next.js 15, serverComponentsExternalPackages se mueve a la raíz como serverExternalPackages
