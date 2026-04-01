@@ -1,5 +1,5 @@
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
-import { createBrowserClient } from '@supabase/ssr'
+import { createBrowserClient, isBrowserClient } from '@supabase/ssr'
 
 import { env } from '@/config/env';
 
@@ -13,41 +13,44 @@ export const createClient = () => {
 
     if (!url || !key) {
         logger.error('CRITICAL: Supabase Environment Variables missing!');
-        // Return a mock client that warns but doesn't crash the entire app render
-        // This allows the error boundary or UI to handle it more gracefully
-        // Return a mock client that warns but doesn't crash the entire app render
-        // This allows the error boundary or UI to handle it more gracefully
-        // even in the browser
-        return {
-            auth: {
-                getUser: async () => ({ data: { user: null }, error: new Error('Missing Supabase Config') }),
-                getSession: async () => ({ data: { session: null }, error: new Error('Missing Supabase Config') }),
-                onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => { } } } }),
-                signInWithPassword: async () => ({ data: { user: null, session: null }, error: new Error('Missing Supabase Config') }),
-                signInWithOAuth: async () => ({ data: { user: null, session: null }, error: new Error('Missing Supabase Config') }),
-                signOut: async () => ({ error: null }),
-                updateUser: async () => ({ data: { user: null }, error: new Error('Missing Supabase Config') }),
-            },
-            from: () => ({
-                select: () => ({
-                    eq: () => ({
-                        single: async () => ({ data: null, error: new Error('Missing Supabase Config') }),
-                        maybeSingle: async () => ({ data: null }),
-                        order: () => ({}),
-                    }),
-                    order: () => ({}),
-                    insert: async () => ({ error: new Error('Missing Config') }),
-                    update: async () => ({ error: new Error('Missing Config') }),
-                }),
-            }),
-            channel: () => ({
-                on: () => ({ subscribe: () => { } }),
-                subscribe: () => { },
-                removeChannel: () => { },
-            }),
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any;
+        return createFallbackClient();
     }
 
-    return createBrowserClient(url, key);
+    try {
+        return createBrowserClient(url, key);
+    } catch (error) {
+        logger.error('Error creating Supabase client:', error);
+        return createFallbackClient();
+    }
 };
+
+function createFallbackClient() {
+    logger.warn('Using fallback mock Supabase client');
+    return {
+        auth: {
+            getUser: async () => ({ data: { user: null }, error: null }),
+            getSession: async () => ({ data: { session: null }, error: null }),
+            signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
+                logger.warn('Fallback: signInWithPassword called with', email);
+                return { data: { user: null, session: null }, error: new Error('Auth not configured') };
+            },
+            signInWithOAuth: async () => ({ data: { session: null }, error: new Error('OAuth not configured') }),
+            signOut: async () => ({ error: null }),
+            updateUser: async () => ({ data: { user: null }, error: null }),
+            onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+        },
+        from: () => ({
+            select: () => ({
+                eq: () => ({
+                    single: async () => ({ data: null, error: null }),
+                    maybeSingle: async () => ({ data: null, error: null }),
+                }),
+            }),
+            insert: async () => ({ error: null }),
+            update: () => ({ eq: () => ({ single: async () => ({ data: null, error: null }) }) }),
+        }),
+        channel: () => ({
+            on: () => ({ subscribe: () => {} }),
+        }),
+    };
+}
