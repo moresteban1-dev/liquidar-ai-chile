@@ -14,12 +14,6 @@ const nextConfig = {
     'sharp',
     'canvas',
   ],
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 
   // Configuración de webpack
   webpack: (config, { isServer }) => {

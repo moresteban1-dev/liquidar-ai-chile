@@ -102,7 +102,7 @@ export function AvailabilityCalendar() {
                             <ChevronLeft className="h-4 w-4" />
                         </Button>
                         <span className="font-medium min-w-32 text-center">
-                            {upcomingDates[0].toLocaleDateString('es-CL', { month: 'long', year: 'numeric' })}
+                            {upcomingDates[0]?.toLocaleDateString('es-CL', { month: 'long', year: 'numeric' }) ?? ''}
                         </span>
                         <Button variant="outline" size="icon-sm" onClick={() => moveWeek('next')}>
                             <ChevronRight className="h-4 w-4" />

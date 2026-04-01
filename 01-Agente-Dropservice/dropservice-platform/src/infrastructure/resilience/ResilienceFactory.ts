@@ -1,5 +1,5 @@
 import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger';
-import { Result, ok, fail } from '@/core/domain/types/result';
+import { Result, fail } from '@/core/domain/types/result';
 import { AppError } from '@/core/shared/AppError';
 
 export interface ResilienceOptions {

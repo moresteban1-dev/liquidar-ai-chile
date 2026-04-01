@@ -1,4 +1,4 @@
-import { INotificationChannel, ChannelNotification, ChannelResult, NotificationChannelType } from '@/core/application/ports/INotificationChannel';
+import { INotificationChannel, ChannelNotification, ChannelResult, NotificationChannelType, NotificationRecipient } from '@/core/application/ports/INotificationChannel';
 import { IEmailProvider, EmailRecipient } from '@/core/application/ports/IEmailProvider';
 import { TemplateEngine } from '../email/TemplateEngine';
 import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger';

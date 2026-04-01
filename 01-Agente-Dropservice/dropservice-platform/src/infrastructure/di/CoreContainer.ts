@@ -35,7 +35,7 @@ export const diContainer = {
                 new SupabaseQuotationRepository(supabase),
                 diContainer.getQuotationService(),
                 new ConfidenceService(),
-                new SupabaseAIAuditAdapter(supabase)
+                new SupabaseAIAuditAdapter()
             );
         }
         return aiBrokerServiceInstance;

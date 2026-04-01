@@ -31,15 +31,13 @@ export function initTelemetry(): NodeSDK | null {
     return null;
   }
 
-  const traceExporter = new OTLPTraceExporter({ url: `${endpoint}/v1/traces` });
+  const traceExporter: any = new OTLPTraceExporter({ url: `${endpoint}/v1/traces` });
 
-  // Explicit cast to resolve cross-version type incompatibilities
-  // between @opentelemetry/sdk-trace-base and @opentelemetry/sdk-node.
-  const spanProcessor = new BatchSpanProcessor(traceExporter as any) as unknown as SpanProcessor;
+  // Use any to bypass cross-version type incompatibility
+  const spanProcessor: any = new BatchSpanProcessor(traceExporter);
 
-  const sdk = new NodeSDK({
+  const sdk: any = new NodeSDK({
     serviceName,
-    serviceVersion,
     spanProcessors: [spanProcessor],
     instrumentations: [
       getNodeAutoInstrumentations({

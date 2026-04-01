@@ -23,11 +23,11 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
   const result = await repo.findById(id);
 
   if (result.isFailure()) {
-    // Error loading data
+    const errorMessage = result.getError().message;
     return (
       <div className="p-8 text-destructive border border-destructive/20 bg-destructive/5 rounded-lg">
         <h2 className="text-xl font-bold">Error al cargar el lead</h2>
-        <p className="mt-2 text-sm">{result.getError()}</p>
+        <p className="mt-2 text-sm">{errorMessage}</p>
       </div>
     );
   }

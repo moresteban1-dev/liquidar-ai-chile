@@ -233,7 +233,8 @@ export class MigrationMonitor {
     if (sorted.length === 0) return 0
 
     const index = Math.ceil((p / 100) * sorted.length) - 1
-    return sorted[Math.max(0, Math.min(index, sorted.length - 1))]
+    const safeIndex = Math.max(0, Math.min(index, sorted.length - 1))
+    return sorted[safeIndex] ?? 0
   }
 
   private async persistMetric(metric: MigrationMetric): Promise<void> {

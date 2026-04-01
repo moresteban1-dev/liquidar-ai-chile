@@ -51,8 +51,8 @@ export class NegotiateProviderBidUseCase {
             }
 
             const quotation = quotationRes.getValue()!;
-            const priceCost = quotation.priceCost;
-            const serviceCategory = quotation.serviceName || 'Servicio General';
+            const priceCost = quotation.totalProviderNet;
+            const serviceCategory = quotation.props.serviceName || 'Servicio General';
 
             if (!priceCost) {
                 this.logger.warn('[NegotiateProviderBid] No provider cost found. Skipping.');

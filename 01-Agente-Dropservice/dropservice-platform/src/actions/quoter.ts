@@ -81,7 +81,7 @@ export async function submitQuoteSessionAction(state: QuoterState): Promise<Acti
         
         if (saveResult.isFailure()) {
             logger.error("Error guardando sesión de cotización:", saveResult.getError());
-            return { success: false, error: saveResult.getError() };
+            return { success: false, error: saveResult.getError().message };
         }
 
         const sessionId = saveResult.getValue();

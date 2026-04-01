@@ -10,8 +10,7 @@ import type { IPaymentGatewayService } from '@/types/payments';
 import crypto from 'crypto';
 
 const KHIPU_API_BASE = 'https://khipu.com/api/2.0';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const __KHIPU_SLA_HOURS = 48;
+const _KHIPU_SLA_HOURS = 48; // Used for documentation purposes
 
 export class KhipuService implements IPaymentGatewayService {
     slug = 'khipu' as const;

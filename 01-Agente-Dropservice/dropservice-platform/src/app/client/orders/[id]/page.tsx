@@ -106,7 +106,7 @@ async function OrderContent({ orderId, userRole }: { orderId: string; userRole: 
                     </p>
 
                     {q.status === 'SENT' && (
-                        <QuotationActions quotationId={q.id} orderId={order.id} />
+                        <QuotationActions quotationId={q.id} />
                     )}
                   </div>
                 ))}

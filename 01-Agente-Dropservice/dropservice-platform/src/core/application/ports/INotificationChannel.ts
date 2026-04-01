@@ -1,6 +1,3 @@
-import { AppError } from '@/core/shared/AppError';
-import { Result } from '@/core/shared/Result';
-
 export type NotificationChannelType = 'email' | 'sms' | 'push' | 'webhook';
 
 export interface NotificationRecipient {
@@ -12,6 +9,7 @@ export interface NotificationRecipient {
 }
 
 export interface ChannelNotification {
+  eventId?: string;
   channel: NotificationChannelType;
   eventType: string;
   recipients: NotificationRecipient[];

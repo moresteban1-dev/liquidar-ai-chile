@@ -1,4 +1,4 @@
-import { IEventPublisher } from '@/core/application/ports/events/IEventPublisher';
+import { IEventPublisher } from '@/core/application/ports/IEventPublisher';
 import { DomainEvent } from '@/core/shared/DomainEvent';
 import { Result, ok } from '@/core/shared/Result';
 

@@ -61,7 +61,7 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
                 toast.error('Error al actualizar perfil');
             }
         } catch (error) {
-            logger.error(error);
+            logger.error('Error updating profile', { error: String(error) });
             toast.error('Ocurrió un error inesperado');
         } finally {
             setIsSubmitting(false);

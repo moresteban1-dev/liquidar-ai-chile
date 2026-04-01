@@ -253,8 +253,11 @@ export class DashboardCollector {
         const trend: Array<{ date: string; count: number }> = []
         for (let i = 6; i >= 0; i--) {
           const date = new Date(); date.setDate(date.getDate() - i)
-          const dateStr = date.toISOString().split('T')[0]
-          const count = periodOrders.filter(o => o.created_at.startsWith(dateStr)).length
+          const dateStr = date.toISOString().split('T')[0] ?? ''
+          const count = periodOrders.filter(o => {
+            if (!o.created_at) return false;
+            return o.created_at.startsWith(dateStr);
+          }).length
           trend.push({ date: dateStr, count })
         }
 

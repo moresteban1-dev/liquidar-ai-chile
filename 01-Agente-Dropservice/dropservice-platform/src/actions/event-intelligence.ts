@@ -131,7 +131,7 @@ export async function requestQuotationAction(
     const result = await rfqService.convertToRFQ(sessionId, clientData);
 
     if (result.isFailure()) {
-      return { success: false, message: result.getError() };
+      return { success: false, message: result.getError().message };
     }
 
     revalidatePath('/admin/quotes');

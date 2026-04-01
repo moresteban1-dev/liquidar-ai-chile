@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { getContainer } from '@/infrastructure/di/Container'
 import { logger } from '@infrastructure/telemetry/StructuredLogger'
 import { withAuth } from '@/lib/api/with-auth';

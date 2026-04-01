@@ -31,7 +31,6 @@ export interface OrderData {
 export async function getAdminOrders(): Promise<OrderData[]> {
     const authResult = await requireRole(UserRole.ADMIN);
     if (authResult.isFailure()) return [];
-    const { user } = authResult.getValue();
 
     const supabase = createServiceRoleClient();
 

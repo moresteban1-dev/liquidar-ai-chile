@@ -110,9 +110,9 @@ export function InferenceTestDashboard() {
                        </TableRow>
                      </TableHeader>
                      <TableBody>
-                       {state.inferredGraph.map((need, i) => (
-                         <TableRow key={i}>
-                           <TableCell className="font-bold">{need.serviceName}</TableCell>
+                        {state.inferredGraph.map((need, i) => (
+                          <TableRow key={i}>
+                            <TableCell className="font-bold">{need.nodeName}</TableCell>
                            <TableCell><Badge variant="outline">{need.nodeCode}</Badge></TableCell>
                            <TableCell className="text-right font-mono text-primary font-bold">{need.quantityInferred}</TableCell>
                            <TableCell className="text-[10px] text-muted-foreground max-w-[300px]">

@@ -59,7 +59,7 @@ export function ManualTransferForm({
 
             onReceiptUploaded();
         } catch (error) {
-            logger.error(error);
+            logger.error('Error uploading receipt', { error: String(error) });
             alert('Error al subir el comprobante');
         } finally {
             setUploading(false);

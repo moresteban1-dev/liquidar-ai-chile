@@ -3,7 +3,6 @@ import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IOrderRepository } from '@app/ports/IOrderRepository'
 import { UniqueEntityID } from '@/core/shared/UniqueEntityID'
 import { DeleteOrderCommand } from '../commands/DeleteOrderCommand'
-import type { Order } from '@/core/domain/aggregates/order/Order'
 import { AppError } from '@/core/shared/AppError'
 
 export class DeleteOrderHandler extends InstrumentedHandler<DeleteOrderCommand, void, AppError> {

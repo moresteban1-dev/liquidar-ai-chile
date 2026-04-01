@@ -32,7 +32,7 @@ export const dropServiceAgent = ai.defineFlow(
     inputSchema: AgentInputSchema,
     outputSchema: AgentOutputSchema,
   },
-  async (input) => {
+  async (input: z.infer<typeof AgentInputSchema>) => {
     const { messages, data } = input;
 
     // 1. Supervisor Routing Decision
@@ -96,8 +96,13 @@ export const dropServiceAgent = ai.defineFlow(
           deliverableContent: data.deliverableContent,
           deliverableType: data.deliverableType || "TEXT"
         });
-        responseContent = `QA Review Complete. Status: ${qaResult.status}. Score: ${qaResult.score}/100. Feedback: ${qaResult.feedback}`;
-        actionTaken = qaResult;
+        if (qaResult.isSuccess()) {
+          const qa = qaResult.getValue();
+          responseContent = `QA Review Complete. Status: ${qa.status}. Score: ${qa.score}/100. Feedback: ${qa.feedback}`;
+          actionTaken = qa;
+        } else {
+          responseContent = `QA Review Failed: ${qaResult.getError().message}`;
+        }
       }
 
     } else {
@@ -106,7 +111,7 @@ export const dropServiceAgent = ai.defineFlow(
 
       const chatPrompt = PromptRegistry.get('GENERAL_CHAT', 'v1')({
         data,
-        history: messages.map(m => `${m.role}: ${m.content}`).join('\n'),
+        history: messages.map((m: { role: string; content: string }) => `${m.role}: ${m.content}`).join('\n'),
         lastMessage: messages[messages.length - 1].content
       });
 

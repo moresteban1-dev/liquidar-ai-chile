@@ -32,9 +32,10 @@ export default function Step4Preferences({ state, updateState, onNext, onBack }:
     const handleDragStart = (idx: number) => setDraggedIdx(idx);
 
     const handleDragEnter = (idx: number) => {
-        if (draggedIdx === null || draggedIdx === idx) return;
+        if (draggedIdx === null || draggedIdx === idx || draggedIdx >= items.length) return;
+        const draggedItem = items[draggedIdx];
+        if (!draggedItem) return;
         const newItems = [...items];
-        const draggedItem = newItems[draggedIdx];
         newItems.splice(draggedIdx, 1);
         newItems.splice(idx, 0, draggedItem);
         setDraggedIdx(idx);

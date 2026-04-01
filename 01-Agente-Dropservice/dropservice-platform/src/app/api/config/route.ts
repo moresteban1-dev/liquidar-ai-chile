@@ -55,7 +55,7 @@ export const GET = withAuth(async (_request, user) => {
 
         // Convert KV rows to Object
         const config: Record<string, any> = { ...DEFAULT_CONFIG };
-        rows?.forEach(row => {
+        rows?.forEach((row: { key: string; value: string }) => {
             // Auto-convert numbers/booleans
             if (row.value === 'true') config[row.key] = true;
             else if (row.value === 'false') config[row.key] = false;

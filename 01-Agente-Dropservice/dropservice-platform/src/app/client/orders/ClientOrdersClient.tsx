@@ -15,11 +15,9 @@ import { Badge } from '@/components/ui/badge';
 import {
     CheckCircle2,
     Package,
-    Box,
     CreditCard,
     Settings,
     Truck,
-    RotateCcw,
     RefreshCw,
     ShoppingCart,
     Check,

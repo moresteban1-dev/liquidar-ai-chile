@@ -7,3 +7,11 @@ export interface ILogger {
   child(context: Record<string, unknown>): ILogger;
   startTimer(operation: string): { end(meta?: Record<string, unknown>): number };
 }
+
+export interface LogContext {
+  correlationId?: string;
+  requestId?: string;
+  userId?: string;
+  sessionId?: string;
+  [key: string]: unknown;
+}

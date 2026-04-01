@@ -14,7 +14,7 @@ try {
         });
 
         redisClient.on('error', (err) => {
-            logger.warn('⚠️ [RateLimiter] Error conectando a Redis, operando en fallback-mode.', err.message);
+            logger.warn('⚠️ [RateLimiter] Error conectando a Redis, operando en fallback-mode.', { error: err.message });
             redisClient = null;
         });
     }

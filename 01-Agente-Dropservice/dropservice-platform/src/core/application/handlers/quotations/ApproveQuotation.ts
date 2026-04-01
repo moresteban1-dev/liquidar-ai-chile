@@ -34,8 +34,8 @@ export class ApproveQuotationHandler implements ICommandHandler<ApproveQuotation
 
         try {
             // 3. Side Effect: Create Order (Persistence)
-            // Ensure priceTotal exists before creating order
-            const price = quotation.props.priceTotal;
+            // Ensure totalWithIva exists before creating order
+            const price = quotation.props.totalWithIva;
             if (!price || price.amount <= 0) {
                 return fail(AppError.businessRule('Cannot approve a quotation without a valid total price.'));
             }

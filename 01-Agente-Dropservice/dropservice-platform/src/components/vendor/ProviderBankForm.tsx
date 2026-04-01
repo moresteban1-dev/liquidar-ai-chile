@@ -69,7 +69,7 @@ export function ProviderBankForm({ profile }: ProviderBankFormProps) {
                 toast.error(result?.error || 'Error al actualizar datos');
             }
         } catch (error) {
-            logger.error(error);
+            logger.error('Error updating bank data', { error: String(error) });
             toast.error('Ocurrió un error inesperado');
         } finally {
             setIsSubmitting(false);

@@ -16,9 +16,6 @@ if (typeof window !== 'undefined') {
 
 export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
-        // Allows us to distinct pageviews accurately in Next.js App Router
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const __handleRouteChange = () => posthog.capture('$pageview');
         // For App Router, we just rely on autocapture or manual triggers mostly
     }, []);
 

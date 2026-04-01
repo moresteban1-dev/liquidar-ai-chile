@@ -6,17 +6,15 @@
  * Uses Server Actions or API for mutation.
  */
 
-import { useState as _useState, useTransition } from 'react';
+import { useTransition } from 'react';
 import { toast } from 'sonner';
 
 interface QuotationActionsProps {
   quotationId: string;
-  orderId: string;
 }
 
 export default function QuotationActions({
   quotationId,
-  orderId,
 }: QuotationActionsProps) {
   const [isPending, startTransition] = useTransition();
 

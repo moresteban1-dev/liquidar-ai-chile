@@ -1,5 +1,5 @@
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { createServiceRoleClient } from '@/lib/supabase/api';
 import { withAuth } from '@/lib/api/with-auth';
 

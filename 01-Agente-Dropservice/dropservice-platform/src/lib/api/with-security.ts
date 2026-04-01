@@ -18,9 +18,15 @@ export async function withSecurity(
 ) {
   try {
     // 1. Validar identidad y roles utilizando la infra existente
-    const { user } = roles 
+    const authResult = roles 
       ? await requireRole(...roles)
       : await requireAuth();
+    
+    if (authResult.isFailure()) {
+      throw new Error('UNAUTHORIZED');
+    }
+    
+    const { user } = authResult.getValue();
     
     // 2. Ejecutar el handler original
     return await handler(user, context);

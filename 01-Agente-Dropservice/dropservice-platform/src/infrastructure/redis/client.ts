@@ -25,7 +25,7 @@ export const createRedisClient = () => {
 
     // Extract the actual redis:// or rediss:// URL using regex
     const redisUrlMatch = connectionString.match(/(rediss?:\/\/[^\s"' ]+)/);
-    if (redisUrlMatch) {
+    if (redisUrlMatch && redisUrlMatch[1]) {
         connectionString = redisUrlMatch[1];
     }
 

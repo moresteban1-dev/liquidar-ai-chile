@@ -10,12 +10,9 @@ import { withInternalAuth } from '@/lib/api/with-auth';
 
 export const runtime = 'edge';
 
-export const GET = withInternalAuth(async (request) => {
+export const GET = withInternalAuth(async () => {
     // Forensic Fix: await createClient is required
-    const supabaseClient = await createClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    const supabaseClient = await createClient();
 
     // Expirar pagos pendientes que pasaron su fecha de expiración
     const { data: expired, error } = await supabaseClient

@@ -5,7 +5,7 @@ import { Order } from '@/core/domain/aggregates/order/Order'
 import { UniqueEntityID } from '@/core/shared/UniqueEntityID'
 import { AppError } from '@/core/shared/AppError'
 
-export class GetOrderByIdHandler extends InstrumentedHandler<{ orderId: string }, Order, AppError> {
+export class GetOrderByIdHandler extends InstrumentedHandler<{ orderId: string }, Order | null, AppError> {
   protected handlerName = 'GetOrderById'
   protected operationType = 'query' as const
 
@@ -13,16 +13,17 @@ export class GetOrderByIdHandler extends InstrumentedHandler<{ orderId: string }
     super()
   }
 
-  protected async handle(query: { orderId: string }): Promise<Result<Order, AppError>> {
+  protected async handle(query: { orderId: string }): Promise<Result<Order | null, AppError>> {
     const orderResult = await this.orderRepository.findById(new UniqueEntityID(query.orderId))
     
     if (orderResult.isFailure()) return orderResult
     
-    if (!orderResult.unwrap()) {
+    const order = orderResult.unwrap()
+    if (!order) {
         return fail(AppError.notFound('Order', query.orderId))
     }
     
-    return ok(orderResult.unwrap())
+    return ok(order)
   }
 
   protected extractSpanAttributes(query: { orderId: string }) {

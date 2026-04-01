@@ -3,7 +3,7 @@
 import { SLAGuardianAgent } from '@infrastructure/ai/agents/SLAGuardianAgent';
 import { IOrderRepository } from '@app/ports/IOrderRepository';
 import { Logger } from '@app/ports/Logger';
-import { Result, ok, fail } from '@core/shared/Result';
+import { Result } from '@core/shared/Result';
 import { AppError } from '@shared/AppError';
 import { UniqueEntityID } from '@core/shared/UniqueEntityID';
 
