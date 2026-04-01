@@ -1,3 +1,5 @@
+import { UserRole } from '@/core/domain/auth/UserRole';
+
 /**
  * TransitionOrderStateCommand
  * 
@@ -9,5 +11,5 @@ export interface TransitionOrderStateCommand {
   newState: string
   reason?: string       // Requerido para transiciones a CANCELLED
   performedBy: string   // ID del usuario que ejecuta la acción
-  performedByRole: 'admin' | 'provider' | 'client'
+  performedByRole: UserRole
 }

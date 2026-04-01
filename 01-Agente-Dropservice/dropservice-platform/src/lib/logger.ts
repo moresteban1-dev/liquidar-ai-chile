@@ -8,10 +8,10 @@ import { ILogger } from '@infrastructure/telemetry/logger-types';
  * while routing all logs through the centralized StructuredLogger.
  */
 
-class LoggerAdapter implements Pick<ILogger, 'debug' | 'info' | 'warn' | 'error' | 'fatal' | 'startTimer'> {
+class LoggerAdapter implements ILogger {
     private context: Record<string, unknown> = {};
 
-    child(context: Record<string, unknown>): LoggerAdapter {
+    child(context: Record<string, unknown>): ILogger {
         const child = new LoggerAdapter();
         child.context = { ...this.context, ...context };
         return child;

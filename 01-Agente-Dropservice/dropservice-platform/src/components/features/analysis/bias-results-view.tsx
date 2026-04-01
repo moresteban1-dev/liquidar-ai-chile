@@ -79,7 +79,7 @@ export function BiasResultsView({ data }: { data: BiasAnalysisOutput }) {
                     </CardHeader>
                     <CardContent>
                         <ul className="list-disc list-inside space-y-1 text-sm text-blue-700">
-                            {data.recommendations.map((rec, i) => (
+                            {data.recommendations.map((rec: string, i: number) => (
                                 <li key={i}>{rec}</li>
                             ))}
                         </ul>
@@ -101,7 +101,7 @@ export function BiasResultsView({ data }: { data: BiasAnalysisOutput }) {
                     </div>
                 ) : (
                     <Accordion type="single" collapsible className="w-full">
-                        {data.biasesDetected.map((bias, i) => (
+                        {data.biasesDetected.map((bias: any, i: number) => (
                             <AccordionItem key={i} value={`bias-${i}`}>
                                 <AccordionTrigger className="hover:no-underline">
                                     <div className="flex items-center justify-between w-full pr-4">

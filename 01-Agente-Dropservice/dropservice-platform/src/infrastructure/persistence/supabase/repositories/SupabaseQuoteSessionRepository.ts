@@ -2,6 +2,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { IQuoteSessionRepository } from '@app/ports/IQuoteSessionRepository';
 import { QuoteSession, QuoteItemRequested } from '@/core/domain/quote/QuoteTypes';
 import { Result, ok, fail } from '@/core/shared/Result';
+import { AppError } from '@/core/shared/AppError';
 import { logger } from '@/infrastructure/telemetry/StructuredLogger';
 
 /**
@@ -12,7 +13,7 @@ import { logger } from '@/infrastructure/telemetry/StructuredLogger';
 export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
   constructor(private readonly supabase: SupabaseClient) {}
 
-  async save(session: QuoteSession): Promise<Result<string, string>> {
+  async save(session: QuoteSession): Promise<Result<string, AppError>> {
     try {
       const { data, error } = await this.supabase
         .from('v2_quote_sessions')
@@ -36,16 +37,16 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
         .select('id')
         .single();
 
-      if (error) return fail(error.message);
+      if (error) return fail(AppError.internal(`Database error: ${error.message}`));
       return ok(data.id);
 
     } catch (error: any) {
       logger.error('Error salvando QuoteSession:', error);
-      return fail(error.message || 'Error desconocido');
+      return fail(AppError.from(error));
     }
   }
 
-  async addItems(sessionId: string, items: QuoteItemRequested[]): Promise<Result<void, string>> {
+  async addItems(sessionId: string, items: QuoteItemRequested[]): Promise<Result<void, AppError>> {
     try {
       const { error } = await this.supabase
         .from('v2_quote_items_requested')
@@ -56,16 +57,16 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
           custom_name: item.customName
         })));
 
-      if (error) return fail(error.message);
+      if (error) return fail(AppError.internal(`Database error: ${error.message}`));
       return ok(undefined);
 
     } catch (error: any) {
       logger.error('Error agregando ítems a QuoteSession:', error);
-      return fail(error.message || 'Error desconocido');
+      return fail(AppError.from(error));
     }
   }
 
-  async findById(id: string): Promise<Result<QuoteSession | null, string>> {
+  async findById(id: string): Promise<Result<QuoteSession | null, AppError>> {
     try {
       const { data, error } = await this.supabase
         .from('v2_quote_sessions')
@@ -75,7 +76,7 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
 
       if (error) {
         if (error.code === 'PGRST116') return ok(null);
-        return fail(error.message);
+        return fail(AppError.internal(`Database error: ${error.message}`));
       }
 
       const session: QuoteSession = {
@@ -108,11 +109,11 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
 
     } catch (error: any) {
       logger.error('Error buscando QuoteSession:', error);
-      return fail(error.message || 'Error desconocido');
+      return fail(AppError.from(error));
     }
   }
 
-  async listAll(filters?: { status?: string; segment?: string }): Promise<Result<QuoteSession[], string>> {
+  async listAll(filters?: { status?: string; segment?: string }): Promise<Result<QuoteSession[], AppError>> {
     try {
       let query = this.supabase
         .from('v2_quote_sessions')
@@ -129,7 +130,7 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
 
       const { data, error } = await query;
 
-      if (error) return fail(error.message);
+      if (error) return fail(AppError.internal(`Database error: ${error.message}`));
 
       const sessions: QuoteSession[] = (data || []).map((d: any) => ({
         id: d.id,
@@ -154,7 +155,7 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
 
     } catch (error: any) {
       logger.error('Error listando QuoteSessions:', error);
-      return fail(error.message || 'Error desconocido');
+      return fail(AppError.from(error));
     }
   }
 }

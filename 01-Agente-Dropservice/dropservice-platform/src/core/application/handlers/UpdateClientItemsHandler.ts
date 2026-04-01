@@ -1,4 +1,4 @@
-import { Result } from '@core/shared/Result'
+import { Result, fail } from '@core/shared/Result'
 import { AppError } from '@core/shared/AppError'
 import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IQuotationRepository } from '@app/ports/IQuotationRepository'
@@ -20,15 +20,17 @@ export class UpdateClientItemsHandler extends InstrumentedHandler<UpdateClientIt
     command: UpdateClientItemsCommand,
   ): Promise<Result<Quotation, AppError>> {
     const quotationRes = await this.quotationRepository.findById(new UniqueEntityID(command.quotationId))
-    if (quotationRes.isFailure()) return Result.fail(quotationRes.getError())
+    if (quotationRes.isFailure()) {
+        return fail(AppError.business(String(quotationRes.getError())))
+    }
     
-    const quotation = quotationRes.getValue()
-    if (!quotation) return Result.fail(AppError.notFound('Cotización', command.quotationId))
+    const quotation = quotationRes.unwrap()
+    if (!quotation) return fail(AppError.notFound('Cotización', command.quotationId))
 
     const items: QuotationClientItem[] = []
     for (const itemData of command.items) {
       const unitPriceRes = Money.create(itemData.unitPrice, itemData.currency as Currency)
-      if (unitPriceRes.isFailure()) return Result.fail(AppError.validation(unitPriceRes.getError()))
+      if (unitPriceRes.isFailure()) return fail(AppError.validation(String(unitPriceRes.getError())))
 
       const itemRes = QuotationClientItem.create(
         itemData.description, 
@@ -36,12 +38,12 @@ export class UpdateClientItemsHandler extends InstrumentedHandler<UpdateClientIt
         itemData.quantity, 
         itemData.sortOrder
       )
-      if (itemRes.isFailure()) return Result.fail(AppError.validation(itemRes.getError()))
+      if (itemRes.isFailure()) return fail(AppError.validation(String(itemRes.getError())))
       items.push(itemRes.getValue())
     }
 
     const updateRes = quotation.updateClientItems(items)
-    if (updateRes.isFailure()) return Result.fail(AppError.validation(updateRes.getError()))
+    if (updateRes.isFailure()) return fail(AppError.validation(String(updateRes.getError())))
 
     const saveResult = await this.quotationRepository.save(quotation)
     if (saveResult.isFailure()) return Result.fail(saveResult.getError())

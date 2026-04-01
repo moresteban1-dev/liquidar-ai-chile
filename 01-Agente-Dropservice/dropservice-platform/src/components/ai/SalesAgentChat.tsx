@@ -22,7 +22,7 @@ export function SalesAgentChat() {
                 content: '¡Hola! Soy el agente corporativo de DropService. ¿En qué te puedo asesorar para tu próximo evento o solicitud?',
             }
         ],
-    } as any);
+    } as any) as any;
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const isStreaming = status === 'streaming' || status === 'submitted';
@@ -77,7 +77,7 @@ export function SalesAgentChat() {
 
                     {/* Historial de Mensajes */}
                     <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
-                        {messages.map((m) => (
+                        {messages.map((m: any) => (
                             <div
                                 key={m.id}
                                 className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -88,7 +88,7 @@ export function SalesAgentChat() {
                                         : 'bg-white border border-gray-100 text-slate-800 rounded-tl-sm'
                                         }`}
                                 >
-                                    {m.content}
+                                    {(m as any).content}
                                 </div>
                             </div>
                         ))}

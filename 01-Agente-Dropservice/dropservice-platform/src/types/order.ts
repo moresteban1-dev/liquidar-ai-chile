@@ -1,7 +1,4 @@
-/**
- * Order State Machine Types
- * Kaizen Poka-Yoke: Make invalid states unrepresentable via TypeScript
- */
+import { UserRole } from '@/core/domain/auth/UserRole';
 
 // ============================================
 // ORDER STATES (Finite State Machine)
@@ -237,7 +234,7 @@ export function canReleasePayment(order: Order): order is Order & { state: 'DELI
 // USER ROLES (RBAC)
 // ============================================
 
-export type UserRole = 'admin' | 'vendor' | 'client';
+// export type UserRole = 'admin' | 'vendor' | 'client'; // REMOVED in favor of central enum
 
 export type Permission =
     | 'orders:create'
@@ -252,8 +249,8 @@ export type Permission =
     | 'vendors:manage'
     | 'analytics:view';
 
-export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
-    admin: [
+export const ROLE_PERMISSIONS: Record<string, Permission[]> = {
+    [UserRole.ADMIN]: [
         'orders:view:all',
         'orders:assign',
         'disputes:resolve',
@@ -261,11 +258,11 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
         'vendors:manage',
         'analytics:view',
     ],
-    vendor: [
+    [UserRole.VENDOR]: [
         'orders:view:own',
         'deliverables:upload',
     ],
-    client: [
+    [UserRole.CLIENT]: [
         'orders:create',
         'orders:view:own',
         'deliverables:approve',

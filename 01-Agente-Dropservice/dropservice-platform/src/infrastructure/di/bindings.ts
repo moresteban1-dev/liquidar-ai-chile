@@ -139,10 +139,9 @@ export function registerBindings(c: Container): void {
 
   c.register('OrderRepository', async () => {
     const { SupabaseOrderRepository } = await import('@infrastructure/persistence/supabase/repositories/SupabaseOrderRepository');
-    const { OrderMapper } = await import('@infrastructure/persistence/supabase/mappers/OrderMapper');
     
     const supabase = await c.resolve<any>('SupabaseClient');
-    return new SupabaseOrderRepository(supabase, new OrderMapper());
+    return new SupabaseOrderRepository(supabase);
   }, { singleton: true });
 
   c.register('QuotationRepository', async () => {
@@ -168,7 +167,7 @@ export function registerBindings(c: Container): void {
   // ═══════════════════════════════════════════════════════════════════════════
 
   c.register('CreateOrderHandler', async () => {
-    const { CreateOrderHandler } = await import('@core/application/handlers/order/CreateOrderUseCase');
+    const { CreateOrderHandler } = await import('@core/application/handlers/CreateOrderHandler');
     const orderRepo = await c.resolve<any>('OrderRepository');
     const eventBus = await c.resolve<any>('EventBus');
     return new CreateOrderHandler(orderRepo, eventBus);
@@ -217,8 +216,7 @@ export function registerBindings(c: Container): void {
 
   c.register('AIAuditPort', async () => {
     const { SupabaseAIAuditAdapter } = await import('@infrastructure/persistence/supabase/SupabaseAIAuditAdapter');
-    const supabase = await c.resolve<any>('SupabaseClient');
-    return new SupabaseAIAuditAdapter(supabase);
+    return new SupabaseAIAuditAdapter();
   }, { singleton: true });
 
   c.register('QASentinelAgent', async () => {

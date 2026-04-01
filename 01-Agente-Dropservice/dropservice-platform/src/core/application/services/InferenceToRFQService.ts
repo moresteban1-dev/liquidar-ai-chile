@@ -4,6 +4,7 @@ import { IKnowledgeRepository as KnowledgeRepository } from '@app/ports/IKnowled
 import { IQuoteSessionRepository as QuoteSessionRepository } from '@app/ports/IQuoteSessionRepository';
 import { QuoteSession, QuoteItemRequested, MarketSegment } from '@/core/domain/quote/QuoteTypes';
 import { Result, ok, fail } from '@/core/shared/Result';
+import { AppError } from '@/core/shared/AppError';
 import { logger } from '@/infrastructure/telemetry/StructuredLogger';
 import { EventProfile, ConfigurationSession, InferredNeed } from '@/core/domain/event-intelligence/types';
 import { ResilienceProxy } from '@/core/shared/ResilienceProxy';
@@ -40,15 +41,15 @@ export class InferenceToRFQService {
   async convertToRFQ(
     configSessionId: string, 
     clientData: ClientConversionData
-  ): Promise<Result<string, string>> {
+  ): Promise<Result<string, AppError>> {
     try {
       logger.info('Iniciando conversión a RFQ', { configSessionId, email: clientData.email });
 
       const configSession = await this.fetchConfigurationSession(configSessionId);
-      if (!configSession) return fail('Sesión de configuración no encontrada');
+      if (!configSession) return fail(AppError.notFound('Sesión de configuración no encontrada'));
 
       const inferredNeeds = await this.runInferencePipeline(configSession.baseProfile);
-      if (inferredNeeds.isFailure()) return fail(inferredNeeds.getError().message);
+      if (inferredNeeds.isFailure()) return fail(AppError.from(inferredNeeds.getError()));
 
       const quoteSession = this.createBaseQuoteSession(configSessionId, clientData, configSession, inferredNeeds.getValue().length);
       const saveResult = await this.quoteRepo.save(quoteSession);
@@ -58,15 +59,14 @@ export class InferenceToRFQService {
 
       const requestedItems = await this.mapInferredNeedsToQuoteItems(inferredNeeds.getValue(), newQuoteId);
       const itemsResult = await this.quoteRepo.addItems(newQuoteId, requestedItems);
-      if (itemsResult.isFailure()) return fail(itemsResult.getError());
+      if (itemsResult.isFailure()) return fail(AppError.from(itemsResult.getError()));
 
       logger.info('Conversión a RFQ completada con éxito', { quoteSessionId: newQuoteId });
       return ok(newQuoteId);
 
     } catch (error) {
-      const err = error instanceof Error ? error : new Error(String(error));
-      logger.error('Excepción en InferenceToRFQService:', err);
-      return fail(err.message);
+      logger.error('Excepción en InferenceToRFQService:', error);
+      return fail(AppError.from(error));
     }
   }
 
@@ -76,8 +76,11 @@ export class InferenceToRFQService {
     return result.getValue();
   }
 
-  private async runInferencePipeline(profile: EventProfile): Promise<Result<InferredNeed[], Error>> {
-    return await this.resilience.execute(() => this.engine.runInference(profile));
+  private async runInferencePipeline(profile: EventProfile): Promise<Result<InferredNeed[], AppError>> {
+    // Wrap Error from engine to AppError
+    const res = await this.resilience.execute(() => this.engine.runInference(profile));
+    if (res.isFailure()) return fail(AppError.from(res.getError()));
+    return ok(res.getValue());
   }
 
   private createBaseQuoteSession(

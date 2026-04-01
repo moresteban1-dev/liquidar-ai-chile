@@ -25,7 +25,7 @@ export const DELETE = withAuth(async (request, user, params) => {
     const result = await handler.execute({
       orderId,
       performedBy: user.id,
-      performedByRole: (user.role.toLowerCase() === 'admin' ? 'admin' : 'client') as 'admin'|'client',
+      performedByRole: user.role,
       reason
     })
 

@@ -135,4 +135,25 @@ export class InMemoryOrderRepository implements IOrderRepository {
   async createFromQuotation(_quotationId: string, _price: number): Promise<Result<string, AppError>> {
     return new Success('new-order-id')
   }
+
+  async getOrderWithBrief(orderId: string): Promise<Result<{
+    id: string;
+    quotationId: string;
+    brief: string;
+    requirements?: string;
+  } | null, AppError>> {
+    const order = this.orders.get(orderId)
+    if (!order) return new Success(null)
+    return new Success({
+      id: orderId,
+      quotationId: 'mock-quotation-id',
+      brief: 'Mock brief content',
+      requirements: order.deliveryAddress
+    })
+  }
+
+  async updateInternalNotes(orderId: string, notes: string): Promise<Result<void, AppError>> {
+    if (this.shouldFail) return new Failure(AppError.internal('Repository error'))
+    return new Success(undefined)
+  }
 }

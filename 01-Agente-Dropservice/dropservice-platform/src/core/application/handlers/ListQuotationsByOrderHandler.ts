@@ -1,4 +1,5 @@
 import { Result, Success } from '@/core/shared/Result'
+import { AppError } from '@/core/shared/AppError'
 import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IQuotationRepository } from '@app/ports/IQuotationRepository'
 import { Quotation } from '@/core/domain/aggregates/quotation/Quotation'
@@ -12,7 +13,7 @@ export class ListQuotationsByOrderHandler extends InstrumentedHandler<{ orderId:
     super()
   }
 
-  protected async handle(query: { orderId: string }): Promise<Result<Quotation[], string>> {
+  protected async handle(query: { orderId: string }): Promise<Result<Quotation[], AppError>> {
     const quotationsResult = await this.quotationRepository.findByOrder(new UniqueEntityID(query.orderId))
     if (quotationsResult.isFailure()) return quotationsResult as any
     return new Success(quotationsResult.getValue() || [])

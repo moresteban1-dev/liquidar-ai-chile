@@ -1,3 +1,5 @@
+import { UserRole } from '@/core/domain/auth/UserRole';
+
 /**
  * DeleteOrderCommand
  * 
@@ -7,6 +9,6 @@
 export interface DeleteOrderCommand {
   orderId: string
   performedBy: string
-  performedByRole: 'admin' | 'client'
+  performedByRole: UserRole
   reason?: string
 }

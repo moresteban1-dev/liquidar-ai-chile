@@ -34,13 +34,13 @@ export const GET = adminRoute(async (_req: NextRequest, _ctx: MiddlewareContext)
     }
 
     // 2. Transform into Calendar Events
-    const events = (orders || []).map(order => ({
+    const events = (orders || []).map((order: { id: string; code: string; items: any[]; event_start_date: string; event_end_date: string; status: string }) => ({
         id: order.id,
         title: `${order.code} - ${order.items?.length || 0} items`,
         start: order.event_start_date,
         end: order.event_end_date,
         status: order.status,
-        resource: order.items?.map((item: any) => {
+        resource: order.items?.map((item: { service: any; quantity: number }) => {
             const serviceName = Array.isArray(item.service) ? item.service[0]?.name : item.service?.name;
             return `${serviceName} (x${item.quantity})`;
         }).join(', ')

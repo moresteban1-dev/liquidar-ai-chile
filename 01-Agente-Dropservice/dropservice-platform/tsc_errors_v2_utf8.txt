@@ -1,0 +1,18 @@
+﻿
+> dropservice-platform@0.1.1 type-check
+> tsc --noEmit
+
+node.exe : "tsc" no se reconoce como un 
+comando interno o externo,
+En línea: 1 Carácter: 1
++ & "C:\Program Files\nodejs/node.exe" 
+"C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecif 
+   ied: ("tsc" no se rec...erno o exte  
+  rno,:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCom 
+   mandError
+ 
+programa o archivo por lotes ejecutable.

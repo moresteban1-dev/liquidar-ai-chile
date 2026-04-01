@@ -1,4 +1,4 @@
-import { Result } from '@core/shared/Result'
+import { Result, ok, fail } from '@core/shared/Result'
 import { AppError } from '@core/shared/AppError'
 import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IQuotationRepository } from '@app/ports/IQuotationRepository'
@@ -18,15 +18,17 @@ export class UpdateProviderItemsHandler extends InstrumentedHandler<UpdateProvid
 
   public async handle(command: UpdateProviderItemsCommand): Promise<Result<Quotation, AppError>> {
     const quotationRes = await this.quotationRepository.findById(new UniqueEntityID(command.quotationId))
-    if (quotationRes.isFailure()) return Result.fail(quotationRes.getError())
+    if (quotationRes.isFailure()) {
+        return fail(AppError.business(String(quotationRes.getError())))
+    }
     
-    const quotation = quotationRes.getValue()
-    if (!quotation) return Result.fail(AppError.notFound('Cotización', command.quotationId))
+    const quotation = quotationRes.unwrap()
+    if (!quotation) return fail(AppError.notFound('Cotización', command.quotationId))
 
     const items: QuotationProviderItem[] = []
     for (const itemData of command.items) {
       const unitPriceRes = Money.create(itemData.unitPrice, itemData.currency as Currency)
-      if (unitPriceRes.isFailure()) return Result.fail(AppError.validation(unitPriceRes.getError()))
+      if (unitPriceRes.isFailure()) return fail(AppError.validation(String(unitPriceRes.getError())))
 
       const itemRes = QuotationProviderItem.create(
         itemData.category, 
@@ -35,17 +37,17 @@ export class UpdateProviderItemsHandler extends InstrumentedHandler<UpdateProvid
         itemData.quantity, 
         itemData.sortOrder
       )
-      if (itemRes.isFailure()) return Result.fail(AppError.validation(itemRes.getError()))
+      if (itemRes.isFailure()) return fail(AppError.validation(String(itemRes.getError())))
       items.push(itemRes.getValue())
     }
 
     const updateRes = quotation.updateProviderItems(items)
-    if (updateRes.isFailure()) return Result.fail(AppError.validation(updateRes.getError()))
+    if (updateRes.isFailure()) return fail(AppError.validation(String(updateRes.getError())))
 
     const saveResult = await this.quotationRepository.save(quotation)
-    if (saveResult.isFailure()) return Result.fail(saveResult.getError())
+    if (saveResult.isFailure()) return fail(AppError.business(String(saveResult.getError())))
 
-    return Result.ok(quotation)
+    return ok(quotation)
   }
 
   protected extractSpanAttributes(command: UpdateProviderItemsCommand) {

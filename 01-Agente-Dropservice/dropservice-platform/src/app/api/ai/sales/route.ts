@@ -1,3 +1,4 @@
+import { NextRequest } from 'next/server';
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { createClient } from '@supabase/supabase-js';
@@ -19,7 +20,7 @@ REGLAS ESTRICTAS DE NEGOCIO (MODELO DROPSERVICE):
 5. Utiliza tu conocimiento (Catalogo de Servicios) para sugerir alternativas brillantes y paquetes cruzados (ej. Si piden DJ, sugiere Iluminación).
 `;
 
-export const POST = withAuth(async (req, _user) => {
+export const POST = withAuth(async (req: NextRequest, _user) => {
     const { messages } = await req.json();
 
     // Validar que se ha inyectado OpenAI (en Producción, esto se setea en Env Vars de Vercel)

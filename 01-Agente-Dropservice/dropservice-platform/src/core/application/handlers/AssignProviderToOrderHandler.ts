@@ -1,4 +1,5 @@
-import { Result, Success, Failure } from '@/core/shared/Result'
+import { Result, Success, fail } from '@/core/shared/Result'
+import { AppError } from '@/core/shared/AppError'
 import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IOrderRepository } from '@app/ports/IOrderRepository'
 import { Order } from '@/core/domain/aggregates/order/Order'
@@ -13,17 +14,17 @@ export class AssignProviderToOrderHandler extends InstrumentedHandler<AssignProv
     super()
   }
 
-  protected async handle(command: AssignProviderToOrderCommand): Promise<Result<Order, string>> {
+  protected async handle(command: AssignProviderToOrderCommand): Promise<Result<Order, AppError>> {
     const orderResult = await this.orderRepository.findById(new UniqueEntityID(command.orderId))
     if (orderResult.isFailure()) return orderResult as any
-    if (!orderResult.getValue()) return new Failure('Order not found')
-
     const order = orderResult.getValue()
+    if (!order) return fail(AppError.notFound('Order', command.orderId))
+
     const assignResult = order.assignProvider(new UniqueEntityID(command.providerId))
-    if (assignResult.isFailure()) return assignResult as any
+    if (assignResult.isFailure()) return fail(AppError.business(assignResult.getError()))
 
     const saveResult = await this.orderRepository.save(order)
-    if (saveResult.isFailure()) return saveResult as any
+    if (saveResult.isFailure()) return saveResult
 
     return new Success(order)
   }

@@ -21,20 +21,20 @@ export class ApproveQuotationHandler extends InstrumentedHandler<ApproveQuotatio
 
   protected async handle(command: ApproveQuotationCommand): Promise<Result<Quotation, AppError>> {
     const quotationRes = await this.quotationRepository.findById(new UniqueEntityID(command.quotationId))
-    if (quotationRes.isFailure()) return quotationRes
-    
+    if (quotationRes.isFailure()) {
+        return fail(AppError.business(String(quotationRes.getError())))
+    }
     const quotation = quotationRes.unwrap()
     if (!quotation) return fail(AppError.notFound('Quotation', command.quotationId))
 
-    const orderRes = await this.orderRepository.findById(quotation.orderId)
-    if (orderRes.isFailure()) return orderRes
-    
-    const order = orderRes.unwrap()
+    const orderResult = await this.orderRepository.findById(quotation.orderId)
+    if (orderResult.isFailure()) return orderResult as any
+    const order = orderResult.unwrap()
     if (!order) return fail(AppError.notFound('Order', quotation.orderId.toString()))
 
     const approveResult = quotation.approve()
     if (approveResult.isFailure()) {
-        return fail(AppError.business(approveResult.getError()))
+        return fail(AppError.business(String(approveResult.getError())))
     }
 
     order.approveQuotation()

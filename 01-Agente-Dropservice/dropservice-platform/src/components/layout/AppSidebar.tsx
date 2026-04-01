@@ -17,9 +17,10 @@ import {
     Sparkles
 } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { UserRole } from '@/core/domain/auth/UserRole';
 
 // --- Types ---
-type UserRole = 'admin' | 'vendor' | 'client';
+// type UserRole = 'admin' | 'vendor' | 'client'; // REMOVED
 
 interface NavItem {
     label: string;
@@ -33,8 +34,8 @@ interface AppSidebarProps {
 }
 
 // --- Navigation Config ---
-const NAV_ITEMS: Record<UserRole, NavItem[]> = {
-    admin: [
+const NAV_ITEMS: Record<string, NavItem[]> = {
+    [UserRole.ADMIN]: [
         { label: 'Dashboard', href: '/admin', icon: <LayoutDashboard className="h-5 w-5" /> },
         { label: 'Leads Inteligentes', href: '/admin/leads', icon: <Sparkles className="h-5 w-5" /> },
         { label: 'Cotizaciones', href: '/admin/quotations', icon: <FileText className="h-5 w-5" /> },
@@ -43,13 +44,13 @@ const NAV_ITEMS: Record<UserRole, NavItem[]> = {
         { label: 'Usuarios', href: '/admin/users', icon: <Users className="h-5 w-5" /> },
         { label: 'Configuración', href: '/admin/settings', icon: <Settings className="h-5 w-5" /> },
     ],
-    vendor: [
+    [UserRole.VENDOR]: [
         { label: 'Dashboard', href: '/vendor', icon: <LayoutDashboard className="h-5 w-5" /> },
         { label: 'Cotizaciones', href: '/vendor/quotations', icon: <FileText className="h-5 w-5" /> },
         { label: 'Órdenes', href: '/vendor/orders', icon: <ShoppingCart className="h-5 w-5" /> },
         { label: 'Configuración', href: '/vendor/settings', icon: <Settings className="h-5 w-5" /> },
     ],
-    client: [
+    [UserRole.CLIENT]: [
         { label: 'Dashboard', href: '/client', icon: <LayoutDashboard className="h-5 w-5" /> },
         { label: 'Mis Cotizaciones', href: '/client/quotations', icon: <FileText className="h-5 w-5" /> },
         { label: 'Mis Pedidos', href: '/client/orders', icon: <ShoppingCart className="h-5 w-5" /> },
@@ -88,7 +89,7 @@ function SidebarContent({ role }: { role: UserRole }) {
 
             {/* Navigation Items */}
             <nav className="flex-1 space-y-1 p-2">
-                {NAV_ITEMS[role].map((item) => {
+                {(NAV_ITEMS[role] || []).map((item) => {
                     const isActive = pathname === item.href || (item.href !== `/${role}` && pathname.startsWith(item.href));
 
                     return (

@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getContainer } from '@/infrastructure/di/Container';
-import { CatalogRepository } from '@core/application/ports/CatalogRepository';
+import { ICatalogRepository } from '@/core/application/ports/ICatalogRepository';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { withAuth } from '@/lib/api/with-auth';
 
 export const GET = withAuth(async (_request, _user) => {
   try {
     const container = await getContainer();
-    const repository = await container.resolve<CatalogRepository>('CatalogRepository');
+    const repository = await container.resolve<ICatalogRepository>('CatalogRepository');
     
     const items = await repository.getItems({ 
       statusFilter: 'active' as any,

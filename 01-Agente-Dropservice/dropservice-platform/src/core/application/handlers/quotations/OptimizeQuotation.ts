@@ -27,7 +27,7 @@ export class OptimizeQuotationHandler implements ICommandHandler<OptimizeQuotati
 
         // 1. Calculate Optimization
         const optimizationRes = OptimizationEngine.calculateOptimalMarkup(quotation);
-        if (optimizationRes.isFailure()) return fail(AppError.businessRule(optimizationRes.getError()));
+        if (optimizationRes.isFailure()) return fail(optimizationRes.getError());
 
         const suggestedMarkup = optimizationRes.getValue();
 

@@ -24,7 +24,7 @@ export const GET = withAuth(async (_request, user) => {
             .eq('client_id', user.id)
             .in('status', ['COMPLETED', 'DELIVERED', 'PAID', 'IN_PRODUCTION', 'INTERNAL_REVIEW', 'UNDER_REVIEW']);
 
-        const totalSpent = (completedOrders || []).reduce((acc, order) => acc + (order.price_total || 0), 0);
+        const totalSpent = (completedOrders || []).reduce((acc: number, order: any) => acc + (order.price_total || 0), 0);
 
         // Active Orders
         const { count: activeOrdersCount } = await supabase

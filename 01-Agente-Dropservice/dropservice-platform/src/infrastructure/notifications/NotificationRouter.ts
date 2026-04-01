@@ -1,7 +1,7 @@
 // src/infrastructure/notifications/NotificationRouter.ts
 
-import { INotificationService } from '@/core/application/ports/services/INotificationService';
-import { ChannelNotification, ChannelResult, INotificationChannel } from '@/core/application/ports/services/INotificationChannel';
+import { INotificationService } from '@/core/application/ports/INotificationService';
+import { ChannelNotification, ChannelResult, INotificationChannel } from '@/core/application/ports/INotificationChannel';
 import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger';
 
 export class NotificationRouter implements INotificationService {

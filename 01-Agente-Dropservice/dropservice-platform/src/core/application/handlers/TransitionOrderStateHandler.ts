@@ -1,3 +1,4 @@
+import { UserRole } from '@/core/domain/auth/UserRole';
 import { Result, ok, fail } from '@core/shared/Result'
 import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IOrderRepository } from '@app/ports/IOrderRepository';
@@ -8,16 +9,16 @@ import { TransitionOrderStateCommand } from '../commands/TransitionOrderStateCom
 import { metricsCollector } from '@infrastructure/telemetry/MetricsCollector'
 import { AppError } from '@/core/shared/AppError'
 
-const ROLE_PERMISSIONS: Record<string, string[]> = {
-  'QUOTATION_PENDING': ['admin'],
-  'QUOTATION_SENT': ['admin'],
-  'QUOTATION_APPROVED': ['admin', 'client'],
-  'PAYMENT_PENDING': ['admin'],
-  'PAYMENT_RECEIVED': ['admin'],
-  'IN_PRODUCTION': ['admin', 'provider'],
-  'DELIVERED': ['admin', 'provider'],
-  'COMPLETED': ['admin'],
-  'CANCELLED': ['admin', 'client']
+const ROLE_PERMISSIONS: Record<string, UserRole[]> = {
+  'QUOTATION_PENDING': [UserRole.ADMIN],
+  'QUOTATION_SENT': [UserRole.ADMIN],
+  'QUOTATION_APPROVED': [UserRole.ADMIN, UserRole.CLIENT],
+  'PAYMENT_PENDING': [UserRole.ADMIN],
+  'PAYMENT_RECEIVED': [UserRole.ADMIN],
+  'IN_PRODUCTION': [UserRole.ADMIN, UserRole.VENDOR],
+  'DELIVERED': [UserRole.ADMIN, UserRole.VENDOR],
+  'COMPLETED': [UserRole.ADMIN],
+  'CANCELLED': [UserRole.ADMIN, UserRole.CLIENT]
 }
 
 export class TransitionOrderStateHandler extends InstrumentedHandler<TransitionOrderStateCommand, Order, AppError> {
@@ -38,7 +39,7 @@ export class TransitionOrderStateHandler extends InstrumentedHandler<TransitionO
     }
 
     const orderRes = await this.orderRepository.findById(new UniqueEntityID(command.orderId))
-    if (orderRes.isFailure()) return orderRes
+    if (orderRes.isFailure()) return fail(AppError.business(String(orderRes.getError())))
     
     const order = orderRes.unwrap()
     if (!order) return fail(AppError.notFound('Order', command.orderId))
@@ -47,7 +48,7 @@ export class TransitionOrderStateHandler extends InstrumentedHandler<TransitionO
     if (transitionResult.isFailure()) return transitionResult
 
     const saveResult = await this.orderRepository.save(order)
-    if (saveResult.isFailure()) return saveResult
+    if (saveResult.isFailure()) return fail(AppError.business(String(saveResult.getError())))
 
     const events = order.pullDomainEvents()
     if (events.length > 0) {
@@ -76,7 +77,7 @@ export class TransitionOrderStateHandler extends InstrumentedHandler<TransitionO
     }
 
     if (result.isFailure()) {
-        return fail(AppError.business(result.getError()))
+        return fail(AppError.business(String(result.getError())))
     }
     return ok(undefined)
   }

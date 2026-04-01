@@ -1,4 +1,5 @@
-import { Result, Success, Failure } from '@/core/shared/Result'
+import { Result, ok, fail } from '@/core/shared/Result'
+import { AppError } from '@/core/shared/AppError'
 import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IOrderRepository } from '@app/ports/IOrderRepository'
 import { IQuotationRepository } from '@app/ports/IQuotationRepository'
@@ -14,23 +15,24 @@ export class AttachQuotationToOrderHandler extends InstrumentedHandler<{ orderId
     private readonly quotationRepository: IQuotationRepository
   ) { super() }
 
-  protected async handle(command: { orderId: string; quotationId: string }): Promise<Result<Order, string>> {
+  protected async handle(command: { orderId: string; quotationId: string }): Promise<Result<Order, AppError>> {
     const orderResult = await this.orderRepository.findById(new UniqueEntityID(command.orderId))
-    if (orderResult.isFailure()) return orderResult as any
+    if (orderResult.isFailure()) return orderResult
+    const order = orderResult.unwrap()
+    if (!order) return fail(AppError.notFound('Order', command.orderId))
 
     const quotationResult = await this.quotationRepository.findById(new UniqueEntityID(command.quotationId))
-    if (quotationResult.isFailure()) return quotationResult as any
-
-    const order = orderResult.unwrap()
+    if (quotationResult.isFailure()) {
+        return fail(AppError.business(String(quotationResult.getError())))
+    }
     const quotation = quotationResult.unwrap()
-
-    if (!order || !quotation) return new Failure('Order or Quotation not found')
+    if (!quotation) return fail(AppError.notFound('Quotation', command.quotationId))
 
     order.attachQuotation(quotation.quotationId, quotation.pricing)
     const saveResult = await this.orderRepository.save(order)
-    if (saveResult.isFailure()) return saveResult as any
+    if (saveResult.isFailure()) return saveResult
 
-    return new Success(order)
+    return ok(order)
   }
 
   protected extractSpanAttributes(command: { orderId: string; quotationId: string }) {

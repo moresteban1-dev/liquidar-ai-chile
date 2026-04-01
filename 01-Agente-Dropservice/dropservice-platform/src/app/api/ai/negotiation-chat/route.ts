@@ -1,3 +1,4 @@
+import { NextRequest } from 'next/server';
 import { streamText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { createServiceRoleClient } from '@/lib/supabase/api';
@@ -6,7 +7,7 @@ import { UserRole, normalizeRole } from '@/core/domain/auth/UserRole';
 
 export const runtime = 'nodejs'; // Use node engine for edge stability or bullmq 
 
-export const POST = withAuth(async (req, user) => {
+export const POST = withAuth(async (req: NextRequest, user) => {
     const { messages, quotationId, role: bodyRole } = await req.json();
 
     // El rol debe venir preferiblemente del perfil real del usuario, pero usamos el context solicitado si tiene los permisos

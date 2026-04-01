@@ -54,17 +54,17 @@ export const GET = withAuth(async (_request, user) => {
 
         // Calculate metrics
         const allOrders = orders || [];
-        const activeOrders = allOrders.filter(o =>
+        const activeOrders = allOrders.filter((o: any) =>
             ['PAID', 'IN_PRODUCTION', 'INTERNAL_REVIEW'].includes(o.status)
         );
-        const completedOrders = allOrders.filter(o => o.status === 'COMPLETED');
-        const completedThisMonth = allOrders.filter(o =>
+        const completedOrders = allOrders.filter((o: any) => o.status === 'COMPLETED');
+        const completedThisMonth = allOrders.filter((o: any) =>
             o.status === 'COMPLETED' && new Date(o.created_at) >= new Date(startOfMonth)
         );
 
         // Earnings = sum of price_cost for completed orders (what provider gets paid)
-        const totalEarnings = completedOrders.reduce((sum, o) => sum + (o.price_cost || 0), 0);
-        const earningsThisMonth = completedThisMonth.reduce((sum, o) => sum + (o.price_cost || 0), 0);
+        const totalEarnings = completedOrders.reduce((sum: number, o: any) => sum + (o.price_cost || 0), 0);
+        const earningsThisMonth = completedThisMonth.reduce((sum: number, o: any) => sum + (o.price_cost || 0), 0);
 
         // Helper to safely extract nested relation value
         const getNestedName = (data: unknown): string => {
@@ -84,7 +84,7 @@ export const GET = withAuth(async (_request, user) => {
                 completedThisMonth: completedThisMonth.length,
                 pendingBids: (pendingQuotations || []).length,
             },
-            activeOrders: activeOrders.slice(0, 10).map(o => {
+            activeOrders: activeOrders.slice(0, 10).map((o: any) => {
                 const orderData = o as Record<string, unknown>;
                 const quotationData = (Array.isArray(orderData.quotation) ? orderData.quotation[0] : orderData.quotation) as Record<string, unknown> | null;
 
@@ -99,7 +99,7 @@ export const GET = withAuth(async (_request, user) => {
                     brief: (quotationData?.brief as string) || '',
                 };
             }),
-            pendingQuotations: (pendingQuotations || []).map(q => {
+            pendingQuotations: (pendingQuotations || []).map((q: any) => {
                 const qData = q as Record<string, unknown>;
                 return {
                     id: q.id,

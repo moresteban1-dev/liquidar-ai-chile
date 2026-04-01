@@ -21,20 +21,22 @@ export class RejectQuotationHandler extends InstrumentedHandler<RejectQuotationC
 
   protected async handle(command: RejectQuotationCommand): Promise<Result<Quotation, AppError>> {
     const quotationRes = await this.quotationRepository.findById(new UniqueEntityID(command.quotationId))
-    if (quotationRes.isFailure()) return quotationRes
+    if (quotationRes.isFailure()) {
+        return fail(AppError.business(String(quotationRes.getError())))
+    }
     
     const quotation = quotationRes.unwrap()
     if (!quotation) return fail(AppError.notFound('Quotation', command.quotationId))
 
     const orderRes = await this.orderRepository.findById(quotation.orderId)
-    if (orderRes.isFailure()) return orderRes
+    if (orderRes.isFailure()) return orderRes as any
     
     const order = orderRes.unwrap()
     if (!order) return fail(AppError.notFound('Order', quotation.orderId.toString()))
 
     const rejectResult = quotation.reject(command.reason)
     if (rejectResult.isFailure()) {
-        return fail(AppError.business(rejectResult.getError()))
+        return fail(AppError.business(String(rejectResult.getError())))
     }
 
     order.transition('QUOTATION_PENDING')

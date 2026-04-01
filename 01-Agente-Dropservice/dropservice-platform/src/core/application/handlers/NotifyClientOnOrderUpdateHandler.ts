@@ -1,5 +1,6 @@
 import { InstrumentedHandler } from '@/core/application/shared/InstrumentedHandler'
-import { Result, Success, Failure as _Failure } from '@/core/shared/Result'
+import { Result, Success } from '@/core/shared/Result'
+import { AppError } from '@/core/shared/AppError'
 import { EmailService } from '@/infrastructure/notifications/EmailService'
 import { WebhookService } from '@/infrastructure/notifications/WebhookService'
 import { EmailTemplates } from '@/core/domain/templates/EmailTemplates'
@@ -29,7 +30,7 @@ export class NotifyClientOnOrderUpdateHandler extends InstrumentedHandler<Notify
     super()
   }
 
-  protected async handle(command: NotifyOrderUpdateCommand): Promise<Result<void, string>> {
+  protected async handle(command: NotifyOrderUpdateCommand): Promise<Result<void, AppError>> {
     const { orderId, newStatus, clientName, clientEmail, total } = command
 
     // 1. Send Email Notification

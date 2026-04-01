@@ -10,6 +10,9 @@ import {
   UpdateCatalogCategoryData
 } from '../../domain/catalog/CatalogTypes';
 
+export type CreateCategoryData = CreateCatalogCategoryData;
+export type UpdateCategoryData = UpdateCatalogCategoryData;
+
 /**
  * ICatalogRepository
  * 
@@ -89,6 +92,3 @@ export interface ICatalogRepository {
     deleteCategory(id: string): Promise<Result<void, AppError>>;
 }
 
-// Support for nested types if needed by implementation
-export type CreateCategoryData = CreateCatalogCategoryData;
-export type UpdateCategoryData = UpdateCatalogCategoryData;

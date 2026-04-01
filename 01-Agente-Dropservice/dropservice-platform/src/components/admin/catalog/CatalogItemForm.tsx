@@ -43,11 +43,11 @@ const CatalogItemFormSchema = z.object({
   name: z.string().min(1, 'El nombre es obligatorio').max(200),
   type: z.enum(['service', 'product', 'equipment']),
   categoryId: z.string().uuid('Seleccione una categoría válida'),
-  description: z.string().min(10, 'La descripción debe tener al menos 10 caracteres').optional(),
-  priceSuggested: z.coerce.number().positive('El precio debe ser positivo').optional().or(z.literal('')),
-  priceReferenceMin: z.coerce.number().positive('El precio debe ser positivo').optional().or(z.literal('')),
-  priceReferenceMax: z.coerce.number().positive('El precio debe ser positivo').optional().or(z.literal('')),
-  defaultMarginPercent: z.coerce.number().min(0).max(100).optional().or(z.literal('')),
+  description: z.string().min(10, 'La descripción debe tener al menos 10 caracteres').optional().or(z.literal('')),
+  priceSuggested: z.union([z.coerce.number().positive(), z.literal(''), z.null()]).optional(),
+  priceReferenceMin: z.union([z.coerce.number().positive(), z.literal(''), z.null()]).optional(),
+  priceReferenceMax: z.union([z.coerce.number().positive(), z.literal(''), z.null()]).optional(),
+  defaultMarginPercent: z.union([z.coerce.number().min(0).max(100), z.literal(''), z.null()]).optional(),
   images: z.array(MediaAssetSchema).min(1, 'Debe subir al menos una imagen'),
   videos: z.array(MediaAssetSchema).default([]),
   documents: z.array(MediaAssetSchema).default([]),
@@ -71,7 +71,7 @@ export function CatalogItemForm({ item, categories, onSuccess, onCancel }: Catal
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [currentTab, setCurrentTab] = useState('basic');
 
-  const form = useForm({
+  const form = useForm<CatalogItemFormData>({
     resolver: zodResolver(CatalogItemFormSchema),
     defaultValues: item ? {
       name: item.name,

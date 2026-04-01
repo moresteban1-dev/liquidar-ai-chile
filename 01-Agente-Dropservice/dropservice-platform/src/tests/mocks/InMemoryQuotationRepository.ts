@@ -1,4 +1,4 @@
-import { Result, ok, fail } from '@/core/shared/Result';
+import { Result, ok } from '@/core/shared/Result';
 import { IQuotationRepository } from '@app/ports/IQuotationRepository';
 import { Quotation } from '@/core/domain/aggregates/quotation/Quotation';
 import { UniqueEntityID } from '@/core/shared/UniqueEntityID';
@@ -62,5 +62,9 @@ export class InMemoryQuotationRepository implements IQuotationRepository {
 
   async findByProviderId(providerId: UniqueEntityID): Promise<Result<Quotation[], AppError>> {
     return this.findByProvider(providerId);
+  }
+
+  async updateInternalNotes(_quotationId: string, _notes: string): Promise<Result<void, AppError>> {
+      return ok(undefined);
   }
 }

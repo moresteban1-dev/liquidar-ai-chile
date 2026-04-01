@@ -10,7 +10,7 @@ export type { UserRole };
 export interface AuthUser {
   id: string;
   email: string;
-  role: string;
+  role: UserRole;
   name?: string;
   metadata?: Record<string, unknown>;
 }
@@ -37,7 +37,7 @@ type InternalApiHandler = (
  */
 export function withAuth(
   handler: ApiHandler,
-  options?: { roles?: string[] },
+  options?: { roles?: UserRole[] },
 ) {
   return async (
     request: NextRequest,
@@ -128,7 +128,7 @@ export function requireOwnership(
 /**
  * Shortcut for specific roles.
  */
-export function withRole(roles: string[], handler: ApiHandler) {
+export function withRole(roles: UserRole[], handler: ApiHandler) {
     return withAuth(handler, { roles });
 }
 

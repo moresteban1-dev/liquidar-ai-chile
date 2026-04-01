@@ -1,0 +1,44 @@
+﻿node : C:\Users\Esteban\Desktop\Skill IA
+\01-Agente-Dropservice\dropservice-platf
+orm\node_modules\typescript\lib\_tsc.js:
+51201
+En línea: 1 Carácter: 1
++ node 
+node_modules\typescript\lib\tsc.js 
+--noEmit > tsc_errors_v3.txt  ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecif 
+   ied: (C:\Users\Esteba...b\_tsc.js:5  
+  1201:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCom 
+   mandError
+ 
+      
+      
+
+SyntaxError: Unexpected end of input
+    at wrapSafe (node:internal/modules/c
+js/loader:1692:18)
+    at Module._compile (node:internal/mo
+dules/cjs/loader:1735:20)
+    at Object..js (node:internal/modules
+/cjs/loader:1893:10)
+    at Module.load (node:internal/module
+s/cjs/loader:1481:32)
+    at Module._load (node:internal/modul
+es/cjs/loader:1300:12)
+    at TracingChannel.traceSync 
+(node:diagnostics_channel:328:14)
+    at wrapModuleLoad (node:internal/mod
+ules/cjs/loader:245:24)
+    at Module.require (node:internal/mod
+ules/cjs/loader:1504:12)
+    at require 
+(node:internal/modules/helpers:152:16)
+    at Object.<anonymous> 
+(C:\Users\Esteban\Desktop\Skill IA\01-Ag
+ente-Dropservice\dropservice-platform\no
+de_modules\typescript\lib\tsc.js:8:18)
+
+Node.js v24.13.0

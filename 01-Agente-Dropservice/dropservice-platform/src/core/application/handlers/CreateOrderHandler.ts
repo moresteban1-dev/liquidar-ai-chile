@@ -1,7 +1,7 @@
 import { Result, ok, fail } from '@/core/shared/Result'
 import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IOrderRepository } from '@app/ports/IOrderRepository'
-import { IEventPublisher } from '@/core/application/ports/events/IEventPublisher'
+import { IEventPublisher } from '@/core/application/ports/IEventPublisher'
 import { Order } from '@/core/domain/aggregates/order/Order'
 import { UniqueEntityID } from '@/core/shared/UniqueEntityID'
 import { CreateOrderCommand } from '../commands/CreateOrderCommand'

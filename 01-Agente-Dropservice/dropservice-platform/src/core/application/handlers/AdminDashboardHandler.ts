@@ -1,4 +1,5 @@
 import { Result, Success } from '@/core/shared/Result'
+import { AppError } from '@/core/shared/AppError'
 import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IOrderRepository } from '@app/ports/IOrderRepository'
 import { AdminDashboardResult } from '../queries/AdminDashboardQuery'
@@ -13,7 +14,7 @@ export class AdminDashboardHandler
     super()
   }
 
-  protected async handle(): Promise<Result<AdminDashboardResult, string>> {
+  protected async handle(): Promise<Result<AdminDashboardResult, AppError>> {
     // 1. Get aggregated stats in a single RPC call (N+1 eliminated)
     const statsResult = await this.orderRepository.getDashboardStats()
     if (statsResult.isFailure()) return statsResult as any

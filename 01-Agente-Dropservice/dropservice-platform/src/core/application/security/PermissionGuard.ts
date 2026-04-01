@@ -1,4 +1,5 @@
-import { UserRole, Permission, ROLE_PERMISSIONS } from '@/types/order';
+import { UserRole } from '@/core/domain/auth/UserRole';
+import { Permission, ROLE_PERMISSIONS } from '@/types/order';
 import { Result } from '@core/shared/Result';
 import { AppError } from '@core/shared/AppError';
 
@@ -34,7 +35,7 @@ export class PermissionGuard {
      */
     static isAuthorized(role: UserRole, permission: Permission, userId: string, ownerId?: string): boolean {
         // Admins can always do everything if they have the permission
-        if (role === 'admin' && this.hasPermission(role, permission)) {
+        if (role === UserRole.ADMIN && this.hasPermission(role, permission)) {
             return true;
         }
 
