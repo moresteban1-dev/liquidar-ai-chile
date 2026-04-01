@@ -20,9 +20,13 @@ export const searchKnowledgeBase = async (query: string, topK = 5) => {
     // The response is an array of embeddings (usually length 1 for single content)
     const queryEmbedding = embeddingResponse[0];
 
+    if (!queryEmbedding?.embedding) {
+        return [];
+    }
+
     // Query Pinecone
     const results = await index.query({
-        vector: queryEmbedding?.embedding,
+        vector: queryEmbedding.embedding,
         topK,
         includeMetadata: true,
     });
