@@ -1,56 +1,40 @@
-import { logger } from '@infrastructure/telemetry/StructuredLogger';
-import { createBrowserClient, isBrowserClient } from '@supabase/ssr'
-
+import { createBrowserClient } from '@supabase/ssr'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { env } from '@/config/env';
 
 /**
  * Creates a Supabase client for use in Client Components (browser).
- * Uses public anon key - safe to expose to client.
+ * 
+ * IMPORTANT: This client must always have environment variables in production.
+ * If missing, it throws a fatal error to prevent silent failures.
+ * 
+ * @returns {SupabaseClient} Typed Supabase Client
  */
-export const createClient = () => {
+export const createClient = (): SupabaseClient => {
     const url = env.NEXT_PUBLIC_SUPABASE_URL;
     const key = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!url || !key) {
-        logger.error('CRITICAL: Supabase Environment Variables missing!');
-        return createFallbackClient();
+        const errorMsg = 'FATAL: Missing Supabase environment variables. Check NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.';
+        
+        if (process.env.NODE_ENV === 'production') {
+            throw new Error(errorMsg);
+        }
+        
+        console.error(`❌ [Supabase Config Error]: ${errorMsg}`);
     }
 
-    try {
-        return createBrowserClient(url, key);
-    } catch (error) {
-        logger.error('Error creating Supabase client:', error);
-        return createFallbackClient();
+    // This validation ensures TypeScript knows url and key are strings
+    if (!url || !key) {
+        // Fallback for types only, should not be reached in production due to throw
+        return null as unknown as SupabaseClient;
     }
-};
 
-function createFallbackClient() {
-    logger.warn('Using fallback mock Supabase client');
-    return {
-        auth: {
-            getUser: async () => ({ data: { user: null }, error: null }),
-            getSession: async () => ({ data: { session: null }, error: null }),
-            signInWithPassword: async ({ email, password }: { email: string; password: string }) => {
-                logger.warn('Fallback: signInWithPassword called with', email);
-                return { data: { user: null, session: null }, error: new Error('Auth not configured') };
+    return createBrowserClient(url, key, {
+        realtime: {
+            params: {
+                eventsPerSecond: 10,
             },
-            signInWithOAuth: async () => ({ data: { session: null }, error: new Error('OAuth not configured') }),
-            signOut: async () => ({ error: null }),
-            updateUser: async () => ({ data: { user: null }, error: null }),
-            onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
         },
-        from: () => ({
-            select: () => ({
-                eq: () => ({
-                    single: async () => ({ data: null, error: null }),
-                    maybeSingle: async () => ({ data: null, error: null }),
-                }),
-            }),
-            insert: async () => ({ error: null }),
-            update: () => ({ eq: () => ({ single: async () => ({ data: null, error: null }) }) }),
-        }),
-        channel: () => ({
-            on: () => ({ subscribe: () => {} }),
-        }),
-    };
-}
+    });
+};

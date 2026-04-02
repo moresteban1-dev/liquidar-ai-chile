@@ -4,7 +4,7 @@ import { PaymentService } from '@/lib/payments/payment-service';
 import { validateRequestBody } from '@/lib/validators/api-validator';
 import { CreatePaymentSchema } from '@/lib/validators/api-schemas';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
-import { withRateLimit } from '@/lib/rate-limit';
+import { withRateLimit } from '@/lib/security/rate-limiter';
 
 export async function POST(request: NextRequest) {
     // 🛡️ API Rate Limiting: 5 intentos por IP cada minuto

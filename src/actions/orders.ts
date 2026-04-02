@@ -76,9 +76,7 @@ export async function getAdminOrders(): Promise<OrderData[]> {
 export async function getClientOrders(): Promise<OrderData[]> {
     const authResult = await requireRole(UserRole.CLIENT);
     if (authResult.isFailure()) return [];
-    const { user } = authResult.getValue();
-
-    const supabase = createServiceRoleClient();
+    const { user, supabase } = authResult.getValue();
 
     const { data: orders, error } = await supabase
         .from('orders')

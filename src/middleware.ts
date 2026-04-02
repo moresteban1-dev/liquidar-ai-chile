@@ -3,6 +3,7 @@ import { createServerClient } from '@supabase/ssr';
 import { metrics } from './infrastructure/telemetry/MetricsService';
 import { logger } from './infrastructure/telemetry/StructuredLogger';
 import { UserRole, normalizeRole } from './core/domain/auth/UserRole';
+import { validateRedirectUrl } from './lib/security/redirect-validator';
 
 /**
  * Configuración de rutas protegidas por rol.
@@ -59,7 +60,7 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const ip = request.headers.get('x-forwarded-for') || 'anonymous';
 
-  // 0. Aplicar Rate Limiting radical en rutas sensibles
+  // 🛡️ API Rate Limiting radical en rutas sensibles
   if (pathname.startsWith('/api/auth') || pathname.startsWith('/api/webhooks')) {
     const now = Date.now();
     const rateKey = `${ip}:${pathname}`;
@@ -81,107 +82,89 @@ export async function middleware(request: NextRequest) {
         { status: 429 }
       );
     }
-    
-    // Limpieza periódica del mapa (prevent memory leak)
     if (rateLimitMap.size > 5000) rateLimitMap.clear();
   }
 
-  // 1. Permitir rutas públicas sin verificación (pero con telemetría)
+  // 🛡️ Inicializar respuesta con Headers de Seguridad
+  let response = NextResponse.next();
+  
+  // Security Headers (Identity Fortress)
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('X-XSS-Protection', '1; mode=block');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  
+  // Basic CSP (Self-host + Supabase)
+  const csp = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.supabase.co; connect-src 'self' https://*.supabase.co;";
+  response.headers.set('Content-Security-Policy', csp);
+
+  // 1. Permitir rutas públicas sin verificación
   if (PUBLIC_ROUTES.some((pattern) => pattern.test(pathname))) {
-    const response = NextResponse.next();
     recordTelemetry(start, pathname, request.method, response.status.toString());
     return response;
   }
 
   // 2. Crear cliente Supabase
-  let supabaseResponse = NextResponse.next({
-    request: { headers: request.headers },
-  });
-
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
+        getAll() { return request.cookies.getAll(); },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value),
-          );
-          supabaseResponse = NextResponse.next({
-            request,
-          });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options),
-          );
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          response = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
         },
       },
     },
   );
 
   // 3. Verificar sesión
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
 
   if (authError || !user) {
     const isProtected = PROTECTED_ROUTES.some((r) => r.pattern.test(pathname));
 
     if (isProtected) {
       if (pathname.startsWith('/api/')) {
-        const response = NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        recordTelemetry(start, pathname, request.method, '401');
-        return response;
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
       }
       const loginUrl = new URL('/login', request.url);
-      loginUrl.searchParams.set('redirect', pathname);
-      const response = NextResponse.redirect(loginUrl);
-      recordTelemetry(start, pathname, request.method, '307');
-      return response;
+      
+      // 🛡️ Layer 3: Redirect Sanitization (Anti-Open Redirect)
+      const safeRedirect = validateRedirectUrl(pathname, '/client');
+      loginUrl.searchParams.set('redirect', safeRedirect);
+      
+      return NextResponse.redirect(loginUrl);
     }
-
-    recordTelemetry(start, pathname, request.method, supabaseResponse.status.toString());
-    return supabaseResponse;
+    return response;
   }
 
   // 4. Verificar roles para rutas protegidas
   const isProtectedRoute = PROTECTED_ROUTES.find((r) => r.pattern.test(pathname));
   
   if (isProtectedRoute) {
-    // OPTIMIZACIÓN AAA: Extraer rol de app_metadata para evitar Query a DB en el Middleware
     const userRole = normalizeRole(user.app_metadata?.role || user.user_metadata?.role);
 
     if (!isProtectedRoute.roles.includes(userRole)) {
       if (pathname.startsWith('/api/')) {
-        const response = NextResponse.json(
-          {
-            error: 'Forbidden',
-            message: `Acceso denegado para el rol '${userRole}'`,
-            requiredRoles: isProtectedRoute.roles,
-          },
-          { status: 403 },
-        );
-        recordTelemetry(start, pathname, request.method, '403');
-        return response;
+        return NextResponse.json({ error: 'Forbidden', message: `Acceso denegado` }, { status: 403 });
       }
-
-      if (isProtectedRoute.redirectTo) {
-        const response = NextResponse.redirect(new URL(isProtectedRoute.redirectTo, request.url));
-        recordTelemetry(start, pathname, request.method, '307');
-        return response;
-      }
+      
+      // Redirect al dashboard apropiado según su rol para evitar bucles
+      const target = userRole === UserRole.ADMIN ? '/admin' : userRole === UserRole.VENDOR ? '/vendor' : '/client';
+      return NextResponse.redirect(new URL(target, request.url));
     }
   }
 
-  recordTelemetry(start, pathname, request.method, supabaseResponse.status.toString());
-  return supabaseResponse;
+  recordTelemetry(start, pathname, request.method, response.status.toString());
+  return response;
 }
 
 /**
- * Technical Telemetry [NASA-Grade] helper
+ * NASA-Grade Telemetry helper
  */
 function recordTelemetry(start: number, path: string, method: string, status: string) {
     const duration = Date.now() - start;
@@ -191,13 +174,6 @@ function recordTelemetry(start: number, path: string, method: string, status: st
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public assets
-     */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

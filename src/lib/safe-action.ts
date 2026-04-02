@@ -2,7 +2,7 @@ import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { z } from 'zod';
 import { validate } from '@core/validation/zod-helper';
 import { AppError, ErrorCode } from '@core/shared/AppError';
-import { rateLimit } from './rate-limiter';
+import { rateLimit } from '@/lib/security/rate-limiter';
 
 // ─── Standardized Action Response ───
 export type ActionResponse<T = void> =
@@ -23,10 +23,12 @@ export function createAction<TInput, TOutput>(
         try {
             // 1. Rate Limiting
             if (config.rateLimitKey) {
-                // We use a global key for the action name, but typically you'd append User ID here.
-                // For simplicity, we limit by Action Name globally (or IP if we had context).
-                // Let's assume global per action for now to prevent abuse.
-                const allowed = await rateLimit(config.rateLimitKey, config.rateLimitMax ?? 10);
+                const allowed = await rateLimit({
+                    identifier: config.rateLimitKey,
+                    action: config.name,
+                    maxAttempts: config.rateLimitMax ?? 10,
+                    windowMs: 60 * 1000
+                });
                 if (!allowed) {
                     return {
                         status: 'error',

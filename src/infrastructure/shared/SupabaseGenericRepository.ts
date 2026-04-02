@@ -3,17 +3,21 @@ import { Result, ok, fail } from '@core/shared/Result';
 import { AppError } from '@core/shared/AppError';
 import { trace, SpanStatusCode } from '@opentelemetry/api';
 
-export class SupabaseGenericRepository<T, Row> {
+export interface RepositoryMapper<T, Row> {
+    toDomain: (row: Row) => Result<T, AppError>;
+    toRow: (domain: T) => Row;
+}
+
+export class SupabaseGenericRepository<T, Row extends Record<string, any>> {
     protected tableName: string;
-    protected mapper: { toDomain: (row: Row) => Result<T, any>; toRow: (domain: T) => Row };
+    protected mapper: RepositoryMapper<T, Row>;
     private tracer = trace.getTracer('supabase-repository');
 
     constructor(
         protected readonly supabase: SupabaseClient,
         tableName: string, 
-        mapper: { toDomain: (row: Row) => Result<T, any>; toRow: (domain: T) => Row }
+        mapper: RepositoryMapper<T, Row>
     ) {
-        this.supabase = supabase;
         this.tableName = tableName;
         this.mapper = mapper;
     }
@@ -42,8 +46,9 @@ export class SupabaseGenericRepository<T, Row> {
 
                 const domainRes = this.mapper.toDomain(data as Row);
                 if (domainRes.isFailure()) {
-                    span.setStatus({ code: SpanStatusCode.ERROR, message: `Mapping error: ${domainRes.getError()}` });
-                    return fail(AppError.internal(`Mapping error in ${this.tableName}`));
+                    const err = domainRes.getError();
+                    span.setStatus({ code: SpanStatusCode.ERROR, message: `Mapping error: ${err.message}` });
+                    return fail(err);
                 }
 
                 return ok(domainRes.getValue());
@@ -63,7 +68,7 @@ export class SupabaseGenericRepository<T, Row> {
                 const row = this.mapper.toRow(entity);
                 const { error } = await supabase
                     .from(this.tableName)
-                    .upsert(row as any);
+                    .upsert(row);
 
                 if (error) {
                     span.setStatus({ code: SpanStatusCode.ERROR, message: error.message });

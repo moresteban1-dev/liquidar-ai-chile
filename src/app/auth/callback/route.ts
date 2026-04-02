@@ -7,22 +7,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { withRateLimit } from '@/lib/rate-limit';
+import { withRateLimit } from '@/lib/security/rate-limiter';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { UserRole } from '@/core/domain/auth/UserRole';
 
-export const dynamic = 'force-dynamic';
-// Forzar ejecución en el entorno estándar de Node.js de Vercel en lugar de Edge (mitiga TypeError: fetch failed)
-export const runtime = 'nodejs';
+import { validateRedirectUrl } from '@/lib/security/redirect-validator';
 
 export async function GET(request: NextRequest) {
-    // 🛡️ API Rate Limiting: Prevenir Spam de Logins / Desbordamiento de BD
+    // 🛡️ API Rate Limiting
     const rateLimitResponse = await withRateLimit(request, 'auth-callback', { limit: 5, windowMs: 60000 });
     if (rateLimitResponse) return rateLimitResponse;
 
     const requestUrl = new URL(request.url);
     const code = requestUrl.searchParams.get('code');
-    const next = requestUrl.searchParams.get('next') || '/client';
+    const nextParam = requestUrl.searchParams.get('next');
+
+    // 🛡️ Layer 3: Redirect Sanitization (Anti-Open Redirect)
+    const safeNext = validateRedirectUrl(nextParam, '/client');
 
     if (!code) {
         return NextResponse.redirect(new URL('/login?error=missing_code', request.url));
@@ -67,7 +68,7 @@ export async function GET(request: NextRequest) {
 
         const role = profile?.role || UserRole.CLIENT;
 
-        // 🔄 Sync Role to Auth Metadata (for Middleware/RBAC optimization)
+        // 🔄 Sync Role to Auth Metadata
         const supabaseAdmin = createServerClient(
             process.env.NEXT_PUBLIC_SUPABASE_URL!,
             process.env.SUPABASE_SERVICE_ROLE_KEY!,
@@ -79,29 +80,23 @@ export async function GET(request: NextRequest) {
             app_metadata: { role: role }
         });
 
-        let targetUrl = '/client';
-
-        switch (role) {
-            case UserRole.ADMIN:
-                targetUrl = '/admin';
-                break;
-            case UserRole.VENDOR:
-                targetUrl = '/vendor';
-                break;
-            case UserRole.CLIENT:
-                targetUrl = '/client';
-                break;
+        // 🛡️ Final Redirection Logic
+        // If 'next' was provided, use it (sanitized), otherwise use role-based default
+        let targetUrl = safeNext;
+        
+        // If next is the default, apply role logic
+        if (safeNext === '/client') {
+            switch (role) {
+                case UserRole.ADMIN: targetUrl = '/admin'; break;
+                case UserRole.VENDOR: targetUrl = '/vendor'; break;
+                case UserRole.CLIENT: targetUrl = '/client'; break;
+            }
         }
 
-        // Check for pending quotation to show success message
+        // Check for pending quotation
         const pendingQuoteCode = requestUrl.searchParams.get('quote');
         if (pendingQuoteCode) {
             targetUrl = `/client/quotations/${pendingQuoteCode}`;
-        }
-
-        // Override with `next` param if set
-        if (next && next !== '/' && next !== '/auth/callback') {
-            targetUrl = next;
         }
 
         return NextResponse.redirect(new URL(targetUrl, request.url));

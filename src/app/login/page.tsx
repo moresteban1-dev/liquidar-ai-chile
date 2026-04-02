@@ -12,6 +12,7 @@ import { createClient } from '@/lib/supabase/client';
 import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton';
 import { LiquidCard } from '@/components/ui/liquid-card';
 import { UserRole, normalizeRole } from '@/core/domain/auth/UserRole';
+import { validateRedirectUrl } from '@/lib/security/redirect-validator';
 
 function LoginForm() {
     const router = useRouter();
@@ -109,10 +110,9 @@ function LoginForm() {
                         break;
                 }
 
-                // Respect callbackUrl if specific
-                if (callbackUrl && callbackUrl !== '/' && callbackUrl !== '/login') {
-                    targetUrl = callbackUrl;
-                }
+                // 🛡️ Layer 3: Redirect Sanitization (Anti-Open Redirect)
+                const safeTarget = validateRedirectUrl(callbackUrl, targetUrl);
+                targetUrl = safeTarget;
 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 router.push(targetUrl as any);

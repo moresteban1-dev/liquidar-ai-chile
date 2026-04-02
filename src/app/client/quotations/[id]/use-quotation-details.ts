@@ -82,7 +82,7 @@ export function useQuotationDetails(id: string) {
                     return;
                 }
                 if (result.data) {
-                    orderIdToPay = result.data;
+                    orderIdToPay = String(result.data);
                 }
             }
 

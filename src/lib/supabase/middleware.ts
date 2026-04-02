@@ -2,7 +2,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 import { UserRole, normalizeRole } from '../../core/domain/auth/UserRole';
 import { logger } from '../../infrastructure/telemetry/StructuredLogger';
-import { rateLimit } from '../rate-limiter';
+import { rateLimit } from '@/lib/security/rate-limiter';
 
 /**
  * Consolidated Middleware Logic
@@ -102,8 +102,14 @@ export async function updateSession(request: NextRequest) {
     
     // Auth Routes Limit
     if (pathname.startsWith('/api/auth')) {
-        const isAllowed = await rateLimit(`auth-${ip}`, 10, 60_000);
-        if (!isAllowed) {
+        const { allowed } = await rateLimit({
+            identifier: `auth-${ip}`,
+            action: 'auth-layer',
+            maxAttempts: 10,
+            windowMs: 60_000
+        });
+
+        if (!allowed) {
             return new NextResponse(
                 JSON.stringify({ error: 'Too Many Requests', retryAfter: 60 }),
                 { status: 429, headers: { 'content-type': 'application/json' } }
@@ -113,8 +119,14 @@ export async function updateSession(request: NextRequest) {
 
     // AI Routes Limit
     if (pathname.startsWith('/api/ai')) {
-        const isAllowed = await rateLimit(`ai-${ip}`, 20, 60_000);
-        if (!isAllowed) {
+        const { allowed } = await rateLimit({
+            identifier: `ai-${ip}`,
+            action: 'ai-layer',
+            maxAttempts: 20,
+            windowMs: 60_000
+        });
+
+        if (!allowed) {
             return new NextResponse(
                 JSON.stringify({ error: 'AI Rate Limit Exceeded', retryAfter: 60 }),
                 { status: 429, headers: { 'content-type': 'application/json' } }

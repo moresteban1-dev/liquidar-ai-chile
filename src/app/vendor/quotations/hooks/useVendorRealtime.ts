@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
+import { RealtimeChannel } from '@supabase/supabase-js';
 
 export interface UseVendorRealtimeResult {
   lastUpdate: number;
@@ -24,8 +25,8 @@ export function useVendorRealtime(): UseVendorRealtimeResult {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'quotations' },
-        (payload: { eventType: string; schema: string; table: string; record: unknown; oldRecord: unknown }) => {
-          logger.info('Realtime Quotation Update Received (Vendor):', payload);
+        (payload: unknown) => {
+          logger.info('Realtime Quotation Update Received (Vendor):', { payload });
           setLastUpdate(Date.now());
           router.refresh();
         }

@@ -9,7 +9,7 @@ export const revalidate = 60; // Cache stats for 60 seconds
  * Protected: Admin only.
  */
 export async function GET(req: Request, context: any) {
-    return withAdmin(async () => {
+    return withAdmin(async (_user, _context, _req) => {
         const supabase = createServiceRoleClient();
 
         const { data: orders, error } = await supabase

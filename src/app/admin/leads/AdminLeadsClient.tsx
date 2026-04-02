@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { LeadsTable } from '@/components/admin/leads/LeadsTable';
 import { QuoteSession } from '@/core/domain/quote/QuoteTypes';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
+import { RealtimeChannel } from '@supabase/supabase-js';
 
 interface AdminLeadsClientProps {
   leads: QuoteSession[];
@@ -19,12 +20,17 @@ export function AdminLeadsClient({ leads }: AdminLeadsClientProps) {
     const supabase = createClient();
 
     // Suscripción Realtime para refrescar la lista si hay cambios en la DB
-    const channel = supabase
+    // Tipamos el canal explícitamente para resolver el error de overloads en Vercel
+    const channel: RealtimeChannel = supabase
       .channel('admin-leads-changes')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'v2_quote_sessions' },
-        (payload: any) => {
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'v2_quote_sessions' 
+        },
+        (payload) => {
           logger.info('Realtime Lead Update Received:', payload);
           router.refresh();
         }
@@ -32,7 +38,7 @@ export function AdminLeadsClient({ leads }: AdminLeadsClientProps) {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+        supabase.removeChannel(channel);
     };
   }, [router]);
 
