@@ -106,9 +106,30 @@ export async function middleware(request: NextRequest) {
   }
 
   // 2. Crear cliente Supabase
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  
+  // Structured logging — only in development to avoid leaking env status in production
+  if (process.env.NODE_ENV === 'development') {
+    logger.debug('[Middleware] Supabase env check', {
+      hasUrl: !!supabaseUrl,
+      hasKey: !!supabaseKey,
+      supabaseEnvKeys: Object.keys(process.env).filter(k => k.includes('SUPABASE')),
+    });
+  }
+  
+  if (!supabaseUrl || !supabaseKey) {
+    logger.error('Missing Supabase env vars in middleware', {
+      hasUrl: !!supabaseUrl,
+      hasKey: !!supabaseKey,
+      availableKeys: Object.keys(process.env).filter(k => k.includes('SUPABASE'))
+    });
+    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+  }
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseKey,
     {
       cookies: {
         getAll() { return request.cookies.getAll(); },

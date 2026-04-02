@@ -23,11 +23,21 @@ export async function updateSession(request: NextRequest) {
     })
 
     // Environment Validation
-    const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'];
-    const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'];
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    // Structured logging — only in development to avoid leaking env status in production
+    if (process.env.NODE_ENV === 'development') {
+        console.log('[Middleware] Supabase URL:', supabaseUrl ? 'set' : 'MISSING');
+        console.log('[Middleware] Supabase KEY:', supabaseKey ? 'set' : 'MISSING');
+    }
 
     if (!supabaseUrl || !supabaseKey) {
-        logger.error("Supabase environment variables are missing in Middleware");
+        logger.error("Supabase environment variables are missing in Middleware", {
+            hasUrl: !!supabaseUrl,
+            hasKey: !!supabaseKey,
+            envKeys: Object.keys(process.env).filter(k => k.includes('SUPABASE'))
+        });
         return supabaseResponse;
     }
 
