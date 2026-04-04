@@ -24,13 +24,14 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="p-8 space-y-8 max-w-[1600px] mx-auto">
-      <header className="flex justify-between items-center">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
         <div>
-          <h1 className="text-4xl font-black text-foreground tracking-tight">Admin Console</h1>
-          <p className="text-muted-foreground">Visión general y optimización de la plataforma</p>
+          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Central de Control</p>
+          <h1 className="text-4xl font-black text-foreground tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">Admin Console</h1>
+          <p className="text-sm text-muted-foreground mt-1 font-medium">Visión general y optimización de la plataforma inteligente</p>
         </div>
-        <div className="flex gap-3">
-            <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/20">
+        <div className="flex gap-3 shrink-0">
+            <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[10px] font-black rounded-full border border-emerald-500/20 shadow-sm shadow-emerald-500/5 transition-all hover:bg-emerald-500/20">
                 SYSTEM ONLINE
             </span>
         </div>

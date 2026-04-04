@@ -190,21 +190,21 @@ export function ShadcnDashboardLayout({ children, role, userName = 'Usuario', us
 
                     <div className="flex-1" />
 
-                    <div className="mr-4 relative">
+                    <div className="mr-2 relative">
                         <NotificationCenter />
                     </div>
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="gap-2 focus:ring-2 focus:ring-indigo-500" aria-label="Menú de usuario">
-                                <Avatar className="h-8 w-8 border border-slate-200 dark:border-slate-700">
-                                    <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-xs">
+                            <Button variant="ghost" className="pl-2 pr-3 gap-3 focus:ring-2 focus:ring-indigo-500 h-10 rounded-full hover:bg-accent/50 transition-all border border-transparent hover:border-border/40" aria-label="Menú de usuario">
+                                <Avatar className="h-8 w-8 ring-2 ring-indigo-500/10 shadow-sm transition-transform hover:scale-105">
+                                    <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-xs font-bold">
                                         {getInitials(userName)}
                                     </AvatarFallback>
                                 </Avatar>
-                                <div className="hidden sm:flex flex-col items-start">
-                                    <span className="text-sm font-medium leading-none">{userName}</span>
-                                    <span className="text-[10px] text-muted-foreground">{ROLE_LABELS[role]}</span>
+                                <div className="hidden sm:flex flex-col items-start text-left min-w-[100px]">
+                                    <span className="text-sm font-semibold text-foreground tracking-tight line-clamp-1">{userName}</span>
+                                    <span className="text-[10px] font-medium text-muted-foreground/80 uppercase tracking-wider">{ROLE_LABELS[role]}</span>
                                 </div>
                             </Button>
                         </DropdownMenuTrigger>

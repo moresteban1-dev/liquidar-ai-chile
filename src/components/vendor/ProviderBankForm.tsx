@@ -168,15 +168,21 @@ export function ProviderBankForm({ profile }: ProviderBankFormProps) {
                                 </FormItem>
                             )}
                         />
-                        <div className="pt-4 border-t mt-6">
-                            <Button type="submit" disabled={isSubmitting} className="w-full">
+                        <div className="pt-6 border-t mt-8">
+                            <Button 
+                                type="submit" 
+                                disabled={isSubmitting} 
+                                className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-100 transition-all font-semibold rounded-lg flex items-center justify-center gap-2"
+                            >
                                 {isSubmitting ? (
                                     <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Guardando...
+                                        <Loader2 className="h-4 w-4 animate-spin" /> 
+                                        <span>Guardando...</span>
                                     </>
                                 ) : (
                                     <>
-                                        <Save className="mr-2 h-4 w-4" /> Guardar Datos Bancarios
+                                        <Save className="h-4 w-4" /> 
+                                        <span className="whitespace-nowrap">Guardar Datos Bancarios</span>
                                     </>
                                 )}
                             </Button>

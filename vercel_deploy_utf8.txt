@@ -1,0 +1,26 @@
+﻿node.exe : Retrieving projectÔÇª
+En C:\Users\Esteban\AppData\Roaming\npm\
+vercel.ps1: 24 Carácter: 5
++     & "node$exe"  "$basedir/node_modul
+es/vercel/dist/vc.js" $args
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecif 
+   ied: (Retrieving projectÔÇª:String)  
+   [], RemoteException
+    + FullyQualifiedErrorId : NativeCom 
+   mandError
+ 
+Deploying estebans-projects-a6b64263/dro
+pservice-platform
+Uploading [--------------------] 
+(0.0B/950B)
+Uploading [====================] 
+(950.0B/950B)
+Inspect: https://vercel.com/estebans-pro
+jects-a6b64263/dropservice-platform/8jy7
+k2FvFDj7HPwSZUg9CAxKxVCp [4s]
+Production: https://dropservice-platform
+-a2729bxgb-estebans-projects-a6b64263.ve
+rcel.app [4s]
+Building...

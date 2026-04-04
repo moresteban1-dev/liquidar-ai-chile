@@ -237,7 +237,7 @@ export default function VendorDashboardPage() {
                 name="Proveedor"
                 subtitle="Gestiona tus oportunidades y maximiza tus ganancias."
                 actions={
-                    <Button asChild>
+                    <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_10px_20px_-10px_rgba(79,70,229,0.3)] transition-all font-semibold rounded-lg" asChild>
                         <Link href="/vendor/quotations">
                             <FileText className="mr-2 h-4 w-4" />
                             Ver Oportunidades
