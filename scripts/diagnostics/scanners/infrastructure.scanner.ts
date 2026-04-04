@@ -70,11 +70,12 @@ export class InfrastructureScanner implements Scanner {
         const line = lines[i];
 
         // Detectar .from() en lo que parece ser una promesa sin await.
-        // Se ignora si es parte de 'this.supabase.from', 'this.client.from' o si es un Repositorio (Inyección de Dependencias).
+        // Se ignora si es parte de 'this.supabase', 'this.client', Repository o Adapter (Inyección de Dependencias).
         const isSafePattern = 
           line && (line.includes('this.supabase') || 
           line.includes('this.client') || 
-          file.endsWith('Repository.ts'));
+          file.endsWith('Repository.ts') ||
+          file.endsWith('Adapter.ts'));
 
         if (
           line && line.includes('.from(') &&

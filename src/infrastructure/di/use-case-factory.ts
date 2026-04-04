@@ -1,6 +1,8 @@
 import { container, DI_KEYS } from './Container';
 import { NegotiateProviderBidUseCase } from '@core/application/use-cases/NegotiateProviderBidUseCase';
 import { AnalyzeQualityReportUseCase } from '@core/application/use-cases/AnalyzeQualityReportUseCase';
+import { Result, ok, fail } from '@core/shared/Result';
+import { AppError } from '@core/shared/AppError';
 
 /**
  * UseCaseFactory
@@ -9,38 +11,36 @@ import { AnalyzeQualityReportUseCase } from '@core/application/use-cases/Analyze
  * This pattern ensures that workers and external entry points can easily obtain fully-wired use cases.
  */
 
-export const createNegotiateProviderBidUseCase = () => {
+export const createNegotiateProviderBidUseCase = (): Result<NegotiateProviderBidUseCase, AppError> => {
   const quotationRepo = container.resolveSync<any>(DI_KEYS.QuotationRepository);
   const negotiatorAgent = container.resolveSync<any>(DI_KEYS.NegotiatorAgent);
   const logger = container.resolveSync<any>(DI_KEYS.Logger);
 
   if (!quotationRepo || !negotiatorAgent || !logger) {
-    throw new Error('[UseCaseFactory] Missing core dependencies for NegotiateProviderBidUseCase');
+    return fail(AppError.internal('[UseCaseFactory] Missing core dependencies for NegotiateProviderBidUseCase'));
   }
 
-  // noteWriter is quotationRepo in this architecture
-  return new NegotiateProviderBidUseCase(
+  return ok(new NegotiateProviderBidUseCase(
     quotationRepo,
     negotiatorAgent,
     quotationRepo,
     logger
-  );
+  ));
 };
 
-export const createAnalyzeQualityReportUseCase = () => {
+export const createAnalyzeQualityReportUseCase = (): Result<AnalyzeQualityReportUseCase, AppError> => {
     const orderRepo = container.resolveSync<any>(DI_KEYS.OrderRepository);
     const qaSentinel = container.resolveSync<any>(DI_KEYS.QASentinelAgent);
     const logger = container.resolveSync<any>(DI_KEYS.Logger);
   
     if (!orderRepo || !qaSentinel || !logger) {
-      throw new Error('[UseCaseFactory] Missing core dependencies for AnalyzeQualityReportUseCase');
+      return fail(AppError.internal('[UseCaseFactory] Missing core dependencies for AnalyzeQualityReportUseCase'));
     }
   
-    // orderReader and noteWriter are both orderRepo
-    return new AnalyzeQualityReportUseCase(
+    return ok(new AnalyzeQualityReportUseCase(
       orderRepo,
       qaSentinel,
       orderRepo,
       logger
-    );
+    ));
 };

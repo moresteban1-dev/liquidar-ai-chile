@@ -81,7 +81,11 @@ export const POST = withWebhookAuth(async (request) => {
                 .maybeSingle();
 
             if (existingEvent) {
-                logger.info(`[Webpay Webhook] Token ${token} already processed. Skipping duplicated execution.`);
+                // Sanitize token for logging (show only first/last chars)
+                const sanitizedToken = token.length > 10
+                    ? `${token.slice(0, 4)}...${token.slice(-4)}`
+                    : '****';
+                logger.info(`[Webpay Webhook] Token ${sanitizedToken} already processed. Skipping duplicated execution.`);
                 return NextResponse.json({ received: true, duplicated: true });
             }
 

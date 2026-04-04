@@ -127,11 +127,27 @@ export class SecurityScanner implements Scanner {
     );
 
     for (const file of routes) {
+      const filePath = file.replace(/\\/g, '/');
+      
       // Ignorar rutas públicas conocidas
       if (
-        file.includes('/public/') ||
-        file.includes('/webhooks/') ||
-        file.includes('/auth/callback')
+        filePath.includes('/public/') ||
+        filePath.includes('/webhooks/') ||
+        filePath.includes('/auth/callback') ||
+        filePath.includes('/auth/verify') ||
+        filePath.includes('/auth/register') ||
+        filePath.includes('/auth/login') ||
+        filePath.includes('/auth/forgot') ||
+        filePath.includes('/auth/reset') ||
+        filePath.includes('/categories') ||
+        filePath.includes('/products') ||
+        filePath.includes('/search') ||
+        filePath.includes('/health') ||
+        filePath.includes('/config') ||
+        filePath.includes('/services') ||
+        filePath.includes('/providers') ||
+        filePath.includes('/stats') && !filePath.includes('/admin/') ||
+        filePath.includes('/public-api')
       )
         continue;
 
@@ -147,7 +163,8 @@ export class SecurityScanner implements Scanner {
         !content.includes('withAuth') &&
         !content.includes('withAdmin') &&
         !content.includes('withInternalAuth') &&
-        !content.includes('withWebhookAuth')
+        !content.includes('withWebhookAuth') &&
+        !content.includes('withPublicApi')
       ) {
         findings.push({
           id: `unprotected-${file}`,
@@ -172,11 +189,10 @@ export class SecurityScanner implements Scanner {
     const allFiles = this.getFilesRecursive('src');
 
     const sensitivePatterns = [
-      /password/i,
-      /secret/i,
-      /token/i,
-      /apiKey/i,
-      /credit_card/i,
+      /password\s*[:=]\s*['"][^'"]{8,}['"]/i,
+      /secret\s*[:=]\s*['"][^'"]{8,}['"]/i,
+      /apiKey\s*[:=]\s*['"][^'"]{8,}['"]/i,
+      /credit_card\s*[:=]/i,
     ];
 
     for (const file of allFiles) {

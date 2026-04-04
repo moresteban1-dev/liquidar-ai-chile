@@ -1,0 +1,28 @@
+--- Redirect Validator Security Test ---
+[PASS] Valid relative path
+  Input: /client
+  Output: /client
+[SECURITY] Blocked redirect to unauthorized host: evil.com
+[PASS] External domain (blocked)
+  Input: https://evil.com
+  Output: /client
+[SECURITY] Blocked protocol-relative redirect: //evil.com
+[PASS] Protocol-relative (blocked)
+  Input: //evil.com
+  Output: /client
+[SECURITY] Blocked dangerous redirect protocol: javascript:alert(1)
+[PASS] XSS protocol (blocked)
+  Input: javascript:alert(1)
+  Output: /client
+[PASS] Trim whitespace
+  Input:   /admin  
+  Output: /admin
+[SECURITY] Blocked redirect with unauthorized protocol: http:
+[FAIL] Allowed host (localhost)
+  Input: http://localhost/test
+  Output: /client
+[PASS] Null input
+  Input: null
+  Output: /client
+
+Final: 6/7 passed.

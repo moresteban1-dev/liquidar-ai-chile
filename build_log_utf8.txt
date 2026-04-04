@@ -1,0 +1,48 @@
+﻿
+> dropservice-platform@0.1.1 build
+> next build --webpack
+
+node.exe : ÔÜá Attempted to load 
+@next/swc-win32-x64-msvc, but an error 
+occurred: 
+\\?\C:\Users\Esteban\Desktop\Skill IA\no
+de_modules\@next\swc-win32-x64-msvc\next
+-swc.win32-x64-msvc.node is not a valid 
+Win32 application.
+En línea: 1 Carácter: 1
++ & "C:\Program Files\nodejs/node.exe" 
+"C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecif 
+   ied: (ÔÜá Attempted t...32 applicat  
+  ion.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCom 
+   mandError
+ 
+\\?\C:\Users\Esteban\Desktop\Skill IA\no
+de_modules\@next\swc-win32-x64-msvc\next
+-swc.win32-x64-msvc.node
+  Skipping creating a lockfile at C:\Users\Esteban\Desktop\Skill IA\.next\lock because we're using WASM bindings
+Ôû▓ Next.js 16.2.1 (webpack)
+- Environments: .env.local, .env.production, .env
+
+ÔÜá The "middleware" file convention is 
+deprecated. Please use "proxy" instead. 
+Learn more: https://nextjs.org/docs/mess
+ages/middleware-to-proxy
+  Creating an optimized production build ...
+Ô£ô Compiled successfully in 12.0s
+  Running TypeScript ...
+ÔÜá Attempted to load 
+@next/swc-win32-x64-msvc, but an error 
+occurred: 
+\\?\C:\Users\Esteban\Desktop\Skill IA\no
+de_modules\@next\swc-win32-x64-msvc\next
+-swc.win32-x64-msvc.node is not a valid 
+Win32 application.
+\\?\C:\Users\Esteban\Desktop\Skill IA\no
+de_modules\@next\swc-win32-x64-msvc\next
+-swc.win32-x64-msvc.node
+Error: invalid type: unit value, 
+expected usize

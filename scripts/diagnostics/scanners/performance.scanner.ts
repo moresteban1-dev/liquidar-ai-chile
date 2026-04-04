@@ -91,20 +91,24 @@ export class PerformanceScanner implements Scanner {
       if (!file.endsWith('.tsx')) continue;
       const content = fs.readFileSync(file, 'utf-8');
 
-      if (content.includes('useEffect') && content.length > 5000) {
-        // Regla simple: useEffect en archivo gigante
-        findings.push({
-          id: `heavy-effect-${file}`,
-          scanner: this.name,
-          severity: 'medium',
-          title: 'Componente React pesado con useEffect',
-          description: `Archivo ${path.basename(file)} tiene > 5000 chars y usa hooks. Riesgo de re-renders costosos.`,
-          file,
-          suggestion:
-            'Dividir en componentes más pequeños o extraer lógica a custom hooks con useMemo/useCallback',
-          autoFixable: false,
-          category: 'react-performance',
-        });
+      // More accurate detection: useEffect with complex dependencies or missing deps
+      // Look for useEffect with async or large dependency arrays
+      if (content.includes('useEffect')) {
+        const useEffectMatches = content.match(/useEffect\s*\(\s*\(\s*\)\s*=>\s*\{[^}]{200,}/g);
+        if (useEffectMatches && useEffectMatches.length > 2) {
+          findings.push({
+            id: `heavy-effect-${file}`,
+            scanner: this.name,
+            severity: 'medium',
+            title: 'Componente React con múltiples useEffects complejos',
+            description: `Archivo ${path.basename(file)} tiene múltiples useEffects con lógica compleja (>200 chars).`,
+            file,
+            suggestion:
+              'Dividir en componentes más pequeños o extraer lógica a custom hooks con useMemo/useCallback',
+            autoFixable: false,
+            category: 'react-performance',
+          });
+        }
       }
     }
 

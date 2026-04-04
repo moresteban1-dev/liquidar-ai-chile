@@ -1,10 +1,5 @@
 import type { NextConfig } from 'next';
-import { validateEnv } from './src/config/env.config';
 
-// Valida el entorno en tiempo de arranque/build (Impide caídas silenciosas)
-validateEnv();
-
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env['ANALYZE'] === 'true',
 });

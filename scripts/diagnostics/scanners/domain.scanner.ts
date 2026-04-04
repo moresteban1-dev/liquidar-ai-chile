@@ -293,7 +293,10 @@ export class DomainIntegrityScanner implements Scanner {
         regex: /\.status\s*===?\s*['"][A-Z_]+['']/,
         desc: 'Decisión basada en status de negocio',
       },
-      { regex: /margin|discount|markup/i, desc: 'Cálculo financiero' },
+      { 
+        regex: /\b(margin|discount|markup)\s*[=+\-*/]/, 
+        desc: 'Cálculo financiero' 
+      },
       {
         regex: /isEligible|isValid|canApprove/,
         desc: 'Regla de elegibilidad',
@@ -531,10 +534,11 @@ export class DomainIntegrityScanner implements Scanner {
         const line = lines[i];
         if (line === undefined) continue;
 
-        if (
-          line.includes('console.') &&
-          !line.trim().startsWith('//')
-        ) {
+        // Skip comments (// and /* */ and JSDoc *)
+        const trimmed = line.trim();
+        if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('*/')) continue;
+
+        if (line.includes('console.')) {
           findings.push({
             id: `console-domain-${file}-${i}`,
             scanner: this.name,

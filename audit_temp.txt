@@ -1,0 +1,118 @@
+﻿# npm audit report
+
+@tootallnate/once  <3.0.1
+@tootallnate/once vulnerable to Incorrect Control Flow Scoping - https://github.com/advisories/GHSA-vpq2-c234-7xj6
+No fix available
+node_modules/@tootallnate/once
+  http-proxy-agent  4.0.1 - 5.0.0
+  Depends on vulnerable versions of @tootallnate/once
+  node_modules/@google-cloud/modelarmor/node_modules/http-proxy-agent
+  node_modules/teeny-request/node_modules/http-proxy-agent
+    teeny-request  7.1.3 - 10.1.0
+    Depends on vulnerable versions of http-proxy-agent
+    node_modules/@google-cloud/modelarmor/node_modules/teeny-request
+    node_modules/teeny-request
+      @google-cloud/common  4.0.0 - 5.0.2
+      Depends on vulnerable versions of retry-request
+      Depends on vulnerable versions of teeny-request
+      node_modules/@google-cloud/common
+        @google-cloud/logging  >=10.0.4
+        Depends on vulnerable versions of @google-cloud/common
+        node_modules/@google-cloud/logging
+          @google-cloud/logging-winston  >=5.1.2
+          Depends on vulnerable versions of @google-cloud/logging
+          node_modules/@google-cloud/logging-winston
+            @genkit-ai/google-cloud  *
+            Depends on vulnerable versions of @google-cloud/logging-winston
+            node_modules/@genkit-ai/google-cloud
+              @genkit-ai/firebase  >=0.5.4
+              Depends on vulnerable versions of @genkit-ai/google-cloud
+              node_modules/@genkit-ai/firebase
+                @genkit-ai/core  >=1.17.0-rc.0
+                Depends on vulnerable versions of @genkit-ai/firebase
+                node_modules/@genkit-ai/core
+                  @genkit-ai/ai  >=1.17.0-rc.0
+                  Depends on vulnerable versions of @genkit-ai/core
+                  node_modules/@genkit-ai/ai
+                  genkit  >=1.17.0-rc.0
+                  Depends on vulnerable versions of @genkit-ai/ai
+                  Depends on vulnerable versions of @genkit-ai/core
+                  node_modules/genkit
+      @google-cloud/storage  >=5.19.0
+      Depends on vulnerable versions of retry-request
+      Depends on vulnerable versions of teeny-request
+      node_modules/@google-cloud/storage
+        firebase-admin  >=11.0.0
+        Depends on vulnerable versions of @google-cloud/firestore
+        Depends on vulnerable versions of @google-cloud/storage
+        node_modules/firebase-admin
+          @genkit-ai/flow  *
+          Depends on vulnerable versions of @google-cloud/firestore
+          Depends on vulnerable versions of firebase-admin
+          node_modules/@genkit-ai/flow
+      retry-request  7.0.0 - 7.0.2
+      Depends on vulnerable versions of teeny-request
+      node_modules/retry-request
+        google-gax  4.0.5-experimental - 4.6.1
+        Depends on vulnerable versions of retry-request
+        node_modules/google-gax
+          @google-cloud/firestore  7.5.0-pre.0 || 7.6.0 - 7.11.6
+          Depends on vulnerable versions of google-gax
+          node_modules/@google-cloud/firestore
+
+brace-expansion  <=1.1.12 || 2.0.0 - 2.0.2 || 4.0.0 - 5.0.4
+Severity: moderate
+brace-expansion: Zero-step sequence causes process hang and memory exhaustion - https://github.com/advisories/GHSA-f886-m6hf-6m8v
+brace-expansion: Zero-step sequence causes process hang and memory exhaustion - https://github.com/advisories/GHSA-f886-m6hf-6m8v
+brace-expansion: Zero-step sequence causes process hang and memory exhaustion - https://github.com/advisories/GHSA-f886-m6hf-6m8v
+fix available via `npm audit fix`
+node_modules/@google-cloud/modelarmor/node_modules/brace-expansion
+node_modules/brace-expansion
+node_modules/glob/node_modules/brace-expansion
+
+handlebars  4.0.0 - 4.7.8
+Severity: critical
+Handlebars.js has JavaScript Injection via AST Type Confusion by tampering @partial-block - https://github.com/advisories/GHSA-3mfm-83xf-c92r
+Handlebars.js has JavaScript Injection via AST Type Confusion - https://github.com/advisories/GHSA-2w6w-674q-4c4q
+Handlebars.js has Prototype Pollution Leading to XSS through Partial Template Injection - https://github.com/advisories/GHSA-2qvq-rjwj-gvw9
+Handlebars.js has a Prototype Method Access Control Gap via Missing __lookupSetter__ Blocklist Entry - https://github.com/advisories/GHSA-7rx3-28cr-v5wh
+Handlebars.js has a Property Access Validation Bypass in container.lookup - https://github.com/advisories/GHSA-442j-39wm-28r2
+Handlebars.js has JavaScript Injection in CLI Precompiler via Unescaped Names and Options - https://github.com/advisories/GHSA-xjpj-3mr7-gcpf
+Handlebars.js has JavaScript Injection via AST Type Confusion when passing an object as dynamic partial - https://github.com/advisories/GHSA-xhpv-hc6g-r9c6
+Handlebars.js has Denial of Service via Malformed Decorator Syntax in Template Compilation - https://github.com/advisories/GHSA-9cx6-37pm-9jff
+fix available via `npm audit fix`
+node_modules/handlebars
+
+node-forge  <=1.3.3
+Severity: high
+Forge has a basicConstraints bypass in its certificate chain verification (RFC 5280 violation) - https://github.com/advisories/GHSA-2328-f5f3-gj25
+Forge has signature forgery in Ed25519 due to missing S > L check - https://github.com/advisories/GHSA-q67f-28xg-22rw
+Forge has Denial of Service via Infinite Loop in BigInteger.modInverse() with Zero Input - https://github.com/advisories/GHSA-5m6q-g25r-mvwx
+Forge has signature forgery in RSA-PKCS due to ASN.1 extra field   - https://github.com/advisories/GHSA-ppp5-5v6c-4jwp
+fix available via `npm audit fix`
+node_modules/node-forge
+
+path-to-regexp  <=0.1.12 || 8.0.0 - 8.3.0
+Severity: high
+path-to-regexp vulnerable to Regular Expression Denial of Service via multiple route parameters - https://github.com/advisories/GHSA-37ch-88jc-xwx2
+path-to-regexp vulnerable to Denial of Service via sequential optional groups - https://github.com/advisories/GHSA-j3q9-mxjg-w52f
+path-to-regexp vulnerable to Regular Expression Denial of Service via multiple wildcards - https://github.com/advisories/GHSA-27v5-c462-wpq7
+fix available via `npm audit fix`
+node_modules/@genkit-ai/core/node_modules/path-to-regexp
+node_modules/@genkit-ai/flow/node_modules/path-to-regexp
+node_modules/firebase-functions/node_modules/path-to-regexp
+node_modules/path-to-regexp
+
+yaml  2.0.0 - 2.8.2
+Severity: moderate
+yaml is vulnerable to Stack Overflow via deeply nested YAML collections - https://github.com/advisories/GHSA-48c2-rrv3-qjmp
+fix available via `npm audit fix`
+node_modules/yaml
+
+22 vulnerabilities (17 low, 2 moderate, 2 high, 1 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+Some issues need review, and may require choosing
+a different dependency.

@@ -80,7 +80,11 @@ export async function POST(request: NextRequest) {
             .single();
 
         if (existingUser) {
-            logger.warn(`[REGISTER] Attempted duplicate registration for: ${email}`);
+            // Sanitize email for logging (show only domain)
+            const sanitizedEmail = email.includes('@')
+                ? `***@${email.split('@')[1]}`
+                : '***';
+            logger.warn(`[REGISTER] Attempted duplicate registration for: ${sanitizedEmail}`);
             return NextResponse.json({
                 success: true,
                 message: 'Si el correo no está registrado, recibirás un mensaje de confirmación.',
@@ -91,8 +95,11 @@ export async function POST(request: NextRequest) {
         let role: UserRole = UserRole.CLIENT;
         if (isProvider) role = UserRole.VENDOR;
 
-        // Future: Validate adminInvitationToken here for ADMIN role
-        // if (adminInvitationToken === process.env.ADMIN_INVITE_SECRET) role = UserRole.ADMIN;
+        // Validate admin invitation token if provided
+        if (adminInvitationToken && adminInvitationToken === process.env.ADMIN_INVITATION_SECRET) {
+            role = UserRole.ADMIN;
+            logger.info('[REGISTER] Admin role assigned via invitation token');
+        }
 
         // 🛡️ Layer 6: Supabase Auth Admin Creation
         const { data: creationData, error: authError } = await supabaseAdmin.auth.admin.createUser({
