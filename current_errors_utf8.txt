@@ -1,0 +1,5 @@
+﻿
+> dropservice-platform@0.1.1 type-check
+> tsc --noEmit
+
+src/components/layout/ShadcnDashboardLayout.tsx(191,22): error TS17008: JSX element 'div' has no corresponding closing tag.
