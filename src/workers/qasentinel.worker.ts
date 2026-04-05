@@ -27,7 +27,7 @@ export const createQASentinelWorker = () => {
         log.info(`[QASentinelWorker] Iniciando control de calidad para orden: ${orderId}...`);
 
         try {
-            const useCaseResult = createAnalyzeQualityReportUseCase();
+            const useCaseResult = await createAnalyzeQualityReportUseCase();
             if (useCaseResult.isFailure()) {
                 throw new Error(useCaseResult.getError().message);
             }

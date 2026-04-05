@@ -26,7 +26,7 @@ export const createNegotiatorWorker = () => {
         log.info(`[NegotiatorWorker] Iniciando revisión/negociación para cotización: ${quotationId}...`);
 
         try {
-            const useCaseResult = createNegotiateProviderBidUseCase();
+            const useCaseResult = await createNegotiateProviderBidUseCase();
             if (useCaseResult.isFailure()) {
                 throw new Error(useCaseResult.getError().message);
             }
