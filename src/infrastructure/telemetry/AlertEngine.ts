@@ -114,7 +114,10 @@ export class AlertEngine {
   private sendConsoleAlert(event: AlertEvent): void {
     const icon = event.severity === 'critical' ? '🚨' : event.severity === 'warning' ? '⚠️' : 'ℹ️'
     const status = event.status === 'firing' ? '🔴 FIRING' : '🟢 RESOLVED'
-    console.log(`${icon} [ALERT] ${status} ${event.ruleName}: ${event.message}`)
+    alertLogger.info(`${icon} [ALERT] ${status} ${event.ruleName}: ${event.message}`, { 
+      severity: event.severity, 
+      status: event.status 
+    })
   }
 
   private async sendSlackAlert(event: AlertEvent, config: Record<string, string>): Promise<void> {

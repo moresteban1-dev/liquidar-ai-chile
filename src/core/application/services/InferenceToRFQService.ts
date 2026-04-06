@@ -8,8 +8,6 @@ import { AppError } from '@/core/shared/AppError';
 import { logger } from '@/infrastructure/telemetry/StructuredLogger';
 import { EventProfile, ConfigurationSession, InferredNeed } from '@/core/domain/event-intelligence/types';
 import { ResilienceProxy } from '@/core/shared/ResilienceProxy';
-// @ts-ignore
-import { v4 as uuidv4 } from 'uuid';
 
 export interface ClientConversionData {
   name: string; 
@@ -90,7 +88,7 @@ export class InferenceToRFQService {
     needsCount: number
   ): QuoteSession {
     return {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       segment: clientData.segment || 'CORPORATIVO',
       stepData: { 
         original_config_id: configId,

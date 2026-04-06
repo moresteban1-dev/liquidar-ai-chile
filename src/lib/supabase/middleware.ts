@@ -28,8 +28,10 @@ export async function updateSession(request: NextRequest) {
 
     // Structured logging — only in development to avoid leaking env status in production
     if (process.env.NODE_ENV === 'development') {
-        console.log('[Middleware] Supabase URL:', supabaseUrl ? 'set' : 'MISSING');
-        console.log('[Middleware] Supabase KEY:', supabaseKey ? 'set' : 'MISSING');
+        logger.debug('[Middleware] Supabase env check', {
+            hasUrl: !!supabaseUrl,
+            hasKey: !!supabaseKey,
+        });
     }
 
     if (!supabaseUrl || !supabaseKey) {

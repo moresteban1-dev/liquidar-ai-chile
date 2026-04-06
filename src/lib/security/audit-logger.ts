@@ -5,6 +5,7 @@
  */
 
 import { createServiceRoleClient } from '@/lib/supabase/api';
+import { logger } from '@/infrastructure/telemetry/StructuredLogger';
 
 export type AuditSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
@@ -50,6 +51,12 @@ export async function logSecurityEvent(event: AuditEvent) {
 }
 
 async function sendSecurityAlert(event: AuditEvent) {
-    // TODO: Implement Slack/Resend alert logic
-    console.warn(`[SECURITY ALERT] ${event.severity}: ${event.action} by ${event.actor}`);
+    // Structured logging for security alerts
+    logger.warn(`[SECURITY ALERT] ${event.severity}: ${event.action} by ${event.actor}`, {
+        severity: event.severity,
+        action: event.action,
+        actor: event.actor,
+        target: event.target,
+        ip: event.ip
+    });
 }
