@@ -20,8 +20,9 @@ interface Service {
         id: string;
         name: string;
         slug: string;
-        icon: string;
-    };
+    } | null;
+    slug?: string;
+    is_featured?: boolean;
 }
 
 interface Category {
@@ -59,7 +60,7 @@ export default function ServiceCatalog() {
                         ...cat,
                         // Find top 4 services for this category to display as bullet points
                         services: dataServices
-                            .filter((s: Service) => s.category?.id === cat.id)
+                            .filter((s: Service) => s.category_id === cat.id || s.category?.id === cat.id)
                             .slice(0, 4)
                             .map((s: Service) => s.name)
                     }));
@@ -165,7 +166,7 @@ export default function ServiceCatalog() {
                                 </div>
                             ) : (
                                 <div className="w-full h-48 bg-muted/50 flex flex-col items-center justify-center border-b border-border/50">
-                                    <div className="text-4xl opacity-50 mb-2">{servicio.category?.icon || '📦'}</div>
+                                    <div className="text-4xl opacity-50 mb-2">📦</div>
                                 </div>
                             )}
 
