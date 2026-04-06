@@ -173,6 +173,13 @@ export function registerBindings(c: Container): void {
     return new CreateOrderHandler(orderRepo, eventBus);
   }, { singleton: true });
 
+  c.register('CreateQuotationRequestHandler', async () => {
+    const { CreateQuotationRequestHandler } = await import('@core/application/handlers/quotations/CreateQuotationRequest');
+    const orderRepo = await c.resolve<any>('OrderRepository');
+    const quotationRepo = await c.resolve<any>('QuotationRepository');
+    return new CreateQuotationRequestHandler(orderRepo, quotationRepo);
+  }, { singleton: true });
+
   c.register('EventBus', async () => {
     const { SupabaseEventPublisher } = await import('@infrastructure/events/SupabaseEventPublisher');
     const supabase = await c.resolve<any>('SupabaseClient');
