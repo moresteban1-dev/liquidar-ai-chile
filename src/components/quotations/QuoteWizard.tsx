@@ -1,11 +1,11 @@
 "use client"
 
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, ChevronRight, ChevronLeft, MapPin, Clock, Truck, User, Package } from 'lucide-react'
+import { CheckCircle2, ChevronRight, ChevronLeft, MapPin, Clock, Truck, User, Package, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 
@@ -32,6 +32,14 @@ const STEPS = [
 ]
 
 
+/** Categoría del catálogo maestro V2 */
+interface MasterCategory {
+    id: string;
+    name: string;
+    slug: string;
+    icon: string | null;
+}
+
 interface QuoteWizardProps {
     initialItems?: { serviceId: string; quantity: number; name: string; priceEstimate?: number }[]
 }
@@ -40,6 +48,30 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
     const router = useRouter()
     const [currentStep, setCurrentStep] = useState(1)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [masterCategories, setMasterCategories] = useState<MasterCategory[]>([])
+    const [loadingCategories, setLoadingCategories] = useState(true)
+
+    // Carga dinámica del catálogo maestro V2
+    useEffect(() => {
+        async function fetchCategories() {
+            try {
+                const res = await fetch('/api/categories')
+                if (!res.ok) throw new Error('Failed to fetch categories')
+                const data = await res.json()
+                if (Array.isArray(data)) {
+                    // Solo mostrar categorías de nivel 1 (parentId === null) para simplificar el wizard
+                    const topLevel = data.filter((c: any) => !c.parentId)
+                    setMasterCategories(topLevel)
+                }
+            } catch (error) {
+                logger.error('Error al cargar categorías del catálogo maestro', error)
+                toast.error('No se pudieron cargar los servicios disponibles')
+            } finally {
+                setLoadingCategories(false)
+            }
+        }
+        fetchCategories()
+    }, [])
 
     // Mode: Cart vs Single Service
     const isCartMode = initialItems && initialItems.length > 0;
@@ -106,10 +138,10 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
                 // Ensure backend receives specific Date fields
                 eventStartDate: eventStartDate.toISOString(),
                 eventEndDate: eventEndDate.toISOString(),
-                // Handle Category Slug vs UUID
-                // If serviceId is not a UUID (e.g. 'audio'), send it as categoryId
-                categoryId: (data.serviceId && !data.serviceId.includes('-')) ? data.serviceId : undefined,
-                serviceId: (data.serviceId && data.serviceId.includes('-')) ? data.serviceId : undefined,
+                // Handle Category UUID — el wizard ahora envía UUIDs del catálogo maestro V2
+                // Siempre enviamos como categoryId para vinculación correcta
+                categoryId: data.serviceId || undefined,
+                serviceId: undefined, // No enviamos serviceId del wizard (es categoryId)
 
                 // Map comments to brief (API expectation)
                 brief: data.comments,
@@ -309,17 +341,24 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
                                                         <FormItem className="col-span-2 md:col-span-1">
                                                             <FormLabel>Tipo de Servicio</FormLabel>
                                                             <FormControl>
-                                                                <select
-                                                                    className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                                                    {...field}
-                                                                >
-                                                                    <option value="">Selecciona...</option>
-                                                                    <option value="audio">Audio Profesional</option>
-                                                                    <option value="iluminacion">Iluminación</option>
-                                                                    <option value="pantallas">Pantallas LED</option>
-                                                                    <option value="escenarios">Escenarios & Truss</option>
-                                                                    <option value="produccion">Producción Completa</option>
-                                                                </select>
+                                                                {loadingCategories ? (
+                                                                    <div className="flex items-center gap-2 h-10 px-3 text-sm text-muted-foreground">
+                                                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                                                        Cargando catálogo...
+                                                                    </div>
+                                                                ) : (
+                                                                    <select
+                                                                        className="flex h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                                                        {...field}
+                                                                    >
+                                                                        <option value="">Selecciona un servicio...</option>
+                                                                        {masterCategories.map((cat) => (
+                                                                            <option key={cat.id} value={cat.id}>
+                                                                                {cat.icon ? `${cat.icon} ` : ''}{cat.name}
+                                                                            </option>
+                                                                        ))}
+                                                                    </select>
+                                                                )}
                                                             </FormControl>
                                                             <FormMessage />
                                                         </FormItem>
