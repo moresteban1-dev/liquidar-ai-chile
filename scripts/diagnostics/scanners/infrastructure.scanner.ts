@@ -208,7 +208,8 @@ export class InfrastructureScanner implements Scanner {
     const infraFiles = this.getFilesRecursive('src/infrastructure');
 
     for (const file of infraFiles) {
-      if (file.includes('.test.') || file.includes('.d.ts')) continue;
+      // Excluir Container DI y Workers - no son adaptadores DDD
+      if (file.includes('Container.ts') || file.includes('.worker.ts') || file.includes('.test.') || file.includes('.d.ts')) continue;
 
       const content = fs.readFileSync(file, 'utf-8');
       const lines = content.split('\n');

@@ -1,4 +1,6 @@
 // src/infrastructure/di/Container.ts
+import { Result, ok, fail } from '@core/shared/Result';
+import { AppError } from '@core/shared/AppError';
 import { SupabaseCatalogRepository } from '@/infrastructure/persistence/supabase/repositories/SupabaseCatalogRepository';
 import { CatalogItemMapper } from '@/infrastructure/persistence/supabase/mappers/CatalogItemMapper';
 import { CatalogCategoryMapper } from '@/infrastructure/persistence/supabase/mappers/CatalogCategoryMapper';
