@@ -50,7 +50,7 @@ export default async function ClientDashboardPage() {
                                 Comparar
                             </Link>
                         </Button>
-                        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_10px_20px_-10px_rgba(79,70,229,0.3)] transition-all font-semibold px-6 border-none" asChild>
+                        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all font-semibold border-none" asChild>
                             <Link href="/client/quotations/request">
                                 <Plus className="mr-2 h-4 w-4" />
                                 Nueva Solicitud
@@ -129,4 +129,3 @@ export default async function ClientDashboardPage() {
         </div>
     );
 }
-

@@ -47,7 +47,7 @@ export async function RecentQuotations() {
                 </div>
                 <Button variant="outline" size="sm" asChild>
                     <Link href="/admin/quotations">
-                        Ver todas <ArrowRight className="ml-1 h-3 w-3" />
+                        Ver todo <ArrowRight className="ml-1 h-3 w-3" />
                     </Link>
                 </Button>
             </div>

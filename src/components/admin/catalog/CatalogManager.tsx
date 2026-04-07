@@ -144,7 +144,7 @@ export function CatalogManager({ initialItems = [], initialCategories = [] }: Ca
           <h2 className="text-2xl font-bold tracking-tight">Catálogo Maestro</h2>
           <p className="text-muted-foreground">Adminitra los items disponibles.</p>
         </div>
-        <Button onClick={handleCreate}>
+        <Button onClick={handleCreate} size="sm">
           <Plus className="mr-2 h-4 w-4" /> Nuevo Item
         </Button>
       </div>

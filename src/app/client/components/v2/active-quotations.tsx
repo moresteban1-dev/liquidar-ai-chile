@@ -42,7 +42,7 @@ export async function ClientActiveQuotations({ userId }: ActiveQuotationsProps) 
                 </div>
                 <Button variant="outline" size="sm" asChild>
                     <Link href="/client/quotations">
-                        Ver todas <ArrowRight className="ml-1 h-3 w-3" />
+                        Ver todo <ArrowRight className="ml-1 h-3 w-3" />
                     </Link>
                 </Button>
             </div>

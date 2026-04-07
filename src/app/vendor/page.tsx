@@ -91,7 +91,7 @@ async function VendorOpportunitiesSection() {
                 </div>
                 <Button variant="outline" size="sm" asChild>
                     <Link href="/vendor/quotations">
-                        Ver todas <ArrowRight className="ml-1 h-3 w-3" />
+                        Ver todo <ArrowRight className="ml-1 h-3 w-3" />
                     </Link>
                 </Button>
             </div>
@@ -170,7 +170,7 @@ async function VendorActiveOrdersSection() {
                 </div>
                 <Button variant="outline" size="sm" asChild>
                     <Link href="/vendor/orders">
-                        Ver todos <ArrowRight className="ml-1 h-3 w-3" />
+                        Ver todo <ArrowRight className="ml-1 h-3 w-3" />
                     </Link>
                 </Button>
             </div>
@@ -237,7 +237,7 @@ export default function VendorDashboardPage() {
                 name="Proveedor"
                 subtitle="Gestiona tus oportunidades y maximiza tus ganancias."
                 actions={
-                    <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_10px_20px_-10px_rgba(79,70,229,0.3)] transition-all font-semibold rounded-lg" asChild>
+                    <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all font-semibold rounded-lg" asChild>
                         <Link href="/vendor/quotations">
                             <FileText className="mr-2 h-4 w-4" />
                             Ver Oportunidades
