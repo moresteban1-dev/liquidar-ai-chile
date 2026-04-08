@@ -205,6 +205,9 @@ export class Money {
     if (!Number.isFinite(percent)) {
       return Result.fail('Money.percentage: percent must be a finite number');
     }
+    if (percent < 0 || percent > 100) {
+      return Result.fail('Money.percentage: percent must be between 0 and 100');
+    }
     return this.multiply(percent / 100);
   }
 
@@ -229,6 +232,23 @@ export class Money {
     }
 
     return this.multiply(1 + (markupPercent / 100));
+  }
+
+  /**
+   * Aplica un descuento porcentual sobre este monto.
+   * 
+   * @param discountPercent - Porcentaje de descuento (ej: 20 para 20%)
+   * @returns Monto con descuento aplicado
+   */
+  applyDiscount(discountPercent: number): Result<Money, string> {
+    if (!Number.isFinite(discountPercent)) {
+      return Result.fail('Money.applyDiscount: percent must be finite');
+    }
+    if (discountPercent < 0 || discountPercent > 100) {
+      return Result.fail('Money.applyDiscount: percent must be between 0 and 100');
+    }
+
+    return this.multiply(1 - (discountPercent / 100));
   }
 
   // ═══════════════════════════════════════════

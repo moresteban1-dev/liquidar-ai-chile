@@ -1,5 +1,5 @@
-import { IEventPublisher } from '@/core/application/ports/events/IEventPublisher';
-import { DomainEvent } from '@/core/shared/DomainEvent';
+import { IEventPublisher } from '@/core/application/ports/IEventPublisher';
+import { DomainEvent } from '@/core/shared/domain/events/DomainEvent';
 import { Result } from '@/core/shared/Result';
 
 export class InMemoryEventPublisher implements IEventPublisher {
@@ -16,6 +16,10 @@ export class InMemoryEventPublisher implements IEventPublisher {
   }
 
   // ── Test Helpers ──
+
+  get publishedEvents(): DomainEvent[] {
+    return [...this.events];
+  }
 
   getPublishedEvents(): DomainEvent[] {
     return [...this.events];

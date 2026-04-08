@@ -38,7 +38,7 @@ describe('Quotation Workflow - Complete Lifecycle', () => {
     );
 
     sendToClientHandler = new SendQuotationToClientHandler(
-      quotationRepository, orderRepository, eventPublisher
+      quotationRepository, eventPublisher
     );
 
     approveHandler = new ApproveQuotationHandler(

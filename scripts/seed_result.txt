@@ -1,0 +1,11 @@
+OK SRV-AV-001: Sistema de Sonido Line Array JBL VTX
+OK SRV-SND-001: Monitoreo de Escenario Wedge + IEM
+OK SRV-ILU-001: Pack Iluminacion Decorativa LED RGB
+OK SRV-VID-001: Pantalla LED Indoor P3.9 (3x2m)
+OK SRV-TENT-001: Carpa Estructural 10x20m con Piso
+OK SRV-FURN-001: Set Lounge Premium (Sofas + Mesas)
+OK SRV-PROD-001: Productor Ejecutivo de Eventos
+OK SRV-SEC-001: Equipo de Seguridad Perimetral (4 guardias)
+
+Total active items: 19
+SEED COMPLETE

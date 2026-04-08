@@ -44,15 +44,15 @@ export default async function ClientDashboardPage() {
                 subtitle="Gestiona tus eventos y cotizaciones desde un solo lugar."
                 actions={
                     <div className="flex items-center gap-2">
-                        <Button variant="outline" className="gap-2 border-border/60 hover:bg-accent/50 transition-all font-medium" asChild>
+                        <Button variant="outline" size="sm" className="gap-2 border-border/60 hover:bg-accent/50 transition-all font-medium rounded-lg" asChild>
                             <Link href={'/client/compare' as Route}>
                                 <Columns className="h-4 w-4 text-muted-foreground" />
                                 Comparar
                             </Link>
                         </Button>
-                        <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all font-semibold border-none" asChild>
+                        <Button size="sm" className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition-all font-semibold rounded-lg" asChild>
                             <Link href="/client/quotations/request">
-                                <Plus className="mr-2 h-4 w-4" />
+                                <Plus className="h-4 w-4 shrink-0" />
                                 Nueva Solicitud
                             </Link>
                         </Button>

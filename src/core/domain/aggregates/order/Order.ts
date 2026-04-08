@@ -155,10 +155,16 @@ export class Order extends AggregateRoot<OrderProps> {
   }
 
   public cancel(reason: string): Result<void> {
+    if (!reason || reason.trim() === '') {
+      return Result.fail('A reason is required to cancel the order');
+    }
     return this.transition('CANCELLED', reason)
   }
 
   public assignProvider(providerId: UniqueEntityID): Result<void> {
+    if (this.props.state !== 'QUOTATION_PENDING' && this.props.state !== 'DRAFT') {
+      return Result.fail(`Cannot assign provider in state ${this.props.state}. Must be in QUOTATION_PENDING or DRAFT.`);
+    }
     this.props.providerId = providerId
     this.props.updatedAt = new Date()
     return Result.ok(undefined)
@@ -175,6 +181,7 @@ export class Order extends AggregateRoot<OrderProps> {
   get orderId(): UniqueEntityID { return this.id }
   get clientId(): UniqueEntityID { return this.props.clientId }
   get providerId(): UniqueEntityID | undefined { return this.props.providerId }
+  get hasProvider(): boolean { return this.props.providerId !== undefined }
   get quotationId(): UniqueEntityID | undefined { return this.props.quotationId }
   get hasQuotation(): boolean { return this.props.quotationId !== undefined }
   get pricing(): QuotationPricing | undefined { return this.props.pricing }

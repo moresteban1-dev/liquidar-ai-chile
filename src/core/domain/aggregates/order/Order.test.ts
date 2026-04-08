@@ -30,7 +30,7 @@ describe('Order Aggregate', () => {
 
       const events = order.domainEvents
       expect(events).toHaveLength(1)
-      expect(events[0].eventType).toBe('OrderCreated')
+      expect((events[0] as any).constructor.name).toBe('OrderCreated')
     })
 
     it('should reject past event date', () => {
@@ -42,7 +42,7 @@ describe('Order Aggregate', () => {
       const result = Order.create(props)
 
       expect(result.isFailure()).toBe(true)
-      expect(result.error).toContain('past')
+      expect(result.error).toContain('future')
     })
 
     it('should reject empty delivery address', () => {
@@ -54,7 +54,7 @@ describe('Order Aggregate', () => {
       const result = Order.create(props)
 
       expect(result.isFailure()).toBe(true)
-      expect(result.error).toContain('empty')
+      expect(result.error).toContain('Delivery address is required')
     })
 
     it('should accept today as event date', () => {
@@ -84,8 +84,8 @@ describe('Order Aggregate', () => {
     })
 
     it('should not emit event when reconstructing from persistence', () => {
-      const id = new UniqueEntityID('existing-order-id')
-      const result = Order.create(createValidOrderProps(), id)
+      const id = 'existing-order-id'
+      const result = Order.reconstitute(createValidOrderProps(), id)
       const order = result.value
 
       expect(order.domainEvents).toHaveLength(0)
@@ -122,7 +122,7 @@ describe('Order Aggregate', () => {
 
       const events = order.domainEvents
       expect(events).toHaveLength(1)
-      expect(events[0].eventType).toBe('OrderStateChanged')
+      expect((events[0] as any).constructor.name).toBe('OrderStateChanged')
       
       const event = events[0] as any
       expect(event.fromState).toBe('DRAFT')
@@ -137,7 +137,7 @@ describe('Order Aggregate', () => {
       const result = order.transition('COMPLETED')
 
       expect(result.isFailure()).toBe(true)
-      expect(result.error).toContain('Invalid')
+      expect(result.error).toContain('Illegal state transition')
       expect(order.state).toBe('DRAFT') // Estado no cambió
     })
 
@@ -168,13 +168,16 @@ describe('Order Aggregate', () => {
     })
 
     it('should reject assigning provider in wrong state', () => {
-      const order = Order.create(createValidOrderProps()).value // DRAFT
+      const order = Order.create({
+        ...createValidOrderProps(),
+        state: 'COMPLETED'
+      }).value
 
       const providerId = new UniqueEntityID('provider-456')
       const result = order.assignProvider(providerId)
 
       expect(result.isFailure()).toBe(true)
-      expect(result.error).toContain('QUOTATION_PENDING')
+      expect(result.error).toContain('QUOTATION_PENDING or DRAFT')
     })
   })
 
@@ -187,7 +190,7 @@ describe('Order Aggregate', () => {
       }).value
 
       const providerCost = Money.create(10000, 'USD').value
-      const pricingRes = QuotationPricing.calculate(providerCost, 0.30)
+      const pricingRes = QuotationPricing.calculate(providerCost, { commissionRate: 0.30, platformFeeRate: 0, taxRate: 0 })
       const pricing = pricingRes.value
 
       const quotationId = new UniqueEntityID('quotation-789')
@@ -241,7 +244,7 @@ describe('Order Aggregate', () => {
 
       // 4. Attach quotation
       const providerCost = Money.create(10000, 'USD').value
-      const pricing = QuotationPricing.calculate(providerCost, 0.30).value
+      const pricing = QuotationPricing.calculate(providerCost, { commissionRate: 0.30, platformFeeRate: 0, taxRate: 0 }).value
       const quotationId = new UniqueEntityID('quotation-456')
       
       order.attachQuotation(quotationId, pricing)

@@ -1,0 +1,753 @@
+﻿
+[1m[46m RUN [49m[22m [36mv4.1.0 [39m[90mC:/Users/Esteban/Desktop/Skill IA[39m
+      [90mRunning tests with seed "1775567360088"[39m
+
+ [32m✓[39m src/core/domain/value-objects/__tests__/Money.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [31m❯[39m src/core/domain/value-objects/__tests__/OrderStatus.test.ts [2m([22m[2m20 tests[22m[2m | [22m[31m7 failed[39m[2m)[22m[32m 17[2mms[22m[39m
+       [32m✓[39m should create valid status[32m 0[2mms[22m[39m
+       [32m✓[39m should reject invalid status[32m 0[2mms[22m[39m
+       [32m✓[39m should allow DRAFT → PENDING_PAYMENT[32m 0[2mms[22m[39m
+       [32m✓[39m should allow DRAFT → CANCELLED[32m 0[2mms[22m[39m
+       [32m✓[39m should reject DRAFT → COMPLETED (skip states)[32m 0[2mms[22m[39m
+       [32m✓[39m should reject transitions from terminal states[32m 0[2mms[22m[39m
+[31m       [31m×[31m should follow full happy path[39m[32m 2[2mms[22m[39m
+       [32m✓[39m should block PAID without payment confirmation[32m 0[2mms[22m[39m
+[31m       [31m×[31m should block DELIVERED without QA approval[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should require reason for dispute[39m[32m 6[2mms[22m[39m
+[31m       [31m×[31m should require reason to return from QA to IN_PROGRESS[39m[32m 0[2mms[22m[39m
+       [32m✓[39m isTerminal should identify terminal states[32m 1[2mms[22m[39m
+[31m       [31m×[31m isPaid should identify paid states[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m isCancellable should check transition availability[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m requiresAction should flag actionable states[39m[32m 0[2mms[22m[39m
+       [32m✓[39m should provide label and color[32m 1[2mms[22m[39m
+       [32m✓[39m should serialize to JSON with metadata[32m 1[2mms[22m[39m
+       [32m✓[39m transitionTo should return new instance[32m 0[2mms[22m[39m
+       [32m✓[39m should list all statuses[32m 0[2mms[22m[39m
+       [32m✓[39m should list terminal statuses[32m 0[2mms[22m[39m
+ [31m❯[39m src/core/domain/value-objects/Money.test.ts [2m([22m[2m40 tests[22m[2m | [22m[31m12 failed[39m[2m)[22m[32m 21[2mms[22m[39m
+       [32m✓[39m should create valid money[32m 0[2mms[22m[39m
+[31m       [31m×[31m should use USD as default currency[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should reject negative amounts[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject invalid currency[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should round to 2 decimals[32m 0[2mms[22m[39m
+       [32m✓[39m should add same currency[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject adding different currencies[39m[32m 0[2mms[22m[39m
+       [32m✓[39m should handle decimal addition correctly[32m 0[2mms[22m[39m
+       [32m✓[39m should subtract same currency[32m 0[2mms[22m[39m
+       [32m✓[39m should reject subtracting different currencies[32m 0[2mms[22m[39m
+       [32m✓[39m should reject result that would be negative[32m 0[2mms[22m[39m
+       [32m✓[39m should multiply by positive factor[32m 0[2mms[22m[39m
+       [32m✓[39m should multiply by zero[32m 0[2mms[22m[39m
+       [32m✓[39m should reject negative factor[32m 0[2mms[22m[39m
+       [32m✓[39m should handle decimal multiplication[32m 0[2mms[22m[39m
+       [32m✓[39m should divide by positive divisor[32m 0[2mms[22m[39m
+       [32m✓[39m should reject division by zero[32m 0[2mms[22m[39m
+       [32m✓[39m should reject division by negative[32m 0[2mms[22m[39m
+       [32m✓[39m should calculate percentage[32m 0[2mms[22m[39m
+       [32m✓[39m should handle 0 percent[32m 0[2mms[22m[39m
+       [32m✓[39m should handle 100 percent[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject percent > 100[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should reject negative percent[32m 0[2mms[22m[39m
+[31m       [31m×[31m should apply discount[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should handle 100% discount[39m[32m 0[2mms[22m[39m
+       [32m✓[39m should check equality[32m 0[2mms[22m[39m
+       [32m✓[39m should check inequality for different amounts[32m 1[2mms[22m[39m
+       [32m✓[39m should check inequality for different currencies[32m 0[2mms[22m[39m
+[31m       [31m×[31m should compare greater than[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m should compare less than[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should throw when comparing different currencies[39m[32m 4[2mms[22m[39m
+       [32m✓[39m should check if zero[32m 0[2mms[22m[39m
+       [32m✓[39m should check if positive[32m 0[2mms[22m[39m
+       [32m✓[39m should convert to JSON[32m 1[2mms[22m[39m
+[31m       [31m×[31m should convert to string[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should convert to locale string[39m[32m 0[2mms[22m[39m
+       [32m✓[39m should calculate price with tax (16%)[32m 0[2mms[22m[39m
+       [32m✓[39m should calculate commission for dropservice platform[32m 0[2mms[22m[39m
+       [32m✓[39m should split bill between people[32m 0[2mms[22m[39m
+[31m       [31m×[31m should calculate final price with discount and tax[39m[32m 0[2mms[22m[39m
+node.exe : 
+En línea: 1 Carácter: 1
++ & "C:\Program Files\nodejs/node.exe" 
+"C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpeci 
+   fied: (:String) [], RemoteExceptio  
+  n
+    + FullyQualifiedErrorId : NativeCo 
+   mmandError
+ 
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 
+19 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mCreation[2m > [22mshould use 
+USD as default currency
+[31m[1mAssertionError[22m: expected 
+'CLP' to be 'USD' // Object.is 
+equality[39m
+
+Expected: [32m"USD"[39m
+Received: [31m"CLP"[39m
+
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m18:42[22m[3
+9m
+    [90m 16|[39m
+    [90m 17|[39m       [34mexpect[3
+9m(result[33m.[39m[34misSuccess[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)[33m;[39m
+    [90m 18|[39m       [34mexpect[3
+9m(result[33m.[39m[34mgetValue[39m(
+)[33m.[39mcurrency)[33m.[39m[34mto
+Be[39m([32m'USD'[39m)[33m;[39m
+    [90m   |[39m                     
+                     [31m^[39m
+    [90m 19|[39m     })[33m;[39m
+    [90m 20|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mCreation[2m > [22mshould reject 
+invalid currency
+[31m[1mAssertionError[22m: expected 
+'Money: currency must be a 3-letter 
+IS…' to contain 'Unsupported 
+currency'[39m
+
+Expected: [32m"Unsupported 
+currency"[39m
+Received: [31m"Money: currency must 
+be a 3-letter ISO code (received: 
+"INVALID")"[39m
+
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m32:33[22m[3
+9m
+    [90m 30|[39m
+    [90m 31|[39m       [34mexpect[3
+9m(result[33m.[39m[34misFailure[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)[33m;[39m
+    [90m 32|[39m       [34mexpect[3
+9m(result[33m.[39m[34mgetError[39m(
+))[33m.[39m[34mtoContain[39m([32m'
+Unsupported currency'[39m)[33m;[39m
+    [90m   |[39m                     
+            [31m^[39m
+    [90m 33|[39m     })[33m;[39m
+    [90m 34|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mAddition[2m > [22mshould reject 
+adding different currencies
+[31m[1mAssertionError[22m: expected 
+'Money.add: cannot add USD and EUR' to 
+contain 'different currencies'[39m
+
+Expected: [32m"different 
+currencies"[39m
+Received: [31m"Money.add: cannot add 
+USD and EUR"[39m
+
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m60:33[22m[3
+9m
+    [90m 58|[39m
+    [90m 59|[39m       [34mexpect[3
+9m(result[33m.[39m[34misFailure[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)[33m;[39m
+    [90m 60|[39m       [34mexpect[3
+9m(result[33m.[39m[34mgetError[39m(
+))[33m.[39m[34mtoContain[39m([32m'
+different currencies'[39m)[33m;[39m
+    [90m   |[39m                     
+            [31m^[39m
+    [90m 61|[39m     })[33m;[39m
+    [90m 62|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mPercentage[2m > [22mshould 
+reject percent > 100
+[31m[1mAssertionError[22m: expected 
+false to be true // Object.is 
+equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m187:34[22m[
+39m
+    [90m185|[39m       
+[35mconst[39m result [33m=[39m mone
+y[33m.[39m[34mpercentage[39m([34m1
+50[39m)[33m;[39m
+    [90m186|[39m
+    [90m187|[39m       [34mexpect[3
+9m(result[33m.[39m[34misFailure[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)[33m;[39m
+    [90m   |[39m                     
+             [31m^[39m
+    [90m188|[39m     })[33m;[39m
+    [90m189|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mApply Discount[2m > [22mshould 
+apply discount
+[31m[1mTypeError[22m: 
+money.applyDiscount is not a 
+function[39m
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m201:28[22m[
+39m
+    [90m199|[39m     
+[34mit[39m([32m'should apply 
+discount'[39m[33m,[39m () 
+[33m=>[39m {
+    [90m200|[39m       
+[35mconst[39m money [33m=[39m [33m
+Money[39m[33m.[39m[34mcreate[39m(
+[34m1000[39m[33m,[39m [32m'USD'[39
+m)[33m.[39m[34mgetValue[39m()[33m;
+[39m
+    [90m201|[39m       
+[35mconst[39m result [33m=[39m mone
+y[33m.[39m[34mapplyDiscount[39m([3
+4m20[39m)[33m;[39m
+    [90m   |[39m                     
+       [31m^[39m
+    [90m202|[39m
+    [90m203|[39m       [34mexpect[3
+9m(result[33m.[39m[34misSuccess[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mApply Discount[2m > [22mshould 
+handle 100% discount
+[31m[1mTypeError[22m: 
+money.applyDiscount is not a 
+function[39m
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m209:28[22m[
+39m
+    [90m207|[39m     
+[34mit[39m([32m'should handle 100% 
+discount'[39m[33m,[39m () 
+[33m=>[39m {
+    [90m208|[39m       
+[35mconst[39m money [33m=[39m [33m
+Money[39m[33m.[39m[34mcreate[39m(
+[34m1000[39m[33m,[39m [32m'USD'[39
+m)[33m.[39m[34mgetValue[39m()[33m;
+[39m
+    [90m209|[39m       
+[35mconst[39m result [33m=[39m mone
+y[33m.[39m[34mapplyDiscount[39m([3
+4m100[39m)[33m;[39m
+    [90m   |[39m                     
+       [31m^[39m
+    [90m210|[39m
+    [90m211|[39m       [34mexpect[3
+9m(result[33m.[39m[34misSuccess[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mComparison[2m > [22mshould 
+compare greater than
+[31m[1mTypeError[22m: 
+money1.greaterThan is not a 
+function[39m
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m242:21[22m[
+39m
+    [90m240|[39m       
+[35mconst[39m money2 [33m=[39m [33
+mMoney[39m[33m.[39m[34mcreate[39m(
+[34m100[39m[33m,[39m [32m'USD'[39
+m)[33m.[39m[34mgetValue[39m()[33m;
+[39m
+    [90m241|[39m
+    [90m242|[39m       [34mexpect[3
+9m(money1[33m.[39m[34mgreaterThan[3
+9m(money2))[33m.[39m[34mtoBe[39m([
+35mtrue[39m)[33m;[39m
+    [90m   |[39m                     
+[31m^[39m
+    [90m243|[39m       [34mexpect[3
+9m(money2[33m.[39m[34mgreaterThan[3
+9m(money1))[33m.[39m[34mtoBe[39m([
+35mfalse[39m)[33m;[39m
+    [90m244|[39m     })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mComparison[2m > [22mshould 
+compare less than
+[31m[1mTypeError[22m: 
+money1.lessThan is not a function[39m
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m250:21[22m[
+39m
+    [90m248|[39m       
+[35mconst[39m money2 [33m=[39m [33
+mMoney[39m[33m.[39m[34mcreate[39m(
+[34m200[39m[33m,[39m [32m'USD'[39
+m)[33m.[39m[34mgetValue[39m()[33m;
+[39m
+    [90m249|[39m
+    [90m250|[39m       [34mexpect[3
+9m(money1[33m.[39m[34mlessThan[39m(
+money2))[33m.[39m[34mtoBe[39m([35m
+true[39m)[33m;[39m
+    [90m   |[39m                     
+[31m^[39m
+    [90m251|[39m       [34mexpect[3
+9m(money2[33m.[39m[34mlessThan[39m(
+money1))[33m.[39m[34mtoBe[39m([35m
+false[39m)[33m;[39m
+    [90m252|[39m     })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mComparison[2m > [22mshould 
+throw when comparing different 
+currencies
+[31m[1mAssertionError[22m: expected 
+[Function] to throw error including 
+'Currency mismatch' but got 
+'money1.greaterThan is not a 
+function'[39m
+
+Expected: [32m"Currency mismatch"[39m
+Received: [31m"money1.greaterThan is 
+not a function"[39m
+
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m258:48[22m[
+39m
+    [90m256|[39m       
+[35mconst[39m money2 [33m=[39m [33
+mMoney[39m[33m.[39m[34mcreate[39m(
+[34m100[39m[33m,[39m [32m'EUR'[39
+m)[33m.[39m[34mgetValue[39m()[33m;
+[39m
+    [90m257|[39m
+    [90m258|[39m       expect(() => m
+oney1.greaterThan(money2)).toThrow('Cur
+rency misma…
+    [90m   |[39m                     
+                           [31m^[39m
+    [90m259|[39m     })[33m;[39m
+    [90m260|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mSerialization[2m > [22mshould 
+convert to string
+[31m[1mAssertionError[22m: expected 
+'USD 1234.56' to be 'USD 1,234.56' // 
+Object.is equality[39m
+
+Expected: [32m"USD 
+1[7m,[27m234.56"[39m
+Received: [31m"USD 1234.56"[39m
+
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m295:19[22m[
+39m
+    [90m293|[39m       
+[35mconst[39m str [33m=[39m money[
+33m.[39m[34mtoString[39m()[33m;[39
+m
+    [90m294|[39m
+    [90m295|[39m       [34mexpect[3
+9m(str)[33m.[39m[34mtoBe[39m([32m'
+USD 1,234.56'[39m)[33m;[39m
+    [90m   |[39m                   
+[31m^[39m
+    [90m296|[39m     })[33m;[39m
+    [90m297|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mSerialization[2m > [22mshould 
+convert to locale string
+[31m[1mAssertionError[22m: expected 
+'USD 1234.56' to contain 
+'1,234.56'[39m
+
+Expected: [32m"1[7m,[27m234.56"[39m
+Received: [31m"[7mUSD 
+[27m1234.56"[39m
+
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m302:19[22m[
+39m
+    [90m300|[39m       
+[35mconst[39m str [33m=[39m money[
+33m.[39m[34mtoLocaleString[39m([32m
+'en-US'[39m)[33m;[39m
+    [90m301|[39m
+    [90m302|[39m       [34mexpect[3
+9m(str)[33m.[39m[34mtoContain[39m(
+[32m'1,234.56'[39m)[33m;[39m
+    [90m   |[39m                   
+[31m^[39m
+    [90m303|[39m     })[33m;[39m
+    [90m304|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/Money.test.ts[2m > 
+[22mMoney Value Object[2m > 
+[22mReal-world scenarios[2m > 
+[22mshould calculate final price with 
+discount and tax
+[31m[1mTypeError[22m: 
+originalPrice.applyDiscount is not a 
+function[39m
+[36m [2m❯[22m src/core/domain/value-
+objects/Money.test.ts:[2m344:46[22m[
+39m
+    [90m342|[39m
+    [90m343|[39m       [90m// Apply 
+20% discount[39m
+    [90m344|[39m       
+[35mconst[39m discountedResult 
+[33m=[39m originalPrice[33m.[39m[3
+4mapplyDiscount[39m([34m20[39m)[33m
+;[39m
+    [90m   |[39m                     
+                         [31m^[39m
+    [90m345|[39m       [34mexpect[3
+9m(discountedResult[33m.[39m[34misSu
+ccess[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)[33m;[39m
+    [90m346|[39m       [34mexpect[3
+9m(discountedResult[33m.[39m[34mgetV
+alue[39m()[33m.[39mamount)[33m.[39
+m[34mtoBe[39m([34m800[39m)[33m;[3
+9m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/__tests__/OrderStatus.
+test.ts[2m > [22mOrderStatus[2m > 
+[22mtransitions[2m > [22mshould 
+follow full happy path
+[31m[1mAssertionError[22m: expected 
+false to be true // Object.is 
+equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/domain/value-
+objects/__tests__/OrderStatus.test.ts:
+[2m68:36[22m[39m
+    [90m 66|[39m       [35mfor[39m 
+([35mconst[39m step [35mof[39m 
+steps) {
+    [90m 67|[39m         
+[35mconst[39m result [33m=[39m stat
+us[33m.[39m[34mtransitionTo[39m(ste
+p[33m.[39mto [35mas[39m 
+any[33m,[39m 
+step[33m.[39mctx)[33m;[39m
+    [90m 68|[39m         [34mexpect
+[39m(result[33m.[39m[34misSuccess[3
+9m())[33m.[39m[34mtoBe[39m([35mtru
+e[39m)[33m;[39m
+    [90m   |[39m                     
+               [31m^[39m
+    [90m 69|[39m         status 
+[33m=[39m result[33m.[39m[34mgetVa
+lue[39m()[33m;[39m
+    [90m 70|[39m       }
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/__tests__/OrderStatus.
+test.ts[2m > [22mOrderStatus[2m > 
+[22mguards[2m > [22mshould block 
+DELIVERED without QA approval
+[31m[1mError[22m: Cannot get value 
+from a Failure result: Invalid order 
+status: "QUALITY_REVIEW". Valid 
+values: DRAFT, PENDING_PAYMENT, 
+PAYMENT_FAILED, PAID, ASSIGNED, 
+IN_PRODUCTION, INTERNAL_REVIEW, 
+UNDER_REVIEW, REVISION_REQUESTED, 
+DELIVERED, COMPLETED, CANCELLED, 
+REFUNDED, DISPUTED[39m
+[36m [2m❯[22m Failure.getValue src/c
+ore/shared/Result.ts:[2m80:11[22m[39
+m
+    [90m 78|[39m
+    [90m 79|[39m   
+[34mgetValue[39m()[33m:[39m never {
+    [90m 80|[39m     throw new 
+Error(`Cannot get value from a Failure 
+result: ${this.er…
+    [90m   |[39m           
+[31m^[39m
+    [90m 81|[39m   }
+    [90m 82|[39m
+[90m [2m❯[22m src/core/domain/value-
+objects/__tests__/OrderStatus.test.ts:
+[2m92:55[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/__tests__/OrderStatus.
+test.ts[2m > [22mOrderStatus[2m > 
+[22mguards[2m > [22mshould require 
+reason for dispute
+[31m[1mAssertionError[22m: expected 
+'Invalid transition: COMPLETED → 
+DISPU…' to contain 'reason'[39m
+
+Expected: [32m"reason"[39m
+Received: [31m"Invalid transition: 
+COMPLETED → DISPUTED. Allowed 
+transitions from COMPLETED: []. This 
+is a terminal state."[39m
+
+[36m [2m❯[22m src/core/domain/value-
+objects/__tests__/OrderStatus.test.ts:
+[2m111:40[22m[39m
+    [90m109|[39m       
+[35mconst[39m withoutReason 
+[33m=[39m completed[33m.[39m[34mtr
+ansitionTo[39m([32m'DISPUTED'[39m)[
+33m;[39m
+    [90m110|[39m       [34mexpect[3
+9m(withoutReason[33m.[39m[34misFailu
+re[39m())[33m.[39m[34mtoBe[39m([3
+5mtrue[39m)[33m;[39m
+    [90m111|[39m       [34mexpect[3
+9m(withoutReason[33m.[39m[34mgetErro
+r[39m())[33m.[39m[34mtoContain[39m
+([32m'reason'[39m)[33m;[39m
+    [90m   |[39m                     
+                   [31m^[39m
+    [90m112|[39m
+    [90m113|[39m       
+[35mconst[39m withReason [33m=[39m 
+completed[33m.[39m[34mtransitionTo[
+39m([32m'DISPUTED'[39m[33m,[39m {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/__tests__/OrderStatus.
+test.ts[2m > [22mOrderStatus[2m > 
+[22mguards[2m > [22mshould require 
+reason to return from QA to IN_PROGRESS
+[31m[1mError[22m: Cannot get value 
+from a Failure result: Invalid order 
+status: "QUALITY_REVIEW". Valid 
+values: DRAFT, PENDING_PAYMENT, 
+PAYMENT_FAILED, PAID, ASSIGNED, 
+IN_PRODUCTION, INTERNAL_REVIEW, 
+UNDER_REVIEW, REVISION_REQUESTED, 
+DELIVERED, COMPLETED, CANCELLED, 
+REFUNDED, DISPUTED[39m
+[36m [2m❯[22m Failure.getValue src/c
+ore/shared/Result.ts:[2m80:11[22m[39
+m
+    [90m 78|[39m
+    [90m 79|[39m   
+[34mgetValue[39m()[33m:[39m never {
+    [90m 80|[39m     throw new 
+Error(`Cannot get value from a Failure 
+result: ${this.er…
+    [90m   |[39m           
+[31m^[39m
+    [90m 81|[39m   }
+    [90m 82|[39m
+[90m [2m❯[22m src/core/domain/value-
+objects/__tests__/OrderStatus.test.ts:
+[2m120:55[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/__tests__/OrderStatus.
+test.ts[2m > [22mOrderStatus[2m > 
+[22mpredicates[2m > [22misPaid 
+should identify paid states
+[31m[1mError[22m: Cannot get value 
+from a Failure result: Invalid order 
+status: "IN_PROGRESS". Valid values: 
+DRAFT, PENDING_PAYMENT, 
+PAYMENT_FAILED, PAID, ASSIGNED, 
+IN_PRODUCTION, INTERNAL_REVIEW, 
+UNDER_REVIEW, REVISION_REQUESTED, 
+DELIVERED, COMPLETED, CANCELLED, 
+REFUNDED, DISPUTED[39m
+[36m [2m❯[22m Failure.getValue src/c
+ore/shared/Result.ts:[2m80:11[22m[39
+m
+    [90m 78|[39m
+    [90m 79|[39m   
+[34mgetValue[39m()[33m:[39m never {
+    [90m 80|[39m     throw new 
+Error(`Cannot get value from a Failure 
+result: ${this.er…
+    [90m   |[39m           
+[31m^[39m
+    [90m 81|[39m   }
+    [90m 82|[39m
+[90m [2m❯[22m src/core/domain/value-
+objects/__tests__/OrderStatus.test.ts:
+[2m141:48[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/__tests__/OrderStatus.
+test.ts[2m > [22mOrderStatus[2m > 
+[22mpredicates[2m > 
+[22misCancellable should check 
+transition availability
+[31m[1mError[22m: Cannot get value 
+from a Failure result: Invalid order 
+status: "IN_PROGRESS". Valid values: 
+DRAFT, PENDING_PAYMENT, 
+PAYMENT_FAILED, PAID, ASSIGNED, 
+IN_PRODUCTION, INTERNAL_REVIEW, 
+UNDER_REVIEW, REVISION_REQUESTED, 
+DELIVERED, COMPLETED, CANCELLED, 
+REFUNDED, DISPUTED[39m
+[36m [2m❯[22m Failure.getValue src/c
+ore/shared/Result.ts:[2m80:11[22m[39
+m
+    [90m 78|[39m
+    [90m 79|[39m   
+[34mgetValue[39m()[33m:[39m never {
+    [90m 80|[39m     throw new 
+Error(`Cannot get value from a Failure 
+result: ${this.er…
+    [90m   |[39m           
+[31m^[39m
+    [90m 81|[39m   }
+    [90m 82|[39m
+[90m [2m❯[22m src/core/domain/value-
+objects/__tests__/OrderStatus.test.ts:
+[2m149:43[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/19]⎯
+[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/doma
+in/value-objects/__tests__/OrderStatus.
+test.ts[2m > [22mOrderStatus[2m > 
+[22mpredicates[2m > 
+[22mrequiresAction should flag 
+actionable states
+[31m[1mError[22m: Cannot get value 
+from a Failure result: Invalid order 
+status: "QUALITY_REVIEW". Valid 
+values: DRAFT, PENDING_PAYMENT, 
+PAYMENT_FAILED, PAID, ASSIGNED, 
+IN_PRODUCTION, INTERNAL_REVIEW, 
+UNDER_REVIEW, REVISION_REQUESTED, 
+DELIVERED, COMPLETED, CANCELLED, 
+REFUNDED, DISPUTED[39m
+[36m [2m❯[22m Failure.getValue src/c
+ore/shared/Result.ts:[2m80:11[22m[39
+m
+    [90m 78|[39m
+    [90m 79|[39m   
+[34mgetValue[39m()[33m:[39m never {
+    [90m 80|[39m     throw new 
+Error(`Cannot get value from a Failure 
+result: ${this.er…
+    [90m   |[39m           
+[31m^[39m
+    [90m 81|[39m   }
+    [90m 82|[39m
+[90m [2m❯[22m src/core/domain/value-
+objects/__tests__/OrderStatus.test.ts:
+[2m161:46[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/19]⎯
+[22m[39m
+
+
+[2m Test Files [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (3)[39m
+[2m      Tests [22m [1m[31m19 failed[39m[22m[2m | [22m[1m[32m57 passed[39m[22m[90m (76)[39m
+[2m   Start at [22m 09:09:20
+[2m   Duration [22m 1.50s[2m (transform 228ms, setup 330ms, import 225ms, tests 44ms, environment 2.96s)[22m
+

@@ -57,9 +57,11 @@ describe('OrderStatus', () => {
       const steps: Array<{ to: string; ctx?: TransitionContext }> = [
         { to: 'PENDING_PAYMENT' },
         { to: 'PAID', ctx: { paymentConfirmed: true } },
-        { to: 'IN_PROGRESS' },
-        { to: 'QUALITY_REVIEW' },
-        { to: 'DELIVERED', ctx: { qaApproved: true } },
+        { to: 'ASSIGNED' },
+        { to: 'IN_PRODUCTION' },
+        { to: 'INTERNAL_REVIEW' },
+        { to: 'UNDER_REVIEW', ctx: { qaApproved: true } },
+        { to: 'DELIVERED' },
         { to: 'COMPLETED' },
       ];
 
@@ -88,41 +90,41 @@ describe('OrderStatus', () => {
       expect(withPayment.isSuccess()).toBe(true);
     });
 
-    it('should block DELIVERED without QA approval', () => {
-      const qa = OrderStatus.create('QUALITY_REVIEW').getValue();
+    it('should block UNDER_REVIEW without QA approval', () => {
+      const qa = OrderStatus.create('INTERNAL_REVIEW').getValue();
 
-      const withoutQA = qa.transitionTo('DELIVERED', {
+      const withoutQA = qa.transitionTo('UNDER_REVIEW', {
         qaApproved: false,
       });
       expect(withoutQA.isFailure()).toBe(true);
       expect(withoutQA.getError()).toContain('QA approval');
 
-      const withQA = qa.transitionTo('DELIVERED', {
+      const withQA = qa.transitionTo('UNDER_REVIEW', {
         qaApproved: true,
       });
       expect(withQA.isSuccess()).toBe(true);
     });
 
     it('should require reason for dispute', () => {
-      const completed = OrderStatus.create('COMPLETED').getValue();
+      const delivered = OrderStatus.create('DELIVERED').getValue();
 
-      const withoutReason = completed.transitionTo('DISPUTED');
+      const withoutReason = delivered.transitionTo('DISPUTED');
       expect(withoutReason.isFailure()).toBe(true);
       expect(withoutReason.getError()).toContain('reason');
 
-      const withReason = completed.transitionTo('DISPUTED', {
+      const withReason = delivered.transitionTo('DISPUTED', {
         reason: 'Service quality below expectations',
       });
       expect(withReason.isSuccess()).toBe(true);
     });
 
-    it('should require reason to return from QA to IN_PROGRESS', () => {
-      const qa = OrderStatus.create('QUALITY_REVIEW').getValue();
+    it('should require reason to return from INTERNAL_REVIEW to IN_PRODUCTION', () => {
+      const qa = OrderStatus.create('INTERNAL_REVIEW').getValue();
 
-      const withoutReason = qa.transitionTo('IN_PROGRESS');
+      const withoutReason = qa.transitionTo('IN_PRODUCTION');
       expect(withoutReason.isFailure()).toBe(true);
 
-      const withReason = qa.transitionTo('IN_PROGRESS', {
+      const withReason = qa.transitionTo('IN_PRODUCTION', {
         reason: 'Needs rework on deliverable #3',
       });
       expect(withReason.isSuccess()).toBe(true);
@@ -138,7 +140,7 @@ describe('OrderStatus', () => {
 
     it('isPaid should identify paid states', () => {
       expect(OrderStatus.create('PAID').getValue().isPaid()).toBe(true);
-      expect(OrderStatus.create('IN_PROGRESS').getValue().isPaid()).toBe(true);
+      expect(OrderStatus.create('IN_PRODUCTION').getValue().isPaid()).toBe(true);
       expect(OrderStatus.create('COMPLETED').getValue().isPaid()).toBe(true);
       expect(OrderStatus.create('DRAFT').getValue().isPaid()).toBe(false);
     });
@@ -146,7 +148,7 @@ describe('OrderStatus', () => {
     it('isCancellable should check transition availability', () => {
       expect(OrderStatus.draft().isCancellable()).toBe(true);
       expect(
-        OrderStatus.create('IN_PROGRESS').getValue().isCancellable(),
+        OrderStatus.create('IN_PRODUCTION').getValue().isCancellable(),
       ).toBe(true);
       expect(
         OrderStatus.create('COMPLETED').getValue().isCancellable(),
@@ -158,13 +160,13 @@ describe('OrderStatus', () => {
         OrderStatus.create('PENDING_PAYMENT').getValue().requiresAction(),
       ).toBe(true);
       expect(
-        OrderStatus.create('QUALITY_REVIEW').getValue().requiresAction(),
+        OrderStatus.create('INTERNAL_REVIEW').getValue().requiresAction(),
       ).toBe(true);
       expect(
         OrderStatus.create('DISPUTED').getValue().requiresAction(),
       ).toBe(true);
       expect(
-        OrderStatus.create('IN_PROGRESS').getValue().requiresAction(),
+        OrderStatus.create('IN_PRODUCTION').getValue().requiresAction(),
       ).toBe(false);
     });
   });

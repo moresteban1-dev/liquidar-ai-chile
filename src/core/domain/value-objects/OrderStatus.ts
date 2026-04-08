@@ -325,13 +325,13 @@ export class OrderStatus {
   }
 
   isPaid(): boolean {
-    return ['PAID', 'IN_PROGRESS', 'QUALITY_REVIEW', 'DELIVERED', 'COMPLETED'].includes(
+    return ['PAID', 'ASSIGNED', 'IN_PRODUCTION', 'INTERNAL_REVIEW', 'UNDER_REVIEW', 'REVISION_REQUESTED', 'DELIVERED', 'COMPLETED'].includes(
       this._value,
     );
   }
 
   isActive(): boolean {
-    return ['PAID', 'IN_PROGRESS', 'QUALITY_REVIEW', 'DELIVERED'].includes(
+    return ['PAID', 'ASSIGNED', 'IN_PRODUCTION', 'INTERNAL_REVIEW', 'UNDER_REVIEW', 'REVISION_REQUESTED', 'DELIVERED'].includes(
       this._value,
     );
   }
@@ -361,7 +361,7 @@ export class OrderStatus {
   }
 
   requiresAction(): boolean {
-    return ['PENDING_PAYMENT', 'QUALITY_REVIEW', 'DISPUTED'].includes(
+    return ['PENDING_PAYMENT', 'INTERNAL_REVIEW', 'UNDER_REVIEW', 'DISPUTED'].includes(
       this._value,
     );
   }

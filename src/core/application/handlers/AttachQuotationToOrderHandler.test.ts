@@ -4,7 +4,7 @@ import { CreateOrderHandler } from './CreateOrderHandler'
 import { InMemoryOrderRepository } from '@tests/mocks/InMemoryOrderRepository'
 import { InMemoryQuotationRepository } from '@tests/mocks/InMemoryQuotationRepository'
 import { InMemoryEventPublisher } from '@tests/mocks/InMemoryEventPublisher'
-import { Quotation } from '@core/domain/aggregates/order/Quotation'
+import { Quotation } from '@core/domain/aggregates/quotation/Quotation'
 import { QuotationPricing } from '@core/domain/aggregates/order/QuotationPricing'
 import { Money } from '@core/domain/value-objects/Money'
 import { UniqueEntityID } from '@core/shared/UniqueEntityID'
@@ -44,7 +44,9 @@ describe('AttachQuotationToOrderHandler', () => {
   const createQuotation = async (orderId: UniqueEntityID) => {
     const providerCost = Money.create(10000, 'USD').unwrap()
     const pricing = QuotationPricing.calculate(providerCost, {
-      commissionRate: 0.30
+      commissionRate: 0.30,
+      platformFeeRate: 0,
+      taxRate: 0
     }).unwrap()
 
     const validUntil = new Date()
@@ -118,7 +120,7 @@ describe('AttachQuotationToOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('not found')
+      expect((result.getError() as any).message || result.getError()).toContain('not found')
     })
 
     it('should reject non-existent quotation', async () => {
@@ -133,7 +135,7 @@ describe('AttachQuotationToOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('not found')
+      expect((result.getError() as any).message || result.getError()).toContain('not found')
     })
   })
 })

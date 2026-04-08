@@ -1,0 +1,222 @@
+﻿
+[1m[46m RUN [49m[22m [36mv4.1.0 [39m[90mC:/Users/Esteban/Desktop/Skill IA[39m
+      [90mRunning tests with seed "1775662525610"[39m
+
+{"level":30,"time":1775662527054,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":40,"time":1775662527062,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":8.36,"error":"Cannot delete other clients own orders","errorDetail":{"code":"UNAUTHORIZED","message":"Cannot delete other clients own orders","httpStatus":401,"isOperational":true},"success":false,"msg":"DeleteOrder failed"}
+{"level":30,"time":1775662527067,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":40,"time":1775662527067,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.14,"error":"Client can only delete DRAFT orders","errorDetail":{"code":"BUSINESS_RULE_VIOLATION","message":"Client can only delete DRAFT orders","httpStatus":422,"isOperational":true},"success":false,"msg":"DeleteOrder failed"}
+{"level":30,"time":1775662527068,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":30,"time":1775662527068,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.09,"success":true,"msg":"DeleteOrder completed"}
+{"level":30,"time":1775662527068,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":30,"time":1775662527068,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.05,"success":true,"msg":"DeleteOrder completed"}
+{"level":30,"time":1775662527069,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":40,"time":1775662527069,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.06,"error":"Cannot delete order in IN_PRODUCTION state","errorDetail":{"code":"BUSINESS_RULE_VIOLATION","message":"Cannot delete order in IN_PRODUCTION state","httpStatus":422,"isOperational":true},"success":false,"msg":"DeleteOrder failed"}
+{"level":30,"time":1775662527069,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":40,"time":1775662527069,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.05,"error":"Order with ID 'non-existent' not found","errorDetail":{"code":"NOT_FOUND","message":"Order with ID 'non-existent' not found","httpStatus":404,"isOperational":true},"success":false,"msg":"DeleteOrder failed"}
+{"level":30,"time":1775662527070,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":40,"time":1775662527070,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.06,"error":"Cannot delete order in COMPLETED state","errorDetail":{"code":"BUSINESS_RULE_VIOLATION","message":"Cannot delete order in COMPLETED state","httpStatus":422,"isOperational":true},"success":false,"msg":"DeleteOrder failed"}
+{"level":30,"time":1775662527070,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":40,"time":1775662527070,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.05,"error":"Cannot delete order in PAYMENT_RECEIVED state","errorDetail":{"code":"BUSINESS_RULE_VIOLATION","message":"Cannot delete order in PAYMENT_RECEIVED state","httpStatus":422,"isOperational":true},"success":false,"msg":"DeleteOrder failed"}
+{"level":30,"time":1775662527071,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":30,"time":1775662527071,"pid":25260,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.1,"success":true,"msg":"DeleteOrder completed"}
+ [31mÔØ»[39m src/core/application/handlers/DeleteOrderHandler.test.ts [2m([22m[2m9 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[32m 21[2mms[22m[39m
+       [32mÔ£ô[39m should delete DRAFT order[32m 0[2mms[22m[39m
+       [32mÔ£ô[39m should delete QUOTATION_PENDING order (auto-cancel)[32m 0[2mms[22m[39m
+[31m       [31m├ù[31m should reject deleting PAYMENT_RECEIVED order[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should reject deleting IN_PRODUCTION order[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should reject deleting COMPLETED order[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should reject non-existent order[39m[32m 0[2mms[22m[39m
+       [32mÔ£ô[39m should allow client to delete own DRAFT order[32m 0[2mms[22m[39m
+[31m       [31m├ù[31m should reject client deleting non-DRAFT order[39m[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should reject client deleting others order[39m[32m 15[2mms[22m[39m
+node.exe : 
+En línea: 1 Carácter: 1
++ & "C:\Program Files\nodejs/node.exe" 
+"C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpeci 
+   fied: (:String) [], RemoteExceptio  
+  n
+    + FullyQualifiedErrorId : NativeCo 
+   mmandError
+ 
+[31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m[1m[41
+m Failed Tests 6 [49m[22m[31mÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m
+
+[41m[1m FAIL [22m[49m src/core/appl
+ication/handlers/DeleteOrderHandler.tes
+t.ts[2m > [22mDeleteOrderHandler[2m 
+> [22mAdmin Delete[2m > [22mshould 
+reject deleting PAYMENT_RECEIVED order
+[31m[1mAssertionError[22m: expected 
+[] to include 'PAYMENT_RECEIVED'[39m
+[36m [2mÔØ»[22m src/core/application
+/handlers/DeleteOrderHandler.test.ts:[
+2m127:33[22m[39m
+    [90m125|[39m
+    [90m126|[39m       [34mexpect[3
+9m(result[33m.[39m[34misFailure[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)
+    [90m127|[39m       [34mexpect[3
+9m(result[33m.[39m[34mgetError[39m(
+))[33m.[39m[34mtoContain[39m([32m'
+PAYMENT_RECEIVED'[39m)
+    [90m   |[39m                     
+            [31m^[39m
+    [90m128|[39m     })
+    [90m129|[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»[1/6]ÔÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/appl
+ication/handlers/DeleteOrderHandler.tes
+t.ts[2m > [22mDeleteOrderHandler[2m 
+> [22mAdmin Delete[2m > [22mshould 
+reject deleting IN_PRODUCTION order
+[31m[1mAssertionError[22m: expected 
+[] to include 'IN_PRODUCTION'[39m
+[36m [2mÔØ»[22m src/core/application
+/handlers/DeleteOrderHandler.test.ts:[
+2m140:33[22m[39m
+    [90m138|[39m
+    [90m139|[39m       [34mexpect[3
+9m(result[33m.[39m[34misFailure[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)
+    [90m140|[39m       [34mexpect[3
+9m(result[33m.[39m[34mgetError[39m(
+))[33m.[39m[34mtoContain[39m([32m'
+IN_PRODUCTION'[39m)
+    [90m   |[39m                     
+            [31m^[39m
+    [90m141|[39m     })
+    [90m142|[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»[2/6]ÔÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/appl
+ication/handlers/DeleteOrderHandler.tes
+t.ts[2m > [22mDeleteOrderHandler[2m 
+> [22mAdmin Delete[2m > [22mshould 
+reject deleting COMPLETED order
+[31m[1mAssertionError[22m: expected 
+[] to include 'COMPLETED'[39m
+[36m [2mÔØ»[22m src/core/application
+/handlers/DeleteOrderHandler.test.ts:[
+2m153:33[22m[39m
+    [90m151|[39m
+    [90m152|[39m       [34mexpect[3
+9m(result[33m.[39m[34misFailure[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)
+    [90m153|[39m       [34mexpect[3
+9m(result[33m.[39m[34mgetError[39m(
+))[33m.[39m[34mtoContain[39m([32m'
+COMPLETED'[39m)
+    [90m   |[39m                     
+            [31m^[39m
+    [90m154|[39m     })
+    [90m155|[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»[3/6]ÔÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/appl
+ication/handlers/DeleteOrderHandler.tes
+t.ts[2m > [22mDeleteOrderHandler[2m 
+> [22mAdmin Delete[2m > [22mshould 
+reject non-existent order
+[31m[1mAssertionError[22m: expected 
+[] to include 'not found'[39m
+[36m [2mÔØ»[22m src/core/application
+/handlers/DeleteOrderHandler.test.ts:[
+2m164:33[22m[39m
+    [90m162|[39m
+    [90m163|[39m       [34mexpect[3
+9m(result[33m.[39m[34misFailure[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)
+    [90m164|[39m       [34mexpect[3
+9m(result[33m.[39m[34mgetError[39m(
+))[33m.[39m[34mtoContain[39m([32m'
+not found'[39m)
+    [90m   |[39m                     
+            [31m^[39m
+    [90m165|[39m     })
+    [90m166|[39m   })
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»[4/6]ÔÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/appl
+ication/handlers/DeleteOrderHandler.tes
+t.ts[2m > [22mDeleteOrderHandler[2m 
+> [22mClient Delete[2m > [22mshould 
+reject client deleting non-DRAFT order
+[31m[1mAssertionError[22m: expected 
+[] to include 'DRAFT'[39m
+[36m [2mÔØ»[22m src/core/application
+/handlers/DeleteOrderHandler.test.ts:[
+2m191:33[22m[39m
+    [90m189|[39m
+    [90m190|[39m       [34mexpect[3
+9m(result[33m.[39m[34misFailure[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)
+    [90m191|[39m       [34mexpect[3
+9m(result[33m.[39m[34mgetError[39m(
+))[33m.[39m[34mtoContain[39m([32m'
+DRAFT'[39m)
+    [90m   |[39m                     
+            [31m^[39m
+    [90m192|[39m     })
+    [90m193|[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»[5/6]ÔÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/appl
+ication/handlers/DeleteOrderHandler.tes
+t.ts[2m > [22mDeleteOrderHandler[2m 
+> [22mClient Delete[2m > [22mshould 
+reject client deleting others order
+[31m[1mAssertionError[22m: expected 
+[] to include 'own orders'[39m
+[36m [2mÔØ»[22m src/core/application
+/handlers/DeleteOrderHandler.test.ts:[
+2m204:33[22m[39m
+    [90m202|[39m
+    [90m203|[39m       [34mexpect[3
+9m(result[33m.[39m[34misFailure[39m
+())[33m.[39m[34mtoBe[39m([35mtrue
+[39m)
+    [90m204|[39m       [34mexpect[3
+9m(result[33m.[39m[34mgetError[39m(
+))[33m.[39m[34mtoContain[39m([32m'
+own orders'[39m)
+    [90m   |[39m                     
+            [31m^[39m
+    [90m205|[39m     })
+    [90m206|[39m   })
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»[6/6]ÔÄ»[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m6 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 11:35:25
+[2m   Duration [22m 1.43s[2m (transform 185ms, setup 86ms, import 231ms, tests 21ms, environment 825ms)[22m
+

@@ -69,7 +69,7 @@ describe('AssignProviderToOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('Order ID')
+      expect((result.getError() as any).message || result.getError()).toContain('Order ID')
     })
 
     it('should reject empty providerId', async () => {
@@ -79,7 +79,7 @@ describe('AssignProviderToOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('Provider ID')
+      expect((result.getError() as any).message || result.getError()).toContain('Provider ID')
     })
 
     it('should reject non-existent order', async () => {
@@ -89,7 +89,7 @@ describe('AssignProviderToOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('not found')
+      expect((result.getError() as any).message || result.getError()).toContain('not found')
     })
   })
 
@@ -109,7 +109,7 @@ describe('AssignProviderToOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('QUOTATION_PENDING')
+      expect((result.getError() as any).message || result.getError()).toContain('QUOTATION_PENDING')
     })
 
     it('should reject changing provider', async () => {
@@ -128,7 +128,7 @@ describe('AssignProviderToOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('already has')
+      expect((result.getError() as any).message || result.getError()).toContain('already has')
     })
   })
 })

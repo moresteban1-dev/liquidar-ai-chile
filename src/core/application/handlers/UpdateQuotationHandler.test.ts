@@ -144,7 +144,7 @@ describe('UpdateQuotationHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('assigned provider')
+      expect((result.getError() as any).message || result.getError()).toContain('assigned provider')
     })
 
     it('should reject update of SENT_TO_CLIENT quotation', async () => {
@@ -159,7 +159,7 @@ describe('UpdateQuotationHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('Only DRAFT and SUBMITTED')
+      expect((result.getError() as any).message || result.getError()).toContain('Only DRAFT and SUBMITTED')
     })
 
     it('should reject non-existent quotation', async () => {
@@ -170,7 +170,7 @@ describe('UpdateQuotationHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('not found')
+      expect((result.getError() as any).message || result.getError()).toContain('not found')
     })
   })
 })

@@ -20,6 +20,14 @@ export class CreateOrderHandler extends InstrumentedHandler<CreateOrderCommand, 
   }
 
   protected async handle(command: CreateOrderCommand): Promise<Result<Order, AppError>> {
+    if (!command.clientId || command.clientId.trim() === '') {
+      return fail(AppError.validation('Client ID is required'))
+    }
+
+    if (command.estimatedGuests !== undefined && command.estimatedGuests <= 0) {
+      return fail(AppError.validation('Estimated guests must be a positive number'))
+    }
+
     const eventDate = new Date(command.eventDate)
     if (isNaN(eventDate.getTime())) {
       return fail(AppError.validation('Invalid event date format'))
@@ -27,7 +35,7 @@ export class CreateOrderHandler extends InstrumentedHandler<CreateOrderCommand, 
 
     const orderResult = Order.create({
       clientId: new UniqueEntityID(command.clientId),
-      state: 'QUOTATION_PENDING',
+      state: 'DRAFT',
       eventDate,
       eventType: command.eventType,
       estimatedGuests: command.estimatedGuests,

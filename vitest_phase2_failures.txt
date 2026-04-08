@@ -1,0 +1,1452 @@
+﻿
+[1m[46m RUN [49m[22m [36mv4.1.0 [39m[90mC:/Users/Esteban/Desktop/Skill IA[39m
+      [90mRunning tests with seed "1775567662139"[39m
+
+ [31m❯[39m src/core/application/handlers/AttachQuotationToOrderHandler.test.ts [2m([22m[2m0 test[22m[2m)[22m
+ [31m❯[39m src/core/domain/aggregates/order/Order.test.ts [2m([22m[2m18 tests[22m[2m | [22m[31m10 failed[39m[2m)[22m[32m 18[2mms[22m[39m
+       [32m✓[39m should create valid order[32m 0[2mms[22m[39m
+[31m       [31m×[31m should emit OrderCreated event on creation[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject past event date[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject empty delivery address[39m[32m 0[2mms[22m[39m
+       [32m✓[39m should accept today as event date[32m 0[2mms[22m[39m
+       [32m✓[39m should accept future event date[32m 0[2mms[22m[39m
+[31m       [31m×[31m should not emit event when reconstructing from persistence[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should transition from DRAFT to QUOTATION_PENDING[32m 0[2mms[22m[39m
+       [32m✓[39m should transition from QUOTATION_PENDING to QUOTATION_SENT[32m 0[2mms[22m[39m
+[31m       [31m×[31m should emit OrderStateChanged event on transition[39m[32m 7[2mms[22m[39m
+[31m       [31m×[31m should reject invalid transition from DRAFT to COMPLETED[39m[32m 2[2mms[22m[39m
+       [32m✓[39m should reject transition from COMPLETED to anything[32m 0[2mms[22m[39m
+       [32m✓[39m should assign provider in QUOTATION_PENDING state[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject assigning provider in wrong state[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should attach quotation with valid pricing[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should cancel order with reason[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject cancellation without reason[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should complete full order lifecycle[39m[32m 1[2mms[22m[39m
+{"level":30,"time":1775567663934,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663933,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663935,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":2.04,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663936,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","type":"command","msg":"AssignProviderToOrder started"}
+{"level":30,"time":1775567663936,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","duration_ms":0.13,"success":true,"msg":"AssignProviderToOrder completed"}
+{"level":30,"time":1775567663936,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","type":"command","msg":"AssignProviderToOrder started"}
+{"level":30,"time":1775567663936,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","duration_ms":0.04,"success":true,"msg":"AssignProviderToOrder completed"}
+{"level":30,"time":1775567663941,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663941,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.15,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663941,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","type":"command","msg":"AssignProviderToOrder started"}
+{"level":30,"time":1775567663941,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","duration_ms":0.04,"success":true,"msg":"AssignProviderToOrder completed"}
+{"level":30,"time":1775567663942,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","type":"command","msg":"AssignProviderToOrder started"}
+{"level":40,"time":1775567663942,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","duration_ms":0.11,"error":"Order with ID 'non-existent' not found","errorDetail":{"code":"NOT_FOUND","message":"Order with ID 'non-existent' not found","httpStatus":404,"isOperational":true},"success":false,"msg":"AssignProviderToOrder failed"}
+{"level":30,"time":1775567663944,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","type":"command","msg":"AssignProviderToOrder started"}
+{"level":40,"time":1775567663944,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","duration_ms":0.05,"error":"Order with ID 'order-123' not found","errorDetail":{"code":"NOT_FOUND","message":"Order with ID 'order-123' not found","httpStatus":404,"isOperational":true},"success":false,"msg":"AssignProviderToOrder failed"}
+{"level":30,"time":1775567663944,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","type":"command","msg":"AssignProviderToOrder started"}
+{"level":40,"time":1775567663944,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","duration_ms":0.06,"error":"Order not found","errorDetail":{"code":"NOT_FOUND","message":"Order not found","httpStatus":404,"isOperational":true},"success":false,"msg":"AssignProviderToOrder failed"}
+{"level":30,"time":1775567663945,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663945,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.09,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663945,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","type":"command","msg":"AssignProviderToOrder started"}
+{"level":30,"time":1775567663945,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","duration_ms":0.04,"success":true,"msg":"AssignProviderToOrder completed"}
+{"level":30,"time":1775567663945,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663945,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.07,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663945,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","type":"command","msg":"AssignProviderToOrder started"}
+{"level":30,"time":1775567663945,"pid":25148,"hostname":"ZBOOK16","name":"dropservice","handler":"AssignProviderToOrder","duration_ms":0.02,"success":true,"msg":"AssignProviderToOrder completed"}
+ [31m❯[39m src/core/application/handlers/AssignProviderToOrderHandler.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[32m 15[2mms[22m[39m
+[31m       [31m×[31m should assign provider to order[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should persist provider assignment[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject empty orderId[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject empty providerId[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject non-existent order[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should reject assigning provider in wrong state[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject changing provider[39m[32m 9[2mms[22m[39m
+{"level":30,"time":1775567663948,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":30,"time":1775567663934,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":1.91,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663936,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":40,"time":1775567663936,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.12,"error":"Invalid event date format","errorDetail":{"code":"VALIDATION_ERROR","message":"Invalid event date format","httpStatus":400,"isOperational":true},"success":false,"msg":"CreateOrder failed"}
+{"level":30,"time":1775567663941,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663941,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.15,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663943,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":40,"time":1775567663943,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.11,"error":"Delivery address is required","errorDetail":{"code":"BUSINESS_RULE_VIOLATION","message":"Delivery address is required","httpStatus":422,"isOperational":true},"success":false,"msg":"CreateOrder failed"}
+{"level":30,"time":1775567663944,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663944,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.09,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663944,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":40,"time":1775567663944,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.03,"error":"Invalid event date format","errorDetail":{"code":"VALIDATION_ERROR","message":"Invalid event date format","httpStatus":400,"isOperational":true},"success":false,"msg":"CreateOrder failed"}
+{"level":30,"time":1775567663945,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663945,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.08,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663945,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663945,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.07,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663946,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":40,"time":1775567663946,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.06,"error":"Event date must be in the future","errorDetail":{"code":"BUSINESS_RULE_VIOLATION","message":"Event date must be in the future","httpStatus":422,"isOperational":true},"success":false,"msg":"CreateOrder failed"}
+{"level":30,"time":1775567663947,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663947,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.07,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663947,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663947,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.06,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663947,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663947,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.08,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663948,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663948,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.05,"success":true,"msg":"CreateOrder completed"}
+{"level":30,"time":1775567663948,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","type":"command","msg":"CreateOrder started"}
+{"level":30,"time":1775567663948,"pid":44188,"hostname":"ZBOOK16","name":"dropservice","handler":"CreateOrder","duration_ms":0.06,"success":true,"msg":"CreateOrder completed"}
+ [31m❯[39m src/core/application/handlers/CreateOrderHandler.test.ts [2m([22m[2m14 tests[22m[2m | [22m[31m10 failed[39m[2m)[22m[32m 19[2mms[22m[39m
+[31m       [31m×[31m should create order successfully[39m[32m 1[2mms[22m[39m
+       [32m✓[39m should persist order in repository[32m 0[2mms[22m[39m
+[31m       [31m×[31m should publish OrderCreated event[39m[32m 0[2mms[22m[39m
+       [32m✓[39m should create order without optional fields[32m 0[2mms[22m[39m
+       [32m✓[39m should handle future event dates[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject empty clientId[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject empty eventDate[39m[32m 5[2mms[22m[39m
+[31m       [31m×[31m should reject empty deliveryAddress[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject invalid date format[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject negative estimatedGuests[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject zero estimatedGuests[39m[32m 3[2mms[22m[39m
+[31m       [31m×[31m should reject past event date[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should handle repository save failure[39m[32m 0[2mms[22m[39m
+       [32m✓[39m should continue even if event publishing fails[32m 4[2mms[22m[39m
+{"level":30,"time":1775567663949,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":1.73,"success":true,"msg":"DeleteOrder completed"}
+{"level":30,"time":1775567663957,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":30,"time":1775567663957,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.17,"success":true,"msg":"DeleteOrder completed"}
+{"level":30,"time":1775567663959,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":30,"time":1775567663959,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.14,"success":true,"msg":"DeleteOrder completed"}
+{"level":30,"time":1775567663960,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":30,"time":1775567663960,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.1,"success":true,"msg":"DeleteOrder completed"}
+{"level":30,"time":1775567663960,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":40,"time":1775567663960,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.1,"error":"Order with ID 'non-existent' not found","errorDetail":{"code":"NOT_FOUND","message":"Order with ID 'non-existent' not found","httpStatus":404,"isOperational":true},"success":false,"msg":"DeleteOrder failed"}
+{"level":30,"time":1775567663962,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":30,"time":1775567663962,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.04,"success":true,"msg":"DeleteOrder completed"}
+{"level":30,"time":1775567663962,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":30,"time":1775567663962,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.05,"success":true,"msg":"DeleteOrder completed"}
+{"level":30,"time":1775567663963,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":30,"time":1775567663963,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.04,"success":true,"msg":"DeleteOrder completed"}
+{"level":30,"time":1775567663963,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","type":"command","msg":"DeleteOrder started"}
+{"level":30,"time":1775567663963,"pid":49892,"hostname":"ZBOOK16","name":"dropservice","handler":"DeleteOrder","duration_ms":0.04,"success":true,"msg":"DeleteOrder completed"}
+ [31m❯[39m src/core/application/handlers/DeleteOrderHandler.test.ts [2m([22m[2m9 tests[22m[2m | [22m[31m7 failed[39m[2m)[22m[32m 20[2mms[22m[39m
+[31m       [31m×[31m should delete DRAFT order[39m[32m 2[2mms[22m[39m
+       [32m✓[39m should delete QUOTATION_PENDING order (auto-cancel)[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject deleting PAYMENT_RECEIVED order[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject deleting IN_PRODUCTION order[39m[32m 0[2mms[22m[39m
+[31m       [31m×[31m should reject deleting COMPLETED order[39m[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject non-existent order[39m[32m 2[2mms[22m[39m
+       [32m✓[39m should allow client to delete own DRAFT order[32m 1[2mms[22m[39m
+[31m       [31m×[31m should reject client deleting non-DRAFT order[39m[32m 2[2mms[22m[39m
+[31m       [31m×[31m should reject client deleting others order[39m[32m 11[2mms[22m[39m
+node.exe : 
+En línea: 1 Carácter: 1
++ & "C:\Program 
+Files\nodejs/node.exe" "C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : 
+NotSpeci    fied: (:String) [], 
+RemoteExceptio    n
+    + FullyQualifiedErrorId : 
+NativeCo    mmandError
+ 
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed 
+Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/AttachQuotationT
+oOrderHandler.test.ts[2m [ src/core
+/application/handlers/AttachQuotatio
+nToOrderHandler.test.ts ][22m
+[31m[1mError[22m: Failed to 
+resolve import "@core/domain/aggrega
+tes/order/Quotation" from "src/core/
+application/handlers/AttachQuotation
+ToOrderHandler.test.ts". Does the 
+file exist?[39m
+  Plugin: 
+[35mvite:import-analysis[39m
+  File: 
+[36mC:/Users/Esteban/Desktop/Skill 
+IA/src/core/application/handlers/Att
+achQuotationToOrderHandler.test.ts[
+39m:7:26
+[33m  6  |  import { 
+InMemoryQuotationRepository } from "
+@tests/mocks/InMemoryQuotationReposi
+tory";
+  7  |  import { 
+InMemoryEventPublisher } from "@test
+s/mocks/InMemoryEventPublisher";
+  8  |  import { Quotation } from "@
+core/domain/aggregates/order/Quotati
+on";
+     |                             ^
+  9  |  import { QuotationPricing } 
+from "@core/domain/aggregates/order/
+QuotationPricing";
+  10 |  import { Money } from "@core
+/domain/value-objects/Money";[39m
+[90m [2m❯[22m 
+TransformPluginContext._formatLog ..
+/Skill%20IA/node_modules/vite/dist/n
+ode/chunks/config.js:[2m28999:43[2
+2m[39m
+[90m [2m❯[22m 
+TransformPluginContext.error ../Skil
+l%20IA/node_modules/vite/dist/node/c
+hunks/config.js:[2m28996:14[22m[3
+9m
+[90m [2m❯[22m normalizeUrl ../Ski
+ll%20IA/node_modules/vite/dist/node/
+chunks/config.js:[2m27119:18[22m[
+39m
+[90m [2m❯[22m ../Skill%20IA/node_
+modules/vite/dist/node/chunks/config
+.js:[2m27177:32[22m[39m
+[90m [2m❯[22m 
+TransformPluginContext.transform ../
+Skill%20IA/node_modules/vite/dist/no
+de/chunks/config.js:[2m27145:4[22m
+[39m
+[90m [2m❯[22m EnvironmentPluginCo
+ntainer.transform ../Skill%20IA/node
+_modules/vite/dist/node/chunks/confi
+g.js:[2m28797:14[22m[39m
+[90m [2m❯[22m loadAndTransform ..
+/Skill%20IA/node_modules/vite/dist/n
+ode/chunks/config.js:[2m22670:26[2
+2m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3
+4]⎯[22m[39m
+
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed 
+Tests 33 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/core/d
+omain/aggregates/order/Order.test.ts
+[2m > [22mOrder Aggregate[2m > 
+[22mCreation[2m > [22mshould 
+emit OrderCreated event on creation
+[31m[1mAssertionError[22m: 
+expected undefined to be 
+'OrderCreated' // Object.is 
+equality[39m
+
+[32m- Expected:[39m
+"OrderCreated"
+
+[31m+ Received:[39m
+undefined
+
+[36m [2m❯[22m src/core/domain/agg
+regates/order/Order.test.ts:[2m33:3
+5[22m[39m
+    [90m 31|[39m       
+[35mconst[39m events [33m=[39m 
+order[33m.[39mdomainEvents
+    [90m 32|[39m       [34mexpect
+[39m(events)[33m.[39m[34mtoHaveL
+ength[39m([34m1[39m)
+    [90m 33|[39m       [34mexpect
+[39m(events[[34m0[39m][33m.[39m
+eventType)[33m.[39m[34mtoBe[39m(
+[32m'OrderCreated'[39m)
+    [90m   |[39m                  
+                 [31m^[39m
+    [90m 34|[39m     })
+    [90m 35|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/d
+omain/aggregates/order/Order.test.ts
+[2m > [22mOrder Aggregate[2m > 
+[22mCreation[2m > [22mshould 
+reject past event date
+[31m[1mAssertionError[22m: 
+expected 'Event date must be in the 
+future' to contain 'past'[39m
+
+Expected: [32m"past"[39m
+Received: [31m"Event date must be 
+in the future"[39m
+
+[36m [2m❯[22m src/core/domain/agg
+regates/order/Order.test.ts:[2m45:2
+8[22m[39m
+    [90m 43|[39m
+    [90m 44|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m 45|[39m       [34mexpect
+[39m(result[33m.[39merror)[33m.
+[39m[34mtoContain[39m([32m'past'
+[39m)
+    [90m   |[39m                  
+          [31m^[39m
+    [90m 46|[39m     })
+    [90m 47|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/d
+omain/aggregates/order/Order.test.ts
+[2m > [22mOrder Aggregate[2m > 
+[22mCreation[2m > [22mshould 
+reject empty delivery address
+[31m[1mAssertionError[22m: 
+expected 'Delivery address is 
+required' to contain 'empty'[39m
+
+Expected: [32m"empty"[39m
+Received: [31m"Delivery address is 
+required"[39m
+
+[36m [2m❯[22m src/core/domain/agg
+regates/order/Order.test.ts:[2m57:2
+8[22m[39m
+    [90m 55|[39m
+    [90m 56|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m 57|[39m       [34mexpect
+[39m(result[33m.[39merror)[33m.
+[39m[34mtoContain[39m([32m'empty'
+[39m)
+    [90m   |[39m                  
+          [31m^[39m
+    [90m 58|[39m     })
+    [90m 59|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/d
+omain/aggregates/order/Order.test.ts
+[2m > [22mOrder Aggregate[2m > 
+[22mCreation[2m > [22mshould not 
+emit event when reconstructing from 
+persistence
+[31m[1mAssertionError[22m: 
+expected [ OrderCreated{ …(6) } ] 
+to have a length of +0 but got 
+1[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 0[39m
+[31m+ 1[39m
+
+[36m [2m❯[22m src/core/domain/agg
+regates/order/Order.test.ts:[2m91:3
+4[22m[39m
+    [90m 89|[39m       
+[35mconst[39m order [33m=[39m 
+result[33m.[39mvalue
+    [90m 90|[39m
+    [90m 91|[39m       [34mexpect
+[39m(order[33m.[39mdomainEvents)
+[33m.[39m[34mtoHaveLength[39m([3
+4m0[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m 92|[39m     })
+    [90m 93|[39m   })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/d
+omain/aggregates/order/Order.test.ts
+[2m > [22mOrder Aggregate[2m > 
+[22mState Transitions - Valid[2m 
+> [22mshould emit 
+OrderStateChanged event on 
+transition
+[31m[1mAssertionError[22m: 
+expected undefined to be 
+'OrderStateChanged' // Object.is 
+equality[39m
+
+[32m- Expected:[39m
+"OrderStateChanged"
+
+[31m+ Received:[39m
+undefined
+
+[36m [2m❯[22m src/core/domain/agg
+regates/order/Order.test.ts:[2m125:
+35[22m[39m
+    [90m123|[39m       
+[35mconst[39m events [33m=[39m 
+order[33m.[39mdomainEvents
+    [90m124|[39m       [34mexpect
+[39m(events)[33m.[39m[34mtoHaveL
+ength[39m([34m1[39m)
+    [90m125|[39m       [34mexpect
+[39m(events[[34m0[39m][33m.[39m
+eventType)[33m.[39m[34mtoBe[39m(
+[32m'OrderStateChanged'[39m)
+    [90m   |[39m                  
+                 [31m^[39m
+    [90m126|[39m
+    [90m127|[39m       
+[35mconst[39m event [33m=[39m 
+events[[34m0[39m] [35mas[39m any
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/d
+omain/aggregates/order/Order.test.ts
+[2m > [22mOrder Aggregate[2m > 
+[22mState Transitions - 
+Invalid[2m > [22mshould reject 
+invalid transition from DRAFT to 
+COMPLETED
+[31m[1mAssertionError[22m: 
+expected 'Illegal state transition 
+attempted: D…' to contain 
+'Invalid'[39m
+
+Expected: 
+[32m"I[7mnvalid[27m"[39m
+Received: [31m"I[7mllegal state 
+transition attempted: DRAFT -> 
+COMPLETED[27m"[39m
+
+[36m [2m❯[22m src/core/domain/agg
+regates/order/Order.test.ts:[2m140:
+28[22m[39m
+    [90m138|[39m
+    [90m139|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m140|[39m       [34mexpect
+[39m(result[33m.[39merror)[33m.
+[39m[34mtoContain[39m([32m'Invali
+d'[39m)
+    [90m   |[39m                  
+          [31m^[39m
+    [90m141|[39m       [34mexpect
+[39m(order[33m.[39mstate)[33m.[
+39m[34mtoBe[39m([32m'DRAFT'[39m)
+ [90m// Estado no cambió[39m
+    [90m142|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/d
+omain/aggregates/order/Order.test.ts
+[2m > [22mOrder Aggregate[2m > 
+[22mAssign Provider[2m > 
+[22mshould reject assigning 
+provider in wrong state
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/domain/agg
+regates/order/Order.test.ts:[2m176:
+34[22m[39m
+    [90m174|[39m       
+[35mconst[39m result [33m=[39m o
+rder[33m.[39m[34massignProvider[
+39m(providerId)
+    [90m175|[39m
+    [90m176|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m177|[39m       [34mexpect
+[39m(result[33m.[39merror)[33m.
+[39m[34mtoContain[39m([32m'QUOTAT
+ION_PENDING'[39m)
+    [90m178|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/d
+omain/aggregates/order/Order.test.ts
+[2m > [22mOrder Aggregate[2m > 
+[22mAttach Quotation[2m > 
+[22mshould attach quotation with 
+valid pricing
+[31m[1mError[22m: Cannot get 
+value from a Failure result: 
+Money.multiply: factor must be a 
+finite number[39m
+[36m [2m❯[22m Failure.getValue sr
+c/core/shared/Result.ts:[2m80:11[2
+2m[39m
+    [90m 78|[39m
+    [90m 79|[39m   
+[34mgetValue[39m()[33m:[39m 
+never {
+    [90m 80|[39m     throw new 
+Error(`Cannot get value from a 
+Failure result: ${this.er…
+    [90m   |[39m           
+[31m^[39m
+    [90m 81|[39m   }
+    [90m 82|[39m
+[90m [2m❯[22m Failure.get value 
+[as value] src/core/shared/Result.ts
+:[2m69:36[22m[39m
+[90m [2m❯[22m src/core/domain/agg
+regates/order/Order.test.ts:[2m191:
+34[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/d
+omain/aggregates/order/Order.test.ts
+[2m > [22mOrder Aggregate[2m > 
+[22mCancellation[2m > [22mshould 
+reject cancellation without reason
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/domain/agg
+regates/order/Order.test.ts:[2m222:
+34[22m[39m
+    [90m220|[39m       
+[35mconst[39m result [33m=[39m o
+rder[33m.[39m[34mcancel[39m([32
+m''[39m)
+    [90m221|[39m
+    [90m222|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m223|[39m       [34mexpect
+[39m(result[33m.[39merror)[33m.
+[39m[34mtoContain[39m([32m'reason
+'[39m)
+    [90m224|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/d
+omain/aggregates/order/Order.test.ts
+[2m > [22mOrder Aggregate[2m > 
+[22mComplete Workflow E2E[2m > 
+[22mshould complete full order 
+lifecycle
+[31m[1mAssertionError[22m: 
+expected undefined to be true // 
+Object.is equality[39m
+
+[32m- Expected:[39m
+true
+
+[31m+ Received:[39m
+undefined
+
+[36m [2m❯[22m src/core/domain/agg
+regates/order/Order.test.ts:[2m240:
+33[22m[39m
+    [90m238|[39m       
+[35mconst[39m providerId 
+[33m=[39m [35mnew[39m [33mUniqu
+eEntityID[39m([32m'provider-123'[
+39m)
+    [90m239|[39m       order[33m.
+[39m[34massignProvider[39m(provid
+erId)
+    [90m240|[39m       [34mexpect
+[39m(order[33m.[39mhasProvider)[
+33m.[39m[34mtoBe[39m([35mtrue[3
+9m)
+    [90m   |[39m                  
+               [31m^[39m
+    [90m241|[39m
+    [90m242|[39m       [90m// 4. 
+Attach quotation[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/DeleteOrderHandl
+er.test.ts[2m > 
+[22mDeleteOrderHandler[2m > 
+[22mAdmin Delete[2m > [22mshould 
+delete DRAFT order
+[31m[1mAssertionError[22m: 
+expected Order{ …(4) } to be 
+null[39m
+
+[32m- Expected:[39m
+null
+
+[31m+ Received:[39m
+Order {
+  "_domainEvents": [
+    OrderStateChanged {
+      "aggregateId": UniqueEntityID 
+{
+        "_value": "07af32a9-bd25-485
+d-b75c-c7109db8bc7e",
+      },
+      "dateTimeOccurred": 
+2026-04-07T13:14:23.963Z,
+      "eventId": "0f82829a-80e8-4c67
+-93ff-fe91d1408215",
+      "fromState": "DRAFT",
+      "reason": "No reason 
+provided",
+      "toState": "CANCELLED",
+      "version": 0,
+    },
+  ],
+  "_id": UniqueEntityID {
+    "_value": "07af32a9-bd25-485d-b7
+5c-c7109db8bc7e",
+  },
+  "_version": -1,
+  "props": {
+    "cancellationReason": "No 
+reason provided",
+    "cancelledAt": 
+2026-04-07T13:14:23.963Z,
+    "clientId": UniqueEntityID {
+      "_value": "client-123",
+    },
+    "createdAt": 
+2026-04-07T13:14:23.963Z,
+    "deliveryAddress": "See 
+instructions",
+    "eventDate": 
+2026-04-07T13:14:23.963Z,
+    "pricing": QuotationPricing {
+      "props": {
+        "adminCommission": Money {
+          "_amount": 2000,
+          "_currency": "USD",
+        },
+        "finalPrice": Money {
+          "_amount": 14280,
+          "_currency": "USD",
+        },
+        "platformFee": Money {
+          "_amount": 0,
+          "_currency": "USD",
+        },
+        "providerCost": Money {
+          "_amount": 10000,
+          "_currency": "USD",
+        },
+        "taxes": Money {
+          "_amount": 2280,
+          "_currency": "USD",
+        },
+      },
+    },
+    "specialInstructions": 
+"Requirements description",
+    "state": "CANCELLED",
+    "updatedAt": 
+2026-04-07T13:14:23.963Z,
+  },
+}
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/DeleteOrderHandler.test.t
+s:[2m101:32[22m[39m
+    [90m 99|[39m
+    [90m100|[39m       
+[35mconst[39m found [33m=[39m 
+[35mawait[39m orderRepository[33m
+.[39m[34mfindById[39m(order[33m.
+[39morderId)
+    [90m101|[39m       [34mexpect
+[39m(found[33m.[39m[34mgetValue
+[39m())[33m.[39m[34mtoBeNull[39m
+()
+    [90m   |[39m                  
+              [31m^[39m
+    [90m102|[39m     })
+    [90m103|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/DeleteOrderHandl
+er.test.ts[2m > 
+[22mDeleteOrderHandler[2m > 
+[22mAdmin Delete[2m > [22mshould 
+reject deleting PAYMENT_RECEIVED 
+order
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/DeleteOrderHandler.test.t
+s:[2m126:34[22m[39m
+    [90m124|[39m       })
+    [90m125|[39m
+    [90m126|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m127|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'PAYMENT_RECEIVED'[39m)
+    [90m128|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/DeleteOrderHandl
+er.test.ts[2m > 
+[22mDeleteOrderHandler[2m > 
+[22mAdmin Delete[2m > [22mshould 
+reject deleting IN_PRODUCTION order
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/DeleteOrderHandler.test.t
+s:[2m139:34[22m[39m
+    [90m137|[39m       })
+    [90m138|[39m
+    [90m139|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m140|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'IN_PRODUCTION'[39m)
+    [90m141|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/DeleteOrderHandl
+er.test.ts[2m > 
+[22mDeleteOrderHandler[2m > 
+[22mAdmin Delete[2m > [22mshould 
+reject deleting COMPLETED order
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/DeleteOrderHandler.test.t
+s:[2m152:34[22m[39m
+    [90m150|[39m       })
+    [90m151|[39m
+    [90m152|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m153|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'COMPLETED'[39m)
+    [90m154|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/DeleteOrderHandl
+er.test.ts[2m > 
+[22mDeleteOrderHandler[2m > 
+[22mAdmin Delete[2m > [22mshould 
+reject non-existent order
+[31m[1mAssertionError[22m: 
+expected [] to include 'not 
+found'[39m
+[36m [2m❯[22m src/core/applicatio
+n/handlers/DeleteOrderHandler.test.t
+s:[2m164:33[22m[39m
+    [90m162|[39m
+    [90m163|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m164|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'not found'[39m)
+    [90m   |[39m                  
+               [31m^[39m
+    [90m165|[39m     })
+    [90m166|[39m   })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/DeleteOrderHandl
+er.test.ts[2m > 
+[22mDeleteOrderHandler[2m > 
+[22mClient Delete[2m > 
+[22mshould reject client deleting 
+non-DRAFT order
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/DeleteOrderHandler.test.t
+s:[2m190:34[22m[39m
+    [90m188|[39m       })
+    [90m189|[39m
+    [90m190|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m191|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'DRAFT'[39m)
+    [90m192|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/DeleteOrderHandl
+er.test.ts[2m > 
+[22mDeleteOrderHandler[2m > 
+[22mClient Delete[2m > 
+[22mshould reject client deleting 
+others order
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/DeleteOrderHandler.test.t
+s:[2m203:34[22m[39m
+    [90m201|[39m       })
+    [90m202|[39m
+    [90m203|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m204|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'own orders'[39m)
+    [90m205|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/CreateOrderHandl
+er.test.ts[2m > 
+[22mCreateOrderHandler[2m > 
+[22mSuccess Cases[2m > 
+[22mshould create order 
+successfully
+[31m[1mAssertionError[22m: 
+expected 'QUOTATION_PENDING' to be 
+'DRAFT' // Object.is equality[39m
+
+Expected: [32m"DRAFT"[39m
+Received: 
+[31m"QUOTATION_PENDING"[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/CreateOrderHandler.test.t
+s:[2m35:27[22m[39m
+    [90m 33|[39m       [34mexpect
+[39m(result[33m.[39m[34misSucces
+s[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m 34|[39m       
+[35mconst[39m order [33m=[39m 
+result[33m.[39m[34munwrap[39m()
+    [90m 35|[39m       [34mexpect
+[39m(order[33m.[39mstate)[33m.[
+39m[34mtoBe[39m([32m'DRAFT'[39m)
+    [90m   |[39m                  
+         [31m^[39m
+    [90m 36|[39m       [34mexpect
+[39m(order[33m.[39mdeliveryAddres
+s)[33m.[39m[34mtoBe[39m(command
+[33m.[39mdeliveryAddress)
+    [90m 37|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/CreateOrderHandl
+er.test.ts[2m > 
+[22mCreateOrderHandler[2m > 
+[22mSuccess Cases[2m > 
+[22mshould publish OrderCreated 
+event
+[31m[1mTypeError[22m: Cannot 
+read properties of undefined 
+(reading 'length')[39m
+[36m [2m❯[22m src/core/applicatio
+n/handlers/CreateOrderHandler.test.t
+s:[2m57:45[22m[39m
+    [90m 55|[39m       
+[35mawait[39m handler[33m.[39m[
+34mexecute[39m(command)
+    [90m 56|[39m
+    [90m 57|[39m       [34mexpect
+[39m(eventPublisher[33m.[39mpubli
+shedEvents[33m.[39mlength)[33m.[
+39m[34mtoBe[39m([34m1[39m)
+    [90m   |[39m                  
+                           
+[31m^[39m
+    [90m 58|[39m       expect(even
+tPublisher.publishedEvents[0].eventN
+ame).toBe('OrderC…
+    [90m 59|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/CreateOrderHandl
+er.test.ts[2m > 
+[22mCreateOrderHandler[2m > 
+[22mValidation Failures[2m > 
+[22mshould reject empty clientId
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/CreateOrderHandler.test.t
+s:[2m100:34[22m[39m
+    [90m 98|[39m       
+[35mconst[39m result [33m=[39m 
+[35mawait[39m handler[33m.[39m[
+34mexecute[39m(command)
+    [90m 99|[39m
+    [90m100|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m101|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'Client ID'[39m)
+    [90m102|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/CreateOrderHandl
+er.test.ts[2m > 
+[22mCreateOrderHandler[2m > 
+[22mValidation Failures[2m > 
+[22mshould reject empty eventDate
+[31m[1mAssertionError[22m: 
+expected [] to include 'Event 
+date'[39m
+[36m [2m❯[22m src/core/applicatio
+n/handlers/CreateOrderHandler.test.t
+s:[2m113:33[22m[39m
+    [90m111|[39m
+    [90m112|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m113|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'Event date'[39m)
+    [90m   |[39m                  
+               [31m^[39m
+    [90m114|[39m     })
+    [90m115|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/CreateOrderHandl
+er.test.ts[2m > 
+[22mCreateOrderHandler[2m > 
+[22mValidation Failures[2m > 
+[22mshould reject empty 
+deliveryAddress
+[31m[1mAssertionError[22m: 
+expected [] to include 'Delivery 
+address'[39m
+[36m [2m❯[22m src/core/applicatio
+n/handlers/CreateOrderHandler.test.t
+s:[2m125:33[22m[39m
+    [90m123|[39m
+    [90m124|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m125|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'Delivery address'[39m)
+    [90m   |[39m                  
+               [31m^[39m
+    [90m126|[39m     })
+    [90m127|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/CreateOrderHandl
+er.test.ts[2m > 
+[22mCreateOrderHandler[2m > 
+[22mValidation Failures[2m > 
+[22mshould reject invalid date 
+format
+[31m[1mAssertionError[22m: 
+expected [] to include 
+'Invalid'[39m
+[36m [2m❯[22m src/core/applicatio
+n/handlers/CreateOrderHandler.test.t
+s:[2m137:33[22m[39m
+    [90m135|[39m
+    [90m136|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m137|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'Invalid'[39m)
+    [90m   |[39m                  
+               [31m^[39m
+    [90m138|[39m     })
+    [90m139|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/CreateOrderHandl
+er.test.ts[2m > 
+[22mCreateOrderHandler[2m > 
+[22mValidation Failures[2m > 
+[22mshould reject negative 
+estimatedGuests
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/CreateOrderHandler.test.t
+s:[2m148:34[22m[39m
+    [90m146|[39m       
+[35mconst[39m result [33m=[39m 
+[35mawait[39m handler[33m.[39m[
+34mexecute[39m(command)
+    [90m147|[39m
+    [90m148|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m149|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'positive'[39m)
+    [90m150|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/CreateOrderHandl
+er.test.ts[2m > 
+[22mCreateOrderHandler[2m > 
+[22mValidation Failures[2m > 
+[22mshould reject zero 
+estimatedGuests
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/CreateOrderHandler.test.t
+s:[2m160:34[22m[39m
+    [90m158|[39m       
+[35mconst[39m result [33m=[39m 
+[35mawait[39m handler[33m.[39m[
+34mexecute[39m(command)
+    [90m159|[39m
+    [90m160|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m161|[39m     })
+    [90m162|[39m   })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/CreateOrderHandl
+er.test.ts[2m > 
+[22mCreateOrderHandler[2m > 
+[22mDomain Rule Violations[2m > 
+[22mshould reject past event date
+[31m[1mAssertionError[22m: 
+expected [] to include 'past'[39m
+[36m [2m❯[22m src/core/applicatio
+n/handlers/CreateOrderHandler.test.t
+s:[2m176:33[22m[39m
+    [90m174|[39m
+    [90m175|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m176|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'past'[39m)
+    [90m   |[39m                  
+               [31m^[39m
+    [90m177|[39m     })
+    [90m178|[39m   })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/CreateOrderHandl
+er.test.ts[2m > 
+[22mCreateOrderHandler[2m > 
+[22mRepository Failures[2m > 
+[22mshould handle repository save 
+failure
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/CreateOrderHandler.test.t
+s:[2m188:34[22m[39m
+    [90m186|[39m       
+[35mconst[39m result [33m=[39m 
+[35mawait[39m handler[33m.[39m[
+34mexecute[39m(command)
+    [90m187|[39m
+    [90m188|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m189|[39m     })
+    [90m190|[39m   })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/AssignProviderTo
+OrderHandler.test.ts[2m > [22mAssi
+gnProviderToOrderHandler[2m > 
+[22mSuccess Cases[2m > 
+[22mshould assign provider to order
+[31m[1mAssertionError[22m: 
+expected undefined to be true // 
+Object.is equality[39m
+
+[32m- Expected:[39m
+true
+
+[31m+ Received:[39m
+undefined
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/AssignProviderToOrderHand
+ler.test.ts:[2m48:40[22m[39m
+    [90m 46|[39m       
+[35mconst[39m updatedOrder 
+[33m=[39m 
+result[33m.[39m[34munwrap[39m()
+    [90m 47|[39m       [34mexpect
+[39m(updatedOrder[33m.[39mprovide
+rId[33m?.[39m[34mtoString[39m())
+[33m.[39m[34mtoBe[39m([32m'prov
+ider-456'[39m)
+    [90m 48|[39m       [34mexpect
+[39m(updatedOrder[33m.[39mhasProv
+ider)[33m.[39m[34mtoBe[39m([35m
+true[39m)
+    [90m   |[39m                  
+                      [31m^[39m
+    [90m 49|[39m     })
+    [90m 50|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/AssignProviderTo
+OrderHandler.test.ts[2m > [22mAssi
+gnProviderToOrderHandler[2m > 
+[22mValidation Failures[2m > 
+[22mshould reject empty orderId
+[31m[1mAssertionError[22m: 
+expected [] to include 'Order 
+ID'[39m
+[36m [2m❯[22m src/core/applicatio
+n/handlers/AssignProviderToOrderHand
+ler.test.ts:[2m72:33[22m[39m
+    [90m 70|[39m
+    [90m 71|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m 72|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'Order ID'[39m)
+    [90m   |[39m                  
+               [31m^[39m
+    [90m 73|[39m     })
+    [90m 74|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/AssignProviderTo
+OrderHandler.test.ts[2m > [22mAssi
+gnProviderToOrderHandler[2m > 
+[22mValidation Failures[2m > 
+[22mshould reject empty providerId
+[31m[1mAssertionError[22m: 
+expected [] to include 'Provider 
+ID'[39m
+[36m [2m❯[22m src/core/applicatio
+n/handlers/AssignProviderToOrderHand
+ler.test.ts:[2m82:33[22m[39m
+    [90m 80|[39m
+
+[2m Test Files [22m [1m[31m5 failed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m33 failed[39m[22m[2m | [22m[1m[32m15 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 09:14:22
+[2m   Duration [22m 1.79s[2m (transform 554ms, setup 547ms, import 867ms, tests 72ms, environment 5.58s)[22m
+
+    [90m 81|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m 82|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'Provider ID'[39m)
+    [90m   |[39m                  
+               [31m^[39m
+    [90m 83|[39m     })
+    [90m 84|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[31/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/AssignProviderTo
+OrderHandler.test.ts[2m > [22mAssi
+gnProviderToOrderHandler[2m > 
+[22mValidation Failures[2m > 
+[22mshould reject non-existent 
+order
+[31m[1mAssertionError[22m: 
+expected [] to include 'not 
+found'[39m
+[36m [2m❯[22m src/core/applicatio
+n/handlers/AssignProviderToOrderHand
+ler.test.ts:[2m92:33[22m[39m
+    [90m 90|[39m
+    [90m 91|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m 92|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'not found'[39m)
+    [90m   |[39m                  
+               [31m^[39m
+    [90m 93|[39m     })
+    [90m 94|[39m   })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[32/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/AssignProviderTo
+OrderHandler.test.ts[2m > [22mAssi
+gnProviderToOrderHandler[2m > 
+[22mBusiness Rule Violations[2m > 
+[22mshould reject assigning 
+provider in wrong state
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/AssignProviderToOrderHand
+ler.test.ts:[2m111:34[22m[39m
+    [90m109|[39m       })
+    [90m110|[39m
+    [90m111|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m112|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'QUOTATION_PENDING'[39m)
+    [90m113|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[33/3
+4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/a
+pplication/handlers/AssignProviderTo
+OrderHandler.test.ts[2m > [22mAssi
+gnProviderToOrderHandler[2m > 
+[22mBusiness Rule Violations[2m > 
+[22mshould reject changing provider
+[31m[1mAssertionError[22m: 
+expected false to be true // 
+Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/core/applicatio
+n/handlers/AssignProviderToOrderHand
+ler.test.ts:[2m130:34[22m[39m
+    [90m128|[39m       })
+    [90m129|[39m
+    [90m130|[39m       [34mexpect
+[39m(result[33m.[39m[34misFailur
+e[39m())[33m.[39m[34mtoBe[39m(
+[35mtrue[39m)
+    [90m   |[39m                  
+                [31m^[39m
+    [90m131|[39m       [34mexpect
+[39m(result[33m.[39m[34mgetError
+[39m())[33m.[39m[34mtoContain[3
+9m([32m'already has'[39m)
+    [90m132|[39m     })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[34/3
+4]⎯[22m[39m
+

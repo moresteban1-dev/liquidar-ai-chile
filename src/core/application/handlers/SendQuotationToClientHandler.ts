@@ -2,7 +2,7 @@ import { Result } from '@core/shared/Result'
 import { AppError } from '@core/shared/AppError'
 import { InstrumentedHandler } from '../shared/InstrumentedHandler'
 import { IQuotationRepository } from '@app/ports/IQuotationRepository'
-import { IDomainEventBus } from '@app/ports/IDomainEventBus'
+import { IEventPublisher } from '@/core/application/ports/IEventPublisher'
 import { Quotation } from '@core/domain/aggregates/quotation/Quotation'
 import { UniqueEntityID } from '@core/shared/UniqueEntityID'
 import { SendQuotationToClientCommand } from '../commands/SendQuotationToClientCommand'
@@ -13,7 +13,7 @@ export class SendQuotationToClientHandler extends InstrumentedHandler<SendQuotat
 
   constructor(
     private readonly quotationRepository: IQuotationRepository,
-    private readonly eventBus: IDomainEventBus
+    private readonly eventBus: IEventPublisher
   ) { super() }
 
   public async handle(
@@ -38,7 +38,7 @@ export class SendQuotationToClientHandler extends InstrumentedHandler<SendQuotat
     const events = quotation.pullDomainEvents()
     if (events.length > 0) {
       const transportEvents = events.map(e => e.toJSON() as any);
-      await this.eventBus.publishAll(transportEvents)
+      await this.eventBus.publishMany(transportEvents)
     }
 
     return Result.ok(quotation)

@@ -125,8 +125,12 @@ export async function requestQuotationAction(
     
     const quoteRepo = new SupabaseQuoteSessionRepository(supabase);
 
+    // Logger needs to be injected into InferenceToRFQService
+    const { StructuredLogger } = await import('@/infrastructure/telemetry/StructuredLogger');
+    const logger = StructuredLogger.create({ component: 'RequestQuotationAction' });
+
     // 2. Ejecutar el Servicio de Conversión
-    const rfqService = new InferenceToRFQService(engine, matcher, configRepo, quoteRepo);
+    const rfqService = new InferenceToRFQService(engine, matcher, configRepo, quoteRepo, logger);
     
     const result = await rfqService.convertToRFQ(sessionId, clientData);
 

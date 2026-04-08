@@ -13,16 +13,20 @@ export class SubmitQuotationHandler extends InstrumentedHandler<{ quotationId: s
     super()
   }
 
-  public async handle(command: { quotationId: string }): Promise<Result<Quotation, AppError>> {
+  public async handle(command: { quotationId: string, providerId: string }): Promise<Result<Quotation, AppError>> {
     const quotationResult = await this.quotationRepository.findById(new UniqueEntityID(command.quotationId))
     if (quotationResult.isFailure()) return quotationResult
     
     const quotation = quotationResult.unwrap()
     if (!quotation) return fail(AppError.notFound('Quotation', command.quotationId))
 
+    if (quotation.providerId.toString() !== command.providerId) {
+        return fail(AppError.forbidden('Provider is not authorized to submit this quotation'))
+    }
+
     const submitResult = quotation.submit()
     if (submitResult.isFailure()) {
-        return fail(AppError.business(submitResult.getError()))
+        return fail(AppError.business(submitResult.getError() as string))
     }
 
     const saveResult = await this.quotationRepository.save(quotation)

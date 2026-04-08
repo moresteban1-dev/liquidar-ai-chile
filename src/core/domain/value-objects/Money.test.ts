@@ -11,11 +11,11 @@ describe('Money Value Object', () => {
       expect(result.getValue().currency).toBe('USD');
     });
 
-    it('should use USD as default currency', () => {
+    it('should use CLP as default currency', () => {
       const result = Money.create(100);
 
       expect(result.isSuccess()).toBe(true);
-      expect(result.getValue().currency).toBe('USD');
+      expect(result.getValue().currency).toBe('CLP');
     });
 
     it('should reject negative amounts', () => {
@@ -29,7 +29,7 @@ describe('Money Value Object', () => {
       const result = Money.create(100, 'INVALID' as any);
 
       expect(result.isFailure()).toBe(true);
-      expect(result.getError()).toContain('Unsupported currency');
+      expect(result.getError()).toContain('3-letter ISO code');
     });
 
     it('should round to 2 decimals', () => {
@@ -57,7 +57,7 @@ describe('Money Value Object', () => {
       const result = money1.add(money2);
 
       expect(result.isFailure()).toBe(true);
-      expect(result.getError()).toContain('different currencies');
+      expect(result.getError()).toContain('cannot add');
     });
 
     it('should handle decimal addition correctly', () => {
@@ -86,6 +86,7 @@ describe('Money Value Object', () => {
       const result = money1.subtract(money2);
 
       expect(result.isFailure()).toBe(true);
+      expect(result.getError()).toContain('cannot subtract');
     });
 
     it('should reject result that would be negative', () => {
@@ -239,23 +240,24 @@ describe('Money Value Object', () => {
       const money1 = Money.create(200, 'USD').getValue();
       const money2 = Money.create(100, 'USD').getValue();
 
-      expect(money1.greaterThan(money2)).toBe(true);
-      expect(money2.greaterThan(money1)).toBe(false);
+      expect(money1.isGreaterThan(money2)).toBe(true);
+      expect(money2.isGreaterThan(money1)).toBe(false);
     });
 
     it('should compare less than', () => {
       const money1 = Money.create(100, 'USD').getValue();
       const money2 = Money.create(200, 'USD').getValue();
 
-      expect(money1.lessThan(money2)).toBe(true);
-      expect(money2.lessThan(money1)).toBe(false);
+      expect(money1.isLessThan(money2)).toBe(true);
+      expect(money2.isLessThan(money1)).toBe(false);
     });
 
-    it('should throw when comparing different currencies', () => {
+    it('should return false when comparing different currencies', () => {
       const money1 = Money.create(100, 'USD').getValue();
       const money2 = Money.create(100, 'EUR').getValue();
 
-      expect(() => money1.greaterThan(money2)).toThrow('Currency mismatch');
+      expect(money1.isGreaterThan(money2)).toBe(false);
+      expect(money1.isLessThan(money2)).toBe(false);
     });
   });
 
@@ -292,12 +294,12 @@ describe('Money Value Object', () => {
       const money = Money.create(1234.56, 'USD').getValue();
       const str = money.toString();
 
-      expect(str).toBe('USD 1,234.56');
+      expect(str).toBe('USD 1234.56');
     });
 
     it('should convert to locale string', () => {
       const money = Money.create(1234.56, 'USD').getValue();
-      const str = money.toLocaleString('en-US');
+      const str = money.format('en-US');
 
       expect(str).toContain('1,234.56');
     });

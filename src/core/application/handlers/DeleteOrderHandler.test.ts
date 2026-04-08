@@ -124,7 +124,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('PAYMENT_RECEIVED')
+      expect((result.getError() as any).message || result.getError()).toContain('PAYMENT_RECEIVED')
     })
 
     it('should reject deleting IN_PRODUCTION order', async () => {
@@ -137,7 +137,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('IN_PRODUCTION')
+      expect((result.getError() as any).message || result.getError()).toContain('IN_PRODUCTION')
     })
 
     it('should reject deleting COMPLETED order', async () => {
@@ -150,7 +150,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('COMPLETED')
+      expect((result.getError() as any).message || result.getError()).toContain('COMPLETED')
     })
 
     it('should reject non-existent order', async () => {
@@ -161,7 +161,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('not found')
+      expect((result.getError() as any).message || result.getError()).toContain('not found')
     })
   })
 
@@ -188,7 +188,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('DRAFT')
+      expect((result.getError() as any).message || result.getError()).toContain('DRAFT')
     })
 
     it('should reject client deleting others order', async () => {
@@ -201,7 +201,7 @@ describe('DeleteOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('own orders')
+      expect((result.getError() as any).message || result.getError()).toContain('own orders')
     })
   })
 })

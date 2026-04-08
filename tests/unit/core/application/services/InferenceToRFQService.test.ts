@@ -5,6 +5,7 @@ import { KnowledgeGraphRepository } from '@/core/domain/event-intelligence/Knowl
 import { IQuoteSessionRepository } from '@/core/application/ports/repositories/IQuoteSessionRepository';
 import { Result } from '@/core/shared/Result';
 import { InferredNeed, ConfigurationSession } from '@/core/domain/event-intelligence/types';
+import { Logger } from '@/core/application/ports/Logger';
 
 describe('InferenceToRFQService', () => {
   let service: InferenceToRFQService;
@@ -12,6 +13,7 @@ describe('InferenceToRFQService', () => {
   let mockMatcher: any;
   let mockConfigRepo: any;
   let mockQuoteRepo: any;
+  let mockLogger: any;
 
   beforeEach(() => {
     mockEngine = {
@@ -27,12 +29,19 @@ describe('InferenceToRFQService', () => {
       save: vi.fn(),
       addItems: vi.fn()
     };
+    mockLogger = {
+      info: vi.fn(),
+      error: vi.fn(),
+      warn: vi.fn(),
+      debug: vi.fn()
+    };
 
     service = new InferenceToRFQService(
       mockEngine as unknown as InferenceEngine,
       mockMatcher as unknown as ProductMatcher,
       mockConfigRepo as unknown as KnowledgeGraphRepository,
-      mockQuoteRepo as unknown as IQuoteSessionRepository
+      mockQuoteRepo as unknown as IQuoteSessionRepository,
+      mockLogger as unknown as Logger
     );
   });
 
@@ -74,8 +83,8 @@ describe('InferenceToRFQService', () => {
     const mockCatalogItem = { id: 'item-1', name: 'Bose L1' };
 
     // 2. Setup Mocks
-    mockConfigRepo.getConfigurationSession.mockResolvedValue(mockConfig);
-    mockEngine.runInference.mockResolvedValue(mockNeeds);
+    mockConfigRepo.getConfigurationSession.mockResolvedValue(Result.ok(mockConfig));
+    mockEngine.runInference.mockResolvedValue(Result.ok(mockNeeds));
     mockQuoteRepo.save.mockResolvedValue(Result.ok('quote-id-789'));
     mockMatcher.findBestMatches.mockResolvedValue([mockCatalogItem]);
     mockQuoteRepo.addItems.mockResolvedValue(Result.ok(undefined));
@@ -100,8 +109,8 @@ describe('InferenceToRFQService', () => {
      const mockConfig = { id: sessionId, baseProfile: { attendees: 10, durationHours: 1 } };
      const mockNeeds = [{ nodeCode: 'NOT_IN_CATALOG', nodeName: 'Fantasma', quantityInferred: 2 }];
 
-     mockConfigRepo.getConfigurationSession.mockResolvedValue(mockConfig);
-     mockEngine.runInference.mockResolvedValue(mockNeeds);
+     mockConfigRepo.getConfigurationSession.mockResolvedValue(Result.ok(mockConfig));
+     mockEngine.runInference.mockResolvedValue(Result.ok(mockNeeds));
      mockQuoteRepo.save.mockResolvedValue(Result.ok('quote-id-999'));
      mockMatcher.findBestMatches.mockResolvedValue([]); // No matches
      mockQuoteRepo.addItems.mockResolvedValue(Result.ok(undefined));
@@ -116,3 +125,4 @@ describe('InferenceToRFQService', () => {
      ]));
   });
 });
+

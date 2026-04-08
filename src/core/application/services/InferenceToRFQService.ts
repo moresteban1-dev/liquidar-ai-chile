@@ -5,7 +5,7 @@ import { IQuoteSessionRepository as QuoteSessionRepository } from '@app/ports/IQ
 import { QuoteSession, QuoteItemRequested, MarketSegment } from '@/core/domain/quote/QuoteTypes';
 import { Result, ok, fail } from '@/core/shared/Result';
 import { AppError } from '@/core/shared/AppError';
-import { logger } from '@/infrastructure/telemetry/StructuredLogger';
+import { Logger } from '@/core/application/ports/Logger';
 import { EventProfile, ConfigurationSession, InferredNeed } from '@/core/domain/event-intelligence/types';
 import { ResilienceProxy } from '@/core/shared/ResilienceProxy';
 
@@ -20,7 +20,7 @@ export interface ClientConversionData {
 /**
  * InferenceToRFQService
  * 
- * Orquestador encargado de transformar una sesión de configuración (IA)
+ * Orquestador encargado de transformas una sesión de configuración (IA)
  * en una solicitud de cotización formal (RFQ) vinculada al catálogo.
  */
 export class InferenceToRFQService {
@@ -30,7 +30,8 @@ export class InferenceToRFQService {
     private readonly engine: InferenceEngine,
     private readonly matcher: ProductMatcher,
     private readonly configRepo: KnowledgeRepository,
-    private readonly quoteRepo: QuoteSessionRepository
+    private readonly quoteRepo: QuoteSessionRepository,
+    private readonly logger: Logger
   ) {}
 
   /**
@@ -41,7 +42,7 @@ export class InferenceToRFQService {
     clientData: ClientConversionData
   ): Promise<Result<string, AppError>> {
     try {
-      logger.info('Iniciando conversión a RFQ', { configSessionId, email: clientData.email });
+      this.logger.info('Iniciando conversión a RFQ', { configSessionId, email: clientData.email });
 
       const configSession = await this.fetchConfigurationSession(configSessionId);
       if (!configSession) return fail(AppError.notFound('Sesión de configuración no encontrada'));
@@ -59,11 +60,11 @@ export class InferenceToRFQService {
       const itemsResult = await this.quoteRepo.addItems(newQuoteId, requestedItems);
       if (itemsResult.isFailure()) return fail(AppError.from(itemsResult.getError()));
 
-      logger.info('Conversión a RFQ completada con éxito', { quoteSessionId: newQuoteId });
+      this.logger.info('Conversión a RFQ completada con éxito', { quoteSessionId: newQuoteId });
       return ok(newQuoteId);
 
     } catch (error) {
-      logger.error('Excepción en InferenceToRFQService:', error);
+      this.logger.error('Excepción en InferenceToRFQService:', error);
       return fail(AppError.from(error));
     }
   }

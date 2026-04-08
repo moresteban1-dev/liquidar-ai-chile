@@ -198,15 +198,15 @@ export function ShadcnDashboardLayout({ children, role, userName = 'Usuario', us
 
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" className="pl-2 pr-3 gap-2.5 focus:ring-2 focus:ring-indigo-500 h-10 rounded-full hover:bg-accent/50 transition-all border border-transparent hover:border-border/40" aria-label="Menú de usuario">
+                            <Button variant="ghost" className="pl-2 pr-3 py-1.5 h-auto gap-2.5 focus:ring-2 focus:ring-indigo-500 rounded-lg hover:bg-accent/50 transition-all border border-transparent hover:border-border/40" aria-label="Menú de usuario">
                                 <Avatar className="h-8 w-8 ring-2 ring-indigo-500/10 shadow-sm transition-transform hover:scale-105">
                                     <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-xs font-bold">
                                         {getInitials(userName)}
                                     </AvatarFallback>
                                 </Avatar>
-                                <div className="hidden sm:flex flex-col items-start text-left min-w-[100px] max-w-[130px]">
-                                    <span className="text-sm font-semibold text-foreground tracking-tight line-clamp-1 w-full text-left truncate">{userName}</span>
-                                    <span className="text-[10px] font-medium text-muted-foreground/80 uppercase tracking-wider">{ROLE_LABELS[role]}</span>
+                                <div className="hidden sm:flex flex-col items-start justify-center text-left min-w-[100px] max-w-[130px]">
+                                    <span className="text-[13px] font-semibold text-foreground tracking-tight leading-tight w-full truncate">{userName}</span>
+                                    <span className="text-[10px] font-medium text-muted-foreground/80 uppercase tracking-wider leading-none mt-0.5">{ROLE_LABELS[role]}</span>
                                 </div>
                             </Button>
                         </DropdownMenuTrigger>
@@ -251,7 +251,7 @@ export function ShadcnDashboardLayout({ children, role, userName = 'Usuario', us
                 </header>
 
                 {/* Page content */}
-                <main className="p-4 lg:p-8">
+                <main className="p-4 lg:p-8 max-w-[1600px] mx-auto w-full">
                     {children}
                 </main>
             </div>

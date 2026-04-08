@@ -17,25 +17,23 @@ import { formatCLP } from '@/lib/formatters';
 import { TrendingUp, Users, ShoppingBag, Clock } from 'lucide-react';
 
 import { DashboardOptimizationPanel, DashboardNotificationLogPanel } from './DashboardClientPanels';
+import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 
 export default async function AdminDashboardPage() {
   const session = await getServerSession();
   if (!session || session.role !== UserRole.ADMIN) redirect('/login');
 
   return (
-    <div className="p-8 space-y-8 max-w-[1600px] mx-auto">
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-        <div>
-          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">Central de Control</p>
-          <h1 className="text-4xl font-black text-foreground tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">Admin Console</h1>
-          <p className="text-sm text-muted-foreground mt-1 font-medium">Visión general y optimización de la plataforma inteligente</p>
-        </div>
-        <div className="flex gap-3 shrink-0">
-            <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[10px] font-black rounded-full border border-emerald-500/20 shadow-sm shadow-emerald-500/5 transition-all hover:bg-emerald-500/20">
+    <div className="space-y-6">
+      <DashboardHeader
+        name="Administrador"
+        subtitle="Visión general y optimización de la plataforma inteligente"
+        actions={
+            <span className="px-4 py-1.5 bg-emerald-500/10 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/20 shadow-sm shadow-emerald-500/5 flex items-center justify-center h-9">
                 SYSTEM ONLINE
             </span>
-        </div>
-      </header>
+        }
+      />
 
       {/* Dynamic Optimization Panel (Island) */}
       <DashboardOptimizationPanel />

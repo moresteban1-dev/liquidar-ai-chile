@@ -55,7 +55,7 @@ describe('CreateOrderHandler', () => {
       await handler.execute(command)
 
       expect(eventPublisher.publishedEvents.length).toBe(1)
-      expect(eventPublisher.publishedEvents[0].eventName).toBe('OrderCreated')
+      expect(eventPublisher.publishedEvents[0].eventType).toBe('OrderCreated')
     })
 
     it('should create order without optional fields', async () => {
@@ -98,7 +98,7 @@ describe('CreateOrderHandler', () => {
       const result = await handler.execute(command)
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('Client ID')
+      expect((result.getError() as any).message || result.getError()).toContain('Client ID')
     })
 
     it('should reject empty eventDate', async () => {
@@ -110,7 +110,7 @@ describe('CreateOrderHandler', () => {
       const result = await handler.execute(command)
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('Event date')
+      expect((result.getError() as any).message || result.getError()).toContain('date format')
     })
 
     it('should reject empty deliveryAddress', async () => {
@@ -122,7 +122,7 @@ describe('CreateOrderHandler', () => {
       const result = await handler.execute(command)
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('Delivery address')
+      expect((result.getError() as any).message || result.getError()).toContain('Delivery address is required')
     })
 
     it('should reject invalid date format', async () => {
@@ -134,7 +134,7 @@ describe('CreateOrderHandler', () => {
       const result = await handler.execute(command)
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('Invalid')
+      expect((result.getError() as any).message || result.getError()).toContain('Invalid')
     })
 
     it('should reject negative estimatedGuests', async () => {
@@ -146,7 +146,7 @@ describe('CreateOrderHandler', () => {
       const result = await handler.execute(command)
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('positive')
+      expect((result.getError() as any).message || result.getError()).toContain('positive')
     })
 
     it('should reject zero estimatedGuests', async () => {
@@ -173,7 +173,7 @@ describe('CreateOrderHandler', () => {
       const result = await handler.execute(command)
 
       expect(result.isFailure()).toBe(true)
-      expect(result.getError()).toContain('past')
+      expect((result.getError() as any).message || result.getError()).toContain('future')
     })
   })
 

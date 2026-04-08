@@ -7,8 +7,12 @@ export class InMemoryOrderRepository implements IOrderRepository {
   private orders: Map<string, Order> = new Map();
   public saveCallCount = 0;
   public findByIdCallCount = 0;
+  public shouldFail = false;
 
   async save(order: Order): Promise<Result<void, string>> {
+    if (this.shouldFail) {
+      return Result.fail('Simulated save failure');
+    }
     this.orders.set(order.id.toString(), order);
     this.saveCallCount++;
     return Result.ok(undefined);
@@ -151,16 +155,25 @@ export class InMemoryOrderRepository implements IOrderRepository {
   async getDashboardStats(): Promise<Result<DashboardStats, string>> {
     const all = Array.from(this.orders.values());
     const byStatus: Record<string, number> = {};
+    let totalRevenue = 0;
+    let totalProfit = 0;
+
     for (const o of all) {
       byStatus[o.state] = (byStatus[o.state] || 0) + 1;
+      if (['PAYMENT_RECEIVED', 'IN_PRODUCTION', 'DELIVERED', 'COMPLETED'].includes(o.state)) {
+        if (o.pricing) {
+          totalRevenue += o.pricing.finalPrice.amount;
+          totalProfit += o.pricing.adminCommission.amount + o.pricing.platformFee.amount;
+        }
+      }
     }
 
     return Result.ok({
       totalOrders: all.length,
       byStatus,
-      totalRevenue: 0,
-      totalProfit: 0,
-      avgOrderValue: 0,
+      totalRevenue,
+      totalProfit,
+      avgOrderValue: totalRevenue / Math.max(1, all.length),
       recentOrders: all.length,
       pendingQuotations: byStatus['QUOTATION_PENDING'] || 0,
       activeProviders: 0,

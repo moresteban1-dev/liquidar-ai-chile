@@ -1,0 +1,95 @@
+﻿
+[1m[46m RUN [49m[22m [36mv4.1.0 [39m[90mC:/Users/Esteban/Desktop/Skill IA[39m
+      [90mRunning tests with seed "1775660931909"[39m
+
+ [31mÔØ»[39m tests/unit/core/application/services/InferenceToRFQService.test.ts [2m([22m[2m2 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 7[2mms[22m[39m
+[31m     [31m├ù[31m debe convertir una sesi├│n de configuraci├│n en un RFQ exitosamente[39m[32m 1[2mms[22m[39m
+[31m     [31m├ù[31m debe crear un ├¡tem custom si no se encuentra match en el cat├ílogo[39m[32m 5[2mms[22m[39m
+node.exe : 
+En línea: 1 Carácter: 1
++ & "C:\Program Files\nodejs/node.exe" 
+"C:\Program Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpeci 
+   fied: (:String) [], RemoteExceptio  
+  n
+    + FullyQualifiedErrorId : NativeCo 
+   mmandError
+ 
+[31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m[1m[41
+m Failed Tests 2 [49m[22m[31mÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[39m
+
+[41m[1m FAIL [22m[49m tests/unit/co
+re/application/services/InferenceToRFQS
+ervice.test.ts[2m > 
+[22mInferenceToRFQService[2m > 
+[22mdebe convertir una sesi├│n de 
+configuraci├│n en un RFQ exitosamente
+[31m[1mReferenceError[22m: logger 
+is not defined[39m
+[36m [2mÔØ»[22m 
+InferenceToRFQService.convertToRFQ src/
+core/application/services/InferenceToRF
+QService.ts:[2m67:7[22m[39m
+    [90m 65|[39m
+    [90m 66|[39m     } 
+[35mcatch[39m (error) {
+    [90m 67|[39m       logger[33m.[
+39m[34merror[39m([32m'Excepci├│n en 
+InferenceToRFQService:'[39m[33m,[39m
+ error)[33m;[39m
+    [90m   |[39m       [31m^[39m
+    [90m 68|[39m       
+[35mreturn[39m [34mfail[39m([33mAp
+pError[39m[33m.[39m[35mfrom[39m(er
+ror))[33m;[39m
+    [90m 69|[39m     }
+[90m [2mÔØ»[22m tests/unit/core/appl
+ication/services/InferenceToRFQService.
+test.ts:[2m93:34[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»[1/2]ÔÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/co
+re/application/services/InferenceToRFQS
+ervice.test.ts[2m > 
+[22mInferenceToRFQService[2m > 
+[22mdebe crear un ├¡tem custom si no 
+se encuentra match en el cat├ílogo
+[31m[1mReferenceError[22m: logger 
+is not defined[39m
+[36m [2mÔØ»[22m 
+InferenceToRFQService.convertToRFQ src/
+core/application/services/InferenceToRF
+QService.ts:[2m67:7[22m[39m
+    [90m 65|[39m
+    [90m 66|[39m     } 
+[35mcatch[39m (error) {
+    [90m 67|[39m       logger[33m.[
+39m[34merror[39m([32m'Excepci├│n en 
+InferenceToRFQService:'[39m[33m,[39m
+ error)[33m;[39m
+    [90m   |[39m       [31m^[39m
+    [90m 68|[39m       
+[35mreturn[39m [34mfail[39m([33mAp
+pError[39m[33m.[39m[35mfrom[39m(er
+ror))[33m;[39m
+    [90m 69|[39m     }
+[90m [2mÔØ»[22m tests/unit/core/appl
+ication/services/InferenceToRFQService.
+test.ts:[2m119:35[22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»[2/2]ÔÄ»[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[90m (2)[39m
+[2m   Start at [22m 11:08:52
+[2m   Duration [22m 1.12s[2m (transform 70ms, setup 95ms, import 60ms, tests 7ms, environment 789ms)[22m
+
