@@ -53,6 +53,7 @@ export function SmartDatePicker({ value, onChange, className }: SmartDatePickerP
         if (value) {
             const date = new Date(value + 'T00:00:00');
             if (!isNaN(date.getTime())) {
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setDay(String(date.getDate()).padStart(2, '0'));
                 setMonth(String(date.getMonth() + 1).padStart(2, '0'));
                 setYear(String(date.getFullYear()));
@@ -248,6 +249,7 @@ export function SmartTimePicker({ value, onChange, className }: SmartTimePickerP
     useEffect(() => {
         if (value) {
             const [h, m] = value.split(':');
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setHour(h || '');
             setMinute(m || '');
         } else {

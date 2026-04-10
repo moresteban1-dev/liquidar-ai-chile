@@ -395,7 +395,7 @@ export function AdminQuotationReview({ quotation, onSuccess, onReturn }: AdminQu
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-xs font-bold text-purple-900 uppercase tracking-wider">Análisis de Pricing Oracle</p>
-                                    <p className="text-sm text-purple-800 leading-relaxed italic">"{aiInsight.reasoning}"</p>
+                                    <p className="text-sm text-purple-800 leading-relaxed italic">&quot;{aiInsight.reasoning}&quot;</p>
                                     <div className="flex gap-4 pt-1">
                                         <div className="flex items-center gap-1">
                                             {aiInsight.isSecure ? <ShieldCheck className="h-3.5 w-3.5 text-green-600" /> : <AlertTriangle className="h-3.5 w-3.5 text-amber-600" />}

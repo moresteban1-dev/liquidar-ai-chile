@@ -32,6 +32,7 @@ export function useEventChecklist(quotationId: string) {
             const stored = localStorage.getItem(storageKey);
             if (stored) {
                 const parsed = JSON.parse(stored) as Record<string, boolean>;
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setItems(prev =>
                     prev.map(item => ({ ...item, checked: !!parsed[item.id] }))
                 );

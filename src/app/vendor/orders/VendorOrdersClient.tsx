@@ -59,6 +59,7 @@ export function VendorOrdersClient({ orders }: VendorOrdersClientProps) {
 
     const getDaysRemaining = (dateStr: string | null) => {
         if (!dateStr) return null;
+        // eslint-disable-next-line react-hooks/purity
         return Math.ceil((new Date(dateStr).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
     };
 

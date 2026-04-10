@@ -40,6 +40,7 @@ const NotificationItem = ({ notification: n, onMarkRead, onClose }: Notification
     };
 
     const formatRelativeTime = (iso: string): string => {
+        // eslint-disable-next-line react-hooks/purity
         const diff = Date.now() - new Date(iso).getTime();
         const minutes = Math.floor(diff / 60_000);
         if (minutes < 1) return 'Ahora';

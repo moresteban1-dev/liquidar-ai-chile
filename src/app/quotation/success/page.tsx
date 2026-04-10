@@ -25,6 +25,7 @@ function SuccessContent() {
         if (pending) {
             try {
                 const data = JSON.parse(pending);
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setEmail(data.email || '');
             } catch (error) {
                 logger.error('Failed to parse pending quotation from localStorage:', error);

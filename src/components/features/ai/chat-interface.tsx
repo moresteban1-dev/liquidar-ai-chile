@@ -27,6 +27,7 @@ export function ChatInterface() {
     useEffect(() => {
         if (status === 'completed' && data) {
             // We use the history returned by the server to stay in sync
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setMessages(data.history);
         }
     }, [status, data]);

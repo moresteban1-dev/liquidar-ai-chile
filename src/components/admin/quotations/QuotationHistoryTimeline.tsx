@@ -54,11 +54,8 @@ export function QuotationHistoryTimeline({ history }: QuotationHistoryTimelinePr
                     <User className="w-3 h-3" /> {actor}
                 </span>
                 {item.comment && (
-                    // eslint-disable-next-line react/jsx-no-comment-textnodes
                     <span className="text-sm mt-1 text-slate-600 dark:text-slate-300 italic">
-                        // eslint-disable-next-line react/no-unescaped-entities
-                        // eslint-disable-next-line react/no-unescaped-entities
-                        "{item.comment}"
+                        &quot;{item.comment}&quot;
                     </span>
                 )}
             </div>
@@ -70,10 +67,7 @@ export function QuotationHistoryTimeline({ history }: QuotationHistoryTimelinePr
             <h3 className="font-semibold text-foreground flex items-center gap-2">
                 <Clock className="w-4 h-4" /> Línea de Tiempo
             </h3>
-            // eslint-disable-next-line react/jsx-no-comment-textnodes
             <div className="relative border-l border-border ml-2 md:ml-4 space-y-6 pb-4">
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 {sortedHistory.map((item, _index) => (
                     <div key={item.id} className="relative pl-6">
                         {/* Timeline dot */}

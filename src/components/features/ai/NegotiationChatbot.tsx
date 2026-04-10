@@ -43,10 +43,7 @@ export function NegotiationChatbot({ quotationId, role }: NegotiationChatbotProp
             </CardHeader>
             <CardContent className="flex-1 overflow-hidden p-0">
                 <ScrollArea className="h-full p-4">
-                    // eslint-disable-next-line react/jsx-no-comment-textnodes
                     <div className="space-y-4">
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         {messages.map((m: any) => (
                             <div
                                 key={m.id}

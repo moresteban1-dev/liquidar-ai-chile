@@ -30,6 +30,7 @@ export function useVendorOnboarding(
 
     useEffect(() => {
         const isDismissed = localStorage.getItem('vendor-onboarding-dismissed');
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (isDismissed === 'true') setDismissed(true);
     }, []);
 

@@ -131,7 +131,7 @@ export function InferenceTestDashboard() {
                   <Info className="h-10 w-10 opacity-20" />
                   <div>
                     <p className="font-medium">Sin datos para mostrar</p>
-                    <p className="text-xs">Configura los parámetros y presiona "Ejecutar" para ver la topología funcional inferida.</p>
+                    <p className="text-xs">Configura los parámetros y presiona &quot;Ejecutar&quot; para ver la topología funcional inferida.</p>
                   </div>
                   {state.message && !state.success && <p className="text-destructive text-xs p-2 bg-destructive/10 rounded">{state.message}</p>}
                </div>

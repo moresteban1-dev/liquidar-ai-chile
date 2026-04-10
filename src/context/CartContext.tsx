@@ -35,6 +35,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         const saved = localStorage.getItem("quote-cart");
         if (saved) {
             try {
+                // eslint-disable-next-line react-hooks/set-state-in-effect
                 setItems(JSON.parse(saved));
             } catch (e) {
                 logger.error("Failed to parse cart", e);

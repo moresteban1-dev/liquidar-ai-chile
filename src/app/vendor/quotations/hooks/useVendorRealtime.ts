@@ -15,7 +15,7 @@ export interface UseVendorRealtimeResult {
  */
 export function useVendorRealtime(): UseVendorRealtimeResult {
   const router = useRouter();
-  const [lastUpdate, setLastUpdate] = useState(Date.now());
+  const [lastUpdate, setLastUpdate] = useState(() => Date.now());
 
   useEffect(() => {
     const supabase = createClient();

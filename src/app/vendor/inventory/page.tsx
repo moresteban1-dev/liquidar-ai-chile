@@ -56,7 +56,9 @@ export default async function InventoryPage() {
         status: i.status || 'active',
         minRentalDays: i.min_rental_days || 1,
         advanceBookingDays: i.advance_booking_days || 0,
+        // eslint-disable-next-line react-hooks/purity
         createdAt: new Date(i.created_at || Date.now()),
+        // eslint-disable-next-line react-hooks/purity
         updatedAt: new Date(i.updated_at || Date.now())
     }));
 

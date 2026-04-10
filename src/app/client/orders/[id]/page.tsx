@@ -102,7 +102,7 @@ async function OrderContent({ orderId, userRole }: { orderId: string; userRole: 
                     </div>
 
                     <p className="text-sm text-foreground/70 mb-4 italic">
-                      "{q.notes || 'Sin notas adicionales.'}"
+                      &quot;{q.notes || 'Sin notas adicionales.'}&quot;
                     </p>
 
                     {q.status === 'SENT' && (

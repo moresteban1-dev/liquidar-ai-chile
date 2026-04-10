@@ -1,0 +1,285 @@
+C:\Users\Esteban\Desktop\Skill IA\src\app\admin\NotificationLogPanel.tsx:20:5 - react-hooks/set-state-in-effect
+Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\admin\NotificationLogPanel.tsx:20:5
+  18 |       { id: 3, type: 'warning', msg: 'L├¡mite de RPS alcanzado en API /orders', time: 'hace 12m' },
+  19 |     ];
+> 20 |     setLogs(initialLogs);
+     |     ^^^^^^^ Avoid calling setState() directly within an effect
+  21 |   }, []);
+  22 |
+  23 |   return (
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\client\components\v2\notification-center.tsx:43:22 - react-hooks/purity
+Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\client\components\v2\notification-center.tsx:43:22
+  41 |
+  42 |     const formatRelativeTime = (iso: string): string => {
+> 43 |         const diff = Date.now() - new Date(iso).getTime();
+     |                      ^^^^^^^^^^ Cannot call impure function
+  44 |         const minutes = Math.floor(diff / 60_000);
+  45 |         if (minutes < 1) return 'Ahora';
+  46 |         if (minutes < 60) return `${minutes}m`;
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\client\components\v2\use-event-checklist.ts:35:17 - react-hooks/set-state-in-effect
+Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\client\components\v2\use-event-checklist.ts:35:17
+  33 |             if (stored) {
+  34 |                 const parsed = JSON.parse(stored) as Record<string, boolean>;
+> 35 |                 setItems(prev =>
+     |                 ^^^^^^^^ Avoid calling setState() directly within an effect
+  36 |                     prev.map(item => ({ ...item, checked: !!parsed[item.id] }))
+  37 |                 );
+  38 |             }
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\client\components\v2\use-favorites.ts:24:17 - react-hooks/set-state-in-effect
+Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\client\components\v2\use-favorites.ts:24:17
+  22 |             const stored = localStorage.getItem(STORAGE_KEY);
+  23 |             if (stored) {
+> 24 |                 setFavorites(JSON.parse(stored));
+     |                 ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  25 |             }
+  26 |         } catch { /* localStorage not available */ }
+  27 |         setLoaded(true);
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\client\orders\[id]\page.tsx:105:23 - react/no-unescaped-entities
+`"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\client\orders\[id]\page.tsx:105:61 - react/no-unescaped-entities
+`"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\quotation\success\page.tsx:28:17 - react-hooks/set-state-in-effect
+Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\quotation\success\page.tsx:28:17
+  26 |             try {
+  27 |                 const data = JSON.parse(pending);
+> 28 |                 setEmail(data.email || '');
+     |                 ^^^^^^^^ Avoid calling setState() directly within an effect
+  29 |             } catch (error) {
+  30 |                 logger.error('Failed to parse pending quotation from localStorage:', error);
+  31 |             }
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\vendor\components\hooks\useVendorOnboarding.ts:33:37 - react-hooks/set-state-in-effect
+Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\vendor\components\hooks\useVendorOnboarding.ts:33:37
+  31 |     useEffect(() => {
+  32 |         const isDismissed = localStorage.getItem('vendor-onboarding-dismissed');
+> 33 |         if (isDismissed === 'true') setDismissed(true);
+     |                                     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  34 |     }, []);
+  35 |
+  36 |     const handleDismiss = useCallback(() => {
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\vendor\inventory\page.tsx:59:45 - react-hooks/purity
+Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\vendor\inventory\page.tsx:59:45
+  57 |         minRentalDays: i.min_rental_days || 1,
+  58 |         advanceBookingDays: i.advance_booking_days || 0,
+> 59 |         createdAt: new Date(i.created_at || Date.now()),
+     |                                             ^^^^^^^^^^ Cannot call impure function
+  60 |         updatedAt: new Date(i.updated_at || Date.now())
+  61 |     }));
+  62 |
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\vendor\inventory\page.tsx:60:45 - react-hooks/purity
+Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\vendor\inventory\page.tsx:60:45
+  58 |         advanceBookingDays: i.advance_booking_days || 0,
+  59 |         createdAt: new Date(i.created_at || Date.now()),
+> 60 |         updatedAt: new Date(i.updated_at || Date.now())
+     |                                             ^^^^^^^^^^ Cannot call impure function
+  61 |     }));
+  62 |
+  63 |     return (
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\vendor\orders\VendorOrdersClient.tsx:62:57 - react-hooks/purity
+Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\vendor\orders\VendorOrdersClient.tsx:62:57
+  60 |     const getDaysRemaining = (dateStr: string | null) => {
+  61 |         if (!dateStr) return null;
+> 62 |         return Math.ceil((new Date(dateStr).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+     |                                                         ^^^^^^^^^^ Cannot call impure function
+  63 |     };
+  64 |
+  65 |     return (
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\vendor\quotations\hooks\useVendorRealtime.ts:18:48 - react-hooks/purity
+Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+C:\Users\Esteban\Desktop\Skill IA\src\app\vendor\quotations\hooks\useVendorRealtime.ts:18:48
+  16 | export function useVendorRealtime(): UseVendorRealtimeResult {
+  17 |   const router = useRouter();
+> 18 |   const [lastUpdate, setLastUpdate] = useState(Date.now());
+     |                                                ^^^^^^^^^^ Cannot call impure function
+  19 |
+  20 |   useEffect(() => {
+  21 |     const supabase = createClient();
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\admin\quotations\AdminQuotationReview.tsx:398:99 - react/no-unescaped-entities
+`"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\admin\quotations\AdminQuotationReview.tsx:398:121 - react/no-unescaped-entities
+`"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\admin\quotations\QuotationHistoryTimeline.tsx:61:25 - react/no-unescaped-entities
+`"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\admin\quotations\QuotationHistoryTimeline.tsx:61:40 - react/no-unescaped-entities
+`"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\admin\quotations\QuotationHistoryTimeline.tsx:72:18 - react/jsx-no-comment-textnodes
+Comments inside children section of tag should be placed inside braces
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\admin\quotations\QuotationHistoryTimeline.tsx:74:90 - react/jsx-no-comment-textnodes
+Comments inside children section of tag should be placed inside braces
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\features\admin\event-intelligence\InferenceTestDashboard.tsx:134:80 - react/no-unescaped-entities
+`"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\features\admin\event-intelligence\InferenceTestDashboard.tsx:134:89 - react/no-unescaped-entities
+`"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`.
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\features\ai\NegotiationChatbot.tsx:45:52 - react/jsx-no-comment-textnodes
+Comments inside children section of tag should be placed inside braces
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\features\ai\NegotiationChatbot.tsx:47:48 - react/jsx-no-comment-textnodes
+Comments inside children section of tag should be placed inside braces
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\features\ai\chat-interface.tsx:30:13 - react-hooks/set-state-in-effect
+Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\features\ai\chat-interface.tsx:30:13
+  28 |         if (status === 'completed' && data) {
+  29 |             // We use the history returned by the server to stay in sync
+> 30 |             setMessages(data.history);
+     |             ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  31 |         }
+  32 |     }, [status, data]);
+  33 |
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\shared\WhatsAppButton.tsx:14:9 - react-hooks/set-state-in-effect
+Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\shared\WhatsAppButton.tsx:14:9
+  12 |
+  13 |     useEffect(() => {
+> 14 |         setMounted(true);
+     |         ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  15 |     }, []);
+  16 |
+  17 |     const handleClick = () => {
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\ui\smart-datetime-picker.tsx:56:17 - react-hooks/set-state-in-effect
+Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\ui\smart-datetime-picker.tsx:56:17
+  54 |             const date = new Date(value + 'T00:00:00');
+  55 |             if (!isNaN(date.getTime())) {
+> 56 |                 setDay(String(date.getDate()).padStart(2, '0'));
+     |                 ^^^^^^ Avoid calling setState() directly within an effect
+  57 |                 setMonth(String(date.getMonth() + 1).padStart(2, '0'));
+  58 |                 setYear(String(date.getFullYear()));
+  59 |             }
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\ui\smart-datetime-picker.tsx:251:13 - react-hooks/set-state-in-effect
+Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Esteban\Desktop\Skill IA\src\components\ui\smart-datetime-picker.tsx:251:13
+  249 |         if (value) {
+  250 |             const [h, m] = value.split(':');
+> 251 |             setHour(h || '');
+      |             ^^^^^^^ Avoid calling setState() directly within an effect
+  252 |             setMinute(m || '');
+  253 |         } else {
+  254 |             setHour('');
+
+C:\Users\Esteban\Desktop\Skill IA\src\context\CartContext.tsx:38:17 - react-hooks/set-state-in-effect
+Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\Esteban\Desktop\Skill IA\src\context\CartContext.tsx:38:17
+  36 |         if (saved) {
+  37 |             try {
+> 38 |                 setItems(JSON.parse(saved));
+     |                 ^^^^^^^^ Avoid calling setState() directly within an effect
+  39 |             } catch (e) {
+  40 |                 logger.error("Failed to parse cart", e);
+  41 |             }

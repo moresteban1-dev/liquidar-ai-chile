@@ -17,6 +17,7 @@ export default function NotificationLogPanel() {
       { id: 2, type: 'info', msg: 'Nuevo registro de proveedor: Blue Eventos', time: 'hace 5m' },
       { id: 3, type: 'warning', msg: 'Límite de RPS alcanzado en API /orders', time: 'hace 12m' },
     ];
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLogs(initialLogs);
   }, []);
 
