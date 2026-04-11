@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { requireOwnership } from './RBACMiddleware'
+import { UserRole } from '@/core/domain/auth/UserRole'
 import type { AuthenticatedUser } from './RBACMiddleware'
 
 describe('RBAC Middleware', () => {
@@ -8,7 +9,7 @@ describe('RBAC Middleware', () => {
       const admin: AuthenticatedUser = {
         id: 'admin-001',
         email: 'admin@test.com',
-        role: 'admin'
+        role: UserRole.ADMIN
       }
 
       expect(requireOwnership('any-resource-owner', admin)).toBe(true)
@@ -18,7 +19,7 @@ describe('RBAC Middleware', () => {
       const client: AuthenticatedUser = {
         id: 'client-001',
         email: 'client@test.com',
-        role: 'client'
+        role: UserRole.CLIENT
       }
 
       expect(requireOwnership('client-001', client)).toBe(true)
@@ -28,7 +29,7 @@ describe('RBAC Middleware', () => {
       const client: AuthenticatedUser = {
         id: 'client-001',
         email: 'client@test.com',
-        role: 'client'
+        role: UserRole.CLIENT
       }
 
       expect(requireOwnership('client-002', client)).toBe(false)

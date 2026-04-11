@@ -29,7 +29,7 @@ interface Props {
     providerId: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export default function InventoryTable({ items, providerId: _providerId }: Props) {
     const [searchTerm, setSearchTerm] = useState('');
 

@@ -16,12 +16,12 @@ describe('UpdateQuotationHandler', () => {
   })
 
   const createQuotation = async (status: string = 'DRAFT') => {
-    const cost = Money.create(50000, 'MXN').unwrap()
+    const cost = Money.create(50000, 'MXN').getValue()
     const pricing = QuotationPricing.calculate(cost, {
       commissionRate: 0.25,
       platformFeeRate: 0.05,
       taxRate: 0.16
-    }).unwrap()
+    }).getValue()
 
     const validUntil = new Date()
     validUntil.setDate(validUntil.getDate() + 7)
@@ -29,6 +29,9 @@ describe('UpdateQuotationHandler', () => {
     const quotation = Quotation.create({
       orderId: new UniqueEntityID('order-123'),
       providerId: new UniqueEntityID('provider-456'),
+      clientId: 'client-1',
+      serviceId: 'service-1',
+      code: 'Q-TEST-001',
       status: status as any,
       pricing,
       serviceDescription: 'Original description',
@@ -36,8 +39,26 @@ describe('UpdateQuotationHandler', () => {
       excludes: ['Service C'],
       validUntil,
       estimatedDeliveryDays: 3,
-      createdAt: new Date()
-    }).unwrap()
+      eventDate: new Date(),
+      createdAt: new Date(),
+      requestedItems: [],
+      providerItems: [],
+      clientItems: [],
+      items: [],
+      subtotalServicesProvider: Money.zero('MXN'),
+      subtotalLogisticsProvider: Money.zero('MXN'),
+      totalProviderNet: Money.zero('MXN'),
+      commissionServicesNet: Money.zero('MXN'),
+      commissionLogisticsNet: Money.zero('MXN'),
+      totalCommissionNet: Money.zero('MXN'),
+      commissionMethod: 'PERCENTAGE',
+      totalNet: Money.zero('MXN'),
+      totalIva: Money.zero('MXN'),
+      totalWithIva: Money.zero('MXN'),
+      providerSuggestsTechnicalVisit: false,
+      technicalVisit: false,
+      expiresAt: validUntil
+    }).getValue()
 
     await quotationRepository.save(quotation)
     return quotation

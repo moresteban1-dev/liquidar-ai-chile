@@ -29,7 +29,7 @@ const AccordionItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTML
     <div ref={ref} className={cn("border-b", className)} {...props}>
         {React.Children.map(children, child => {
             if (React.isValidElement(child)) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 return React.cloneElement(child, { value } as any);
             }
             return child;

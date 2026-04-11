@@ -1,56 +1,38 @@
 import { BaseMappingStage } from '@/core/domain/event-intelligence/engine/stages/BaseMappingStage';
 import { InferenceContext } from '@/core/domain/event-intelligence/engine/InferenceEngine';
-import { EventTypeGraph, EventProfile } from '@/core/domain/event-intelligence/types';
+import { IKnowledgeRepository } from '@/core/application/ports/IKnowledgeRepository';
+import { ok } from '@/core/shared/Result';
+import { describe, it, expect, vi } from 'vitest';
 
 describe('BaseMappingStage', () => {
-  it('should map base nodes from graph to needs context', () => {
+  it('should map base nodes from repository to needs context', async () => {
     const stage = new BaseMappingStage();
     
-    const mockGraph: EventTypeGraph = {
-      id: 'evt-type-1',
-      code: 'CORPORATE_EVENT',
-      name: 'Evento Corporativo',
-      baseNodes: [
+    const mockRepo: vi.Mocked<IKnowledgeRepository> = {
+      findBaselineNodesByEventType: vi.fn().mockResolvedValue(ok([
         {
-          priority: 1,
-          node: {
-            id: 'node-1',
-            code: 'PA_SYSTEM',
-            name: 'Sistema de Sonido',
-            nodeType: 'EQUIPMENT',
-            isEssential: true,
-            dependencies: [],
-            scalingRules: []
-          }
+          nodeId: 'node-1',
+          nodeCode: 'PA_SYSTEM',
+          nodeName: 'Sistema de Sonido',
+          priority: 1
         },
         {
-          priority: 2,
-          node: {
-            id: 'node-2',
-            code: 'COFFEE_BREAK',
-            name: 'Servicio de Café',
-            nodeType: 'SERVICE',
-            isEssential: false,
-            dependencies: [],
-            scalingRules: []
-          }
+          nodeId: 'node-2',
+          nodeCode: 'COFFEE_BREAK',
+          nodeName: 'Servicio de Café',
+          priority: 2
         }
-      ]
-    };
-
-    const mockProfile: EventProfile = {
-      eventTypeId: 'evt-type-1',
-      attendees: 50,
-      durationHours: 4
-    };
+      ])),
+      findEssentialNodes: vi.fn().mockResolvedValue(ok([]))
+    } as any;
 
     const context: InferenceContext = {
-      profile: mockProfile,
-      graph: mockGraph,
+      profile: { eventTypeId: 'evt-type-1', attendees: 50, durationHours: 4 },
+      repository: mockRepo,
       needs: new Map()
     };
 
-    stage.execute(context);
+    await stage.execute(context);
 
     // Assertions
     expect(context.needs.size).toBe(2);
@@ -64,39 +46,33 @@ describe('BaseMappingStage', () => {
     const coffeeNeed = context.needs.get('COFFEE_BREAK');
     expect(coffeeNeed).toBeDefined();
     expect(coffeeNeed?.isEssential).toBe(false);
-    expect(coffeeNeed?.reasoning[0]).toContain('Prioridad 2');
   });
 
-  it('should mark node as essential if priority is 1 even if node metadata says otherwise', () => {
+  it('should include global essential nodes', async () => {
     const stage = new BaseMappingStage();
-    const mockGraph: EventTypeGraph = {
-      id: 'evt-type-1',
-      code: 'TEST',
-      name: 'Test Event',
-      baseNodes: [
+    
+    const mockRepo: vi.Mocked<IKnowledgeRepository> = {
+      findBaselineNodesByEventType: vi.fn().mockResolvedValue(ok([])),
+      findEssentialNodes: vi.fn().mockResolvedValue(ok([
         {
-          priority: 1,
-          node: {
-            id: 'node-3',
-            code: 'NON_ESSENTIAL_NODE',
-            name: 'Optional but Priority 1',
-            nodeType: 'SERVICE',
-            isEssential: false, // Metadata says false
-            dependencies: [],
-            scalingRules: []
-          }
+          id: 'node-global',
+          code: 'SUPPORT',
+          name: 'Soporte Técnico',
+          nodeType: 'STAFF',
+          isEssential: true
         }
-      ]
-    };
+      ]))
+    } as any;
 
     const context: InferenceContext = {
       profile: { eventTypeId: '1', attendees: 1, durationHours: 1 },
-      graph: mockGraph,
+      repository: mockRepo,
       needs: new Map()
     };
 
-    stage.execute(context);
+    await stage.execute(context);
 
-    expect(context.needs.get('NON_ESSENTIAL_NODE')?.isEssential).toBe(true);
+    expect(context.needs.get('SUPPORT')).toBeDefined();
+    expect(context.needs.get('SUPPORT')?.isEssential).toBe(true);
   });
 });

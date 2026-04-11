@@ -62,7 +62,7 @@ export function RevenueChartClient({ data }: RevenueChartClientProps) {
                         formatter={((value: number, name: string) => [
                             formatCompactCLP(value ?? 0),
                             name === 'revenue' ? 'Ingresos' : 'Margen',
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                         
                         ]) as any}
                         contentStyle={{
                             backgroundColor: 'hsl(var(--card))',

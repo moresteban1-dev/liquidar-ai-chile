@@ -30,7 +30,7 @@ export function NegotiationChatbot({ quotationId, role }: NegotiationChatbotProp
                     : 'Hola Proveedor. He revisado tu presupuesto. Estoy aquí para resolver dudas técnicas o negociar partidas comerciales.'
             }
         ]
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     } as any) as any;
 
     return (
@@ -63,7 +63,7 @@ export function NegotiationChatbot({ quotationId, role }: NegotiationChatbotProp
                                         : 'bg-white border border-gray-200 text-gray-800 shadow-sm'
                                         }`}
                                 >
-                                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                                    { }
                                     {String((m as any).content)}
                                 </div>
                             </div>

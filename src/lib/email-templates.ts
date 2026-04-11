@@ -192,7 +192,7 @@ export function newBidTemplate(data: {
  * Template: New Quote Request (Admin)
  * Sent to admin when a new quote is submitted
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export function newQuoteTemplate(_data: {
   quoteCode: string;
   clientName: string;

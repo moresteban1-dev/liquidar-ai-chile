@@ -80,7 +80,7 @@ export function CommandMenu() {
     const handleSelect = React.useCallback(
         (href: string) => {
             setOpen(false);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+             
             router.push(href as any);
         },
         [router]

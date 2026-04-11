@@ -48,7 +48,7 @@ function LoginForm() {
                 else if (role === UserRole.VENDOR) target = '/vendor';
                 else target = '/client';
 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 router.push(target as any);
             }
         };
@@ -114,7 +114,7 @@ function LoginForm() {
                 const safeTarget = validateRedirectUrl(callbackUrl, targetUrl);
                 targetUrl = safeTarget;
 
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 router.push(targetUrl as any);
                 router.refresh();
             }

@@ -20,7 +20,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 import { CatalogCategory, CatalogStatus as _CatalogStatus } from '@core/domain/catalog/CatalogTypes';
 import { Loader2, Save } from 'lucide-react';
 

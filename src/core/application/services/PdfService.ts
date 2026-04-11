@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Quotation, QuotationProviderItem } from '@/lib/types';

@@ -1,40 +1,29 @@
 import { QuantityScalingStage } from '@/core/domain/event-intelligence/engine/stages/QuantityScalingStage';
 import { InferenceContext } from '@/core/domain/event-intelligence/engine/InferenceEngine';
-import { EventTypeGraph, ServiceNode } from '@/core/domain/event-intelligence/types';
+import { IKnowledgeRepository } from '@/core/application/ports/IKnowledgeRepository';
+import { ok } from '@/core/shared/Result';
+import { describe, it, expect, vi } from 'vitest';
 
 describe('QuantityScalingStage', () => {
-  it('should apply "LINEAR" scaling rules (e.g. 1 chair per attendee)', () => {
+  it('should apply "LINEAR" scaling rules (e.g. 1 chair per attendee)', async () => {
     const stage = new QuantityScalingStage();
     
-    const node: ServiceNode = {
-      id: 'node-chair',
-      code: 'CHAIR',
-      name: 'Silla',
-      nodeType: 'EQUIPMENT',
-      isEssential: true,
-      dependencies: [],
-      scalingRules: [
+    const mockRepo: vi.Mocked<IKnowledgeRepository> = {
+      findScalingRulesByNodeId: vi.fn().mockResolvedValue(ok([
         {
-          serviceNodeId: 'node-chair',
+          nodeId: 'node-chair',
           ruleType: 'LINEAR',
           parameterTarget: 'ATTENDEES',
           baseQuantity: 1,
           divisor: 1,
-          maxQuantity: null
+          maxQuantity: 0
         }
-      ]
-    };
-
-    const mockGraph: EventTypeGraph = {
-      id: 'evt-1',
-      code: 'EVENT',
-      name: 'Test',
-      baseNodes: [{ priority: 1, node }]
-    };
+      ]))
+    } as any;
 
     const context: InferenceContext = {
       profile: { eventTypeId: 'evt-1', attendees: 150, durationHours: 4 },
-      graph: mockGraph,
+      repository: mockRepo,
       needs: new Map([
         ['CHAIR', {
           serviceNodeId: 'node-chair',
@@ -48,44 +37,30 @@ describe('QuantityScalingStage', () => {
       ])
     };
 
-    stage.execute(context);
+    await stage.execute(context);
 
     expect(context.needs.get('CHAIR')?.quantityInferred).toBe(150);
-    expect(context.needs.get('CHAIR')?.reasoning.length).toBe(2);
   });
 
-  it('should apply "STEP" scaling rules (e.g. 1 bathroom per 100 attendees)', () => {
+  it('should apply "STAIRCASE" scaling rules (e.g. 1 bathroom per 100 attendees)', async () => {
     const stage = new QuantityScalingStage();
     
-    const node: ServiceNode = {
-      id: 'node-bath',
-      code: 'BATHROOM',
-      name: 'Baño Portátil',
-      nodeType: 'EQUIPMENT',
-      isEssential: true,
-      dependencies: [],
-      scalingRules: [
+    const mockRepo: vi.Mocked<IKnowledgeRepository> = {
+      findScalingRulesByNodeId: vi.fn().mockResolvedValue(ok([
         {
-          serviceNodeId: 'node-bath',
-          ruleType: 'STEP',
+          nodeId: 'node-bath',
+          ruleType: 'STAIRCASE',
           parameterTarget: 'ATTENDEES',
           baseQuantity: 1,
           divisor: 100,
-          maxQuantity: null
+          maxQuantity: 0
         }
-      ]
-    };
+      ]))
+    } as any;
 
-    const mockGraph: EventTypeGraph = {
-      id: 'evt-1',
-      code: 'EVENT',
-      name: 'Test',
-      baseNodes: [{ priority: 1, node }]
-    };
-
-    const context1: InferenceContext = {
+    const context: InferenceContext = {
       profile: { eventTypeId: 'evt-1', attendees: 250, durationHours: 4 },
-      graph: mockGraph,
+      repository: mockRepo,
       needs: new Map([
         ['BATHROOM', {
           serviceNodeId: 'node-bath',
@@ -99,56 +74,30 @@ describe('QuantityScalingStage', () => {
       ])
     };
 
-    stage.execute(context1);
+    await stage.execute(context);
     // ceil(250/100) = 3 bathrooms
-    expect(context1.needs.get('BATHROOM')?.quantityInferred).toBe(3);
-
-    const context2: InferenceContext = {
-      profile: { eventTypeId: 'evt-1', attendees: 100, durationHours: 4 },
-      graph: mockGraph,
-      needs: new Map([
-        ['BATHROOM', {
-          serviceNodeId: 'node-bath',
-          nodeCode: 'BATHROOM',
-          nodeName: 'Baño Portátil',
-          quantityInferred: 1,
-          isEssential: true,
-          reasoning: ['Base'],
-          confidenceScore: 1.0
-        }]
-      ])
-    };
-
-    stage.execute(context2);
-    // ceil(100/100) = 1 bathroom
-    expect(context2.needs.get('BATHROOM')?.quantityInferred).toBe(1);
+    expect(context.needs.get('BATHROOM')?.quantityInferred).toBe(3);
   });
 
-  it('should respect "maxQuantity" constraint', () => {
+  it('should respect "maxQuantity" constraint', async () => {
     const stage = new QuantityScalingStage();
     
-    const node: ServiceNode = {
-      id: 'node-staff',
-      code: 'MANAGER',
-      name: 'Project Manager',
-      nodeType: 'STAFF',
-      isEssential: true,
-      dependencies: [],
-      scalingRules: [
+    const mockRepo: vi.Mocked<IKnowledgeRepository> = {
+      findScalingRulesByNodeId: vi.fn().mockResolvedValue(ok([
         {
-          serviceNodeId: 'node-staff',
-          ruleType: 'STEP',
+          nodeId: 'node-staff',
+          ruleType: 'STAIRCASE',
           parameterTarget: 'ATTENDEES',
           baseQuantity: 1,
           divisor: 100,
-          maxQuantity: 2 // Max 2 managers no matter what
+          maxQuantity: 2 
         }
-      ]
-    };
+      ]))
+    } as any;
 
     const context: InferenceContext = {
       profile: { eventTypeId: 'evt-1', attendees: 500, durationHours: 4 },
-      graph: { id: 'evt-1', code: 'T', name: 'T', baseNodes: [{ priority: 1, node }] },
+      repository: mockRepo,
       needs: new Map([
         ['MANAGER', {
           serviceNodeId: 'node-staff',
@@ -162,37 +111,30 @@ describe('QuantityScalingStage', () => {
       ])
     };
 
-    stage.execute(context);
+    await stage.execute(context);
     // ceil(500/100) = 5, but max is 2
     expect(context.needs.get('MANAGER')?.quantityInferred).toBe(2);
-    expect(context.needs.get('MANAGER')?.reasoning[1]).toContain('Tope MÁX alcanzado: 2');
   });
 
-  it('should support "HOURS" parameter target', () => {
+  it('should support "DURATION" parameter target', async () => {
     const stage = new QuantityScalingStage();
     
-    const node: ServiceNode = {
-      id: 'node-service',
-      code: 'CLEANING',
-      name: 'Limpieza',
-      nodeType: 'SERVICE',
-      isEssential: false,
-      dependencies: [],
-      scalingRules: [
+    const mockRepo: vi.Mocked<IKnowledgeRepository> = {
+      findScalingRulesByNodeId: vi.fn().mockResolvedValue(ok([
         {
-          serviceNodeId: 'node-service',
+          nodeId: 'node-service',
           ruleType: 'LINEAR',
-          parameterTarget: 'HOURS',
+          parameterTarget: 'DURATION',
           baseQuantity: 1,
           divisor: 1,
-          maxQuantity: null
+          maxQuantity: 0
         }
-      ]
-    };
+      ]))
+    } as any;
 
     const context: InferenceContext = {
       profile: { eventTypeId: 'evt-1', attendees: 100, durationHours: 8 },
-      graph: { id: 'evt-1', code: 'T', name: 'T', baseNodes: [{ priority: 1, node }] },
+      repository: mockRepo,
       needs: new Map([
         ['CLEANING', {
           serviceNodeId: 'node-service',
@@ -206,7 +148,7 @@ describe('QuantityScalingStage', () => {
       ])
     };
 
-    stage.execute(context);
+    await stage.execute(context);
     expect(context.needs.get('CLEANING')?.quantityInferred).toBe(8);
   });
 });

@@ -57,7 +57,7 @@ export class NotificationService {
         newStatus: string,
         quotationCode: string,
     ): Promise<void> {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         const template = (NotificationService.STATUS_TEMPLATES as any)[newStatus];
         if (!template) return;
 

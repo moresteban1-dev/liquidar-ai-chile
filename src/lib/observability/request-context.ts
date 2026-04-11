@@ -9,12 +9,12 @@ export interface RequestContextProps extends LogContext {
 }
 
 // Internal store reference - Using 'any' to avoid circular type issues before full initialization
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 let store: any;
 
 // Safe initialization that doesn't break Edge Runtime
 try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+     
     const { AsyncLocalStorage } = require('node:async_hooks');
     store = new AsyncLocalStorage();
 } catch {

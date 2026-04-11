@@ -73,14 +73,18 @@ export class PricingCalculatorService {
         }
 
         try {
-            const prediction = await this.pricingAgent.execute({
+            const result = await this.pricingAgent.execute({
                 serviceId,
                 historicalCosts,
                 historicalPrices,
                 complexity
             });
 
-            return ok(prediction);
+            if (result.isFailure()) {
+              return fail(result.getError().message);
+            }
+
+            return ok(result.getValue());
         } catch (error) {
             return fail(`Error al predecir precio: ${error instanceof Error ? error.message : String(error)}`);
         }

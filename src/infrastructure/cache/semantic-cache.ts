@@ -38,7 +38,7 @@ export class SemanticCache {
 
             // 3. Check Similarity
             if (match && match.score && match.score >= threshold) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 const metadata = match.metadata as any;
                 logger.info(`[SemanticCache] HIT (Score: ${match.score} >= ${threshold})`);
                 return metadata.response;
@@ -78,7 +78,7 @@ export class SemanticCache {
                     originalPrompt: prompt,
                     timestamp: Date.now()
                 }
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
             }] as any);
         } catch (error) {
             logger.warn(`[SemanticCache] Set Error: ${error instanceof Error ? error.message : 'Unknown'}`);

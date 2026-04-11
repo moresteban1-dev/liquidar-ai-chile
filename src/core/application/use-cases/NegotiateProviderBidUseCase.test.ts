@@ -3,13 +3,13 @@ import { NegotiateProviderBidUseCase } from './NegotiateProviderBidUseCase';
 
 describe('NegotiateProviderBidUseCase', () => {
     let uc: NegotiateProviderBidUseCase;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let mockQuotationRepo: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let mockNegotiatorAgent: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let mockNoteWriter: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let mockLogger: any;
 
     beforeEach(() => {

@@ -246,9 +246,9 @@ export default function Step5LeadData({ state, updateState, onBack }: Props) {
                                         <input
                                             type="checkbox"
                                             className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                             
                                             checked={state.contactPreferences.includes(opt.id as any)}
-                                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                             
                                             onChange={() => handleTogglePreference(opt.id as any)}
                                         />
                                         <span className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{opt.label}</span>

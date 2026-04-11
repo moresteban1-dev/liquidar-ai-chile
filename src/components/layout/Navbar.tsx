@@ -74,7 +74,7 @@ export function Navbar() {
                         {loading ? (
                             <div className="w-24 h-9 bg-muted rounded-md animate-pulse" />
                         ) : user ? (
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                             
                             <Link href={`/${userRole.toLowerCase()}` as any} className="flex items-center gap-4">
                                 <div className="relative">
                                     <Bell className="h-5 w-5 text-muted-foreground hover:text-indigo-600 transition-colors" />

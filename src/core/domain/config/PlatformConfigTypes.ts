@@ -25,7 +25,7 @@ export interface PlatformConfigRecord {
     id: string;
     configKey: string;
     category: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     configValue: unknown; // Raw JSON payload from DB
     description: string | null;
     updatedBy: string | null;

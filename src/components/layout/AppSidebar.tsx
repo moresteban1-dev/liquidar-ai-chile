@@ -95,7 +95,7 @@ function SidebarContent({ role }: { role: UserRole }) {
                     return (
                         <Link
                             key={item.href}
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                             
                             href={item.href as any}
                             className={cn(
                                 "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors relative",

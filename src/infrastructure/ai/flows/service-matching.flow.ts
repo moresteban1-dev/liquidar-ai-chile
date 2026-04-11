@@ -31,9 +31,9 @@ export type ServiceMatchOutput = z.infer<typeof serviceMatchOutputSchema>;
 
 export async function matchServicesWithCatalog(
     brief: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     requestedItems: any[],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     catalogContext: any[]
 ): Promise<Result<ServiceMatchOutput, AppError>> {
 

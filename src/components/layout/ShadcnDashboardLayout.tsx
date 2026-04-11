@@ -92,7 +92,7 @@ export function ShadcnDashboardLayout({ children, role, userName = 'Usuario', us
     const pathname = usePathname();
     const router = useRouter();
     const navItems = NAV_ITEMS[role];
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const { unreadCount: __unreadCount } = useNotifications();
 
     const handleLogout = async () => {

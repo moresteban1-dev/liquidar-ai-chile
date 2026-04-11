@@ -8,7 +8,7 @@ interface FavoritesWrapperProps {
     userId: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export async function FavoritesWrapper({ userId: _userId }: FavoritesWrapperProps) {
     const supabase = createServiceRoleClient();
 

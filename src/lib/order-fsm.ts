@@ -180,7 +180,7 @@ export function getPublicStatus(state: OrderState): string {
  * @deprecated Use `calculateMarkup()` from `@core/domain/pricing/PricingCalculator` directly.
  */
 export function calculateMarkup(priceCost: number, markupPercentage: number = 30) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+     
     const { calculateMarkup: unifiedCalc } = require('@core/domain/pricing/PricingCalculator');
     return unifiedCalc(priceCost, markupPercentage);
 }
@@ -189,7 +189,7 @@ export function calculateMarkup(priceCost: number, markupPercentage: number = 30
  * @deprecated Use `applyIVA()` from `@core/domain/pricing/PricingCalculator` directly.
  */
 export function calculateWithIVA(amount: number): number {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+     
     const { applyIVA } = require('@core/domain/pricing/PricingCalculator');
     return applyIVA(amount);
 }

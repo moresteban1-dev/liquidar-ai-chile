@@ -30,7 +30,7 @@ export function PaymentGatewayManager() {
             }
 
             setGateways(data.gateways || []);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         } catch (error: any) {
             toast.error(error.message || 'Error cargando gateways desde API');
         } finally {
@@ -57,7 +57,7 @@ export function PaymentGatewayManager() {
             }
 
             toast.success(`Gateway ${!currentState ? 'activado' : 'desactivado'}`);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         } catch (error: any) {
             // Revert
             setGateways(gws => gws.map(gw =>
@@ -89,7 +89,7 @@ export function PaymentGatewayManager() {
             toast.success('Configuración guardada');
             setEditingId(null);
             fetchGateways(); // Actualizar para obtener nuevas versiones (si cambiaron)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         } catch (error: any) {
             toast.error(error.message || 'Error al guardar configuración');
         }

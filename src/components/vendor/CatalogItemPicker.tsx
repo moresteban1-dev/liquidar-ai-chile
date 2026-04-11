@@ -8,7 +8,7 @@
  * La selección es opcional: el proveedor puede escribir free-text.
  */
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 import React, { useState, useEffect, useMemo as _useMemo, useRef, useCallback } from 'react';
 import { Search, Link2, Unlink, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -39,7 +39,7 @@ interface Props {
 /** Debounce delay for API search (ms) */
 const SEARCH_DEBOUNCE_MS = 300;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 export function CatalogItemPicker({ value, onChange, compact: _compact = true }: Props) {
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');

@@ -24,10 +24,15 @@ export class UpdateQuotationHandler extends InstrumentedHandler<UpdateQuotationC
     const quotation = quotationResult.unwrap()
     if (!quotation) return fail(AppError.notFound('Quotation', command.quotationId))
 
+    // Security Check: Only the assigned provider can update it
+    if (quotation.providerId.toString() !== command.providerId) {
+      return fail(AppError.authorization('Only the assigned provider can update this quotation'))
+    }
+
     const updates = command.updates
     const currentPricing = quotation.pricing
 
-    // Pricing update if costs/rates changed
+    // 1. Pricing update
     if (updates.providerCost !== undefined || updates.commissionRate !== undefined) {
       const providerCostRes = Money.create(
         updates.providerCost ?? currentPricing.providerCost.amount, 
@@ -55,7 +60,16 @@ export class UpdateQuotationHandler extends InstrumentedHandler<UpdateQuotationC
       }
     }
 
-    // Additional updates (notes, items, etc) could be added here
+    // 2. Content Updates (Advanced V2 logic)
+    if (updates.serviceDescription) {
+        (quotation as any).props.serviceDescription = updates.serviceDescription
+    }
+    if (updates.includes) {
+        (quotation as any).props.includes = updates.includes
+    }
+    if (updates.excludes) {
+        (quotation as any).props.excludes = updates.excludes
+    }
     if (updates.providerNotes) {
       quotation.addProviderNotes(updates.providerNotes)
     }

@@ -1,4 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 import { PlatformConfigRecord as _PlatformConfigRecord, TaxConfig, MarginTiersConfig } from '../../domain/config/PlatformConfigTypes';
 
 export interface PlatformConfigRepository {

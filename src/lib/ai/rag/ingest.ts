@@ -37,7 +37,7 @@ export const ingestDocuments = async (docs: { content: string; source: string }[
         logger.info(`Ingesting ${vectors.length} records into namespace: default`);
 
         try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+             
             await index.upsert(vectors as any);
             logger.info('Ingestion complete');
         } catch (e) {

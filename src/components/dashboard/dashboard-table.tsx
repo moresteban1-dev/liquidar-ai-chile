@@ -37,7 +37,7 @@ export function DashboardTable<T extends { id: string | number }>({
                 </div>
                 {actionLabel && actionHref && (
                     <Button variant="ghost" size="sm" className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-950 transition-colors" asChild>
-                        <Link // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        <Link  
                             href={actionHref as any}>{actionLabel}</Link>
                     </Button>
                 )}

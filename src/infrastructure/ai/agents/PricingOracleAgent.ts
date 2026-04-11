@@ -14,6 +14,12 @@ export class PricingOracleAgent {
     ) { }
 
     async execute(input: z.infer<typeof PricingInputSchema>): Promise<Result<z.infer<typeof PricingOutputSchema>, AppError>> {
+        // Defensive Check: Ensure API key is present before calling SDK
+        if (!process.env.OPENAI_API_KEY && !process.env.NEXT_PUBLIC_SUPABASE_URL?.includes('localhost')) {
+            this.logger.warn('[PricingOracleAgent] OpenAI API Key missing. Skipping live prediction.');
+            return fail(AppError.internal('OpenAI API Key is missing. Live prediction disabled.'));
+        }
+
         const { historicalCosts, historicalPrices, complexity, marketTrends } = input;
 
         const avgCost = historicalCosts.length > 0 

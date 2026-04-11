@@ -12,7 +12,9 @@ describe('EventType', () => {
       isActive: true
     }
 
-    const eventType = EventType.create(props)
+    const result = EventType.create(props)
+    expect(result.isSuccess()).toBe(true)
+    const eventType = result.getValue()
 
     expect(eventType.id).toBe(props.id)
     expect(eventType.code).toBe(props.code)
@@ -22,29 +24,29 @@ describe('EventType', () => {
   })
 
   it('should throw error if code is empty', () => {
-    expect(() => {
-      EventType.create({
-        id: '1',
-        code: '',
-        name: 'Test',
-        description: null,
-        baseCategory: 'SOCIAL',
-        isActive: true
-      })
-    }).toThrow('EventType: code is required')
+    const result = EventType.create({
+      id: '1',
+      code: '',
+      name: 'Test',
+      description: null,
+      baseCategory: 'SOCIAL',
+      isActive: true
+    })
+    expect(result.isFailure()).toBe(true)
+    expect(result.getError()).toBe('EventType: code is required')
   })
 
   it('should throw error if name is empty', () => {
-    expect(() => {
-      EventType.create({
-        id: '1',
-        code: 'TEST',
-        name: ' ',
-        description: null,
-        baseCategory: 'SOCIAL',
-        isActive: true
-      })
-    }).toThrow('EventType: name is required')
+    const result = EventType.create({
+      id: '1',
+      code: 'TEST',
+      name: ' ',
+      description: null,
+      baseCategory: 'SOCIAL',
+      isActive: true
+    })
+    expect(result.isFailure()).toBe(true)
+    expect(result.getError()).toBe('EventType: name is required')
   })
 
   it('should reconstitute from existing props', () => {
@@ -63,7 +65,7 @@ describe('EventType', () => {
   })
 
   it('should serialize to JSON correctly', () => {
-    const eventType = EventType.create({
+    const result = EventType.create({
       id: '1',
       code: 'TEST',
       name: 'Test',
@@ -72,7 +74,8 @@ describe('EventType', () => {
       isActive: true
     })
 
-    const json = eventType.toJSON()
+    expect(result.isSuccess()).toBe(true)
+    const json = result.getValue().toJSON()
     expect(json.code).toBe('TEST')
     expect(json.name).toBe('Test')
     expect(json.isActive).toBe(true)

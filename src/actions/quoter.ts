@@ -70,7 +70,12 @@ export async function submitQuoteSessionAction(state: QuoterState): Promise<Acti
     };
 
     // 4. Generar Opciones Comerciales (Económica, Recomendada, Premium)
-    const options: QuoteOption[] = generator.generateOptions(partialSession);
+    const optionsResult = generator.generateOptions(partialSession);
+    if (optionsResult.isFailure()) {
+        logger.error("Error generando opciones comerciales:", optionsResult.getError());
+        return { success: false, error: optionsResult.getError().message };
+    }
+    const options = optionsResult.getValue();
 
     // Asignar opciones a la sesión para que se graben
     partialSession.options = options;
@@ -81,32 +86,35 @@ export async function submitQuoteSessionAction(state: QuoterState): Promise<Acti
         
         if (saveResult.isFailure()) {
             logger.error("Error guardando sesión de cotización:", saveResult.getError());
-            return { success: false, error: saveResult.getError().message };
+            return { success: false, error: `Error base de datos: ${saveResult.getError().message}` };
         }
 
         const sessionId = saveResult.getValue();
 
-        // 6. Agregar los ítems solicitados
+        // 6. Agregar los ítems solicitados (Atómico lógico)
         const itemsResult = await repo.addItems(sessionId, requestedItems);
         if (itemsResult.isFailure()) {
-            logger.error("Error agregando ítems a la sesión:", itemsResult.getError());
+            logger.error("Error crítico agregando ítems a la sesión:", itemsResult.getError());
+            // TODO: En el futuro podríamos disparar un rollback aquí si fuera necesario
+            return { success: false, error: "No se pudieron registrar los ítems de la cotización." };
         }
 
         // 7. Guardar las opciones comerciales
-        const optionsResult = await repo.saveOptions(sessionId, options);
-        if (optionsResult.isFailure()) {
-            logger.error("Error guardando opciones para la sesión:", optionsResult.getError());
+        const saveOptionsResult = await repo.saveOptions(sessionId, options);
+        if (saveOptionsResult.isFailure()) {
+            logger.error("Error crítico guardando opciones para la sesión:", saveOptionsResult.getError());
+            return { success: false, error: "No se pudieron registrar las opciones comerciales." };
         }
 
         // Recuperar la sesión completa para devolverla (con IDs generados)
         const finalResult = await repo.findById(sessionId);
         if (finalResult.isFailure() || !finalResult.getValue()) {
-            return { success: false, error: "Sesión guardada pero no se pudo recuperar." };
+            return { success: false, error: "La cotización se guardó pero hubo un error de sincronización final." };
         }
 
         return { success: true, data: finalResult.getValue()! };
     } catch (error: any) {
-        logger.error("Error subiendo cotización a Supabase:", error);
-        return { success: false, error: error.message || "No se pudo generar y guardar la cotización." };
+        logger.error("Atrapado error inesperado en submitQuoteSessionAction:", error);
+        return { success: false, error: "Ocurrió un error inesperado al procesar la cotización." };
     }
 }

@@ -2,7 +2,7 @@ import { z } from 'genkit';
 import { ai } from '@infrastructure/ai/config';
 import { negotiatorAgent } from '@infrastructure/ai/agents/NegotiatorAgent';
 import { qaSentinelAgent } from '@infrastructure/ai/agents/QASentinelAgent';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 // [REMOVED] t
 import { logger } from '@/lib/logger';
 import { executeAIFlow } from '@infrastructure/ai/services/ResilientGenkitService';
@@ -68,7 +68,7 @@ export const dropServiceAgent = ai.defineFlow(
 
     const decision = routingResult.data;
     let responseContent = "";
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let actionTaken: any = null;
 
     logger.info(`[Supervisor] Routing to: ${decision.next} (${decision.reasoning})`);

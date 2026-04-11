@@ -12,7 +12,7 @@ export class Success<T> {
         return fn(this.value);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     getOrElse(_fallback: T): T {
         return this.value;
     }
@@ -26,12 +26,12 @@ export class Failure<E> {
     readonly ok = false as const;
     constructor(readonly error: E) { }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     map<U>(_fn: (value: never) => U): Result<U, E> {
         return this as unknown as Result<U, E>;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     flatMap<U>(_fn: (value: never) => Result<U, E>): Result<U, E> {
         return this as unknown as Result<U, E>;
     }

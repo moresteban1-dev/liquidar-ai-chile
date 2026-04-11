@@ -13,8 +13,10 @@ describe('ServiceNode', () => {
       isActive: true
     }
 
-    const node = ServiceNode.create(props)
-
+    const result = ServiceNode.create(props)
+    expect(result.isSuccess()).toBe(true)
+    
+    const node = result.getValue()
     expect(node.id).toBe(props.id)
     expect(node.code).toBe(props.code)
     expect(node.nodeType).toBe('EQUIPMENT')
@@ -22,7 +24,7 @@ describe('ServiceNode', () => {
   })
 
   it('should default isEssential to false', () => {
-    const node = ServiceNode.create({
+    const result = ServiceNode.create({
       id: '1',
       code: 'TABLE',
       name: 'Mesa',
@@ -32,25 +34,27 @@ describe('ServiceNode', () => {
       isActive: true
     })
 
-    expect(node.isEssential).toBe(false)
+    expect(result.isSuccess()).toBe(true)
+    expect(result.getValue().isEssential).toBe(false)
   })
 
   it('should throw error if code or name is missing', () => {
-    expect(() => {
-      ServiceNode.create({
-        id: '1',
-        code: '',
-        name: 'Test',
-        description: null,
-        nodeType: 'EQUIPMENT',
-        isEssential: false,
-        isActive: true
-      })
-    }).toThrow('ServiceNode: code is required')
+    const result = ServiceNode.create({
+      id: '1',
+      code: '',
+      name: 'Test',
+      description: null,
+      nodeType: 'EQUIPMENT',
+      isEssential: false,
+      isActive: true
+    })
+
+    expect(result.isFailure()).toBe(true)
+    expect(result.getError()).toBe('ServiceNode: code is required')
   })
 
   it('should serialize to JSON', () => {
-    const node = ServiceNode.create({
+    const result = ServiceNode.create({
       id: '1',
       code: 'WIFI',
       name: 'WiFi 6',
@@ -60,7 +64,8 @@ describe('ServiceNode', () => {
       isActive: true
     })
 
-    const json = node.toJSON()
+    expect(result.isSuccess()).toBe(true)
+    const json = result.getValue().toJSON()
     expect(json.code).toBe('WIFI')
     expect(json.nodeType).toBe('SERVICE')
   })

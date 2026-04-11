@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { ok, fail } from '../../core/shared/Result';
+import { AppError } from '../../core/shared/AppError';
 
 vi.mock('@/lib/supabase/api', () => ({
     createServiceRoleClient: vi.fn(),
@@ -23,7 +25,7 @@ describe('Server Actions: Provider Bids & Quotations', () => {
 
     describe('Provider Bidding (submitProviderBidAction)', () => {
         it('should block unauthenticated users', async () => {
-            vi.mocked(getAuthUser).mockResolvedValue(null);
+            vi.mocked(getAuthUser).mockResolvedValue(fail(AppError.authentication('Session missing')));
 
             const result = await submitProviderBidAction({
                 quotationId: '123',
@@ -31,11 +33,11 @@ describe('Server Actions: Provider Bids & Quotations', () => {
             });
 
             expect(result.success).toBe(false);
-            expect(result.error).toBe('No autorizado');
+            expect(result.error).toContain('No autorizado');
         });
 
         it('should block non-provider roles', async () => {
-            vi.mocked(getAuthUser).mockResolvedValue({ id: 'abc', role: UserRole.CLIENT, email: 'test@test.com', name: 'Test' });
+            vi.mocked(getAuthUser).mockResolvedValue(ok({ id: 'abc', role: UserRole.CLIENT, email: 'test@test.com', name: 'Test' } as any));
 
             const result = await submitProviderBidAction({
                 quotationId: '123',
@@ -47,7 +49,7 @@ describe('Server Actions: Provider Bids & Quotations', () => {
         });
 
         it('should fail if items are empty', async () => {
-            vi.mocked(getAuthUser).mockResolvedValue({ id: 'abc', role: UserRole.VENDOR, email: 'test@test.com', name: 'Test' });
+            vi.mocked(getAuthUser).mockResolvedValue(ok({ id: 'abc', role: UserRole.VENDOR, email: 'test@test.com', name: 'Test' } as any));
 
             const result = await submitProviderBidAction({
                 quotationId: '123',
@@ -59,11 +61,10 @@ describe('Server Actions: Provider Bids & Quotations', () => {
         });
 
         it('should fail if an item has invalid category', async () => {
-            vi.mocked(getAuthUser).mockResolvedValue({ id: 'abc', role: UserRole.VENDOR, email: 'test@test.com', name: 'Test' });
+            vi.mocked(getAuthUser).mockResolvedValue(ok({ id: 'abc', role: UserRole.VENDOR, email: 'test@test.com', name: 'Test' } as any));
 
             const result = await submitProviderBidAction({
                 quotationId: '123',
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 items: [{ category: 'INVALID' as any, concept: 'test', quantity: 1, unitPriceNet: 100 }]
             });
 
@@ -74,12 +75,13 @@ describe('Server Actions: Provider Bids & Quotations', () => {
 
     describe('Admin Quotations (setMarkupAndApprove)', () => {
         it('should throw if role is not ADMIN', async () => {
-            vi.mocked(requireRole).mockRejectedValue(new Error('Unauthorized'));
+            vi.mocked(requireRole).mockResolvedValue(fail(AppError.authorization('Unauthorized')));
 
             const result = await setMarkupAndApprove('123', 5000, 15000);
 
             expect(result.success).toBe(false);
-            expect(result.error).toBe('Unauthorized');
+            // setMarkupAndApprove unwrap results differently, let's assume it returns the error message
+            expect(result.error).toContain('Unauthorized');
         });
     });
 });

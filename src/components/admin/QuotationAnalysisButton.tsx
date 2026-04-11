@@ -42,7 +42,7 @@ export function QuotationAnalysisButton({ description }: QuotationAnalysisButton
                     <div className="mt-2">
                         <p className="text-xs font-semibold text-slate-500 uppercase">Sesgos Detectados:</p>
                         <ul className="list-disc list-inside text-xs text-red-600 mt-1">
-                            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                            { }
                             {data.biasesDetected.map((b: any, i: number) => (
                                 <li key={i}>{b.name} ({b.severity})</li>
                             ))}

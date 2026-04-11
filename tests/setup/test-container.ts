@@ -3,7 +3,7 @@
  * Uses real implementations where possible, mocks for external I/O.
  */
 
-import { DIContainer as Container } from '@/infrastructure/di/Container';
+import { Container } from '@/infrastructure/di/Container';
 import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger';
 import { MetricsCollectorImpl } from '@/infrastructure/telemetry/MetricsCollector';
 import { TemplateEngine } from '@/infrastructure/notifications/email/TemplateEngine';

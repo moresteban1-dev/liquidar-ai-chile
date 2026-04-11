@@ -4,9 +4,9 @@ import { z } from 'zod';
 
 // Mock NextRequest and NextResponse
 class MockNextRequest {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     private body: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     constructor(body: any) {
         this.body = body;
     }
@@ -30,7 +30,7 @@ const testSchema = z.object({
 describe('API Validator: validateRequestBody', () => {
 
     it('should return success and parsed data for valid input', async () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         const req = new MockNextRequest({ name: 'Alice', age: 30 }) as any;
         const result = await validateRequestBody(req, testSchema);
 
@@ -42,14 +42,14 @@ describe('API Validator: validateRequestBody', () => {
     });
 
     it('should return Validation Error (400) for missing fields', async () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         const req = new MockNextRequest({ name: 'A' }) as any; // Invalid name length and missing age
         const result = await validateRequestBody(req, testSchema);
 
         expect(result.success).toBe(false);
         if (!result.success && result.response) {
             expect(result.response.status).toBe(400);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+             
             const body = result.response.body as any;
             expect(body.error).toBe('Validation Error');
             expect(body.fieldErrors.length).toBeGreaterThan(0);
@@ -57,14 +57,14 @@ describe('API Validator: validateRequestBody', () => {
     });
 
     it('should return Bad Request (400) for malformed JSON parsing errors', async () => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         const req = new MockNextRequest('SERVER_ERROR') as any;
         const result = await validateRequestBody(req, testSchema);
 
         expect(result.success).toBe(false);
         if (!result.success && result.response) {
             expect(result.response.status).toBe(400);
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+             
             const body = result.response.body as any;
             expect(body.error).toBe('Bad Request');
             expect(body.message).toBe('Invalid JSON body');

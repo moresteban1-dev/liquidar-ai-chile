@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { Badge } from '@/components/ui/badge';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 // [REMOVED] t
 import { Skeleton } from '@/components/ui/skeleton';
 import { Users, Star, MapPin, CheckCircle2, AlertCircle } from 'lucide-react';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 // [REMOVED] t
 
 interface ProviderMatchRow {

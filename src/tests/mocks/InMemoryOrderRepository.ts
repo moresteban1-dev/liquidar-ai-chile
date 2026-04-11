@@ -98,16 +98,34 @@ export class InMemoryOrderRepository implements IOrderRepository {
   }
 
   async getDashboardStats(): Promise<Result<DashboardStats, AppError>> {
+    const orders = Array.from(this.orders.values());
+    const byStatus: Record<string, number> = {};
+    let totalRevenue = 0;
+    let totalProfit = 0;
+
+    for (const order of orders) {
+      const state = order.state;
+      byStatus[state] = (byStatus[state] || 0) + 1;
+
+      if (order.isPaid && order.pricing) {
+        totalRevenue += order.pricing.finalPrice.amount;
+        totalProfit += order.pricing.totalCommission.amount;
+      }
+    }
+
     return new Success({
-      totalOrders: this.orders.size,
-      byStatus: {},
-      totalRevenue: 0,
-      totalProfit: 0,
-      avgOrderValue: 0,
-      recentOrders: 0,
-      pendingQuotations: 0,
-      activeProviders: 0
-    })
+      totalOrders: orders.length,
+      byStatus,
+      totalRevenue,
+      totalProfit,
+      avgOrderValue: orders.length > 0 ? totalRevenue / orders.length : 0,
+      recentOrders: orders.filter(o => {
+        const diff = Date.now() - o.createdAt.getTime();
+        return diff < 1000 * 60 * 60 * 24 * 7; // Last 7 days
+      }).length,
+      pendingQuotations: orders.filter(o => o.state === 'QUOTATION_PENDING').length,
+      activeProviders: new Set(orders.map(o => o.providerId?.toString()).filter(Boolean)).size
+    });
   }
 
   async findActiveOrdersByClient(clientId: UniqueEntityID): Promise<Result<Order[], AppError>> {

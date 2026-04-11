@@ -16,14 +16,14 @@ vi.mock('../notifications', () => ({
 }));
 const mockHistoryRepo = {
     recordTransition: vi.fn(),
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 } as any;
 
 const mockLogger = {
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 } as any;
 
 describe('QuotationService', () => {

@@ -451,7 +451,7 @@ export class PaymentService {
             const { diContainer } = await import('@infrastructure/di/CoreContainer');
             await diContainer.getQuotationService().transitionQuotation(
                 orderEntity.quotation_id,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 'PAID' as any, // QuotationStatus.PAID
                 { internalNotes: 'Pago procesado automáticamente por webhook' }
             );

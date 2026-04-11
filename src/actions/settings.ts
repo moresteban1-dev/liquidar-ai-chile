@@ -58,7 +58,7 @@ export async function updateOrganizationSettings(data: OrganizationSettingsUpdat
             action: 'updateOrganizationSettings',
             changes: Object.keys(data)
         });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     } catch (e) {
         // Silent catch for audit logger
     }

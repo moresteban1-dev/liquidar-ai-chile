@@ -3,7 +3,7 @@ import { ProviderInventoryService } from './ProviderInventoryService';
 import { ProviderInventoryRepository } from '../ports/ProviderInventoryRepository';
 import {
     ProviderInventoryItem,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     InventoryStats,
     ProviderMatch
 } from '../../domain/provider/ProviderInventoryTypes';

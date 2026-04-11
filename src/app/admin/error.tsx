@@ -14,9 +14,9 @@ export default function AdminError({
     error: Error & { digest?: string };
     reset: () => void;
 }) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     const [diagnostic, setDiagnostic] = useState<any>(null);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const [_loading, setLoading] = useState(false);
 
     useEffect(() => {

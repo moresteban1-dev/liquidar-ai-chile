@@ -3,13 +3,13 @@ import { AnalyzeQualityReportUseCase } from './AnalyzeQualityReportUseCase';
 
 describe('AnalyzeQualityReportUseCase', () => {
     let uc: AnalyzeQualityReportUseCase;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let mockOrderReader: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let mockQASentinel: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let mockNoteWriter: any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let mockLogger: any;
 
     beforeEach(() => {
