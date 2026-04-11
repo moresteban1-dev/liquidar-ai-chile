@@ -14,6 +14,9 @@ import { SupabaseCatalogRepository } from '@/infrastructure/persistence/supabase
 import { CatalogItemMapper } from '@/infrastructure/persistence/supabase/mappers/CatalogItemMapper';
 import { CatalogCategoryMapper } from '@/infrastructure/persistence/supabase/mappers/CatalogCategoryMapper';
 import { SupabaseQuoteSessionRepository } from '@/infrastructure/persistence/supabase/repositories/SupabaseQuoteSessionRepository';
+import { logger } from '@infrastructure/telemetry/StructuredLogger';
+import { requireRole, requireAuth } from '@/lib/supabase/api';
+import { UserRole } from '@/core/domain/auth/UserRole';
 
 // Scheme setup validator
 const EventProfileSchema = z.object({
@@ -38,6 +41,7 @@ export async function generateIntelligentConfiguration(
   formData: FormData
 ): Promise<WizardState> {
   try {
+    // Note: Wizard can be anonymous, but we log the attempt
     const supabase = await createClient();
 
     // 1. Validar el Input
@@ -94,8 +98,8 @@ export async function generateIntelligentConfiguration(
     };
 
   } catch (error: any) {
-    console.error('Error generando configuración:', error);
-    return { success: false, message: error.message || 'Error interno del motor de inferencia.' };
+    logger.error('Error generando configuración:', error);
+    return { success: false, message: 'Error interno del motor de inferencia.' };
   }
 }
 
@@ -110,6 +114,11 @@ export async function requestQuotationAction(
   }
 ): Promise<WizardState> {
   try {
+    // Auth Check: Although wizard starts anonymous, requesting quotation persists lead data.
+    // For now we allow anonymous if the flow allows it, but we use requireAuth to link if possible.
+    const authRes = await requireAuth();
+    const userId = authRes.isSuccess() ? authRes.getValue().user.id : null;
+
     const supabase = await createClient();
 
     // 1. Instanciar dependencias para el orquestador
@@ -147,8 +156,8 @@ export async function requestQuotationAction(
     };
 
   } catch (error: any) {
-    console.error('Error en requestQuotationAction:', error);
-    return { success: false, message: error.message || 'Error al procesar la solicitud.' };
+    logger.error('Error en requestQuotationAction:', error);
+    return { success: false, message: 'Error al procesar la solicitud.' };
   }
 }
 

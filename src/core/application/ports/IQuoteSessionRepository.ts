@@ -1,6 +1,6 @@
-import { QuoteSession, QuoteItemRequested } from '@domain/quote/QuoteTypes';
-import { Result } from '@/core/shared/Result';
+import { QuoteSession, QuoteItemRequested, QuoteOption } from '@domain/quote/QuoteTypes';
 import { AppError } from '@/core/shared/AppError';
+import { Result } from '@/core/shared/Result';
 
 /**
  * IQuoteSessionRepository
@@ -18,6 +18,11 @@ export interface IQuoteSessionRepository {
    * Agrega ítems solicitados a una sesión.
    */
   addItems(sessionId: string, items: QuoteItemRequested[]): Promise<Result<void, AppError>>;
+
+  /**
+   * Guarda las opciones generadas para la sesión.
+   */
+  saveOptions(sessionId: string, options: QuoteOption[]): Promise<Result<void, AppError>>;
 
   /**
    * Recupera una sesión por su ID, incluyendo sus ítems.

@@ -92,6 +92,12 @@ export async function submitQuoteSessionAction(state: QuoterState): Promise<Acti
             logger.error("Error agregando ítems a la sesión:", itemsResult.getError());
         }
 
+        // 7. Guardar las opciones comerciales
+        const optionsResult = await repo.saveOptions(sessionId, options);
+        if (optionsResult.isFailure()) {
+            logger.error("Error guardando opciones para la sesión:", optionsResult.getError());
+        }
+
         // Recuperar la sesión completa para devolverla (con IDs generados)
         const finalResult = await repo.findById(sessionId);
         if (finalResult.isFailure() || !finalResult.getValue()) {

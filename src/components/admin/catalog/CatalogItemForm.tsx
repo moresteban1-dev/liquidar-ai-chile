@@ -127,7 +127,7 @@ export function CatalogItemForm({ item, categories, onSuccess, onCancel }: Catal
       
       // Agregar todos los campos validando tipos string/empty
       Object.entries(data).forEach(([key, value]) => {
-        if (key === 'images' || key === 'videos' || key === 'technicalSpecs' || key === 'tags') {
+        if (key === 'images' || key === 'videos' || key === 'documents' || key === 'technicalSpecs' || key === 'tags') {
           formData.append(key, JSON.stringify(value));
         } else if (value !== undefined && value !== null && value !== '') {
           formData.append(key, String(value));

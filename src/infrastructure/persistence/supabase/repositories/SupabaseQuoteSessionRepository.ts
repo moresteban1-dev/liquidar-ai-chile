@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { IQuoteSessionRepository } from '@app/ports/IQuoteSessionRepository';
-import { QuoteSession, QuoteItemRequested } from '@/core/domain/quote/QuoteTypes';
+import { QuoteSession, QuoteItemRequested, QuoteOption } from '@/core/domain/quote/QuoteTypes';
 import { Result, ok, fail } from '@/core/shared/Result';
 import { AppError } from '@/core/shared/AppError';
 import { logger } from '@/infrastructure/telemetry/StructuredLogger';
@@ -15,10 +15,7 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
 
   async save(session: QuoteSession): Promise<Result<string, AppError>> {
     try {
-      const { data, error } = await this.supabase
-        .from('v2_quote_sessions')
-        .upsert({
-          id: session.id, // Si es undefined, Supabase genera uno
+      const payload: any = {
           segment: session.segment,
           step_data: session.stepData,
           event_type: session.eventType,
@@ -33,7 +30,15 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
           client_data: session.clientData,
           status: session.status,
           updated_at: new Date().toISOString()
-        })
+      };
+      
+      if (session.id) {
+          payload.id = session.id;
+      }
+
+      const { data, error } = await this.supabase
+        .from('v2_quote_sessions')
+        .upsert(payload)
         .select('id')
         .single();
 
@@ -66,11 +71,33 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
     }
   }
 
+  async saveOptions(sessionId: string, options: QuoteOption[]): Promise<Result<void, AppError>> {
+    try {
+      const { error } = await this.supabase
+        .from('v2_quote_options')
+        .insert(options.map(opt => ({
+          session_id: sessionId,
+          option_type: opt.optionType,
+          total_value: Math.round(opt.totalValue),
+          margin_applied: opt.marginApplied,
+          config_notes: opt.configNotes,
+          included_catalog_items: opt.includedCatalogItems || []
+        })));
+
+      if (error) return fail(AppError.internal(`Database error saving options: ${error.message}`));
+      return ok(undefined);
+
+    } catch (error: any) {
+      logger.error('Error guardando opciones de QuoteSession:', error);
+      return fail(AppError.from(error));
+    }
+  }
+
   async findById(id: string): Promise<Result<QuoteSession | null, AppError>> {
     try {
       const { data, error } = await this.supabase
         .from('v2_quote_sessions')
-        .select('*, v2_quote_items_requested(*)')
+        .select('*, v2_quote_items_requested(*), v2_quote_options(*)')
         .eq('id', id)
         .single();
 
@@ -102,6 +129,14 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
           catalogItemId: item.catalog_item_id,
           isCustom: item.is_custom,
           customName: item.custom_name
+        })),
+        options: (data.v2_quote_options || []).map((opt: any) => ({
+          id: opt.id,
+          optionType: opt.option_type,
+          totalValue: opt.total_value,
+          marginApplied: opt.margin_applied,
+          configNotes: opt.config_notes,
+          includedCatalogItems: opt.included_catalog_items || []
         }))
       };
 

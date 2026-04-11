@@ -220,7 +220,18 @@ export class PaymentService {
                 .single(); // Use single() carefully, maybe limit 1?
 
             if (!payment) {
+                logger.error(`[Webhook] Pago no encontrado para ref: ${externalRef} en pasarela ${gatewaySlug}`);
                 throw new Error(`Pago no encontrado para ref: ${externalRef}`);
+            }
+
+            // 2b. Terminal Status Check (H5 Audit)
+            if (payment.status === 'approved') {
+                logger.info(`[Webhook] Ignorando evento para pago ${payment.id} ya aprobado (Terminal Status).`);
+                await supabase
+                    .from('webhook_events')
+                    .update({ processed: true, payment_id: payment.id, error_message: 'Terminal status already reached' })
+                    .eq('id', event?.id);
+                return;
             }
 
             // 3. Obtener configuración del gateway
@@ -241,20 +252,28 @@ export class PaymentService {
 
             // Only update if status changed or we have new metadata
             if (oldStatus !== result.status || hasMetadataChanges) {
-                const { data: updatedRows, error } = await supabase
+                // LOCK-FREE ATOMIC UPDATE: Only update if the status is still what we fetched.
+                // This prevents race conditions between two concurrent webhooks.
+                const { data: updatedRows, error: updateError } = await supabase
                     .from('payments')
                     .update({
                         status: result.status,
                         metadata: { ...payment.metadata, ...result.metadata },
                         paid_at: result.status === 'approved' ? new Date().toISOString() : payment.paid_at,
                     })
-                    .eq('id', payment.id)
-                    .eq('status', oldStatus)
+                    .match({ id: payment.id, status: oldStatus })
                     .select();
 
-                if (error) throw error;
+                if (updateError) throw updateError;
+                
                 if (!updatedRows || updatedRows.length === 0) {
-                    logger.warn(`Concurrencia en webhook: el pago id ${payment.id} ya no estaba en estado ${oldStatus}`);
+                    // This means another process (like another webhook) updated the status while we were verifyng this one.
+                    logger.warn(`[Concurrency] Webhook conflict for payment ${payment.id}. Current status already changed from ${oldStatus}. Skipping post-actions.`);
+                    
+                    await supabase
+                        .from('webhook_events')
+                        .update({ processed: true, payment_id: payment.id, error_message: 'Concurrent update ignored' })
+                        .eq('id', event?.id);
                     return;
                 }
 
@@ -490,18 +509,21 @@ export class PaymentService {
         slug: GatewaySlug,
         payload: Record<string, unknown>
     ): string {
-        switch (slug) {
-            case 'webpay':
-                const wpPayload = payload as { token_ws?: string };
-                return wpPayload.token_ws || '';
-            case 'khipu':
-                const khPayload = payload as { payment_id?: string, notification_token?: string };
-                return khPayload.payment_id || khPayload.notification_token || '';
-            case 'flow':
-                const flPayload = payload as { token?: string, flowOrder?: string | number };
-                return flPayload.token || flPayload.flowOrder?.toString() || '';
-            default:
-                return '';
+        try {
+            switch (slug) {
+                case 'webpay':
+                    return (payload.token_ws as string) || '';
+                case 'khipu':
+                    return (payload.payment_id as string) || (payload.notification_token as string) || '';
+                case 'flow':
+                    // Flow sometimes sends token or flowOrder
+                    return (payload.token as string) || (payload.flowOrder?.toString()) || '';
+                default:
+                    return '';
+            }
+        } catch (e) {
+            logger.error(`Error extracting reference for ${slug}`, e as Error);
+            return '';
         }
     }
 

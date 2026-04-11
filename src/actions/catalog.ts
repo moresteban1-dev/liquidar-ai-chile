@@ -5,6 +5,8 @@ import { z, ZodError } from 'zod';
 import { CatalogService } from '@core/application/services/CatalogService';
 import { SupabaseCatalogRepository } from '@infrastructure/persistence/supabase/repositories/SupabaseCatalogRepository';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
+import { requireRole } from '@/lib/supabase/api';
+import { UserRole } from '@/core/domain/auth/UserRole';
 
 // ============ SCHEMAS ============
 
@@ -58,6 +60,11 @@ async function getCatalogService(): Promise<CatalogService> {
 
 export async function createCatalogItemAction(formData: FormData) {
   try {
+    const authResult = await requireRole(UserRole.ADMIN);
+    if (authResult.isFailure()) {
+      return { success: false, error: authResult.getError().message };
+    }
+
     const rawData = Object.fromEntries(formData.entries());
     
     // Parsear campos JSON
@@ -118,6 +125,11 @@ export async function createCatalogItemAction(formData: FormData) {
 
 export async function updateCatalogItemAction(itemId: string, formData: FormData) {
   try {
+    const authResult = await requireRole(UserRole.ADMIN);
+    if (authResult.isFailure()) {
+      return { success: false, error: authResult.getError().message };
+    }
+
     const rawData = Object.fromEntries(formData.entries());
     
     // Parsear campos JSON
@@ -184,6 +196,11 @@ export async function updateCatalogItemAction(itemId: string, formData: FormData
 
 export async function publishCatalogItemAction(itemId: string) {
   try {
+    const authResult = await requireRole(UserRole.ADMIN);
+    if (authResult.isFailure()) {
+      return { success: false, error: authResult.getError().message };
+    }
+
     const service = await getCatalogService();
     const result = await service.publishItem(itemId);
 
@@ -207,6 +224,11 @@ export async function publishCatalogItemAction(itemId: string) {
 
 export async function unpublishCatalogItemAction(itemId: string) {
   try {
+    const authResult = await requireRole(UserRole.ADMIN);
+    if (authResult.isFailure()) {
+      return { success: false, error: authResult.getError().message };
+    }
+
     const service = await getCatalogService();
     const result = await service.unpublishItem(itemId);
 
@@ -230,6 +252,11 @@ export async function unpublishCatalogItemAction(itemId: string) {
 
 export async function archiveCatalogItemAction(itemId: string) {
   try {
+    const authResult = await requireRole(UserRole.ADMIN);
+    if (authResult.isFailure()) {
+      return { success: false, error: authResult.getError().message };
+    }
+
     const service = await getCatalogService();
     const result = await service.archiveItem(itemId);
 
@@ -252,6 +279,11 @@ export async function archiveCatalogItemAction(itemId: string) {
 
 export async function deleteCatalogItemAction(itemId: string) {
   try {
+    const authResult = await requireRole(UserRole.ADMIN);
+    if (authResult.isFailure()) {
+      return { success: false, error: authResult.getError().message };
+    }
+
     const service = await getCatalogService();
     const result = await service.deleteItem(itemId);
 
@@ -285,6 +317,11 @@ const CreateCategorySchema = z.object({
 
 export async function createCategoryAction(formData: FormData) {
   try {
+    const authResult = await requireRole(UserRole.ADMIN);
+    if (authResult.isFailure()) {
+      return { success: false, error: authResult.getError().message };
+    }
+
     const rawData = Object.fromEntries(formData.entries());
     
     const parsedData = {
@@ -335,6 +372,11 @@ export async function createCategoryAction(formData: FormData) {
 
 export async function updateCategoryAction(categoryId: string, formData: FormData) {
   try {
+    const authResult = await requireRole(UserRole.ADMIN);
+    if (authResult.isFailure()) {
+      return { success: false, error: authResult.getError().message };
+    }
+
     const rawData = Object.fromEntries(formData.entries());
     
     const parsedData = {
@@ -494,6 +536,11 @@ export async function getCatalogStatisticsAction() {
 
 export async function generateMarketingAction(itemId: string) {
   try {
+    const authResult = await requireRole(UserRole.ADMIN);
+    if (authResult.isFailure()) {
+      return { success: false, error: authResult.getError().message };
+    }
+
     const service = await getCatalogService();
     // Resolve Marketing Agent from container and inject manually since getCatalogService 
     // manually creates the repository for now.
