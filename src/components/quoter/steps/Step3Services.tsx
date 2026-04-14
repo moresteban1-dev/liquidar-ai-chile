@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { QuoterState } from '../WizardContainer';
-import { Check, Plus, Trash2, Info } from 'lucide-react';
+import { Check, Plus, Trash2, Info, Loader2 } from 'lucide-react';
 
 interface Props {
     state: QuoterState;
@@ -11,26 +11,58 @@ interface Props {
     onBack: () => void;
 }
 
-// Temporary Mock Data representing V2 Catalog output
-const recommendedServices = [
-    { id: 'SRV-SOUND-PRO', label: 'Sonido Profesional', priceEst: '$950.000', detail: 'Sistema Line Array, Monitores, Microfonía Inalámbrica...' },
-    { id: 'SRV-LIGHT-SCENE', label: 'Iluminación Escénica', priceEst: '$750.000', detail: 'Cabezas Móviles, Par LED, Consola DMX, Operador...' },
-    { id: 'SRV-LED-SCREEN', label: 'Pantallas LED', priceEst: '$1.200.000', detail: 'Pantalla Pitch 3.9mm Modular de 5x3 metros...' },
-    { id: 'SRV-STAGE-MODULAR', label: 'Escenario Modular', priceEst: '$450.000', detail: 'Tarimas Layher a 1m alto, Escalera, Faldón...' },
-];
+import { getCatalogItemsAction } from '@/actions/catalog';
 
-const additionalServices = [
-    { id: 'SRV-CATERING', label: 'Catering', priceEst: '$18.000/pers' },
-    { id: 'SRV-PHOTO-VIDEO', label: 'Fotografía / Video', priceEst: '$380.000' },
-    { id: 'SRV-FURNITURE', label: 'Mobiliario', priceEst: '$285.000' },
-    { id: 'SRV-SECURITY', label: 'Seguridad', priceEst: '$190.000' },
-    { id: 'SRV-TRANSPORT', label: 'Transporte', priceEst: 'Personalizado' },
-    { id: 'SRV-DECOR', label: 'Decoración', priceEst: 'Personalizado' },
-];
+type CatalogItemDisplay = {
+    id: string;
+    label: string;
+    priceEst: string;
+    detail: string;
+    type: string;
+    isFeatured: boolean;
+};
 
 export default function Step3Services({ state, updateState, onNext, onBack }: Props) {
 
     const [customServInput, setCustomServInput] = useState('');
+    const [recommendedServices, setRecommendedServices] = useState<CatalogItemDisplay[]>([]);
+    const [additionalServices, setAdditionalServices] = useState<CatalogItemDisplay[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        async function loadCatalog() {
+            try {
+                const response = await getCatalogItemsAction({ statusFilter: 'active' });
+                if (response.success && response.data) {
+                    const items = response.data.map((item: any) => ({
+                        id: item.id,
+                        label: item.name,
+                        priceEst: item.priceSuggested ? `$${item.priceSuggested.toLocaleString('es-CL')}` : 'A convenir',
+                        detail: item.description || item.slug || 'Servicio Profesional',
+                        type: item.type,
+                        isFeatured: !!item.isFeatured
+                    }));
+                    
+                    const featured = items.filter((i: any) => i.isFeatured);
+                    const standard = items.filter((i: any) => !i.isFeatured);
+                    
+                    // Si no hay featured, asignamos los primeros 3 como recomendados.
+                    if (featured.length === 0 && items.length > 0) {
+                        setRecommendedServices(items.slice(0, 3));
+                        setAdditionalServices(items.slice(3));
+                    } else {
+                        setRecommendedServices(featured);
+                        setAdditionalServices(standard);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to load catalog:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        loadCatalog();
+    }, []);
 
     const toggleService = (id: string) => {
         if (state.selectedServices.includes(id)) {
@@ -61,6 +93,14 @@ export default function Step3Services({ state, updateState, onNext, onBack }: Pr
                 <p className="text-neutral-500 dark:text-neutral-400 mb-6">
                     Basado en eventos corporativos similares, te recomendamos:
                 </p>
+
+                {isLoading ? (
+                    <div className="flex flex-col items-center justify-center py-10 space-y-4">
+                        <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
+                        <span className="text-neutral-500 text-sm">Cargando catálogo maestro...</span>
+                    </div>
+                ) : (
+                    <>
 
                 {/* Essential Services */}
                 <div className="mb-8">
@@ -130,6 +170,8 @@ export default function Step3Services({ state, updateState, onNext, onBack }: Pr
                         })}
                     </div>
                 </div>
+                </>
+                )}
 
                 {/* Custom Services Section */}
                 <div>

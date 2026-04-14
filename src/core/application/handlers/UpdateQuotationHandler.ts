@@ -26,7 +26,7 @@ export class UpdateQuotationHandler extends InstrumentedHandler<UpdateQuotationC
 
     // Security Check: Only the assigned provider can update it
     if (quotation.providerId.toString() !== command.providerId) {
-      return fail(AppError.authorization('Only the assigned provider can update this quotation'))
+      return fail(AppError.forbidden('Only the assigned provider can update this quotation'))
     }
 
     const updates = command.updates

@@ -12,6 +12,14 @@ import { QuotationClientItem } from './QuotationClientItem';
 import { QuotationRequestedItem } from './QuotationRequestedItem';
 import { ProviderBid } from './ProviderBid';
 
+interface QuotationItem {
+  id: string;
+  itemName: string;
+  quantity: number;
+  unitCost: Money;
+  description: string;
+}
+
 export interface LegacyQuotationItem {
   description: string;
   quantity: number;
@@ -316,6 +324,39 @@ export class Quotation extends AggregateRoot<QuotationProps> {
     return ok(undefined);
   }
 
+  public analyze(): Result<void, string> {
+    if (this.props.status !== 'SUBMITTED') {
+      return fail('La cotización debe estar en estado SUBMITTED para ser analizada');
+    }
+
+    this.props.status = 'ANALYZING';
+    this.props.updatedAt = new Date();
+
+    return ok(undefined);
+  }
+
+  public cancel(reason: string): Result<void, string> {
+    this.props.status = 'CANCELLED';
+    this.props.rejectionReason = reason;
+    this.props.updatedAt = new Date();
+
+    return ok(undefined);
+  }
+
+  public addItem(item: QuotationItem): Result<void, string> {
+    this.props.requestedItems = this.props.requestedItems || [];
+    this.props.requestedItems.push(item as any);
+    this.version = this.version > 0 ? this.version + 1 : 2;
+    this.props.updatedAt = new Date();
+    return ok(undefined);
+  }
+
+  public removeItem(itemId: string): Result<void, string> {
+    this.props.requestedItems = (this.props.requestedItems || []).filter((i: any) => i.id !== itemId);
+    this.props.updatedAt = new Date();
+    return ok(undefined);
+  }
+
   public markUnderReview(): Result<void, string> {
     if (this.props.status !== 'SUBMITTED') {
       return fail('La cotización debe estar enviada para revisión');
@@ -431,9 +472,10 @@ export class Quotation extends AggregateRoot<QuotationProps> {
   }
 
   public applyAISuggestions(providerItems: QuotationProviderItem[], clientItems: QuotationClientItem[]): Result<void, string> {
-    if (!this.canBeModified) return fail('No se pueden aplicar sugerencias en el estado actual');
+    if (this.props.status !== 'ANALYZING') return fail('Solo se pueden aplicar sugerencias en estado ANALYZING');
     this.props.providerItems = providerItems;
     this.props.clientItems = clientItems;
+    this.props.status = 'OPTIMIZED';
     this.props.updatedAt = new Date();
     return ok(undefined);
   }

@@ -42,20 +42,20 @@ describe('TransitionOrderStateHandler', () => {
     };
 
     describe('Success Cases', () => {
-        it('should transition DRAFT to CONFIRMED', async () => {
+        it('should transition DRAFT to QUOTATION_PENDING', async () => {
             const order = await createOrderInState('DRAFT');
             const command: TransitionOrderStateCommand = {
                 orderId: order.orderId.toString(),
-                newState: 'CONFIRMED',
+                newState: 'QUOTATION_PENDING',
                 performedBy: 'user-1',
-                performedByRole: 'admin'
+                performedByRole: 'ADMIN'
             };
 
             const result = await handler.handle(command);
 
             expect(result.isSuccess()).toBe(true);
             const updatedOrder = await orderRepository.findById(order.orderId);
-            expect(updatedOrder.unwrap()?.state).toBe('CONFIRMED');
+            expect(updatedOrder.unwrap()?.state).toBe('QUOTATION_PENDING');
         });
     });
 

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NegotiateProviderBidUseCase } from './NegotiateProviderBidUseCase';
+import { Result, ok, fail } from '@core/shared/Result';
 
 describe('NegotiateProviderBidUseCase', () => {
     let uc: NegotiateProviderBidUseCase;
@@ -27,14 +28,14 @@ describe('NegotiateProviderBidUseCase', () => {
     });
 
     it('debe retornar false si la cotizacion no existe', async () => {
-        mockQuotationRepo.findById.mockResolvedValue(null);
+        mockQuotationRepo.findById.mockResolvedValue(fail('Not found'));
         const result = await uc.execute('q-123', 'p-456');
         expect(result).toBe(false);
         expect(mockLogger.warn).toHaveBeenCalledWith(expect.stringContaining('Quotation not found'));
     });
 
     it('debe aprobar y escribir nota si el agente decide APPROVE', async () => {
-        mockQuotationRepo.findById.mockResolvedValue({ id: 'q-123', priceCost: 1000, serviceName: 'Test' });
+        mockQuotationRepo.findById.mockResolvedValue(ok({ id: 'q-123', totalProviderNet: { amount: 1000 }, props: { serviceName: 'Test' } }));
         mockNegotiatorAgent.execute.mockResolvedValue({
             decision: 'APPROVE',
             reasoning: 'Buen precio'
@@ -47,7 +48,7 @@ describe('NegotiateProviderBidUseCase', () => {
     });
 
     it('debe registrar el rechazo u otra decision si no es APPROVE', async () => {
-        mockQuotationRepo.findById.mockResolvedValue({ id: 'q-123', priceCost: 1000, serviceName: 'Test' });
+        mockQuotationRepo.findById.mockResolvedValue(ok({ id: 'q-123', totalProviderNet: { amount: 1000 }, props: { serviceName: 'Test' } }));
         mockNegotiatorAgent.execute.mockResolvedValue({
             decision: 'NEGOTIATE',
             reasoning: 'Precio alto',

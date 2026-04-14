@@ -15,6 +15,10 @@ export class InMemoryEventPublisher implements IEventPublisher {
     return Result.ok(undefined);
   }
 
+  async publishAll(events: any[]): Promise<void> {
+    this.events.push(...events);
+  }
+
   // ── Test Helpers ──
 
   get publishedEvents(): DomainEvent[] {

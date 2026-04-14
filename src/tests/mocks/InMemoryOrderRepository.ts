@@ -109,7 +109,7 @@ export class InMemoryOrderRepository implements IOrderRepository {
 
       if (order.isPaid && order.pricing) {
         totalRevenue += order.pricing.finalPrice.amount;
-        totalProfit += order.pricing.totalCommission.amount;
+        totalProfit += order.pricing.calculateProfit().amount;
       }
     }
 
