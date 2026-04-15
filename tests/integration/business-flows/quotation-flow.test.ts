@@ -26,9 +26,9 @@ describe('Quotation Flow — Full Integration', () => {
     ctx.orderRepo.seed([order]);
 
     createOrder = new CreateOrderHandler(ctx.orderRepo, ctx.eventPublisher);
-    createQuotation = new CreateQuotationHandler(ctx.orderRepo, ctx.quotationRepo, ctx.eventPublisher);
-    approveQuotation = new ApproveQuotationHandler(ctx.quotationRepo, ctx.orderRepo, ctx.eventPublisher);
-    rejectQuotation = new RejectQuotationHandler(ctx.quotationRepo, ctx.orderRepo, ctx.eventPublisher);
+    createQuotation = new CreateQuotationHandler(ctx.orderRepo, ctx.quotationRepo);
+    approveQuotation = new ApproveQuotationHandler(ctx.quotationRepo, ctx.orderRepo, ctx.eventPublisher as any);
+    rejectQuotation = new RejectQuotationHandler(ctx.quotationRepo, ctx.orderRepo, ctx.eventPublisher as any);
     transitionState = new TransitionOrderStateHandler(ctx.orderRepo, ctx.eventPublisher);
   });
 

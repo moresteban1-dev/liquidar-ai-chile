@@ -15,8 +15,9 @@ export class InMemoryEventPublisher implements IEventPublisher {
     return Result.ok(undefined);
   }
 
-  async publishAll(events: any[]): Promise<void> {
+  async publishAll(events: any[]): Promise<Result<void, string>> {
     this.events.push(...events);
+    return Result.ok(undefined);
   }
 
   // ── Test Helpers ──
@@ -30,7 +31,7 @@ export class InMemoryEventPublisher implements IEventPublisher {
   }
 
   getEventsByType(eventType: string): DomainEvent[] {
-    return this.events.filter((e) => e.type === eventType);
+    return this.events.filter((e: any) => e.type === eventType || e.eventType === eventType);
   }
 
   get publishedCount(): number {
@@ -38,7 +39,7 @@ export class InMemoryEventPublisher implements IEventPublisher {
   }
 
   hasEvent(eventType: string): boolean {
-    return this.events.some((e) => e.type === eventType);
+    return this.events.some((e: any) => e.type === eventType || e.eventType === eventType);
   }
 
   reset(): void {

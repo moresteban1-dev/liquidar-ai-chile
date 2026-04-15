@@ -4,6 +4,8 @@ import { TransitionOrderStateHandler } from '@core/application/handlers/Transiti
 import { CreateOrderHandler } from '@core/application/handlers/order/CreateOrderUseCase';
 import { UniqueEntityID } from '@core/shared/UniqueEntityID';
 
+import { UserRole } from '@core/domain/auth/UserRole';
+
 describe('Concurrency Stress Tests', () => {
   let ctx: TestContainer;
 
@@ -43,8 +45,8 @@ describe('Concurrency Stress Tests', () => {
     const handler = new TransitionOrderStateHandler(ctx.orderRepo, ctx.eventPublisher);
 
     const [result1, result2] = await Promise.allSettled([
-      handler.execute({ orderId: 'race-order', newState: 'QUOTATION_SENT', performedBy: TEST_IDS.admin, performedByRole: 'admin' }),
-      handler.execute({ orderId: 'race-order', newState: 'CANCELLED', reason: 'Stress test', performedBy: TEST_IDS.admin, performedByRole: 'admin' }),
+      handler.execute({ orderId: 'race-order', newState: 'QUOTATION_SENT', performedBy: TEST_IDS.admin, performedByRole: UserRole.ADMIN }),
+      handler.execute({ orderId: 'race-order', newState: 'CANCELLED', reason: 'Stress test', performedBy: TEST_IDS.admin, performedByRole: UserRole.ADMIN }),
     ]);
 
     // At least one should succeed (the one that hits first)

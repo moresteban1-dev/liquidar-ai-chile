@@ -63,6 +63,10 @@ export class AppError {
     return new AppError('INTERNAL_ERROR', message, 500)
   }
 
+  static infrastructure(message: string): AppError {
+    return new AppError('INTERNAL_ERROR', message, 503)
+  }
+
   static rateLimited(retryAfter?: number): AppError {
     const msg = retryAfter ? `Rate limited. Retry after ${retryAfter} seconds` : 'Too many requests'
     return new AppError('RATE_LIMITED', msg, 429)

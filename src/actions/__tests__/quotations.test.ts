@@ -25,7 +25,7 @@ describe('Server Actions: Provider Bids & Quotations', () => {
 
     describe('Provider Bidding (submitProviderBidAction)', () => {
         it('should block unauthenticated users', async () => {
-            vi.mocked(getAuthUser).mockResolvedValue(fail(AppError.authentication('Session missing')));
+            vi.mocked(getAuthUser).mockResolvedValue(fail(AppError.unauthorized('Session missing')));
 
             const result = await submitProviderBidAction({
                 quotationId: '123',
@@ -75,7 +75,7 @@ describe('Server Actions: Provider Bids & Quotations', () => {
 
     describe('Admin Quotations (setMarkupAndApprove)', () => {
         it('should throw if role is not ADMIN', async () => {
-            vi.mocked(requireRole).mockResolvedValue(fail(AppError.authorization('Unauthorized')));
+            vi.mocked(requireRole).mockResolvedValue(fail(AppError.forbidden('Unauthorized')));
 
             const result = await setMarkupAndApprove('123', 5000, 15000);
 

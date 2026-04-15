@@ -9,20 +9,20 @@ import {
 describe('Mapper Round-Trip — Data Integrity', () => {
   describe('OrderMapper', () => {
     it('should preserve all fields through toPersistence → toDomain', () => {
-      const mapper = new OrderMapper();
+      // OrderMapper uses static methods
       const original = createTestOrder({
         state: 'QUOTATION_PENDING',
         providerId: TEST_IDS.provider,
       });
 
       // Domain → Persistence (instance method)
-      const persisted = mapper.toPersistence(original);
+      const persisted = OrderMapper.toPersistence(original);
 
       expect(persisted.id).toBe(original.id.toString());
       expect(persisted.client_id).toBe(original.clientId.toString());
 
       // Persistence → Domain (instance method)
-      const restored = mapper.toDomain(persisted);
+      const restored = OrderMapper.toDomain(persisted);
 
       expect(restored.isSuccess()).toBe(true);
       const restoredOrder = restored.getValue();

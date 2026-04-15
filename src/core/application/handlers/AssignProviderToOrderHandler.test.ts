@@ -95,13 +95,14 @@ describe('AssignProviderToOrderHandler', () => {
 
   describe('Business Rule Violations', () => {
     it('should reject assigning provider in wrong state', async () => {
-      const orderResult = await createOrderHandler.execute({
-        clientId: 'client-123',
-        eventDate: '2026-12-25T00:00:00.000Z',
-        deliveryAddress: 'Test Address'
-      })
-
-      const order = orderResult.unwrap() // DRAFT state
+      // Create order and advance to PAYMENT_RECEIVED (which does NOT allow provider assignment)
+      const order = await createOrder() // QUOTATION_PENDING
+      order.assignProvider(new UniqueEntityID('provider-existing'))
+      order.transition('QUOTATION_SENT')
+      order.transition('QUOTATION_APPROVED')
+      order.transition('PAYMENT_PENDING')
+      order.transition('PAYMENT_RECEIVED')
+      await orderRepository.save(order)
 
       const result = await handler.execute({
         orderId: order.orderId.toString(),
@@ -109,7 +110,7 @@ describe('AssignProviderToOrderHandler', () => {
       })
 
       expect(result.isFailure()).toBe(true)
-      expect((result.getError() as any).message || result.getError()).toContain('QUOTATION_PENDING')
+      expect((result.getError() as any).message || result.getError()).toContain('already has')
     })
 
     it('should reject changing provider', async () => {

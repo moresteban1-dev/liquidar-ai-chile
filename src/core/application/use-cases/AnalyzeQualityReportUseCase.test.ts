@@ -36,7 +36,8 @@ describe('AnalyzeQualityReportUseCase', () => {
 
         const result = await uc.execute('ord-123', 'Entregable del prov', 'TEXT');
 
-        expect(result).toBe(true);
+        expect(result.isSuccess()).toBe(true);
+        expect(result.getValue()).toBe(true);
         expect(mockNoteWriter.updateInternalNotes).toHaveBeenCalledWith('ord-123', expect.stringContaining('PASS'));
     });
 
@@ -44,7 +45,10 @@ describe('AnalyzeQualityReportUseCase', () => {
         mockOrderReader.getOrderWithBrief.mockResolvedValue({ id: 'ord-1', brief: 'x' });
         mockQASentinel.execute.mockRejectedValue(new Error('500 API Error'));
 
-        await expect(uc.execute('ord-1', 'x', 'TEXT')).rejects.toThrow(/SYSTEM_AI_EXCEPTION/);
+        const result = await uc.execute('ord-1', 'x', 'TEXT');
+
+        expect(result.isFailure()).toBe(true);
+        expect(result.getError().message).toContain('SYSTEM_AI_EXCEPTION');
         expect(mockLogger.error).toHaveBeenCalled();
     });
 });

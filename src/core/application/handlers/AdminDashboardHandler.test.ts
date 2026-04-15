@@ -141,8 +141,11 @@ describe('AdminDashboardHandler', () => {
   })
 
   it('should return recent orders sorted by date', async () => {
+    const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
     await createOrderInState('DRAFT')
+    await sleep(2)
     await createOrderInState('QUOTATION_PENDING', true)
+    await sleep(2)
     await createOrderInState('COMPLETED')
 
     const result = await handler.execute()

@@ -5,6 +5,7 @@ import {
 import { CreateOrderHandler } from '@/core/application/handlers/CreateOrderHandler';
 import { TransitionOrderStateHandler } from '@/core/application/handlers/TransitionOrderStateHandler';
 import { GetOrderByIdHandler } from '@/core/application/handlers/GetOrderByIdHandler';
+import { UserRole } from '@/core/domain/auth/UserRole';
 
 describe('Order Lifecycle — Full Integration', () => {
   let ctx: TestContainer;
@@ -36,36 +37,45 @@ describe('Order Lifecycle — Full Integration', () => {
     // Verify OrderCreated event published
     expect(ctx.eventPublisher.hasEvent('OrderCreated')).toBe(true);
 
-    // ── Step 2: Get Order (verify state) ──
+    // ── Step 2: CreateOrderHandler creates in DRAFT ──
     const getResult1 = await getOrder.execute({ orderId });
     expect(getResult1.isSuccess()).toBe(true);
     const order1 = getResult1.getValue();
-    expect(order1.state).toBe('QUOTATION_PENDING'); // Auto-transition in create handler logic if no draft
+    expect(order1.state).toBe('DRAFT');
 
-    // ── Step 3: Transition to quoted (after quotation) ──
+    // ── Step 3: Transition DRAFT → QUOTATION_PENDING ──
+    const toPendingResult = await transitionState.execute({
+      orderId,
+      newState: 'QUOTATION_PENDING',
+      performedBy: TEST_IDS.admin,
+      performedByRole: UserRole.ADMIN,
+    });
+    expect(toPendingResult.isSuccess()).toBe(true);
+
+    // ── Step 4: Transition to QUOTATION_SENT ──
     const quoteResult = await transitionState.execute({
       orderId,
       newState: 'QUOTATION_SENT',
       performedBy: TEST_IDS.admin,
-      performedByRole: 'admin',
+      performedByRole: UserRole.ADMIN,
     });
     expect(quoteResult.isSuccess()).toBe(true);
 
-    // ── Step 4: Approve ──
+    // ── Step 5: Approve ──
     const approveResult = await transitionState.execute({
       orderId,
       newState: 'QUOTATION_APPROVED',
       performedBy: TEST_IDS.admin,
-      performedByRole: 'admin',
+      performedByRole: UserRole.ADMIN,
     });
     expect(approveResult.isSuccess()).toBe(true);
 
-    // ── Step 5: Payment ──
+    // ── Step 6: Payment ──
     const payPendingResult = await transitionState.execute({
       orderId,
       newState: 'PAYMENT_PENDING',
       performedBy: TEST_IDS.admin,
-      performedByRole: 'admin',
+      performedByRole: UserRole.ADMIN,
     });
     expect(payPendingResult.isSuccess()).toBe(true);
 
@@ -73,34 +83,34 @@ describe('Order Lifecycle — Full Integration', () => {
       orderId,
       newState: 'PAYMENT_RECEIVED',
       performedBy: TEST_IDS.admin,
-      performedByRole: 'admin',
+      performedByRole: UserRole.ADMIN,
     });
     expect(payReceivedResult.isSuccess()).toBe(true);
 
-    // ── Step 6: In Production ──
+    // ── Step 7: In Production ──
     const prodResult = await transitionState.execute({
       orderId,
       newState: 'IN_PRODUCTION',
       performedBy: TEST_IDS.admin,
-      performedByRole: 'admin',
+      performedByRole: UserRole.ADMIN,
     });
     expect(prodResult.isSuccess()).toBe(true);
 
-    // ── Step 6: Delivered ──
+    // ── Step 8: Delivered ──
     const deliverResult = await transitionState.execute({
       orderId,
       newState: 'DELIVERED',
       performedBy: TEST_IDS.admin,
-      performedByRole: 'admin',
+      performedByRole: UserRole.ADMIN,
     });
     expect(deliverResult.isSuccess()).toBe(true);
 
-    // ── Step 7: Completed ──
+    // ── Step 9: Completed ──
     const completeResult = await transitionState.execute({
       orderId,
       newState: 'COMPLETED',
       performedBy: TEST_IDS.admin,
-      performedByRole: 'admin',
+      performedByRole: UserRole.ADMIN,
     });
     expect(completeResult.isSuccess()).toBe(true);
 
@@ -119,7 +129,6 @@ describe('Order Lifecycle — Full Integration', () => {
   });
 
   it('should reject invalid state transition: DRAFT → COMPLETED', async () => {
-    // Manually seed a DRAFT order or use create handler with draft logic if it exists
     const createResult = await createOrder.execute({
       clientId: TEST_IDS.client,
       eventDate: '2026-07-01T10:00:00Z',
@@ -133,7 +142,7 @@ describe('Order Lifecycle — Full Integration', () => {
       orderId,
       newState: 'COMPLETED',
       performedBy: TEST_IDS.admin,
-      performedByRole: 'admin',
+      performedByRole: UserRole.ADMIN,
     });
 
     expect(invalidResult.isFailure()).toBe(true);
@@ -149,13 +158,13 @@ describe('Order Lifecycle — Full Integration', () => {
     const order = createResult.getValue();
     const orderId = order.id.toString();
 
-    // Cancel from initial state
+    // Cancel from initial state (DRAFT permits CANCELLED)
     const cancelResult = await transitionState.execute({
       orderId,
       newState: 'CANCELLED',
       reason: 'Client changed plans',
       performedBy: TEST_IDS.admin,
-      performedByRole: 'admin',
+      performedByRole: UserRole.ADMIN,
     });
 
     expect(cancelResult.isSuccess()).toBe(true);
@@ -165,7 +174,7 @@ describe('Order Lifecycle — Full Integration', () => {
       orderId,
       newState: 'IN_PRODUCTION',
       performedBy: TEST_IDS.admin,
-      performedByRole: 'admin',
+      performedByRole: UserRole.ADMIN,
     });
 
     expect(reOpenResult.isFailure()).toBe(true);

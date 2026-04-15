@@ -29,6 +29,11 @@ export class UpdateQuotationHandler extends InstrumentedHandler<UpdateQuotationC
       return fail(AppError.forbidden('Only the assigned provider can update this quotation'))
     }
 
+    // State Guard: Only DRAFT and SUBMITTED quotations can be modified
+    if (!quotation.canBeModified) {
+      return fail(AppError.business('Only DRAFT and SUBMITTED quotations can be updated'))
+    }
+
     const updates = command.updates
     const currentPricing = quotation.pricing
 

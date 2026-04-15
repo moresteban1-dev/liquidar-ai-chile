@@ -7,6 +7,7 @@ import {
     InventoryStats,
     ProviderMatch
 } from '../../domain/provider/ProviderInventoryTypes';
+import { ok, fail } from '@core/shared/Result';
 
 // ─── Mock Repository ────────────────────────────────────────────────────────
 
@@ -55,7 +56,7 @@ describe('ProviderInventoryService.addItem', () => {
 
     it('should add a valid item', async () => {
         const savedItem = createSampleItem();
-        (repo.saveItem as ReturnType<typeof vi.fn>).mockResolvedValue(savedItem);
+        (repo.saveItem as ReturnType<typeof vi.fn>).mockResolvedValue(ok(savedItem));
 
         const result = await service.addItem({
             providerId: 'prov-1',
@@ -63,38 +64,43 @@ describe('ProviderInventoryService.addItem', () => {
             costPerUnit: 50000,
         });
 
-        expect(result).toEqual(savedItem);
+        expect(result.isSuccess()).toBe(true);
+        expect(result.getValue()).toEqual(savedItem);
         expect(repo.saveItem).toHaveBeenCalledOnce();
     });
 
-    it('should throw if providerId is missing', async () => {
-        await expect(
-            service.addItem({ itemId: 'cat-item-1', costPerUnit: 100 })
-        ).rejects.toThrow('ProviderId e ItemId son obligatorios');
+    it('should fail if providerId is missing', async () => {
+        const result = await service.addItem({ itemId: 'cat-item-1', costPerUnit: 100 });
+
+        expect(result.isFailure()).toBe(true);
+        expect(result.getError().message).toContain('ProviderId e ItemId son obligatorios');
     });
 
-    it('should throw if itemId is missing', async () => {
-        await expect(
-            service.addItem({ providerId: 'prov-1', costPerUnit: 100 })
-        ).rejects.toThrow('ProviderId e ItemId son obligatorios');
+    it('should fail if itemId is missing', async () => {
+        const result = await service.addItem({ providerId: 'prov-1', costPerUnit: 100 });
+
+        expect(result.isFailure()).toBe(true);
+        expect(result.getError().message).toContain('ProviderId e ItemId son obligatorios');
     });
 
-    it('should throw if costPerUnit is negative', async () => {
-        await expect(
-            service.addItem({ providerId: 'prov-1', itemId: 'cat-1', costPerUnit: -10 })
-        ).rejects.toThrow('costo por unidad');
+    it('should fail if costPerUnit is negative', async () => {
+        const result = await service.addItem({ providerId: 'prov-1', itemId: 'cat-1', costPerUnit: -10 });
+
+        expect(result.isFailure()).toBe(true);
+        expect(result.getError().message).toContain('costo por unidad');
     });
 
-    it('should throw if costPerUnit is undefined', async () => {
-        await expect(
-            service.addItem({ providerId: 'prov-1', itemId: 'cat-1' })
-        ).rejects.toThrow('costo por unidad');
+    it('should fail if costPerUnit is undefined', async () => {
+        const result = await service.addItem({ providerId: 'prov-1', itemId: 'cat-1' });
+
+        expect(result.isFailure()).toBe(true);
+        expect(result.getError().message).toContain('costo por unidad');
     });
 
     it('should default status to ACTIVE', async () => {
         const savedItem = createSampleItem();
         (repo.saveItem as ReturnType<typeof vi.fn>).mockImplementation(
-            (item: Partial<ProviderInventoryItem>) => Promise.resolve({ ...savedItem, ...item })
+            (item: Partial<ProviderInventoryItem>) => Promise.resolve(ok({ ...savedItem, ...item }))
         );
 
         await service.addItem({
@@ -110,7 +116,7 @@ describe('ProviderInventoryService.addItem', () => {
 
     it('should respect explicit isAvailable = false', async () => {
         const savedItem = createSampleItem({ isAvailable: false });
-        (repo.saveItem as ReturnType<typeof vi.fn>).mockResolvedValue(savedItem);
+        (repo.saveItem as ReturnType<typeof vi.fn>).mockResolvedValue(ok(savedItem));
 
         await service.addItem({
             providerId: 'prov-1',
@@ -137,23 +143,25 @@ describe('ProviderInventoryService.updateItem', () => {
 
     it('should update an existing item', async () => {
         const existing = createSampleItem();
-        (repo.getInventoryByProviderId as ReturnType<typeof vi.fn>).mockResolvedValue([existing]);
+        (repo.getInventoryByProviderId as ReturnType<typeof vi.fn>).mockResolvedValue(ok([existing]));
         (repo.saveItem as ReturnType<typeof vi.fn>).mockImplementation(
-            (item: Partial<ProviderInventoryItem>) => Promise.resolve(item as ProviderInventoryItem)
+            (item: Partial<ProviderInventoryItem>) => Promise.resolve(ok(item as ProviderInventoryItem))
         );
 
         const result = await service.updateItem('inv-001', 'prov-1', { costPerUnit: 75000 });
 
-        expect(result.costPerUnit).toBe(75000);
+        expect(result.isSuccess()).toBe(true);
+        expect(result.getValue().costPerUnit).toBe(75000);
         expect(repo.saveItem).toHaveBeenCalledOnce();
     });
 
-    it('should throw if item is not found in provider inventory', async () => {
-        (repo.getInventoryByProviderId as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+    it('should fail if item is not found in provider inventory', async () => {
+        (repo.getInventoryByProviderId as ReturnType<typeof vi.fn>).mockResolvedValue(ok([]));
 
-        await expect(
-            service.updateItem('inv-999', 'prov-1', { costPerUnit: 75000 })
-        ).rejects.toThrow('no encontrado');
+        const result = await service.updateItem('inv-999', 'prov-1', { costPerUnit: 75000 });
+
+        expect(result.isFailure()).toBe(true);
+        expect(result.getError().message).toContain('no encontrado');
     });
 });
 
@@ -179,15 +187,17 @@ describe('ProviderInventoryService.suggestProvidersForRFP', () => {
                 city: 'Viña', costPerUnit: 45000, availableQuantity: 5
             },
         ];
-        (repo.findMatchesForItem as ReturnType<typeof vi.fn>).mockResolvedValue(matches);
+        (repo.findMatchesForItem as ReturnType<typeof vi.fn>).mockResolvedValue(ok(matches));
 
         const result = await service.suggestProvidersForRFP([
             { itemId: 'cat-audio-001', quantity: 2 }
         ]);
 
-        expect(result).toBeInstanceOf(Map);
-        expect(result.size).toBe(1);
-        const itemMatches = result.get('cat-audio-001')!;
+        expect(result.isSuccess()).toBe(true);
+        const map = result.getValue();
+        expect(map).toBeInstanceOf(Map);
+        expect(map.size).toBe(1);
+        const itemMatches = map.get('cat-audio-001')!;
         expect(itemMatches).toHaveLength(2);
     });
 
@@ -206,13 +216,14 @@ describe('ProviderInventoryService.suggestProvidersForRFP', () => {
                 costPerUnit: 40000, availableQuantity: 10
             },
         ];
-        (repo.findMatchesForItem as ReturnType<typeof vi.fn>).mockResolvedValue(matches);
+        (repo.findMatchesForItem as ReturnType<typeof vi.fn>).mockResolvedValue(ok(matches));
 
         const result = await service.suggestProvidersForRFP([
             { itemId: 'cat-item-1', quantity: 1 }
         ]);
 
-        const sorted = result.get('cat-item-1')!;
+        expect(result.isSuccess()).toBe(true);
+        const sorted = result.getValue().get('cat-item-1')!;
         // Highest rating first
         expect(sorted[0].providerId).toBe('prov-mid'); // 5.0 rating, $40k (cheaper)
         expect(sorted[1].providerId).toBe('prov-best'); // 5.0 rating, $50k
@@ -220,30 +231,33 @@ describe('ProviderInventoryService.suggestProvidersForRFP', () => {
     });
 
     it('should handle empty matches gracefully', async () => {
-        (repo.findMatchesForItem as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+        (repo.findMatchesForItem as ReturnType<typeof vi.fn>).mockResolvedValue(ok([]));
 
         const result = await service.suggestProvidersForRFP([
             { itemId: 'cat-rare-item', quantity: 1 }
         ]);
 
-        expect(result.get('cat-rare-item')).toEqual([]);
+        expect(result.isSuccess()).toBe(true);
+        expect(result.getValue().get('cat-rare-item')).toEqual([]);
     });
 
     it('should handle multiple items independently', async () => {
         (repo.findMatchesForItem as ReturnType<typeof vi.fn>)
-            .mockResolvedValueOnce([{
+            .mockResolvedValueOnce(ok([{
                 providerId: 'p1', companyName: 'A', rating: 5,
                 costPerUnit: 100, availableQuantity: 1
-            }])
-            .mockResolvedValueOnce([]); // No matches for second item
+            }]))
+            .mockResolvedValueOnce(ok([])); // No matches for second item
 
         const result = await service.suggestProvidersForRFP([
             { itemId: 'item-a', quantity: 1 },
             { itemId: 'item-b', quantity: 3 }
         ]);
 
-        expect(result.size).toBe(2);
-        expect(result.get('item-a')).toHaveLength(1);
-        expect(result.get('item-b')).toHaveLength(0);
+        expect(result.isSuccess()).toBe(true);
+        const map = result.getValue();
+        expect(map.size).toBe(2);
+        expect(map.get('item-a')).toHaveLength(1);
+        expect(map.get('item-b')).toHaveLength(0);
     });
 });

@@ -4,7 +4,7 @@ import { Order } from '@core/domain/aggregates/order/Order';
 import { UniqueEntityID } from '@core/shared/UniqueEntityID';
 
 describe('OrderMapper', () => {
-  const mapper = new OrderMapper();
+  // OrderMapper uses static methods — no instance needed
 
   const validPersistence = {
     id: '123e4567-e89b-12d3-a456-426614174000',
@@ -18,7 +18,7 @@ describe('OrderMapper', () => {
 
   describe('toDomain', () => {
     it('should map persistence to domain', () => {
-      const result = mapper.toDomain(validPersistence);
+      const result = OrderMapper.toDomain(validPersistence);
 
       expect(result.isSuccess()).toBe(true);
       expect(result.getValue().orderId.toString()).toBe(validPersistence.id);
@@ -32,7 +32,7 @@ describe('OrderMapper', () => {
         special_instructions: 'Handle with care'
       };
 
-      const result = mapper.toDomain(withOptionals);
+      const result = OrderMapper.toDomain(withOptionals);
 
       expect(result.isSuccess()).toBe(true);
       expect(result.getValue().props.providerId).toBeDefined();
@@ -46,7 +46,7 @@ describe('OrderMapper', () => {
         completed_at: '2026-06-20T00:00:00.000Z'
       };
 
-      const result = mapper.toDomain(completed);
+      const result = OrderMapper.toDomain(completed);
 
       expect(result.isSuccess()).toBe(true);
       expect(result.getValue().props.completedAt).toBeInstanceOf(Date);
@@ -60,7 +60,7 @@ describe('OrderMapper', () => {
         cancellation_reason: 'Client requested'
       };
 
-      const result = mapper.toDomain(cancelled);
+      const result = OrderMapper.toDomain(cancelled);
 
       expect(result.isSuccess()).toBe(true);
       expect(result.getValue().props.cancelledAt).toBeInstanceOf(Date);
@@ -73,7 +73,7 @@ describe('OrderMapper', () => {
         client_id: undefined as any
       };
 
-      const result = mapper.toDomain(invalid);
+      const result = OrderMapper.toDomain(invalid);
 
       expect(result.isFailure()).toBe(true);
     });
@@ -93,7 +93,7 @@ describe('OrderMapper', () => {
       expect(orderResult.isSuccess()).toBe(true);
       const order = orderResult.getValue();
 
-      const persistence = mapper.toPersistence(order);
+      const persistence = OrderMapper.toPersistence(order);
 
       expect(persistence.client_id).toBe('client-123');
       expect(persistence.state).toBe('DRAFT');
@@ -113,7 +113,7 @@ describe('OrderMapper', () => {
       });
 
       const order = orderResult.getValue();
-      const persistence = mapper.toPersistence(order);
+      const persistence = OrderMapper.toPersistence(order);
 
       expect(persistence.provider_id).toBe('provider-456');
       expect(persistence.special_instructions).toBe('Call before delivery');
@@ -133,8 +133,8 @@ describe('OrderMapper', () => {
       });
 
       const original = originalResult.getValue();
-      const persistence = mapper.toPersistence(original);
-      const reconstructedResult = mapper.toDomain(persistence);
+      const persistence = OrderMapper.toPersistence(original);
+      const reconstructedResult = OrderMapper.toDomain(persistence);
 
       expect(reconstructedResult.isSuccess()).toBe(true);
       const reconstructed = reconstructedResult.getValue();

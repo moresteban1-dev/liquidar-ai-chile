@@ -15,10 +15,21 @@ export class AssignProviderToOrderHandler extends InstrumentedHandler<AssignProv
   }
 
   protected async handle(command: AssignProviderToOrderCommand): Promise<Result<Order, AppError>> {
+    if (!command.orderId || command.orderId.trim() === '') {
+      return fail(AppError.validation('Order ID is required'))
+    }
+    if (!command.providerId || command.providerId.trim() === '') {
+      return fail(AppError.validation('Provider ID is required'))
+    }
+
     const orderResult = await this.orderRepository.findById(new UniqueEntityID(command.orderId))
     if (orderResult.isFailure()) return orderResult as any
     const order = orderResult.getValue()
     if (!order) return fail(AppError.notFound('Order', command.orderId))
+
+    if (order.hasProvider) {
+      return fail(AppError.business('Order already has an assigned provider'))
+    }
 
     const assignResult = order.assignProvider(new UniqueEntityID(command.providerId))
     if (assignResult.isFailure()) return fail(AppError.business(assignResult.getError()))

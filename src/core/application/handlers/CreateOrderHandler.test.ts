@@ -55,7 +55,7 @@ describe('CreateOrderHandler', () => {
       await handler.execute(command)
 
       expect(eventPublisher.publishedEvents.length).toBe(1)
-      expect(eventPublisher.publishedEvents[0].eventType).toBe('OrderCreated')
+      expect(eventPublisher.publishedEvents[0].type).toBe('OrderCreated')
     })
 
     it('should create order without optional fields', async () => {

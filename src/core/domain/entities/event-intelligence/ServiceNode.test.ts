@@ -13,18 +13,24 @@ describe('ServiceNode', () => {
   };
 
   it('should create a valid ServiceNode', () => {
-    const node = ServiceNode.create(validProps);
+    const result = ServiceNode.create(validProps);
+    expect(result.isSuccess()).toBe(true);
+    const node = result.getValue();
     expect(node.id).toBe(validProps.id);
     expect(node.nodeType).toBe('EQUIPMENT');
     expect(node.isEssential).toBe(true);
   });
 
-  it('should throw error if code is empty', () => {
-    expect(() => ServiceNode.create({ ...validProps, code: '' })).toThrow('ServiceNode: code is required');
+  it('should fail if code is empty', () => {
+    const result = ServiceNode.create({ ...validProps, code: '' });
+    expect(result.isFailure()).toBe(true);
+    expect(result.getError()).toContain('code is required');
   });
 
-  it('should throw error if name is empty', () => {
-    expect(() => ServiceNode.create({ ...validProps, name: ' ' })).toThrow('ServiceNode: name is required');
+  it('should fail if name is empty', () => {
+    const result = ServiceNode.create({ ...validProps, name: ' ' });
+    expect(result.isFailure()).toBe(true);
+    expect(result.getError()).toContain('name is required');
   });
 
   it('should reconstitute a ServiceNode', () => {

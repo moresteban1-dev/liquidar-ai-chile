@@ -126,7 +126,15 @@ export class InMemoryOrderRepository implements IOrderRepository {
   async findAllEnriched(
     options?: OrderListOptions,
   ): Promise<Result<OrderListResult, string>> {
-    const all = Array.from(this.orders.values());
+    let all = Array.from(this.orders.values());
+
+    if (options?.sortBy === 'created_at') {
+      all.sort((a, b) => {
+        const timeA = a.createdAt.getTime();
+        const timeB = b.createdAt.getTime();
+        return options.sortOrder === 'desc' ? timeB - timeA : timeA - timeB;
+      });
+    }
 
     const page = options?.page ?? 1;
     const limit = options?.limit ?? 20;

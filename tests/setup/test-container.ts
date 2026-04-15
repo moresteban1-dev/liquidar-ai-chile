@@ -52,14 +52,14 @@ export function createTestContainer(): TestContainer {
   const notificationRouter = new NotificationRouter({ logger });
 
   // Register all
-  container.registerSingleton('logger', logger);
-  container.registerSingleton('metrics', metrics);
-  container.registerSingleton('orderRepository', orderRepo);
-  container.registerSingleton('quotationRepository', quotationRepo);
-  container.registerSingleton('eventPublisher', eventPublisher);
-  container.registerSingleton('notificationLog', notificationLog);
-  container.registerSingleton('templateEngine', templateEngine);
-  container.registerSingleton('notificationService', notificationRouter);
+  container.register('logger', () => logger, { singleton: true });
+  container.register('metrics', () => metrics, { singleton: true });
+  container.register('orderRepository', () => orderRepo, { singleton: true });
+  container.register('quotationRepository', () => quotationRepo, { singleton: true });
+  container.register('eventPublisher', () => eventPublisher, { singleton: true });
+  container.register('notificationLog', () => notificationLog, { singleton: true });
+  container.register('templateEngine', () => templateEngine, { singleton: true });
+  container.register('notificationService', () => notificationRouter, { singleton: true });
 
   return {
     container,
