@@ -6,7 +6,7 @@ import { IDomainEventBus } from '@app/ports/IDomainEventBus'
 import { Quotation } from '@core/domain/aggregates/quotation/Quotation'
 import { UniqueEntityID } from '@core/shared/UniqueEntityID'
 import { ApproveQuotationCommand } from '../commands/ApproveQuotationCommand'
-import { metricsCollector } from '@infrastructure/telemetry/MetricsCollector'
+import { getTelemetryProvider } from '../ports/ITelemetryPort'
 import { AppError } from '@/core/shared/AppError'
 
 export class ApproveQuotationHandler extends InstrumentedHandler<ApproveQuotationCommand, Quotation, AppError> {
@@ -54,7 +54,7 @@ export class ApproveQuotationHandler extends InstrumentedHandler<ApproveQuotatio
       await this.eventBus.publishAll(transportEvents)
     }
 
-    metricsCollector.recordQuotationApproved({ 
+    getTelemetryProvider().metrics.recordQuotationApproved({ 
       orderId: order.orderId.toString(), 
       amount: String(quotation.pricing.finalPrice.amount), 
       currency: quotation.pricing.finalPrice.currency 

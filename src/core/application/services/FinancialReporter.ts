@@ -1,4 +1,4 @@
-import { logger } from '@infrastructure/telemetry/StructuredLogger';
+import { getTelemetryProvider } from '../ports/ITelemetryPort';
 
 export interface FinancialReport {
     periodStart: Date;
@@ -15,7 +15,7 @@ export class FinancialReporter {
      * This bypasses read models to ensure 100% audit accuracy from the source of truth.
      */
     async generateReport(start: Date, end: Date): Promise<FinancialReport> {
-        logger.info(`Generating financial report from ${start.toISOString()} to ${end.toISOString()}`);
+        getTelemetryProvider().logger.info(`Generating financial report from ${start.toISOString()} to ${end.toISOString()}`);
         
         // In a real high-volume system, we would query the Event Store for specific event types in a time range.
         // For this implementation, we demonstrate the replaying logic.

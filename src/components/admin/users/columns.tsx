@@ -24,17 +24,7 @@ import { Loader2 } from 'lucide-react';
 import { UserEditDialog } from './user-edit-dialog';
 import { UserRole, normalizeRole } from '@/core/domain/auth/UserRole';
 
-// This type mirrors the profile structure + auth data
-export type UserProfile = {
-    id: string;
-    email: string;
-    name: string;
-    role: UserRole;
-    phone: string | null;
-    created_at: string;
-    is_active?: boolean;
-    last_sign_in_at?: string;
-};
+import { UserProfile } from './types';
 
 const UserActions = ({ user }: { user: UserProfile }) => {
     const router = useRouter();

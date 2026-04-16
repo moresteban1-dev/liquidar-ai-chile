@@ -5,7 +5,7 @@ import { IEventPublisher } from '@/core/application/ports/IEventPublisher'
 import { Order } from '@/core/domain/aggregates/order/Order'
 import { UniqueEntityID } from '@/core/shared/UniqueEntityID'
 import { CreateOrderCommand } from '../commands/CreateOrderCommand'
-import { metricsCollector } from '@/infrastructure/telemetry/MetricsCollector'
+import { getTelemetryProvider } from '../ports/ITelemetryPort'
 import { AppError } from '@/core/shared/AppError'
 
 export class CreateOrderHandler extends InstrumentedHandler<CreateOrderCommand, Order, AppError> {
@@ -60,7 +60,7 @@ export class CreateOrderHandler extends InstrumentedHandler<CreateOrderCommand, 
       await this.eventPublisher.publishMany(events)
     }
 
-    metricsCollector.recordOrderCreated({
+    getTelemetryProvider().metrics.recordOrderCreated({
       clientId: command.clientId,
       eventType: command.eventType || 'unknown'
     })

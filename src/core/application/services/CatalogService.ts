@@ -9,7 +9,7 @@ import {
 import { ICatalogRepository } from '@core/application/ports/ICatalogRepository';
 import { Result } from '@core/shared/Result';
 import { AppError } from '@shared/AppError';
-import { MarketingGeniusAgent } from '@infrastructure/ai/agents/MarketingGeniusAgent';
+import { IMarketingAgent } from '../ports/IAgents';
 
 export interface CatalogLogger {
   info: (msg: string, data?: unknown) => void;
@@ -26,7 +26,7 @@ export interface CatalogLogger {
 export class CatalogService {
   constructor(
     private repository: ICatalogRepository,
-    private marketingAgent?: MarketingGeniusAgent,
+    private marketingAgent?: IMarketingAgent,
     private logger?: CatalogLogger
   ) {}
 

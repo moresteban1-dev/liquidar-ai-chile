@@ -6,11 +6,7 @@ import { CatalogItemMapper } from '@/infrastructure/persistence/supabase/mappers
 import { CatalogCategoryMapper } from '@/infrastructure/persistence/supabase/mappers/CatalogCategoryMapper';
 import { createClient } from '@supabase/supabase-js';
 
-type Factory<T> = () => T | Promise<T>;
-
-interface RegistrationOptions {
-  singleton?: boolean;
-}
+import { IContainer, Factory, RegistrationOptions } from './DITypes';
 
 interface Registration<T> {
   factory: Factory<T>;
@@ -19,41 +15,9 @@ interface Registration<T> {
   loading?: Promise<T>;
 }
 
-export const DI_KEYS = {
-  SupabaseClient: 'SupabaseClient',
-  CatalogRepository: 'CatalogRepository',
-  Logger: 'Logger',
-  CacheManager: 'CacheManager',
-  NegotiatorAgent: 'NegotiatorAgent',
-  QASentinelAgent: 'QASentinelAgent',
-  EmailService: 'EmailService',
-  NotificationService: 'NotificationService',
-  OrderRepository: 'OrderRepository',
-  QuotationRepository: 'QuotationRepository',
-  PlatformConfigRepository: 'PlatformConfigRepository',
-  CatalogService: 'CatalogService',
-  KnowledgeRepository: 'KnowledgeRepository',
-  QuotationHistoryRepository: 'QuotationHistoryRepository',
-  CreateOrderHandler: 'CreateOrderHandler',
-  CreateQuotationHandler: 'CreateQuotationHandler',
-  AssignProviderHandler: 'AssignProviderHandler',
-  CreateQuotationRequestHandler: 'CreateQuotationRequestHandler',
-  EventBus: 'EventBus',
-  AIBroker: 'AIBroker',
-  ProviderInventoryRepository: 'ProviderInventoryRepository',
-  ProviderInventoryService: 'ProviderInventoryService',
-  AIGenerator: 'AIGenerator',
-  AIAuditPort: 'AIAuditPort',
-  ConfidenceService: 'ConfidenceService',
-  PricingCalculatorService: 'PricingCalculatorService',
-  SLAService: 'SLAService',
-  MarketingGeniusAgent: 'MarketingGeniusAgent',
-  PricingOracleAgent: 'PricingOracleAgent',
-  SLAGuardianAgent: 'SLAGuardianAgent',
-  InternalCommandBus: 'InternalCommandBus',
-} as const;
+import { DI_KEYS } from './DIKeys';
 
-export class Container {
+export class Container implements IContainer {
   private registrations = new Map<string, Registration<any>>();
 
   register<T>(key: string, factory: Factory<T>, options: RegistrationOptions = {}): void {

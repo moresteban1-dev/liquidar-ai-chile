@@ -2,7 +2,8 @@
 // lib/payments/payment-service.ts
 // ============================================================
 
-import { DI_KEYS, container } from '@/infrastructure/di/bindings';
+import { getContainer } from '@/infrastructure/di/Container';
+import { DI_KEYS } from '@/infrastructure/di/DIKeys';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { createClient } from '@/lib/supabase/server';
 import { createServiceRoleClient } from '@/lib/supabase/api';
@@ -447,11 +448,11 @@ export class PaymentService {
             .single();
 
         if (orderEntity && orderEntity.quotation_id) {
-            // FIX ADITIVO: Delega la transición al QuotationService para usar la FSM y logs asociados.
-            const { diContainer } = await import('@infrastructure/di/CoreContainer');
-            await diContainer.getQuotationService().transitionQuotation(
+            // Unificado bajo el contenedor principal
+            const container = await getContainer();
+            const quotationService = await container.resolve<any>('QuotationService');
+            await quotationService.transitionQuotation(
                 orderEntity.quotation_id,
-                 
                 'PAID' as any, // QuotationStatus.PAID
                 { internalNotes: 'Pago procesado automáticamente por webhook' }
             );
@@ -473,6 +474,7 @@ export class PaymentService {
             const clientData = Array.isArray(orderDetails.client) ? orderDetails.client[0] : orderDetails.client;
             if (clientData?.email) {
                 const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/client/orders/${orderId}`;
+                const container = await getContainer();
                 const emailService = await container.resolve<any>(DI_KEYS.EmailService);
                 await emailService.sendPaymentConfirmation(clientData.email, orderDetails.code, dashboardUrl);
             }

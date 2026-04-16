@@ -1,8 +1,7 @@
 import { InstrumentedHandler } from '@/core/application/shared/InstrumentedHandler'
 import { Result, Success } from '@/core/shared/Result'
 import { AppError } from '@/core/shared/AppError'
-import { EmailService } from '@/infrastructure/notifications/EmailService'
-import { WebhookService } from '@/infrastructure/notifications/WebhookService'
+import { IEmailProvider, IWebhookProvider } from '../ports/INotificationProvider'
 import { EmailTemplates } from '@/core/domain/templates/EmailTemplates'
 
 export interface NotifyOrderUpdateCommand {
@@ -24,8 +23,8 @@ export class NotifyClientOnOrderUpdateHandler extends InstrumentedHandler<Notify
   protected operationType = 'command' as const
 
   constructor(
-    private readonly emailService: EmailService,
-    private readonly webhookService: WebhookService
+    private readonly emailService: IEmailProvider,
+    private readonly webhookService: IWebhookProvider
   ) {
     super()
   }

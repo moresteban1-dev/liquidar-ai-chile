@@ -1,5 +1,5 @@
 import { PlatformConfigRepository } from '../ports/PlatformConfigRepository';
-import { PricingOracleAgent } from '@infrastructure/ai/agents/PricingOracleAgent';
+import { IPricingOracleAgent } from '../ports/IAgents';
 import { Result, ok, fail } from '@core/shared/Result';
 
 export interface PriceCalculationResult {
@@ -15,7 +15,7 @@ export interface PriceCalculationResult {
 export class PricingCalculatorService {
     constructor(
         private configRepository: PlatformConfigRepository,
-        private pricingAgent?: PricingOracleAgent
+        private pricingAgent?: IPricingOracleAgent
     ) { }
 
     /**

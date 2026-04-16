@@ -44,8 +44,8 @@ export class AnalyzeQuotationHandler implements ICommandHandler<AnalyzeQuotation
         const analysisData = analysisRes.getValue();
 
         // Business Metrics [NEW]
-        const { DomainMetrics } = await import('@infrastructure/telemetry/DomainMetrics');
-        DomainMetrics.recordAIBiasAnalysis(analysisData.overallBiasScore);
+        const { getTelemetryProvider } = await import('../../ports/ITelemetryPort');
+        getTelemetryProvider().metrics.recordAIBiasAnalysis(analysisData.overallBiasScore);
 
         return ok(analysisData);
     }

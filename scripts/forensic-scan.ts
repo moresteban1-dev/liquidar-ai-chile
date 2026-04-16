@@ -127,11 +127,20 @@ let hookViolations = 0;
 for (const file of serverComponentFiles) {
     const content = readFileSync(file, 'utf-8');
     if (!content.includes("'use client'") && !content.includes('"use client"')) {
-        const matches = content.match(hookPattern);
-        if (matches) {
-            hookViolations++;
-            log('fail', `${relative('.', file)} uses ${matches[0]} without "use client"`);
+        const lines = content.split('\n');
+        let foundHook = false;
+        for (const line of lines) {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) continue;
+            const matches = line.match(hookPattern);
+            if (matches) {
+                hookViolations++;
+                log('fail', `${relative('.', file)} uses ${matches[0]} without "use client"`);
+                foundHook = true;
+                break;
+            }
         }
+
     }
 }
 
@@ -145,7 +154,7 @@ if (hookViolations === 0) {
 // ─── 3. Browser API in Server Files ─────────────────────────
 
 console.log(`\n${BOLD}[3/10] Checking for browser API usage in server files...${RESET}`);
-const browserAPIs = /\b(window|document|navigator|localStorage|sessionStorage|alert|confirm|prompt)\b/;
+const browserAPIs = /\b(window|document|navigator|localStorage|sessionStorage)\b|\b(alert|confirm|prompt)\s*\(/;
 const serverFiles = findFiles('src', /\.ts$/);
 let browserViolations = 0;
 
@@ -278,26 +287,31 @@ if (!existsSync('src/app/global-error.tsx')) {
     log('pass', 'global-error.tsx exists');
 }
 
-// ─── 7. Hexagonal Architecture Violations ───────────────────
-
 console.log(`\n${BOLD}[7/10] Checking hexagonal architecture violations...${RESET}`);
 if (existsSync('src/core')) {
-    try {
-        const violations = execSync(
-            'findstr /s /r "from.*infrastructure from.*..\\\\infrastructure" src\\core\\*.ts 2>nul || echo CLEAN',
-            { encoding: 'utf-8', cwd: '.' },
-        );
-        if (violations.trim() === 'CLEAN' || violations.trim() === '') {
-            log('pass', 'Core layer is properly isolated from infrastructure');
-            addResult('hexagonal', 'pass', 'Clean');
-        } else {
-            log('fail', 'Core imports infrastructure (hexagonal violation!)');
-            console.log(`${DIM}${violations}${RESET}`);
-            addResult('hexagonal', 'fail', 'Violations found');
+    const coreFiles = findFiles('src/core', /\.ts$/);
+    let hexagonalViolations = 0;
+    const infrPattern = /from\s+['"](@infrastructure|.*infrastructure)['"]/;
+
+    for (const file of coreFiles) {
+        const lines = readFileSync(file, 'utf-8').split('\n');
+        for (const [i, line] of lines.entries()) {
+            const trimmed = line.trim();
+            if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) continue;
+            
+            if (infrPattern.test(line)) {
+                hexagonalViolations++;
+                log('fail', `${relative('.', file)}: line ${i + 1} imports infrastructure!`);
+                console.log(`${DIM}  → ${trimmed}${RESET}`);
+            }
         }
-    } catch {
-        log('pass', 'No hexagonal violations found');
+    }
+
+    if (hexagonalViolations === 0) {
+        log('pass', 'Core layer is properly isolated from infrastructure');
         addResult('hexagonal', 'pass', 'Clean');
+    } else {
+        addResult('hexagonal', 'fail', `${hexagonalViolations} violations found`);
     }
 } else {
     log('pass', 'No src/core directory (hexagonal check skipped)');

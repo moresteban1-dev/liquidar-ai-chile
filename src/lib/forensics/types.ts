@@ -1,0 +1,15 @@
+export type ErrorCategory =
+    | 'SERIALIZATION'
+    | 'HYDRATION'
+    | 'CLIENT_BOUNDARY'
+    | 'DATABASE'
+    | 'AUTHENTICATION'
+    | 'ENVIRONMENT'
+    | 'IMPORT_RESOLUTION'
+    | 'TYPE_MISMATCH'
+    | 'CIRCULAR_DEPENDENCY'
+    | 'RSC_VIOLATION'
+    | 'ASYNC_COMPONENT'
+    | 'SUPABASE'
+    | 'AI_GENKIT'
+    | 'UNKNOWN';

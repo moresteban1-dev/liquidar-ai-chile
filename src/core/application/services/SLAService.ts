@@ -1,6 +1,6 @@
 // src/core/application/services/SLAService.ts
 
-import { SLAGuardianAgent } from '@infrastructure/ai/agents/SLAGuardianAgent';
+import { ISLAGuardianAgent } from '../ports/IAgents';
 import { IOrderRepository } from '@app/ports/IOrderRepository';
 import { Logger } from '@app/ports/Logger';
 import { Result } from '@core/shared/Result';
@@ -10,7 +10,7 @@ import { UniqueEntityID } from '@core/shared/UniqueEntityID';
 export class SLAService {
     constructor(
         private orderRepository: IOrderRepository,
-        private slaAgent: SLAGuardianAgent,
+        private slaAgent: ISLAGuardianAgent,
         private logger: Logger
     ) { }
 

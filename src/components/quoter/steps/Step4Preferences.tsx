@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { QuoterState } from '../WizardContainer';
+import { QuoterState } from '../QuoterTypes';
 import { DollarSign, Leaf, Map, MessageSquare, GripVertical } from 'lucide-react';
 
 interface Props {

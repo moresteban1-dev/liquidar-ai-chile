@@ -1,15 +1,14 @@
 // src/infrastructure/di/bindings.ts
 // Registros de dependencias con LAZY LOADING (imports dinámicos)
 
-import { container, Container, DI_KEYS } from './Container';
-
-export { DI_KEYS };
+import { IContainer } from './DITypes';
+import { DI_KEYS } from './DIKeys';
 
 /**
  * Registra todas las dependencias de la aplicación
  * Usa imports DINÁMICOS para evitar bundling de módulos pesados
  */
-export function registerBindings(c: Container): void {
+export function registerBindings(c: IContainer): void {
   
   // ═══════════════════════════════════════════════════════════════════════════
   // TIER 0: INFRASTRUCTURE (Logger, Email, etc.)
@@ -156,11 +155,26 @@ export function registerBindings(c: Container): void {
     return new SupabaseKnowledgeRepository(supabase);
   }, { singleton: true });
 
+  c.register('QuotationHistoryRepository', async () => {
+    const { SupabaseQuotationHistoryRepository } = await import('@infrastructure/persistence/supabase/repositories/SupabaseQuotationHistoryRepository');
+    const supabase = await c.resolve<any>('SupabaseClient');
+    return new SupabaseQuotationHistoryRepository(supabase);
+  }, { singleton: true });
+
+  c.register('QuotationService', async () => {
+    const { QuotationService } = await import('@core/application/services/quotation-service');
+    const repo = await c.resolve<any>('QuotationRepository');
+    const historyRepo = await c.resolve<any>('QuotationHistoryRepository');
+    const logger = await c.resolve<any>('Logger');
+    return new QuotationService(repo, historyRepo, logger);
+  }, { singleton: true });
+
   // Alias con prefijo 'I' para cumplir con la propuesta del usuario
   c.register('IOrderRepository', async () => await c.resolve('OrderRepository'), { singleton: true });
   c.register('IQuotationRepository', async () => await c.resolve('QuotationRepository'), { singleton: true });
   c.register('ICatalogRepository', async () => await c.resolve('CatalogRepository'), { singleton: true });
   c.register('IKnowledgeRepository', async () => await c.resolve('KnowledgeRepository'), { singleton: true });
+  c.register('IQuotationHistoryRepository', async () => await c.resolve('QuotationHistoryRepository'), { singleton: true });
 
   // ═══════════════════════════════════════════════════════════════════════════
   // TIER 4: APPLICATION HANDLERS & SERVICES
@@ -290,9 +304,3 @@ export function registerBindings(c: Container): void {
      });
   });
 }
-
-// Auto-registrar bindings al importar el módulo
-registerBindings(container);
-
-// Re-exportar container para uso en la aplicación
-export { container };

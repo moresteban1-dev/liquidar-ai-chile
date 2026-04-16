@@ -36,7 +36,7 @@ import { toast } from 'sonner';
 import { UserRole } from '@/core/domain/auth/UserRole';
 
 import { adminUpdateUser, updateUserRole } from '@/actions/users';
-import { UserProfile } from './columns';
+import { UserProfile } from './types';
 
 const profileSchema = z.object({
     name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),

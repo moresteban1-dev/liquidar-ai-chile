@@ -1,5 +1,4 @@
-import { InferenceStage } from './InferenceStage';
-import { InferenceContext } from '../InferenceEngine';
+import { InferenceStage, InferenceContext } from '../InferenceTypes';
 import { Result, ok } from '@/core/shared/Result';
 
 export class QuantityScalingStage implements InferenceStage {

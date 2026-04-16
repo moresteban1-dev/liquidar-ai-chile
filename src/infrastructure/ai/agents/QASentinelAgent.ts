@@ -73,10 +73,12 @@ export class QASentinelAgent {
 // Prefer using `container.resolve(DI_KEYS.QASentinelAgent)` directly.
 // This export remains for backward compatibility with existing call sites.
 
-import { container, DI_KEYS } from '@infrastructure/di/Container';
+import { getContainer } from '@/infrastructure/di/Container';
+import { DI_KEYS } from '@/infrastructure/di/DIKeys';
 
 export const qaSentinelAgent = {
     async execute(input: z.infer<typeof QAInputSchema>) {
+        const container = await getContainer();
         const agent = await container.resolve<QASentinelAgent>(DI_KEYS.QASentinelAgent);
         return agent.execute(input);
     }

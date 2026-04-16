@@ -4,6 +4,8 @@ import { revalidatePath } from 'next/cache';
 import { z, ZodError } from 'zod';
 import { CatalogService } from '@core/application/services/CatalogService';
 import { SupabaseCatalogRepository } from '@infrastructure/persistence/supabase/repositories/SupabaseCatalogRepository';
+import { getContainer } from '@/infrastructure/di/Container';
+import { DI_KEYS } from '@/infrastructure/di/DIKeys';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { requireRole } from '@/lib/supabase/api';
 import { UserRole } from '@/core/domain/auth/UserRole';
@@ -545,8 +547,8 @@ export async function generateMarketingAction(itemId: string) {
     // Resolve Marketing Agent from container and inject manually since getCatalogService 
     // manually creates the repository for now.
     // In a full DI world, we would resolve CatalogService directly.
-    const { container } = await import('@infrastructure/di/bindings');
-    const marketingAgent = await container.resolve<any>('MarketingGeniusAgent');
+    const container = await getContainer();
+    const marketingAgent = await container.resolve<any>(DI_KEYS.MarketingGeniusAgent);
     
     // Patch the service with the agent if it's missing (needed because getCatalogService factory)
     if (!(service as any).marketingAgent) {

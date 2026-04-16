@@ -2,7 +2,7 @@
 
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import React, { useState, useEffect } from 'react';
-import { QuoterState } from '../WizardContainer';
+import { QuoterState } from '../QuoterTypes';
 import { User, Mail, Phone, Briefcase, CheckCircle, FileText, ArrowRight } from 'lucide-react';
 import { getDownPaymentAction, submitQuoteSessionAction } from '@/actions/quoter';
 import { QuoteSession } from '@core/domain/quote/QuoteTypes';

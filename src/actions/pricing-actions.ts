@@ -1,7 +1,8 @@
 // src/actions/pricing-actions.ts
 'use server';
 
-import { container } from '@infrastructure/di/bindings';
+import { getContainer } from '@infrastructure/di/Container';
+import { DI_KEYS } from '@infrastructure/di/DIKeys';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { PricingCalculatorService } from '@core/application/services/PricingCalculatorService';
 
@@ -15,6 +16,7 @@ export async function predictPriceAction(data: {
     complexity?: 'LOW' | 'MEDIUM' | 'HIGH';
 }) {
     try {
+        const container = await getContainer();
         const pricingService = await container.resolve<PricingCalculatorService>('PricingCalculatorService');
         
         const result = await pricingService.predictOptimalPrice(

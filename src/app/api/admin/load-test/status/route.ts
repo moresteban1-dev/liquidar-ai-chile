@@ -1,7 +1,8 @@
 import { NextRequest } from 'next/server';
 import { adminRoute, MiddlewareContext } from '@/infrastructure/http/middleware/compose';
 import { ok } from '@/infrastructure/http/helpers/responses';
-import { getContainer, DI_KEYS } from '@/infrastructure/di/Container';
+import { getContainer } from '@/infrastructure/di/Container';
+import { DI_KEYS } from '@/infrastructure/di/DIKeys';
 import { CacheManager } from '@/infrastructure/cache/CacheManager';
 
 /**

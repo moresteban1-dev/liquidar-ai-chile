@@ -4,29 +4,60 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env['ANALYZE'] === 'true',
 });
 
+/** @type {import('next').NextConfig} */
 const config: NextConfig = {
-  typescript: {
-    ignoreBuildErrors: false,
-  },
-  
-  // Next.js 16: Silence Turbopack error to allow Webpack plugins (Bundle Analyzer)
-  // @ts-ignore - turbopack is a new key in Next 16
-  turbopack: {},
-  
-  // Configuración de rutas tipadas (Next.js 15+ compatible)
-  // typedRoutes: true,
+  reactStrictMode: true,
 
-  // Optimización de paquetes externos (Server-only)
+  // Next.js 16/15 compatibility: Merge external packages
   serverExternalPackages: [
     '@google/generative-ai',
     'pino',
     '@opentelemetry/api',
     '@opentelemetry/sdk-trace-node',
     'jspdf',
-    'fflate'
+    'fflate',
+    '@genkit-ai/core',
+    '@genkit-ai/googleai',
+    'bullmq',
+    'ioredis',
+    'sharp',
+    'canvas',
   ],
 
+  // Next.js 16: Explicitly set empty turbopack config to allow fallback to Webpack
+  // when custom webpack properties are defined (e.g. by plugins).
+  // @ts-ignore
+  turbopack: {
+    rules: {}
+  },
 
+  // Configuración de Webpack (Preservada del antiguo next.config.mjs)
+  webpack: (config, { isServer }) => {
+    // Ignorar warnings de dependencias opcionales
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      { module: /opentelemetry/ },
+      { module: /genkit/ },
+      { module: /bullmq/ },
+      { message: /Critical dependency/ },
+      { message: /Serializing big strings/ },
+    ];
+
+    // Fallbacks para módulos de Node.js en cliente
+    if (!isServer) {
+        config.resolve.fallback = {
+            ...config.resolve.fallback,
+            fs: false,
+            net: false,
+            tls: false,
+            dns: false,
+            child_process: false,
+            crypto: false,
+        };
+    }
+
+    return config;
+  },
 
   experimental: {
     // Server Actions config
@@ -34,8 +65,6 @@ const config: NextConfig = {
       bodySizeLimit: '2mb',
       allowedOrigins: ['dropservice-platform.vercel.app', 'localhost:3000'],
     },
-    // Next.js 15 experimental features
-    ppr: false,
     // Stale Times (Cache Client-side)
     staleTimes: {
       dynamic: 30,
@@ -63,57 +92,34 @@ const config: NextConfig = {
     ]
   },
 
-  // Headers de seguridad
+  // Headers de seguridad con CSP dinámico
   async headers() {
     return [
       {
         source: '/(.*)',
         headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
-          },
-          {
-            key: 'Content-Security-Policy',
-            value: buildCSP(),
-          },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          { key: 'Content-Security-Policy', value: buildCSP() },
         ],
       },
       {
-        // Assets estáticos — caché agresivo
         source: '/static/(.*)',
         headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
         ],
       },
     ];
+  },
+
+  // Var de entorno forzadas (Next.js config style)
+  env: {
+    NEXT_TELEMETRY_DISABLED: '1',
   },
 };
 

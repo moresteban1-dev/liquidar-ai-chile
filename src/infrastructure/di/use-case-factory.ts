@@ -1,4 +1,5 @@
-import { container, DI_KEYS, getContainer } from './Container';
+import { getContainer } from './Container';
+import { DI_KEYS } from './DIKeys';
 import { NegotiateProviderBidUseCase } from '@core/application/use-cases/NegotiateProviderBidUseCase';
 import { AnalyzeQualityReportUseCase } from '@core/application/use-cases/AnalyzeQualityReportUseCase';
 import { Result, ok, fail } from '@core/shared/Result';

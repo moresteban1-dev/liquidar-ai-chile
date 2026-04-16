@@ -1,5 +1,5 @@
 import { Result } from '@/core/shared/Result';
-import { InferenceContext } from '../InferenceEngine';
+import { InferenceContext } from '../InferenceTypes';
 
 export interface InferenceStage {
   /**

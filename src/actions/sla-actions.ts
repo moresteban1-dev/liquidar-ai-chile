@@ -1,7 +1,8 @@
 // src/actions/sla-actions.ts
 'use server';
 
-import { container } from '@infrastructure/di/bindings';
+import { getContainer } from '@/infrastructure/di/Container';
+import { DI_KEYS } from '@/infrastructure/di/DIKeys';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { SLAService } from '@core/application/services/SLAService';
 
@@ -10,6 +11,7 @@ import { SLAService } from '@core/application/services/SLAService';
  */
 export async function checkOrderSLARiskAction(orderId: string) {
     try {
+        const container = await getContainer();
         const slaService = await container.resolve<SLAService>('SLAService');
         const result = await slaService.checkOrderSLARisk(orderId);
 
@@ -32,6 +34,7 @@ export async function checkOrderSLARiskAction(orderId: string) {
  */
 export async function auditActiveSLAAction() {
     try {
+        const container = await getContainer();
         const slaService = await container.resolve<SLAService>('SLAService');
         const result = await slaService.auditActiveOrders();
 

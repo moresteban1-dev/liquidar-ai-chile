@@ -8,7 +8,7 @@
  * @module lib/forensics/analyzer
  */
 
-import type { ErrorCategory } from './registry';
+import type { ErrorCategory } from './types';
 
 // ─── Types ─────────────────────────────────────────────────────
 

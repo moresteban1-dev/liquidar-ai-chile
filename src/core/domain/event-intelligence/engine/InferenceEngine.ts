@@ -4,16 +4,7 @@ import { DependencyResolutionStage } from './stages/DependencyResolutionStage';
 import { QuantityScalingStage } from './stages/QuantityScalingStage';
 import { IKnowledgeRepository as KnowledgeRepository } from '@app/ports/IKnowledgeRepository';
 import { Result, ok } from '@/core/shared/Result';
-import { InferenceStage } from './stages/InferenceStage';
-
-/**
- * Contexto que muta a lo largo del pipeline.
- */
-export interface InferenceContext {
-  profile: EventProfile;
-  repository: KnowledgeRepository;
-  needs: Map<string, InferredNeed>; // Key: nodeCode
-}
+import { InferenceContext, InferenceStage } from './InferenceTypes';
 
 /**
  * Orquestador principal del motor topológico.

@@ -1,11 +1,12 @@
 import { NextRequest } from 'next/server';
 import { adminRoute, MiddlewareContext } from '@/infrastructure/http/middleware/compose';
 import { ok } from '@/infrastructure/http/helpers/responses';
-import { container } from '@/infrastructure/di/Container';
+import { getContainer } from '@/infrastructure/di/Container';
 
 export const POST = adminRoute(async (req: NextRequest, _ctx: MiddlewareContext) => {
   // Extract ID from URL since it's a dynamic route
   const id = req.nextUrl.pathname.split('/')[4]; 
+  const container = await getContainer();
   const supabase = await container.resolve<any>('supabase');
 
   const { data: webhook } = await supabase

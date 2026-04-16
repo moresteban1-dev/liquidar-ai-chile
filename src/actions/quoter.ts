@@ -6,7 +6,7 @@ import { SupabasePlatformConfigRepository } from '@/infrastructure/persistence/s
 import { SupabaseQuoteSessionRepository } from '@infrastructure/persistence/supabase/repositories/SupabaseQuoteSessionRepository';
 import { VariantGeneratorService } from '@core/application/services/VariantGeneratorService';
 import { QuoteSession, QuoteItemRequested, QuoteOption } from '@core/domain/quote/QuoteTypes';
-import { QuoterState } from '@/components/quoter/WizardContainer';
+import { QuoterState } from '@/components/quoter/QuoterTypes';
 
 import { ActionResponse } from '@/types/actions';
 

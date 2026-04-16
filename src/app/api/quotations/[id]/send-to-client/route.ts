@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import sanitizeHtml from 'sanitize-html';
-import { container } from '@/infrastructure/di/Container';
+import { getContainer } from '@/infrastructure/di/Container';
 import { SendQuotationToClientHandler } from '@/core/application/handlers/SendQuotationToClientHandler';
 import { withAuth } from '@/lib/api/with-auth';
 import { UserRole } from '@/core/domain/auth/UserRole';
@@ -32,6 +32,7 @@ export const POST = withAuth(async (request, user, params) => {
           })
         : undefined;
 
+      const container = await getContainer();
       const handler = await container.resolve<SendQuotationToClientHandler>(
         'SendQuotationToClientHandler'
       );

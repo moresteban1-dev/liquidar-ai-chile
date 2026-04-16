@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { adminRoute, MiddlewareContext } from '@/infrastructure/http/middleware/compose';
 import { ok } from '@/infrastructure/http/helpers/responses';
-import { container } from '@/infrastructure/di/Container';
+import { getContainer } from '@/infrastructure/di/Container';
 import { CacheManager } from '@/infrastructure/cache/CacheManager';
 
 export interface SystemHealthReport {
@@ -62,7 +62,7 @@ interface EventMetrics {
 
 export const GET = adminRoute(async (_req: NextRequest, ctx: MiddlewareContext) => {
   const startTime = Date.now();
-  const c = container; // Using the exported container instance
+  const c = await getContainer(); // Using the factory pattern
   const supabase = await c.resolve<any>('supabase');
   const cache = await c.resolve<CacheManager>('cache');
 

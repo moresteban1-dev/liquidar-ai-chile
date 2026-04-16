@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { QuoterState } from '../WizardContainer';
+import { QuoterState } from '../QuoterTypes';
 import { Briefcase, Heart, Music, Tent, Users, PlusCircle } from 'lucide-react';
 
 interface Props {

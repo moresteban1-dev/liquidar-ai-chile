@@ -6,7 +6,8 @@ import {
   QuotationRejectedNotificationHandler,
   OrderStateChangedNotificationHandler
 } from './handlers/NotificationEventHandler'
-import { getContainer, DI_KEYS } from '@/infrastructure/di/Container'
+import { getContainer } from '@/infrastructure/di/Container'
+import { DI_KEYS } from '@/infrastructure/di/DIKeys'
 
 export async function setupEventHandlers(processor: EventProcessor): Promise<void> {
   const container = await getContainer();

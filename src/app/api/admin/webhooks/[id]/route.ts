@@ -1,11 +1,12 @@
 import { NextRequest } from 'next/server';
 import { adminRoute, MiddlewareContext } from '@/infrastructure/http/middleware/compose';
 import { ok } from '@/infrastructure/http/helpers/responses';
-import { container } from '@/infrastructure/di/Container';
+import { getContainer } from '@/infrastructure/di/Container';
 
 export const PATCH = adminRoute(async (req: NextRequest, _ctx: MiddlewareContext) => {
   const id = req.nextUrl.pathname.split('/').pop();
   const body = await req.json();
+  const container = await getContainer();
   const supabase = await container.resolve<any>('supabase');
 
   const { data, error } = await supabase
@@ -22,6 +23,7 @@ export const PATCH = adminRoute(async (req: NextRequest, _ctx: MiddlewareContext
 
 export const DELETE = adminRoute(async (req: NextRequest, _ctx: MiddlewareContext) => {
   const id = req.nextUrl.pathname.split('/').pop();
+  const container = await getContainer();
   const supabase = await container.resolve<any>('supabase');
 
   const { error } = await supabase

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { QuoterState } from '../WizardContainer';
+import { QuoterState } from '../QuoterTypes';
 import { Check, Plus, Trash2, Info, Loader2 } from 'lucide-react';
 
 interface Props {

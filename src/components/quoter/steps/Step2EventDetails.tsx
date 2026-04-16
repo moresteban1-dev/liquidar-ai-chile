@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { QuoterState } from '../WizardContainer';
+import { QuoterState } from '../QuoterTypes';
 import { Calendar, MapPin, Users, Clock } from 'lucide-react';
 
 interface Props {

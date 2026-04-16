@@ -107,10 +107,12 @@ export class NegotiatorAgent {
 // Prefer using `container.resolve(DI_KEYS.NegotiatorAgent)` directly.
 // This export remains for backward compatibility with existing call sites.
 
-import { container, DI_KEYS } from '@infrastructure/di/Container';
+import { getContainer } from '@/infrastructure/di/Container';
+import { DI_KEYS } from '@/infrastructure/di/DIKeys';
 
 export const negotiatorAgent = {
     async execute(input: z.infer<typeof NegotiatorInputSchema>) {
+        const container = await getContainer();
         const agent = await container.resolve<NegotiatorAgent>(DI_KEYS.NegotiatorAgent);
         return agent.execute(input);
     },

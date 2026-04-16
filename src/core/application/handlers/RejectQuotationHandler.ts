@@ -6,7 +6,7 @@ import { IDomainEventBus } from '@app/ports/IDomainEventBus'
 import { Quotation } from '@core/domain/aggregates/quotation/Quotation'
 import { UniqueEntityID } from '@core/shared/UniqueEntityID'
 import { RejectQuotationCommand } from '../commands/RejectQuotationCommand'
-import { metricsCollector } from '@infrastructure/telemetry/MetricsCollector'
+import { getTelemetryProvider } from '../ports/ITelemetryPort'
 import { AppError } from '@/core/shared/AppError'
 
 export class RejectQuotationHandler extends InstrumentedHandler<RejectQuotationCommand, Quotation, AppError> {
@@ -54,7 +54,7 @@ export class RejectQuotationHandler extends InstrumentedHandler<RejectQuotationC
       await this.eventBus.publishAll(transportEvents)
     }
 
-    metricsCollector.recordQuotationRejected({ 
+    getTelemetryProvider().metrics.recordQuotationRejected({ 
       orderId: order.orderId.toString(), 
       reason: command.reason 
     })

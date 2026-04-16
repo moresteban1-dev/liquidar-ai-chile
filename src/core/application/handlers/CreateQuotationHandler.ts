@@ -7,7 +7,7 @@ import { QuotationPricing } from '@core/domain/aggregates/order/QuotationPricing
 import { Money, Currency } from '@core/domain/value-objects/Money'
 import { UniqueEntityID } from '@core/shared/UniqueEntityID'
 import { CreateQuotationCommand } from '../commands/CreateQuotationCommand'
-import { metricsCollector } from '@infrastructure/telemetry/MetricsCollector'
+import { getTelemetryProvider } from '../ports/ITelemetryPort'
 import { TAX_CONFIG } from '@domain/pricing/TaxConfig'
 import { AppError } from '@/core/shared/AppError'
 
@@ -94,7 +94,7 @@ export class CreateQuotationHandler extends InstrumentedHandler<CreateQuotationC
     const saveResult = await this.quotationRepository.save(quotation)
     if (saveResult.isFailure()) return saveResult
 
-    metricsCollector.recordQuotationCreated({ 
+    getTelemetryProvider().metrics.recordQuotationCreated({ 
       orderId: command.orderId, 
       providerId: command.providerId, 
       amount: pricing.finalPrice.amount.toString() 

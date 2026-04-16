@@ -12,21 +12,7 @@ import { logger } from '../../infrastructure/telemetry/StructuredLogger';
 
 // ─── Types ─────────────────────────────────────────────────────
 
-export type ErrorCategory =
-    | 'SERIALIZATION'
-    | 'HYDRATION'
-    | 'CLIENT_BOUNDARY'
-    | 'DATABASE'
-    | 'AUTHENTICATION'
-    | 'ENVIRONMENT'
-    | 'IMPORT_RESOLUTION'
-    | 'TYPE_MISMATCH'
-    | 'CIRCULAR_DEPENDENCY'
-    | 'RSC_VIOLATION'
-    | 'ASYNC_COMPONENT'
-    | 'SUPABASE'
-    | 'AI_GENKIT'
-    | 'UNKNOWN';
+import { ErrorCategory } from './types';
 
 export interface ForensicErrorRecord {
     id: string;

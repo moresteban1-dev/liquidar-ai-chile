@@ -6,7 +6,7 @@ import { IDomainEventBus } from '@app/ports/IDomainEventBus'
 import { Order, OrderState } from '@core/domain/aggregates/order/Order'
 import { UniqueEntityID } from '@core/shared/UniqueEntityID'
 import { TransitionOrderStateCommand } from '../commands/TransitionOrderStateCommand'
-import { metricsCollector } from '@infrastructure/telemetry/MetricsCollector'
+import { getTelemetryProvider } from '../ports/ITelemetryPort'
 import { AppError } from '@/core/shared/AppError'
 
 const ROLE_PERMISSIONS: Record<string, UserRole[]> = {
@@ -56,7 +56,7 @@ export class TransitionOrderStateHandler extends InstrumentedHandler<TransitionO
       await this.eventBus.publishAll(transportEvents)
     }
 
-    metricsCollector.recordStateTransition(command.newState, command.performedByRole)
+    getTelemetryProvider().metrics.recordStateTransition(command.newState, command.performedByRole)
 
     return ok(order)
   }
