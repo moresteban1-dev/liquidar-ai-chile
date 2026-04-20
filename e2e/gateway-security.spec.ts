@@ -1,10 +1,10 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 import { test, expect } from '@playwright/test';
 
 test('Golden Flow: Gateway Config Security Check', async ({ browser }) => {
     // Aquí implementaremos una prueba rápida solo para el panel de Admin para probar los Gateway Saves
     const adminContext = await browser.newContext();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+     
     const adminPage = await adminContext.newPage();
     try {
 

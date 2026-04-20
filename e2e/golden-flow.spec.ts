@@ -76,10 +76,10 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
         });
 
         let adminContext;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         let adminPage: any;
         let vendorContext;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         let vendorPage: any;
 
         await test.step('1. Cliente Login', async () => {
@@ -100,7 +100,7 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
             // Selectores semánticos que garantizan interacción humana
             const emailInput = clientPage.getByLabel('Correo electrónico');
             const passwordInput = clientPage.getByLabel('Contraseña');
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+             
             const submitButton = clientPage.getByRole('button', { name: 'Iniciar Sesión' });
 
             await emailInput.click();
@@ -134,7 +134,7 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
                     const btnOmitir = clientPage.getByRole('button', { name: 'Omitir' });
                     await btnOmitir.waitFor({ state: 'visible', timeout: 3000 });
                     await btnOmitir.click();
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                 
                 } catch (e) {
                     console.log("No detectó Modal de Onboarding, continuando...");
                 }
@@ -189,13 +189,13 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
                 adminPage = await adminContext.newPage();
 
                 // Escuchar errores del lado del cliente Admin
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 adminPage.on('console', (msg: any) => {
                     if (msg.type() === 'error' || msg.type() === 'warning') {
                         console.log(`🖥️ ADMIN-BROWSER [${msg.type().toUpperCase()}]: ${msg.text()}`);
                     }
                 });
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 adminPage.on('pageerror', (exception: any) => {
                     console.log(`💥 ADMIN-BROWSER UNCAUGHT EXCEPTION: ${exception.message}`);
                 });
@@ -251,13 +251,13 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
                 vendorPage = await vendorContext.newPage();
 
                 // Escuchar errores del lado del vendor
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 vendorPage.on('console', (msg: any) => {
                     if (msg.type() === 'error' || msg.type() === 'warning') {
                         console.log(`🖥️ VENDOR-BROWSER [${msg.type().toUpperCase()}]: ${msg.text()}`);
                     }
                 });
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                 
                 vendorPage.on('pageerror', (exception: any) => {
                     console.log(`💥 VENDOR-BROWSER EXCEPTION: ${exception.message}`);
                 });
@@ -405,7 +405,7 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
                 // Hacemos scroll hacia abajo para garantizar que carguen los elementos "Lazy-load" si los hubiera
                 await finalClientPage.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
                 // Volvemos a ubicar el bloque
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                 
                 const sectionPago = finalClientPage.getByText(/Propuesta Económica/i).first();
                 // Hacemos scroll hacia abajo de forma dramática y esperamos 1 segundo antes de la aserción
                 await finalClientPage.evaluate(() => window.scrollTo(0, document.body.scrollHeight));

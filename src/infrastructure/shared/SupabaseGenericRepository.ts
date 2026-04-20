@@ -68,7 +68,7 @@ export class SupabaseGenericRepository<T, Row extends Record<string, any>> {
                 const row = this.mapper.toRow(entity);
                 const { error } = await supabase
                     .from(this.tableName)
-                    .upsert(row);
+                    .upsert(row as any);
 
                 if (error) {
                     span.setStatus({ code: SpanStatusCode.ERROR, message: error.message });
