@@ -150,11 +150,16 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
                 items: isCartMode ? initialItems?.map(i => ({ serviceId: i.serviceId, quantity: i.quantity })) : [],
             };
 
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
+
             const response = await fetch('/api/quotations', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(payload),
+                signal: controller.signal
             });
+            clearTimeout(timeoutId);
 
             const result = await response.json();
             logger.info('[QuoteWizard] Response', { status: response.status, result });
