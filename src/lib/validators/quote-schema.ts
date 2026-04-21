@@ -1,24 +1,33 @@
 import { z } from 'zod';
 
-// Helper for Modular 11 RUT Verification
+// Helper for Modular 11 RUT Verification (Chile)
 function validateRut(rut: string): boolean {
-    if (!/^[0-9]+-[0-9kK]{1}$/.test(rut)) return false;
-    const [body, dv] = rut.split('-');
+    if (!rut || typeof rut !== 'string') return false;
+    
+    // Clean RUT - remove dots and spaces, uppercase K
+    const cleanRut = rut.replace(/[\.\s]/g, '').toUpperCase();
+    
+    // Allow formats: 12345678-9, 12345678K, 1-9, 1K
+    if (!/^[0-9]+-[0-9K]$/.test(cleanRut) && !/^[0-9]+[0-9K]$/.test(cleanRut)) {
+        return false;
+    }
+    
+    const [body, dv] = cleanRut.includes('-') ? cleanRut.split('-') : [cleanRut.slice(0, -1), cleanRut.slice(-1)];
     if (!body || !dv) return false;
+    
+    // Remove leading zeros for calculation
+    const bodyNum = body.replace(/^0+/, '') || '0';
+    
     let suma = 0;
     let multiplo = 2;
-    for (let i = 1; i <= body.length; i++) {
-        const index = multiplo * parseInt(body.charAt(body.length - i));
-        suma = suma + index;
-        if (multiplo < 7) {
-            multiplo = multiplo + 1;
-        } else {
-            multiplo = 2;
-        }
+    for (let i = bodyNum.length - 1; i >= 0; i--) {
+        suma += parseInt(bodyNum.charAt(i), 10) * multiplo;
+        multiplo = multiplo === 7 ? 2 : multiplo + 1;
     }
+    
     const dvEsperado = 11 - (suma % 11);
-    const dvCalculado = (dvEsperado === 11) ? "0" : (dvEsperado === 10) ? "K" : dvEsperado.toString();
-    return dvCalculado.toUpperCase() === dv.toUpperCase();
+    const dvCalculado = dvEsperado === 11 ? '0' : dvEsperado === 10 ? 'K' : String(dvEsperado);
+    return dvCalculado === dv.toUpperCase();
 }
 
 const phoneRegex = /^(?:\+?56)?(?:\s?)(?:9)(?:\s?)[98765432]\d{7}$/;
