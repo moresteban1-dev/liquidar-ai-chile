@@ -66,7 +66,27 @@ export async function GET(request: NextRequest) {
             .eq('id', user.id)
             .single();
 
-        const role = profile?.role || UserRole.CLIENT;
+        let role = profile?.role || UserRole.CLIENT;
+
+        // 🔧 Create profile if it doesn't exist
+        if (!profile) {
+            logger.info('[Auth] Creating profile for new user', { userId: user.id });
+            const { error: profileError } = await supabase
+                .from('profiles')
+                .insert({
+                    id: user.id,
+                    email: user.email,
+                    name: user.user_metadata?.name || user.email?.split('@')[0] || 'Usuario',
+                    role: role,
+                    created_at: new Date().toISOString()
+                });
+            
+            if (profileError) {
+                logger.error('[Auth] Failed to create profile', { error: profileError });
+            } else {
+                logger.info('[Auth] Profile created successfully', { userId: user.id });
+            }
+        }
 
         // 🔄 Sync Role to Auth Metadata
         const supabaseAdmin = createServerClient(
