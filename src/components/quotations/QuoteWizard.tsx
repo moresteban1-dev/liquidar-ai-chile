@@ -100,31 +100,20 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
 
     // Navigation Logic
     const nextStep = async () => {
-        logger.info('[QuoteWizard] nextStep', { currentStep })
-        
         let fieldsToValidate: (keyof QuoteFormValues)[] = []
 
         if (currentStep === 1) {
             fieldsToValidate = ["clientName", "clientRut", "clientEmail", "clientPhone"]
         } else if (currentStep === 2) {
-            // Validate serviceId ONLY if not in cart mode, else validate items (which are implicit)
             fieldsToValidate = isCartMode ? ["comments", "items"] : ["serviceId", "eventDate", "comments"]
         }
 
-        logger.info('[QuoteWizard] Validating fields', { fieldsToValidate })
-        
         try {
             const isValid = await trigger(fieldsToValidate)
-            logger.info('[QuoteWizard] Validation result', { isValid })
-            
             if (isValid) {
                 setCurrentStep((prev) => Math.min(prev + 1, STEPS.length))
-            } else {
-                logger.warn('[QuoteWizard] Validation failed - showing errors')
             }
-        } catch (err) {
-            logger.error('[QuoteWizard] Validation error', { error: err })
-            // Still advance even if validation errors
+        } catch {
             setCurrentStep((prev) => Math.min(prev + 1, STEPS.length))
         }
     }
@@ -176,7 +165,6 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
             clearTimeout(timeoutId);
 
             const result = await response.json();
-            logger.info('[QuoteWizard] Response', { status: response.status, result });
 
             if (response.ok && result.success) {
                 toast.success("¡Solicitud recibida!", {
@@ -195,16 +183,13 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
                 router.push(`/client/quotations/success?code=${result.code}`)
                 router.refresh(); // Ensure server components revalidate to show the new quote
             } else {
-                logger.error("Submission Error:", { result, status: response.status });
                 toast.error("Error al enviar", {
                     description: result.error || `Error ${response.status}: Hubo un problema al procesar tu solicitud.`
                 })
             }
-        } catch (error) {
-            const msg = error instanceof Error ? error.message : String(error);
-            logger.error("[QuoteWizard] Catch Error:", msg);
-            toast.error("Error inesperado", {
-                description: "Por favor intenta nuevamente más tarde."
+        } catch {
+            toast.error("Error de conexión", {
+                description: "Por favor verifica tu conexión e intenta nuevamente."
             })
         } finally {
             setIsSubmitting(false)

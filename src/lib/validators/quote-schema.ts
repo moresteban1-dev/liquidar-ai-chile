@@ -35,9 +35,9 @@ const phoneRegex = /^(?:\+?56)?(?:\s?)(?:9)(?:\s?)[98765432]\d{7}$/;
 export const quoteSchema = z.object({
     // Step 1: Client Identity
     clientName: z.string().min(2, { message: "El nombre es muy corto" }),
-    clientRut: z.string().min(1, { message: "El RUT es requerido" }), // Temp: make optional for testing
+    clientRut: z.string().refine(validateRut, { message: "RUT inválido (ej: 12345678-9)" }),
     clientEmail: z.string().email({ message: "Email inválido" }),
-    clientPhone: z.string().regex(phoneRegex, { message: "Formato inválido api chilena (ej: +56 9 1234 5678)" }),
+    clientPhone: z.string().regex(phoneRegex, { message: "Formato inválido (ej: +56 9 1234 5678)" }),
 
     // Step 2: Service & Requirement
     serviceId: z.string().optional(), // Made optional to support multi-item cart

@@ -9,7 +9,6 @@ import { QuotationPricing } from '@core/domain/aggregates/order/QuotationPricing
 import { UniqueEntityID } from '@core/shared/UniqueEntityID'
 import { CreateQuotationRequestCommand } from '../../commands/CreateQuotationRequestCommand'
 import { AppError } from '@/core/shared/AppError'
-import { logger } from '@infrastructure/telemetry/StructuredLogger'
 
 export class CreateQuotationRequestHandler {
     constructor(
@@ -19,12 +18,10 @@ export class CreateQuotationRequestHandler {
 
     async execute(command: CreateQuotationRequestCommand): Promise<Result<{ quotationId: string; code: string }, AppError>> {
         try {
-            logger.info('[CreateQuotationRequestHandler] Starting', { clientId: command.clientId, serviceId: command.serviceId })
-
             // 1. Create Order (DRAFT)
             const orderResult = Order.create({
                 clientId: new UniqueEntityID(command.clientId || 'system-client'),
-                state: 'QUOTATION_PENDING', // Initial state for requests
+                state: 'QUOTATION_PENDING',
                 eventDate: new Date(command.eventDate),
                 deliveryAddress: command.venueAddress,
                 specialInstructions: command.brief,
@@ -33,19 +30,14 @@ export class CreateQuotationRequestHandler {
             });
 
             if (orderResult.isFailure()) {
-                logger.error('[CreateQuotationRequestHandler] Order create failed', { error: orderResult.getError() })
                 return fail(AppError.businessRule(orderResult.getError()));
             }
 
             const order = orderResult.unwrap();
-            logger.info('[CreateQuotationRequestHandler] Order created', { orderId: order.orderId.toString() })
-            
             const orderSaveRes = await this.orderRepository.save(order);
             if (orderSaveRes.isFailure()) {
-                logger.error('[CreateQuotationRequestHandler] Order save failed', { error: orderSaveRes.getError() })
                 return fail(orderSaveRes.getError());
             }
-            logger.info('[CreateQuotationRequestHandler] Order saved')
 
             // 2. Create Quotation (PENDING_ASSIGNMENT)
             const validUntil = new Date();

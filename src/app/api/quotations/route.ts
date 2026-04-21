@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getContainer } from '@/infrastructure/di/Container'
 import { withAuth } from '@/lib/api/with-auth'
-import { logger } from '@infrastructure/telemetry/StructuredLogger'
 
 /**
  * POST /api/quotations
@@ -10,8 +9,6 @@ import { logger } from '@infrastructure/telemetry/StructuredLogger'
 export const POST = withAuth(async (req: NextRequest, _user) => {
     try {
         const body = await req.json()
-        logger.info('[Quotations] Creating quotation', { userId: _user.id })
-
         const container = await getContainer()
         const handler = await container.resolve<any>('CreateQuotationRequestHandler')
         
@@ -36,7 +33,6 @@ export const POST = withAuth(async (req: NextRequest, _user) => {
 
         if (result.isFailure()) {
             const error = result.getError();
-            logger.error('[Quotations] Failed to create', { error: error.message })
             return NextResponse.json({ 
                 success: false,
                 error: typeof error === 'string' ? error : error.message 
@@ -44,7 +40,6 @@ export const POST = withAuth(async (req: NextRequest, _user) => {
         }
 
         const { quotationId, code } = result.getValue()
-        logger.info('[Quotations] Created successfully', { quotationId, code })
         return NextResponse.json({ 
             success: true,
             quotationId,
@@ -52,8 +47,7 @@ export const POST = withAuth(async (req: NextRequest, _user) => {
             message: "Tu cotización ha sido ingresada correctamente."
         }, { status: 201 })
     } catch (error) {
-        const message = error instanceof Error ? error.message : 'Unknown error'
-        logger.error('[Quotations] Exception', { error: message, stack: error instanceof Error ? error.stack : undefined })
+        const message = error instanceof Error ? error.message : 'Error desconocido'
         return NextResponse.json({ 
             success: false,
             error: message 
