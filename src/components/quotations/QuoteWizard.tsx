@@ -100,6 +100,8 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
 
     // Navigation Logic
     const nextStep = async () => {
+        logger.info('[QuoteWizard] nextStep', { currentStep })
+        
         let fieldsToValidate: (keyof QuoteFormValues)[] = []
 
         if (currentStep === 1) {
@@ -109,8 +111,20 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
             fieldsToValidate = isCartMode ? ["comments", "items"] : ["serviceId", "eventDate", "comments"]
         }
 
-        const isValid = await trigger(fieldsToValidate)
-        if (isValid) {
+        logger.info('[QuoteWizard] Validating fields', { fieldsToValidate })
+        
+        try {
+            const isValid = await trigger(fieldsToValidate)
+            logger.info('[QuoteWizard] Validation result', { isValid })
+            
+            if (isValid) {
+                setCurrentStep((prev) => Math.min(prev + 1, STEPS.length))
+            } else {
+                logger.warn('[QuoteWizard] Validation failed - showing errors')
+            }
+        } catch (err) {
+            logger.error('[QuoteWizard] Validation error', { error: err })
+            // Still advance even if validation errors
             setCurrentStep((prev) => Math.min(prev + 1, STEPS.length))
         }
     }
