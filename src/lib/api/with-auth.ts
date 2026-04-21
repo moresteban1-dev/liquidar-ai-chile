@@ -68,9 +68,9 @@ export function withAuth(
         .single();
 
       if (profileError || !profile) {
-          logger.error('[Auth] Profile not found for user', { userId: user.id });
+          logger.error('[Auth] Profile not found for user', { userId: user.id, profileError });
           return Response.json(
-              { error: 'Forbidden', message: 'User profile not found' },
+              { error: 'Forbidden', message: 'Tu perfil de usuario no existe. Contacta al administrador.' },
               { status: 403 }
           );
       }
