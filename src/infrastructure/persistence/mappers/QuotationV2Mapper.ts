@@ -205,10 +205,10 @@ export class QuotationV2Mapper {
             });
 
             const quotationResult = Quotation.reconstitute({
-                orderId: new UniqueEntityID(qRow.id),
+                orderId: new UniqueEntityID(qRow.service_id || qRow.id),
                 providerId: new UniqueEntityID(qRow.assigned_provider_id || ''),
                 clientId,
-                serviceId,
+                serviceId: qRow.service_id || 'GENERIC',
                 code: String(qRow.code || ''),
                 status,
                 requestedItems,
@@ -271,13 +271,16 @@ export class QuotationV2Mapper {
                 quotation: {
                     id: quotation.quotationId.toString(),
                     client_id: quotation.clientId,
-                    service_id: quotation.serviceId || null,
+                    service_id: quotation.orderId.toString(),
                     status: quotation.status,
                     code: quotation.code,
                     created_at: quotation.createdAt.toISOString(),
                     updated_at: quotation.updatedAt.toISOString(),
                     selected_bid_id: quotation.acceptedBidId || null,
                     assigned_provider_id: quotation.assignedProviderId || null,
+                    event_start_date: quotation.props.eventDate ? quotation.props.eventDate.toISOString() : null,
+                    valid_until: quotation.props.validUntil ? quotation.props.validUntil.toISOString() : null,
+                    brief: quotation.props.brief || quotation.props.serviceDescription || null,
                     
                     client_rut: quotation.clientRut ?? null,
                     event_address: quotation.eventAddress ?? null,
