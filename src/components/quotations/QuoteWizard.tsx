@@ -157,6 +157,7 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
             });
 
             const result = await response.json();
+            logger.info('[QuoteWizard] Response', { status: response.status, result });
 
             if (response.ok && result.success) {
                 toast.success("¡Solicitud recibida!", {
@@ -175,16 +176,17 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
                 router.push(`/client/quotations/success?code=${result.code}`)
                 router.refresh(); // Ensure server components revalidate to show the new quote
             } else {
-                logger.error("Submission Error:", result);
+                logger.error("Submission Error:", { result, status: response.status });
                 toast.error("Error al enviar", {
-                    description: result.error || "Hubo un problema al procesar tu solicitud."
+                    description: result.error || `Error ${response.status}: Hubo un problema al procesar tu solicitud.`
                 })
             }
         } catch (error) {
+            const msg = error instanceof Error ? error.message : String(error);
+            logger.error("[QuoteWizard] Catch Error:", msg);
             toast.error("Error inesperado", {
                 description: "Por favor intenta nuevamente más tarde."
             })
-            logger.error(String(error))
         } finally {
             setIsSubmitting(false)
         }
