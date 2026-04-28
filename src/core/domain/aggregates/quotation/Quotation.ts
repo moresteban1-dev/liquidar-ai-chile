@@ -345,14 +345,14 @@ export class Quotation extends AggregateRoot<QuotationProps> {
 
   public addItem(item: QuotationItem): Result<void, string> {
     this.props.requestedItems = this.props.requestedItems || [];
-    this.props.requestedItems.push(item as any);
+    this.props.requestedItems.push(item as unknown as QuotationRequestedItem);
     this.version = this.version > 0 ? this.version + 1 : 2;
     this.props.updatedAt = new Date();
     return ok(undefined);
   }
 
   public removeItem(itemId: string): Result<void, string> {
-    this.props.requestedItems = (this.props.requestedItems || []).filter((i: any) => i.id !== itemId);
+    this.props.requestedItems = (this.props.requestedItems || []).filter((i: QuotationRequestedItem) => i.id.toString() !== itemId);
     this.props.updatedAt = new Date();
     return ok(undefined);
   }
