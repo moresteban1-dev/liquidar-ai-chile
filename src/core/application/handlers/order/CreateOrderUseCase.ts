@@ -9,6 +9,7 @@ import { IEventPublisher } from '@/core/application/ports/IEventPublisher';
 import { ICommand } from '@core/shared/ICommand';
 import { ICommandHandler } from '@core/shared/ICommandHandler';
 import { AppError } from '@core/shared/AppError';
+import { Logger } from '@core/domain/ports/Logger';
 
 /**
  * Command to create a new order directly (bypassing quotation if needed).
@@ -44,6 +45,7 @@ export class CreateOrderHandler implements ICommandHandler<CreateOrderCommand, O
     constructor(
         private readonly orderRepository: IOrderRepository,
         private readonly eventPublisher: IEventPublisher,
+        private readonly logger?: Logger,
     ) { }
 
     /**
@@ -101,7 +103,7 @@ export class CreateOrderHandler implements ICommandHandler<CreateOrderCommand, O
               const publishResult = await this.eventPublisher.publishMany(events);
               if (publishResult.isFailure()) {
                   // We log but don't fail the whole use case as persistence was successful
-                  console.warn('Events published with partial failures:', publishResult.getError());
+                  this.logger?.warn('Events published with partial failures', { error: publishResult.getError() });
               }
             }
 
@@ -148,7 +150,7 @@ export class CreateOrderHandler implements ICommandHandler<CreateOrderCommand, O
             if (events.length > 0) {
                 const publishResult = await this.eventPublisher.publishMany(events);
                 if (publishResult.isFailure()) {
-                    console.warn('Events published with partial failures:', publishResult.getError());
+                    this.logger?.warn('Events published with partial failures', { error: publishResult.getError() });
                 }
             }
 

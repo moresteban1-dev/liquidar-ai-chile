@@ -59,7 +59,15 @@ export const POST = withWebhookAuth(async (request) => {
         // Parse body based on content type
         let body: Record<string, unknown>;
         if (contentType.includes('application/json')) {
-            body = JSON.parse(rawBody);
+            try {
+                body = JSON.parse(rawBody);
+            } catch {
+                logger.error('[Webpay Webhook] Malformed JSON payload received');
+                return NextResponse.json(
+                    { error: 'Invalid JSON payload' },
+                    { status: 400 },
+                );
+            }
         } else {
             // Form data — parse manually
             const params = new URLSearchParams(rawBody);
@@ -100,9 +108,10 @@ export const POST = withWebhookAuth(async (request) => {
 
     } catch (error) {
         logger.error('[Webpay Webhook] Error processing webhook', error);
+        // Return 200 to prevent gateway retries on logic errors
         return NextResponse.json(
-            { error: 'Internal Server Error' },
-            { status: 500 },
+            { received: true },
+            { status: 200 },
         );
     }
 });

@@ -39,7 +39,16 @@ export const POST = withWebhookAuth(async (request) => {
             );
         }
 
-        const body = JSON.parse(rawBody);
+        let body: Record<string, unknown>;
+        try {
+            body = JSON.parse(rawBody);
+        } catch {
+            logger.error('[Khipu Webhook] Malformed JSON payload received');
+            return NextResponse.json(
+                { error: 'Invalid JSON payload' },
+                { status: 400 }
+            );
+        }
 
         // Khipu sends notification_token or payment_id
         if (body.payment_id || body.notification_token) {
@@ -55,7 +64,7 @@ export const POST = withWebhookAuth(async (request) => {
     } catch (error) {
         logger.error('[Khipu Webhook Error]:', error);
         return NextResponse.json(
-            { received: true, error: (error as Error).message },
+            { received: true },
             { status: 200 }
         );
     }

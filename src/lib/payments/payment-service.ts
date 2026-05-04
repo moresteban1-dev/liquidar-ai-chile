@@ -161,7 +161,7 @@ export class PaymentService {
             // Marcar pago como fallido
             await supabase
                 .from('payments')
-                .update({ status: 'rejected' })
+                .update({ status: 'rejected' as PaymentStatus, updated_at: new Date().toISOString() })
                 .eq('id', payment.id);
 
             this.createLog(
@@ -453,7 +453,7 @@ export class PaymentService {
             const quotationService = await container.resolve<any>('QuotationService');
             await quotationService.transitionQuotation(
                 orderEntity.quotation_id,
-                'PAID' as any, // QuotationStatus.PAID
+                'PAID', // Uses string literal matching QuotationStatus union
                 { internalNotes: 'Pago procesado automáticamente por webhook' }
             );
         } else {

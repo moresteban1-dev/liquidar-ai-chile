@@ -44,7 +44,16 @@ export const POST = withWebhookAuth(async (request) => {
             );
         }
 
-        const body = JSON.parse(rawBody);
+        let body: Record<string, unknown>;
+        try {
+            body = JSON.parse(rawBody);
+        } catch {
+            logger.error('[Flow Webhook] Malformed JSON payload received');
+            return NextResponse.json(
+                { error: 'Invalid JSON payload' },
+                { status: 400 }
+            );
+        }
 
         // Flow sends token in webhook confirmation
         if (body.token || body.flowOrder) {
@@ -61,7 +70,7 @@ export const POST = withWebhookAuth(async (request) => {
         logger.error('[Flow Webhook Error]:', error);
         return NextResponse.json(
           // Always return 200 to webhooks to avoid retries on logic errors, but log them
-            { received: true, error: (error as Error).message },
+            { received: true },
             { status: 200 }
         );
     }

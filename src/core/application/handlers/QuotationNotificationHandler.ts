@@ -12,7 +12,8 @@ export class QuotationNotificationHandler implements EventHandler<QuotationStatu
         private quotationRepository: QuotationRepository,
         private notificationService: NotificationService,
         private emailService: EmailService,
-        private logger: Logger
+        private logger: Logger,
+        private readonly baseUrl: string = process.env.NEXT_PUBLIC_APP_URL || 'https://dropservice.cl'
     ) { }
 
     async handle(event: QuotationStatusChanged | QuotationBidReceived): Promise<void> {
@@ -41,7 +42,7 @@ export class QuotationNotificationHandler implements EventHandler<QuotationStatu
             const emailResult = await this.quotationRepository.getClientEmail(event.clientId);
             if (emailResult.isSuccess() && emailResult.getValue()) {
                 const clientEmail = emailResult.getValue()!;
-                const quoteUrl = `${process.env.NEXT_PUBLIC_APP_URL}/client/quotations/${event.quotationId}`;
+                const quoteUrl = `${this.baseUrl}/client/quotations/${event.quotationId}`;
                 await this.emailService.sendQuotationApprovalRequest(clientEmail, event.quotationCode, quoteUrl);
             }
         }
