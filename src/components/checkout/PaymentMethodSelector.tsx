@@ -23,10 +23,6 @@ export function PaymentMethodSelector({ onSelect, selected }: Props) {
     const [gateways, setGateways] = useState<PaymentGateway[]>([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchGateways();
-    }, []);
-
     async function fetchGateways() {
         try {
             // Fetch public gateways (busting cache and ensuring JSON response)
@@ -47,6 +43,11 @@ export function PaymentMethodSelector({ onSelect, selected }: Props) {
             setLoading(false);
         }
     }
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        fetchGateways();
+    }, []);
 
     if (loading) {
         return (

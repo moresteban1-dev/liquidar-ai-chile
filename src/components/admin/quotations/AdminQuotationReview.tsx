@@ -132,6 +132,7 @@ export function AdminQuotationReview({ quotation, onSuccess, onReturn }: AdminQu
                 quantity: pi.quantity,
                 unitPriceNet: 0, // Will be filled after commission calc
             }));
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setClientLines(initialLines);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

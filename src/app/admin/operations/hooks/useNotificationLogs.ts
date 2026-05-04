@@ -60,6 +60,7 @@ export function useNotificationLogs(): UseNotificationLogsResult {
   }, [page, filter]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchLogs();
   }, [fetchLogs]);
 

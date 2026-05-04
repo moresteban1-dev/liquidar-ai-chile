@@ -59,6 +59,7 @@ export function useQuotationDetails(id: string) {
     }, [id]);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (id) fetchQuotation();
     }, [id, fetchQuotation]);
 

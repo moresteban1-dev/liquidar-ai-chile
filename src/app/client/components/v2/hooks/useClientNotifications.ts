@@ -68,6 +68,7 @@ export function useClientNotifications(isOpen: boolean): UseClientNotificationsR
 
   useEffect(() => {
     const interval = setInterval(pollUnreadCount, 60_000);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     pollUnreadCount();
     return () => clearInterval(interval);
   }, [pollUnreadCount]);

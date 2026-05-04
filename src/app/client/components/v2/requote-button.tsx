@@ -71,6 +71,7 @@ export function RequoteButton({ quotation }: RequoteButtonProps) {
     };
 
     // Minimum date: tomorrow
+    // eslint-disable-next-line react-hooks/purity
     const minDate = new Date(Date.now() + 86_400_000).toISOString().split('T')[0];
 
     return (

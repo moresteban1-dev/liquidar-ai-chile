@@ -50,6 +50,7 @@ export function useSystemHealth(): UseSystemHealthResult {
   }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchHealth();
     if (!autoRefresh) return;
     const interval = setInterval(fetchHealth, 15_000);

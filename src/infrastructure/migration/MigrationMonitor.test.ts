@@ -15,13 +15,15 @@ describe('MigrationMonitor', () => {
     avgDuration: number = 200,
     errorRate: number = 0
   ) => {
+    const errorCount = Math.floor(count * errorRate)
     for (let i = 0; i < count; i++) {
-      const isError = Math.random() < errorRate
+      const isError = i < errorCount
       monitor.record({
         endpoint,
         version,
         status: isError ? 500 : 200,
-        duration: avgDuration + (Math.random() * 100 - 50),
+        // use deterministic duration to avoid flakiness
+        duration: avgDuration + (i % 2 === 0 ? 10 : -10),
         timestamp: new Date(),
         userId: `user-${i}`
       })

@@ -1,8 +1,13 @@
 // tests/IA_HyperScaling_Verification.test.ts
-import { container, DI_KEYS } from '../src/infrastructure/di/bindings'
-import { describe, it, expect, vi } from 'vitest'
+import { container } from '../src/infrastructure/di/Container'
+import { DI_KEYS } from '../src/infrastructure/di/DIKeys'
+import { registerBindings } from '../src/infrastructure/di/bindings'
+import { describe, it, expect, vi, beforeAll } from 'vitest'
 
 describe('IA Hyper-Scaling Full-Flow Verification', () => {
+    beforeAll(() => {
+        registerBindings(container);
+    });
     
     it('MarketingGenius: Should generate valid SEO content from CatalogService', async () => {
         const service: any = await container.resolve(DI_KEYS.CatalogService);

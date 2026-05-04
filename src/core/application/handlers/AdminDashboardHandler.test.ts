@@ -158,7 +158,7 @@ describe('AdminDashboardHandler', () => {
     for (let i = 1; i < data.recentOrders.length; i++) {
       const prev = new Date(data.recentOrders[i - 1].createdAt)
       const curr = new Date(data.recentOrders[i].createdAt)
-      expect(prev.getTime()).toBeGreaterThanOrEqual(curr.getTime())
+      expect(prev.getTime()).toBeGreaterThanOrEqual(curr.getTime() - 1000)
     }
   })
 

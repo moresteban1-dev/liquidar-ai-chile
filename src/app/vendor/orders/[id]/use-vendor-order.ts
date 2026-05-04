@@ -52,6 +52,7 @@ export function useVendorOrder(orderId: string) {
     }, [orderId]);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (orderId) fetchOrder();
     }, [orderId, fetchOrder]);
 

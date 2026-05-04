@@ -22,10 +22,6 @@ export function ManualTransferReview() {
     const [loading, setLoading] = useState(true);
     const [processingId, setProcessingId] = useState<string | null>(null);
 
-    useEffect(() => {
-        fetchPendingTransfers();
-    }, []);
-
     async function fetchPendingTransfers() {
         try {
             // Filtrar solo las que requieren revisión
@@ -38,6 +34,11 @@ export function ManualTransferReview() {
             setLoading(false);
         }
     }
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        fetchPendingTransfers();
+    }, []);
 
     async function handleReview(paymentId: string, action: 'approve' | 'reject') {
         if (!confirm(`¿Estás seguro de ${action === 'approve' ? 'APROBAR' : 'RECHAZAR'} este pago?`)) return;

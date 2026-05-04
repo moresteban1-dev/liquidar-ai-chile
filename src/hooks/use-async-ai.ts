@@ -25,45 +25,49 @@ export function useAsyncAI<TResponse, TInput = unknown>() {
         }
     }, []);
 
-    const pollJob = useCallback(async (jobId: string) => {
-        try {
-            const res = await fetch(`/api/ai/jobs/${jobId}`);
-            if (!res.ok) throw new Error('Failed to check job status');
+    const pollJob = useCallback((jobId: string) => {
+        const doPoll = async () => {
+            try {
+                const res = await fetch(`/api/ai/jobs/${jobId}`);
+                if (!res.ok) throw new Error('Failed to check job status');
 
-            const data = await res.json();
+                const data = await res.json();
 
-            if (data.status === 'completed') {
-                setState({
-                    status: 'completed',
-                    data: data.result,
-                    error: null
-                });
-                return; // Stop polling
-            }
+                if (data.status === 'completed') {
+                    setState({
+                        status: 'completed',
+                        data: data.result,
+                        error: null
+                    });
+                    return; // Stop polling
+                }
 
-            if (data.status === 'failed') {
+                if (data.status === 'failed') {
+                    setState({
+                        status: 'error',
+                        data: null,
+                        error: data.error || 'AI Processing Failed'
+                    });
+                    toast.error('AI Processing Failed: ' + (data.error || 'Unknown error'));
+                    return; // Stop polling
+                }
+
+                // If pending, poll again in 2s
+                setState(prev => ({ ...prev, status: 'polling' }));
+                pollTimeoutRef.current = setTimeout(doPoll, 2000);
+
+            } catch (err) {
+                logger.error(err instanceof Error ? err.message : String(err));
                 setState({
                     status: 'error',
                     data: null,
-                    error: data.error || 'AI Processing Failed'
+                    error: 'Connection lost checking status'
                 });
-                toast.error('AI Processing Failed: ' + (data.error || 'Unknown error'));
-                return; // Stop polling
+                stopPolling();
             }
-
-            // If pending, poll again in 2s
-            setState(prev => ({ ...prev, status: 'polling' }));
-            pollTimeoutRef.current = setTimeout(() => pollJob(jobId), 2000);
-
-        } catch (err) {
-            logger.error(err instanceof Error ? err.message : String(err));
-            setState({
-                status: 'error',
-                data: null,
-                error: 'Connection lost checking status'
-            });
-            stopPolling();
-        }
+        };
+        
+        doPoll();
     }, [stopPolling]);
 
     const execute = useCallback(async (endpoint: string, payload: TInput) => {

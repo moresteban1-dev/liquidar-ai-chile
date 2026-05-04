@@ -35,10 +35,6 @@ export function AvailabilityCalendar() {
     const [loading, setLoading] = useState(true);
     const [currentDate, setCurrentDate] = useState(new Date());
 
-    useEffect(() => {
-        fetchEvents();
-    }, []);
-
     const fetchEvents = async () => {
         try {
             const res = await fetch('/api/admin/calendar');
@@ -52,6 +48,11 @@ export function AvailabilityCalendar() {
             setLoading(false);
         }
     };
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        fetchEvents();
+    }, []);
 
     // Helper: generate dates for view (e.g., 14 days)
     const getDates = () => {
