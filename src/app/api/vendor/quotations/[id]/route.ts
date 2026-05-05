@@ -1,20 +1,23 @@
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
-import { NextResponse } from 'next/server';
 import { createApiClient } from '@/lib/supabase/api';
 import { withAuth } from '@/lib/api/with-auth';
 import { UserRole } from '@/core/domain/auth/UserRole';
+import { ApiResponder } from '@/infrastructure/http/ApiResponder';
+import { AppError } from '@/core/shared/AppError';
 
 export const GET = withAuth(async (_request, user, params) => {
     try {
         const id = params?.id;
-        if (!id) return NextResponse.json({ error: 'Missing ID' }, { status: 400 });
+        if (!id) return ApiResponder.fromAppError(AppError.validation('Missing ID'));
 
         const clientResult = await createApiClient();
-    if (clientResult.isFailure()) return NextResponse.json({ error: clientResult.getError().message }, { status: 401 });
-    const supabase = clientResult.getValue();
+        if (clientResult.isFailure()) {
+            return ApiResponder.fromAppError(AppError.unauthorized(clientResult.getError().message));
+        }
+        const supabase = clientResult.getValue();
 
         if (user.role !== UserRole.VENDOR) {
-            return NextResponse.json({ error: 'No autorizado' }, { status: 401 });
+            return ApiResponder.fromAppError(AppError.forbidden('No autorizado. Se requiere rol de VENDOR.'));
         }
 
         const { data, error } = await supabase
@@ -34,7 +37,7 @@ export const GET = withAuth(async (_request, user, params) => {
 
         if (error) {
             logger.error('Error fetching quotation for vendor:', error);
-            return NextResponse.json({ error: 'Cotización no encontrada' }, { status: 404 });
+            return ApiResponder.fromAppError(AppError.notFound('Cotización'));
         }
 
         const result = data as any;
@@ -60,10 +63,10 @@ export const GET = withAuth(async (_request, user, params) => {
             provider_items: result.quotation_provider_items
         };
 
-        return NextResponse.json(mappedData);
+        return ApiResponder.success(mappedData);
 
     } catch (error) {
         logger.error('API Error:', error);
-        return NextResponse.json({ error: 'Error interno' }, { status: 500 });
+        return ApiResponder.fatal(error);
     }
 });

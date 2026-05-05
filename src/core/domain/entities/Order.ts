@@ -2,14 +2,7 @@
  * NASA-Grade Engineering: Order Domain Entity
  */
 
-export type OrderStatus = 
-  | 'PAID'
-  | 'IN_PRODUCTION'
-  | 'INTERNAL_REVIEW'
-  | 'DELIVERED'
-  | 'UNDER_REVIEW'
-  | 'COMPLETED'
-  | 'REFUNDED';
+import { OrderState } from '@/types/order';
 
 export interface OrderItem {
   id?: string;
@@ -26,7 +19,7 @@ export interface Order {
   quotationId: string;
   clientId: string;
   providerId: string;
-  status: OrderStatus;
+  status: OrderState;
   priceTotal: number;
   items?: OrderItem[];
   createdAt?: string;
