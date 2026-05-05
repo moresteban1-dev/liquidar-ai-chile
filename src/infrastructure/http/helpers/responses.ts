@@ -62,7 +62,6 @@ export function internalError(message = 'Internal server error'): NextResponse<A
   return errorResponse('INTERNAL_ERROR', message, 500)
 }
 
-export const internalServerError = internalError;
 
 function errorResponse(code: string, message: string, status: number, details?: Record<string, unknown>): NextResponse<ApiResponse<never>> {
   return NextResponse.json({

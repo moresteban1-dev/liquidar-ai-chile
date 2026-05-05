@@ -4,7 +4,7 @@
  * Previene valores inválidos en el dominio
  */
 
-export interface GuardResult {
+interface GuardResult {
   succeeded: boolean
   message?: string
 }

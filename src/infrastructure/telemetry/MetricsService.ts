@@ -26,4 +26,3 @@ export const metrics = {
   }
 }
 
-export const MetricsService = metrics
