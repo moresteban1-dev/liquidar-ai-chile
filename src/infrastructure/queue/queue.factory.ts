@@ -1,5 +1,5 @@
 import { Queue, ConnectionOptions } from 'bullmq';
-import { redis } from '@infrastructure/redis/client';
+import { getRedis } from '@infrastructure/redis/client';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 
 // Queue names registry to prevent typos
@@ -22,7 +22,7 @@ export const getQueue = (name: QueueName): Queue => {
         return queues[name];
     }
 
-    if (!redis) {
+    if (!getRedis()) {
         // Fallback or Error? 
         // For queuing, if Redis is down, we usually can't function asynchronously.
         // We log a critical warning. The app might need to crash or fallback to sync execution.
