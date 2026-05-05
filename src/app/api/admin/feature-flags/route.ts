@@ -4,6 +4,8 @@ import { featureFlags } from '@/infrastructure/feature-flags/FeatureFlags'
 import { withAdmin } from '@/lib/api/with-auth'
 import { handleError } from '@/infrastructure/http/middleware/errorHandler'
 
+export const dynamic = 'force-dynamic'
+
 const UpdateFlagSchema = z.object({
   flagName: z.string().min(1),
   percentage: z.number().min(0).max(100)

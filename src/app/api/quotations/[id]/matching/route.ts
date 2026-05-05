@@ -5,7 +5,7 @@ import { SupabaseProviderInventoryRepository } from '@/infrastructure/persistenc
 import { ProviderInventoryService } from '@core/application/services/ProviderInventoryService';
 import { UserRole } from '@/core/domain/auth/UserRole';
 
-export const revalidate = 60; // Cache matching results for 60 seconds
+export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/quotations/[id]/matching

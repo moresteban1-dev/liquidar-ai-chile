@@ -8,7 +8,7 @@ import { createApiClient } from '@/lib/supabase/api';
 import { withAuth } from '@/lib/api/with-auth';
 import { UserRole } from '@/core/domain/auth/UserRole';
 
-export const revalidate = 60; // Cache dashboard stats for 60 seconds
+export const dynamic = 'force-dynamic';
 
 export const GET = withAuth(async (_request, user) => {
     try {

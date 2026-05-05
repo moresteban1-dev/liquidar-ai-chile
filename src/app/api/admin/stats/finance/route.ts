@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { createServiceRoleClient } from '@/lib/supabase/api';
 import { withAdmin } from '@/lib/api/with-security';
 
-export const revalidate = 60; // Cache stats for 60 seconds
+export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/admin/stats/finance

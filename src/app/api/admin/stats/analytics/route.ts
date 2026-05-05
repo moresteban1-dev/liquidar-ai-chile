@@ -5,7 +5,6 @@ import { startOfMonth, subMonths, format, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 3600; // Cache analytics for 1 hour
 
 /**
  * GET /api/admin/stats/analytics
