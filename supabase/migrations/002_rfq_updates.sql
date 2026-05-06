@@ -74,7 +74,9 @@ CREATE POLICY "Clients can view own" ON public.quotations
 -- This view explicitly EXCLUDES provider_cost and admin_fee.
 -- Frontend for Clients should prefer querying this View or select specific columns.
 
-CREATE OR REPLACE VIEW public.client_safe_quotations AS
+CREATE OR REPLACE VIEW public.client_safe_quotations 
+WITH (security_invoker = true)
+AS
 SELECT
   id,
   code,

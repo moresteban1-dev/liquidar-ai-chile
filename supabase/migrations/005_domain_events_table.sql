@@ -35,7 +35,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Vista de eventos no procesados
-CREATE OR REPLACE VIEW unprocessed_events AS
+CREATE OR REPLACE VIEW unprocessed_events 
+WITH (security_invoker = true)
+AS
 SELECT *
 FROM domain_events
 WHERE processed = FALSE

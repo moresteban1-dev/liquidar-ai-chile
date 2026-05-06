@@ -32,7 +32,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Summary view
-CREATE OR REPLACE VIEW migration_summary AS
+CREATE OR REPLACE VIEW migration_summary 
+WITH (security_invoker = true)
+AS
 SELECT
   endpoint,
   version,
