@@ -271,7 +271,7 @@ export class QuotationV2Mapper {
                 quotation: {
                     id: quotation.quotationId.toString(),
                     client_id: quotation.clientId,
-                    service_id: quotation.orderId.toString(),
+                    service_id: (quotation.serviceId && quotation.serviceId !== 'GENERIC') ? quotation.serviceId : null,
                     status: quotation.status,
                     code: quotation.code,
                     created_at: quotation.createdAt.toISOString(),
