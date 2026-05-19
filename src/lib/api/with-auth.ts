@@ -63,14 +63,14 @@ export function withAuth(
       // 2. Authorize via Database Profile (Business Role)
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
-        .select('role, name, metadata')
+        .select('role, name')
         .eq('id', user.id)
         .single();
 
       if (profileError || !profile) {
           logger.error('[Auth] Profile not found for user', { userId: user.id, profileError });
           return Response.json(
-              { error: 'Forbidden', message: 'Tu perfil de usuario no existe. Contacta al administrador.' },
+              { error: 'Forbidden', message: 'Tu perfil de usuario no existe. Contacta al administrador.', details: profileError },
               { status: 403 }
           );
       }
@@ -99,7 +99,7 @@ export function withAuth(
         email: user.email ?? '',
         role: userRoleFull,
         name: profile.name || undefined,
-        metadata: profile.metadata as Record<string, unknown> || {},
+        metadata: {},
       };
 
       const params = context?.params ? await context.params : undefined;

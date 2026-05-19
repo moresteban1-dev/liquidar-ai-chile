@@ -241,7 +241,6 @@ export class DashboardCollector {
         const { data: quotations } = await this.client
           .from('quotations')
           .select('id, status, created_at')
-          .is('deleted_at', null)
 
         const allQuotations = (quotations as QuotationRow[]) || []
         const approvedQuotes = allQuotations.filter(q => q.status === 'APPROVED')

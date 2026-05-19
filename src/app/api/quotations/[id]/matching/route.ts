@@ -6,6 +6,7 @@ import { ProviderInventoryService } from '@core/application/services/ProviderInv
 import { UserRole } from '@/core/domain/auth/UserRole';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 /**
  * GET /api/quotations/[id]/matching

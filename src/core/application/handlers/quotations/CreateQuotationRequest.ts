@@ -78,7 +78,7 @@ export class CreateQuotationRequestHandler {
                 commissionServicesNet: Money.zero('CLP'),
                 commissionLogisticsNet: Money.zero('CLP'),
                 totalCommissionNet: Money.zero('CLP'),
-                commissionMethod: 'PERCENTAGE',
+                commissionMethod: 'PORCENTAJE',
                 totalNet: Money.zero('CLP'),
                 totalIva: Money.zero('CLP'),
                 totalWithIva: Money.zero('CLP'),

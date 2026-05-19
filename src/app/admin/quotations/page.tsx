@@ -19,7 +19,7 @@ export default async function AdminQuotationsPage() {
     const legacyQuotations = quotations.map(q => ({
         ...q,
         service: { name: q.serviceName },
-        client: q.clientName ? { name: q.clientName, email: '' } : null,
+        client: q.clientName ? { name: q.clientName, email: q.clientEmail || '' } : null,
         assignedProvider: q.providerName ? { name: q.providerName } : null
     }));
 

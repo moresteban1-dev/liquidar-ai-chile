@@ -5,7 +5,7 @@ function validateRut(rut: string): boolean {
     if (!rut || typeof rut !== 'string') return false;
     
     // Clean RUT - remove dots and spaces, uppercase K
-    const cleanRut = rut.replace(/[\.\s]/g, '').toUpperCase();
+    const cleanRut = rut.replace(/[\.\\s]/g, '').toUpperCase();
     
     // Allow formats: 12345678-9, 12345678K, 1-9, 1K
     if (!/^[0-9]+-[0-9K]$/.test(cleanRut) && !/^[0-9]+[0-9K]$/.test(cleanRut)) {
@@ -32,12 +32,51 @@ function validateRut(rut: string): boolean {
 
 const phoneRegex = /^(?:\+?56)?(?:\s?)(?:9)(?:\s?)[98765432]\d{7}$/;
 
+// ─────────────────────────────────────────────────────────
+// Step-specific sub-schemas for per-step wizard validation
+// ─────────────────────────────────────────────────────────
+
+/** Step 1: Client identity fields */
+export const quoteStep1Schema = z.object({
+    clientName: z.string().min(2, { message: "El nombre es muy corto" }),
+    clientRut: z.string().refine(validateRut, { message: "RUT inválido (ej: 12345678-9)" }),
+    clientEmail: z.string().email({ message: "Email inválido" }),
+    clientPhone: z.string().min(8, { message: "Teléfono inválido" }),
+});
+
+/** Step 2: Service & requirement fields */
+export const quoteStep2Schema = z.object({
+    serviceId: z.string().optional(),
+    items: z.array(z.object({
+        serviceId: z.string(),
+        quantity: z.number().min(1)
+    })).optional(),
+    eventDate: z.coerce.date().refine((date) => !isNaN(date.getTime()) && date >= new Date(new Date().setHours(0, 0, 0, 0)), {
+        message: "La fecha del evento no puede ser en el pasado",
+    }),
+    comments: z.string().optional(),
+    needsTechnicalVisit: z.boolean(),
+});
+
+/** Step 3: Logistics fields */
+export const quoteStep3Schema = z.object({
+    venueAddress: z.string().min(5, { message: "La dirección es requerida" }),
+    mountingTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, { message: "Formato HH:MM" }),
+    eventStartTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, { message: "Formato HH:MM" }),
+    eventEndTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, { message: "Formato HH:MM" }),
+    dismountingTime: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, { message: "Formato HH:MM" }),
+});
+
+// ─────────────────────────────────────────────────────────
+// Full schema for final form submission (with refinements)
+// ─────────────────────────────────────────────────────────
+
 export const quoteSchema = z.object({
     // Step 1: Client Identity
     clientName: z.string().min(2, { message: "El nombre es muy corto" }),
     clientRut: z.string().refine(validateRut, { message: "RUT inválido (ej: 12345678-9)" }),
     clientEmail: z.string().email({ message: "Email inválido" }),
-    clientPhone: z.string().regex(phoneRegex, { message: "Formato inválido (ej: +56 9 1234 5678)" }),
+    clientPhone: z.string().min(8, { message: "Teléfono inválido" }),
 
     // Step 2: Service & Requirement
     serviceId: z.string().optional(), // Made optional to support multi-item cart
@@ -46,7 +85,7 @@ export const quoteSchema = z.object({
         quantity: z.number().min(1)
     })).optional(),
 
-    eventDate: z.date().refine((date) => date >= new Date(new Date().setHours(0, 0, 0, 0)), {
+    eventDate: z.coerce.date().refine((date) => !isNaN(date.getTime()) && date >= new Date(new Date().setHours(0, 0, 0, 0)), {
         message: "La fecha del evento no puede ser en el pasado",
     }),
     comments: z.string().optional(),

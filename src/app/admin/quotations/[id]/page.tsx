@@ -55,8 +55,8 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
             name: rawQuotation.service.name,
             priceFrom: rawQuotation.service.price_from
         } : undefined,
-        category: rawQuotation.category ? {
-            name: rawQuotation.category.name
+        category: (rawQuotation.category || rawQuotation.service?.category) ? {
+            name: rawQuotation.category?.name || rawQuotation.service?.category?.name
         } : undefined,
     };
 

@@ -24,7 +24,7 @@ export const GET = withAuth(async (_request, user) => {
                 email,
                 provider_profiles(rating, completed_orders)
             `)
-            .eq('role', UserRole.VENDOR);
+            .eq('role', 'PROVEEDOR');
 
         if (error) {
             logger.error('Error fetching providers:', error);

@@ -3,6 +3,7 @@ import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger';
 import { metricsCollector } from '@/infrastructure/telemetry/MetricsCollector';
 import { createClient } from '@/lib/supabase/server';
 import { UserRole } from '@/core/domain/auth/UserRole';
+import { createServiceRoleClient } from '@/lib/supabase/api';
 
 /**
  * Server-side data fetching functions for Server Components.
@@ -84,8 +85,8 @@ export async function fetchOrders(params: OrderListParams): Promise<OrderListDat
       `
       id, title, event_type, event_date, state, urgency,
       estimated_budget, budget_currency, guest_count, created_at,
-      client:profiles!orders_client_id_fkey(full_name),
-      provider:profiles!orders_provider_id_fkey(full_name),
+      client:profiles!orders_client_id_fkey(name),
+      provider:profiles!orders_provider_id_fkey(name),
       quotations(id, client_price)
     `,
       { count: 'exact' },
@@ -133,8 +134,8 @@ export async function fetchOrders(params: OrderListParams): Promise<OrderListDat
     currency: row.budget_currency ?? 'MXN',
     guestCount: row.guest_count,
     createdAt: row.created_at,
-    clientName: row.client?.full_name ?? null,
-    providerName: row.provider?.full_name ?? null,
+    clientName: row.client?.name ?? null,
+    providerName: row.provider?.name ?? null,
     quotationCount: row.quotations?.length ?? 0,
     latestQuotationPrice: row.quotations?.[0]?.client_price ?? null,
   }));
@@ -195,8 +196,8 @@ export async function fetchOrderDetail(
     .select(
       `
       *,
-      client:profiles!orders_client_id_fkey(id, full_name, email),
-      provider:profiles!orders_provider_id_fkey(id, full_name, company_name),
+      client:profiles!orders_client_id_fkey(id, name, email),
+      provider:profiles!orders_provider_id_fkey(id, name),
       quotations(
         id, status, provider_cost, admin_margin, client_price,
         currency, items, notes, valid_until, created_at
@@ -227,10 +228,10 @@ export async function fetchOrderDetail(
     createdAt: data.created_at,
     updatedAt: data.updated_at,
     client: clientData
-      ? { id: clientData.id, name: clientData.full_name, email: clientData.email }
+      ? { id: clientData.id, name: clientData.name, email: clientData.email }
       : null,
     provider: providerData
-      ? { id: providerData.id, name: providerData.full_name, company: providerData.company_name }
+      ? { id: providerData.id, name: providerData.name, company: null }
       : null,
     quotations: quotationsData.map((q) => ({
       id: q.id,
@@ -299,6 +300,7 @@ export interface QuotationListData {
   readonly createdAt: string;
   readonly serviceName: string;
   readonly clientName: string | null;
+  readonly clientEmail: string | null;
   readonly providerName: string | null;
   readonly eventStartDate: string | null;
   readonly eventLocation: string | null;
@@ -311,15 +313,15 @@ export interface QuotationListData {
 }
 
 export async function fetchAdminQuotations(): Promise<QuotationListData[]> {
-  const supabase = await getSupabaseServerClient();
+  const supabase = createServiceRoleClient();
 
   const { data, error } = await supabase
     .from('quotations')
     .select(`
       id, code, brief, status, public_status, price_cost, price_total, created_at,
       service:services(name),
-      client:profiles!quotations_client_id_fkey(full_name),
-      provider:profiles!quotations_assigned_provider_id_fkey(full_name)
+      client:profiles!quotations_client_id_fkey(name, email),
+      provider:profiles!quotations_assigned_provider_id_fkey(name)
     `)
     .order('created_at', { ascending: false });
 
@@ -338,8 +340,9 @@ export async function fetchAdminQuotations(): Promise<QuotationListData[]> {
     priceTotal: q.price_total,
     createdAt: q.created_at,
     serviceName: q.service?.name || 'Servicio General',
-    clientName: q.client?.full_name || null,
-    providerName: q.provider?.full_name || null,
+    clientName: q.client?.name || null,
+    clientEmail: q.client?.email || null,
+    providerName: q.provider?.name || null,
     eventStartDate: null,
     eventLocation: null,
     eventAddress: null,
@@ -359,7 +362,7 @@ export async function fetchProviderQuotations(providerId: string): Promise<Quota
     .select(`
       id, code, brief, status, public_status, price_cost, created_at,
       service:services(name),
-      client:profiles!quotations_client_id_fkey(full_name),
+      client:profiles!quotations_client_id_fkey(name, email),
       event_start_date, event_location, event_address, event_time,
       setup_time, teardown_time, event_end_time, technical_visit
     `)
@@ -381,7 +384,8 @@ export async function fetchProviderQuotations(providerId: string): Promise<Quota
     priceTotal: null,
     createdAt: q.created_at,
     serviceName: q.service?.name || 'Servicio General',
-    clientName: q.client?.full_name || null,
+    clientName: q.client?.name || null,
+    clientEmail: q.client?.email || null,
     providerName: null,
     eventStartDate: q.event_start_date,
     eventLocation: q.event_location,
@@ -486,15 +490,14 @@ export async function fetchCatalogForInventory() {
 // ═══════════════════════════════════════════════════════════
 
 export async function fetchQuotationDetail(id: string) {
-  const supabase = await getSupabaseServerClient();
+  const supabase = createServiceRoleClient();
   const { data, error } = await supabase
     .from('quotations')
     .select(`
       *,
       client:profiles!quotations_client_id_fkey(id, name, email, phone),
       assigned_provider:profiles!quotations_assigned_provider_id_fkey(id, name, email),
-      service:services(id, name, price_from),
-      category:categories(id, name)
+      service:services(id, name, price_from, category:categories(id, name))
     `)
     .eq('id', id)
     .single();

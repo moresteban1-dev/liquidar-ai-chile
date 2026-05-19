@@ -32,7 +32,6 @@ export class SupabaseQuotationRepository implements IQuotationRepository {
           clientItems:quotation_client_items(*)
         `)
         .eq('id', id.toString())
-        .is('deleted_at', null)
         .maybeSingle()
 
       if (error) {
@@ -101,7 +100,6 @@ export class SupabaseQuotationRepository implements IQuotationRepository {
           clientItems:quotation_client_items(*)
         `)
         .eq('service_id', orderId.toString())
-        .is('deleted_at', null)
         .order('created_at', { ascending: false })
 
       if (error) return Result.fail(AppError.internal(`Error de base de datos: ${error.message}`))
@@ -132,7 +130,6 @@ export class SupabaseQuotationRepository implements IQuotationRepository {
           clientItems:quotation_client_items(*)
         `)
         .eq('assigned_provider_id', providerId.toString())
-        .is('deleted_at', null)
         .order('created_at', { ascending: false })
 
       if (error) return Result.fail(AppError.internal(`Error de base de datos: ${error.message}`))
@@ -155,7 +152,7 @@ export class SupabaseQuotationRepository implements IQuotationRepository {
     try {
       const { error } = await this.client
         .from('quotations')
-        .update({ deleted_at: new Date().toISOString() })
+        .delete()
         .eq('id', id.toString())
 
       if (error) return Result.fail(AppError.internal(`Error de base de datos: ${error.message}`))

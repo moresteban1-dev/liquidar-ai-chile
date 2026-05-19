@@ -39,11 +39,11 @@ export class OrderMapper {
    * Persistence → Domain
    */
   public static toDomain(
-    raw: OrderPersistence,
+    raw: any,
     pricingRaw?: PricingPersistence
   ): Result<Order, string> {
     try {
-      if (!raw.id || !raw.client_id || !raw.state) {
+      if (!raw.id || !raw.client_id || !(raw.state || raw.status)) {
         return Result.fail('Missing required fields in persistence data')
       }
 
@@ -59,7 +59,7 @@ export class OrderMapper {
 
       const props: OrderProps = {
         clientId: new UniqueEntityID(raw.client_id),
-        state: raw.state as OrderState,
+        state: this.mapToDomainState(raw.state || raw.status),
         eventDate: new Date(raw.event_date),
         deliveryAddress: raw.delivery_address,
         createdAt: new Date(raw.created_at),
@@ -71,8 +71,8 @@ export class OrderMapper {
       if (pricing) props.pricing = pricing
       if (raw.event_type) props.eventType = raw.event_type
       if (raw.estimated_guests !== undefined) props.estimatedGuests = raw.estimated_guests
-      if (raw.special_instructions) props.specialInstructions = raw.special_instructions
-      if (raw.admin_notes) props.adminNotes = raw.admin_notes
+      if (raw.client_notes || raw.special_instructions) props.specialInstructions = raw.client_notes || raw.special_instructions
+      if (raw.internal_notes || raw.admin_notes) props.adminNotes = raw.internal_notes || raw.admin_notes
       if (raw.completed_at) props.completedAt = new Date(raw.completed_at)
       if (raw.cancelled_at) props.cancelledAt = new Date(raw.cancelled_at)
       if (raw.cancellation_reason) props.cancellationReason = raw.cancellation_reason
@@ -84,28 +84,91 @@ export class OrderMapper {
     }
   }
 
+  private static mapToDBStatus(state: string): string {
+    switch(state) {
+      case 'DRAFT': return 'EN_REVISION';
+      case 'QUOTATION_PENDING': return 'EN_REVISION';
+      case 'QUOTATION_SENT': return 'EN_REVISION';
+      case 'QUOTATION_APPROVED': return 'CONFIRMADA';
+      case 'PAYMENT_PENDING': return 'CONFIRMADA';
+      case 'PAYMENT_RECEIVED': return 'PAGADA';
+      case 'IN_PRODUCTION': return 'EN_PRODUCCION';
+      case 'DELIVERED': return 'ENTREGADA';
+      case 'COMPLETED': return 'COMPLETADA';
+      case 'CANCELLED': return 'CANCELADA';
+      default: return 'EN_REVISION';
+    }
+  }
+
+  private static mapToDomainState(status: string): OrderState {
+    const validStates: OrderState[] = [
+      'DRAFT',
+      'QUOTATION_PENDING',
+      'QUOTATION_SENT',
+      'QUOTATION_APPROVED',
+      'PAYMENT_PENDING',
+      'PAYMENT_RECEIVED',
+      'IN_PRODUCTION',
+      'DELIVERED',
+      'COMPLETED',
+      'CANCELLED'
+    ];
+    if (validStates.includes(status as any)) {
+      return status as OrderState;
+    }
+
+    switch(status) {
+      case 'EN_REVISION': return 'QUOTATION_PENDING';
+      case 'REVISION_INTERNA': return 'QUOTATION_PENDING';
+      case 'CONFIRMADA': return 'QUOTATION_APPROVED';
+      case 'PAGADA': return 'PAYMENT_RECEIVED';
+      case 'EN_PRODUCCION': return 'IN_PRODUCTION';
+      case 'ENTREGADA': return 'DELIVERED';
+      case 'COMPLETADA': return 'COMPLETED';
+      case 'CANCELADA': return 'CANCELLED';
+      default: return 'QUOTATION_PENDING';
+    }
+  }
+
   /**
    * Domain → Persistence
    */
-  public static toPersistence(order: Order): OrderPersistence {
-    return {
+  public static toPersistence(order: Order): any {
+    const raw: any = {
       id: order.id.toString(),
+      code: `ORD-${order.id.toString().substring(0, 8).toUpperCase()}`, // Auto-generate required code
       client_id: order.clientId.toString(),
       provider_id: order.props.providerId?.toString(),
       quotation_id: order.props.quotationId?.toString(),
-      state: order.state,
+      state: order.state, // Map domain state directly for V2
+      status: this.mapToDBStatus(order.state), // Map domain state to DB status for V1
       event_date: order.eventDate.toISOString(),
       event_type: order.props.eventType,
       estimated_guests: order.props.estimatedGuests,
       delivery_address: order.deliveryAddress,
-      special_instructions: order.props.specialInstructions,
-      admin_notes: order.props.adminNotes,
+      special_instructions: order.props.specialInstructions, // Set both special_instructions
+      client_notes: order.props.specialInstructions, // and client_notes for V1/V2 compatibility
+      admin_notes: order.props.adminNotes, // Set both admin_notes
+      internal_notes: order.props.adminNotes, // and internal_notes for V1/V2 compatibility
       created_at: order.createdAt.toISOString(),
       updated_at: order.updatedAt.toISOString(),
       completed_at: order.completedAt?.toISOString(),
       cancelled_at: order.cancelledAt?.toISOString(),
-      cancellation_reason: order.cancellationReason
-    }
+      cancellation_reason: order.cancellationReason,
+      // Default values to satisfy NOT NULL constraints from 001_initial_schema
+      price_net: 0,
+      price_iva: 0,
+      price_total: 0
+    };
+
+    // Remove undefined values to avoid PostgREST schema errors
+    Object.keys(raw).forEach(key => {
+        if (raw[key] === undefined) {
+            delete raw[key];
+        }
+    });
+
+    return raw;
   }
 
   /**

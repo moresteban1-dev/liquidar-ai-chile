@@ -402,7 +402,7 @@ export async function getAdminProviderActivity(limit = 5): Promise<ProviderActiv
         const { data: providers } = await supabase
             .from('profiles')
             .select('id, name, email')
-            .eq('role', UserRole.VENDOR)
+            .eq('role', 'PROVEEDOR')
             .limit(limit);
 
         if (!providers?.length) return [];

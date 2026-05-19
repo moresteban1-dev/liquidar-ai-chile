@@ -35,7 +35,7 @@ export interface QuotationRow {
     brief?: string | null;
     client_rut?: string | null;
     provider_notes?: string | null;
-    admin_notes?: string | null;
+    internal_notes?: string | null;
     rejection_reason?: string | null;
     service?: { name: string } | null;
     subtotal_services_provider?: number;
@@ -113,7 +113,7 @@ export class QuotationV2Mapper {
     
     public static toDomain(row: QuotationAggregateRow): Result<Quotation, string> {
         try {
-            const qRow = row.quotation;
+            const qRow = row.quotation || (row as any);
             const reqItems = row.requestedItems || [];
             const provItems = row.providerItems || [];
             const cliItems = row.clientItems || [];
@@ -228,7 +228,7 @@ export class QuotationV2Mapper {
                 brief: qRow.brief ? String(qRow.brief) : undefined,
                 clientRut: qRow.client_rut ? String(qRow.client_rut) : undefined,
                 providerNotes: qRow.provider_notes ? String(qRow.provider_notes) : undefined,
-                adminNotes: qRow.admin_notes ? String(qRow.admin_notes) : undefined,
+                adminNotes: qRow.internal_notes ? String(qRow.internal_notes) : undefined,
                 rejectionReason: qRow.rejection_reason ? String(qRow.rejection_reason) : undefined,
                 serviceName: (qRow.service && typeof qRow.service === 'object' && 'name' in qRow.service) 
                     ? String((qRow.service as any).name) 
@@ -286,7 +286,7 @@ export class QuotationV2Mapper {
                     event_address: quotation.eventAddress ?? null,
                     event_end_time: quotation.eventEndTime ?? null,
                     provider_notes: quotation.providerNotes ?? null,
-                    admin_notes: quotation.props.adminNotes ?? null,
+                    internal_notes: quotation.props.adminNotes ?? null,
                     rejection_reason: quotation.rejectionReason ?? null,
                     technical_visit: quotation.technicalVisit ?? false,
                     provider_suggests_technical_visit: quotation.providerSuggestsTechnicalVisit ?? false,

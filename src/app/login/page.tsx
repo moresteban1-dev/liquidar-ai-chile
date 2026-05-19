@@ -111,8 +111,10 @@ function LoginForm() {
                 }
 
                 // 🛡️ Layer 3: Redirect Sanitization (Anti-Open Redirect)
-                const safeTarget = validateRedirectUrl(callbackUrl, targetUrl);
-                targetUrl = safeTarget;
+                const requestedCallback = searchParams.get('callbackUrl');
+                if (requestedCallback && requestedCallback !== '/') {
+                    targetUrl = validateRedirectUrl(requestedCallback, targetUrl);
+                }
 
                  
                 router.push(targetUrl as any);

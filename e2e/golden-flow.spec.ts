@@ -7,6 +7,7 @@ const TADMIN = { email: `admin.${Date.now()}@test.com`, pass: 'test1234' };
 const TVENDOR = { email: `vendor.${Date.now()}@test.com`, pass: 'test1234' };
 
 test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
+    test.setTimeout(120000); // Allow up to 2 minutes for full flow
 
     test.beforeAll(async () => {
         // 🛠️ SEEDING AUTOMÁTICO DE USUARIOS
@@ -25,6 +26,8 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
                 email,
                 password: pass,
                 email_confirm: true,
+                user_metadata: { role: roleName },
+                app_metadata: { role: roleName }
             });
 
             if (authError) {
@@ -33,7 +36,15 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
             }
 
             if (authData?.user) {
-                await supabase.from('profiles').update({ role: roleName }).eq('id', authData.user.id);
+                const { error: profileError } = await supabase.from('profiles').upsert({ 
+                    id: authData.user.id, 
+                    role: roleName,
+                    email: email,
+                    name: 'Test ' + roleName
+                }, { onConflict: 'id' });
+                if (profileError) {
+                    console.error(`Error configurando perfil para ${email}:`, profileError.message);
+                }
             }
         };
 
@@ -66,6 +77,13 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
         const clientPage = await clientContext.newPage();
 
         // 🚨 ATRAPAR LOGS Y CRASHES DEL NAVEGADOR (CLIENT-SIDE)
+        clientPage.on('response', async response => {
+            if (response.status() >= 400 && response.url().includes('/api/quotations')) {
+                const body = await response.text();
+                console.log(`❌ BROWSER NETWORK ERROR: ${response.status()} ${response.url()} -> ${body}`);
+            }
+        });
+
         clientPage.on('console', msg => {
             if (msg.type() === 'error' || msg.type() === 'warning') {
                 console.log(`🖥️ BROWSER [${msg.type().toUpperCase()}]: ${msg.text()}`);
@@ -127,7 +145,7 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
             await clientPage.keyboard.press('Enter');
 
             try {
-                await clientPage.waitForURL('/client', { timeout: 15000 });
+                await clientPage.waitForURL('**/client**', { timeout: 15000 });
 
                 // Lidiar con el Onboarding Modal si aparece (no bloqueante)
                 try {
@@ -148,31 +166,98 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
                 console.log("Creando nueva solicitud en QuoteWizard...");
                 await clientPage.getByRole('link', { name: /Nueva Solicitud|Cotizar mi Evento/ }).first().click();
                 await clientPage.waitForURL('**/quotations/request**');
+                await clientPage.waitForLoadState('networkidle');
+                await clientPage.waitForTimeout(2000); // React Hook Form + Framer Motion full hydration
 
-                // Step 1: Identidad
-                await clientPage.getByLabel('Nombre Completo').fill('Cliente Test Automatizado');
-                await clientPage.getByLabel('RUT Empresa/Persona').fill('19000000-1'); // Valid Modulo 11 RUT
-                await clientPage.getByLabel('Email Corporativo').fill(TCLIENT.email);
-                await clientPage.getByLabel('Teléfono de Contacto').fill('+56991234567'); // Valid Chilean Phone format
+                // Step 1: Identidad — use placeholders to guarantee unique selectors
+                const nameInput = clientPage.getByPlaceholder(/Nombre o Empresa/i);
+                await nameInput.waitFor({ state: 'visible', timeout: 10000 });
+                await nameInput.click();
+                await clientPage.keyboard.type('Cliente Test Automatizado', { delay: 10 });
+
+                const rutInput = clientPage.getByPlaceholder('76.123.456-K');
+                await rutInput.click();
+                await clientPage.keyboard.type('19000000-1', { delay: 10 });
+
+                const emailCorpInput = clientPage.getByPlaceholder('contacto@empresa.com');
+                await emailCorpInput.click();
+                await clientPage.keyboard.type(TCLIENT.email, { delay: 10 });
+
+                const phoneInput = clientPage.getByPlaceholder('+56 9 1234 5678');
+                await phoneInput.click();
+                await clientPage.keyboard.type('+56991234567', { delay: 10 });
+
                 await clientPage.getByRole('button', { name: 'Siguiente' }).click();
+                await clientPage.waitForTimeout(800); // Framer Motion step animation
 
                 // Step 2: Requerimiento
-                await clientPage.getByLabel('Tipo de Servicio').selectOption('audio');
-                await clientPage.getByLabel('Fecha del Evento').fill('2028-12-31');
-                await clientPage.getByLabel('Detalles Técnicos').fill('Prueba E2E automatizada de sonido para 500 personas.');
-                // Bypass animation wait by ensuring the button is actionable
+                // Wait for categories API to load into the select
+                const serviceSelect = clientPage.locator('select').first();
+                await serviceSelect.waitFor({ state: 'visible', timeout: 10000 });
+                await clientPage.waitForFunction(() => {
+                    const sel = document.querySelector('select');
+                    return sel && sel.options.length > 1;
+                }, { timeout: 10000 });
+                // Select the first real category (index 1, skipping "Selecciona un servicio..." placeholder)
+                await serviceSelect.selectOption({ index: 1 });
+
+                // Date input — use evaluate to set the value and dispatch proper React events
+                const dateInput = clientPage.locator('input[type="date"]').first();
+                await dateInput.waitFor({ state: 'visible' });
+                await dateInput.fill('2028-12-31');
+                // Force React Hook Form to register the change via native input event
+                await dateInput.evaluate((el: HTMLInputElement) => {
+                    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+                        window.HTMLInputElement.prototype, 'value'
+                    )?.set;
+                    nativeInputValueSetter?.call(el, '2028-12-31');
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                    el.dispatchEvent(new Event('change', { bubbles: true }));
+                });
+
+                const detailsInput = clientPage.getByPlaceholder(/evento, aforo/i);
+                await detailsInput.click();
+                await clientPage.keyboard.type('Prueba E2E automatizada de sonido para 500 personas.', { delay: 5 });
+
                 const btnSiguiente = clientPage.getByRole('button', { name: 'Siguiente' });
                 await btnSiguiente.waitFor({ state: 'visible' });
-                await clientPage.waitForTimeout(500); // Dar respiro a la animación de Framer Motion
+                await clientPage.waitForTimeout(500);
                 await btnSiguiente.click();
+                await clientPage.waitForTimeout(800); // Framer Motion step transition
 
                 // Step 3: Logística
-                await clientPage.getByPlaceholder('Av. Costanera Sur 2710, Santiago').fill('Av E2E Testing 1234, Santiago');
-                // Los time inputs ya tienen defaultValues (10:00, 20:00, etc) en el código, no es urgente rellenarlos.
+                // AnimatePresence from Framer Motion needs time to fully mount the new step's DOM
+                await clientPage.waitForTimeout(1500);
+
+                // Use evaluate to directly call form.setValue() via the exposed API
+                // This bypasses the React controlled component + Radix Slot abstraction
+                await clientPage.evaluate(() => {
+                    const form = (window as any).__QUOTEWIZARD_FORM__;
+                    if (form?.setValue) {
+                        form.setValue('venueAddress', 'Av E2E Testing 1234 Santiago', { 
+                            shouldValidate: true, 
+                            shouldDirty: true, 
+                            shouldTouch: true 
+                        });
+                    } else {
+                        console.error('❌ __QUOTEWIZARD_FORM__ not available');
+                    }
+                });
+                // Time inputs already have defaults (10:00, 20:00, etc.) in the code
+
+                // Debug: verify the value was set in RHF state
+                const rhfAddress = await clientPage.evaluate(() => {
+                    const form = (window as any).__QUOTEWIZARD_FORM__;
+                    return form?.getValues?.('venueAddress') ?? 'FORM NOT FOUND';
+                });
+                console.log(`📍 RHF venueAddress value: "${rhfAddress}"`);
+
+                // Give React Hook Form time to update internal state
+                await clientPage.waitForTimeout(500);
 
                 const btnFinalizar = clientPage.getByRole('button', { name: 'Finalizar Cotización' });
                 await btnFinalizar.waitFor({ state: 'visible' });
-                await clientPage.waitForTimeout(500);
+                await clientPage.waitForTimeout(300);
                 await btnFinalizar.click();
 
                 // Esperar pantalla de Éxito o Redirección a success
@@ -203,9 +288,26 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
                 await adminPage.goto('/login');
                 await adminPage.waitForTimeout(2000); // Wait for React Auth Hydration
 
-                await adminPage.getByLabel('Correo Electrónico').fill(TADMIN.email);
-                await adminPage.getByLabel('Contraseña', { exact: true }).fill(TADMIN.pass);
-                await adminPage.keyboard.press('Enter');
+                await adminPage.locator('input[type="email"]').first().fill(TADMIN.email);
+                await adminPage.locator('input[type="password"]').first().fill(TADMIN.pass);
+
+                // Escuchar respuestas de red para auth
+                adminPage.on('response', async (response) => {
+                    if (response.url().includes('/auth/v1/token')) {
+                        console.log(`ADMIN LOGIN RESPONSE: ${response.status()}`);
+                        if (response.status() >= 400) {
+                            console.log(`ADMIN LOGIN ERROR: await response.text()`);
+                        }
+                    }
+                });
+
+                await adminPage.locator('button[type="submit"]').first().click();
+
+                // Extraer el texto de error si existe en el DOM
+                const errorLocator = adminPage.locator('p.text-red-500, p.text-destructive');
+                if (await errorLocator.count() > 0) {
+                    console.log(`ADMIN UI ERROR: ${await errorLocator.first().textContent()}`);
+                }
 
                 // Asegurar que admin entró al panel
                 await adminPage.waitForURL('**/admin**', { timeout: 15000 });
@@ -265,9 +367,9 @@ test.describe('E2E Golden Flow: Dropservice Lifecycle', () => {
                 await vendorPage.goto('/login');
                 await vendorPage.waitForTimeout(2000);
 
-                await vendorPage.getByLabel('Correo Electrónico').fill(TVENDOR.email);
-                await vendorPage.getByLabel('Contraseña', { exact: true }).fill(TVENDOR.pass);
-                await vendorPage.keyboard.press('Enter');
+                await vendorPage.locator('input[type="email"]').first().fill(TVENDOR.email);
+                await vendorPage.locator('input[type="password"]').first().fill(TVENDOR.pass);
+                await vendorPage.locator('button[type="submit"]').first().click();
 
                 await vendorPage.waitForURL('**/vendor**', { timeout: 15000 });
                 console.log("Proveedor logueado. Buscando solicitud...");

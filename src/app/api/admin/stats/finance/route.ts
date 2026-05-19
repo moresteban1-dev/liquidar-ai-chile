@@ -3,6 +3,7 @@ import { createServiceRoleClient } from '@/lib/supabase/api';
 import { withAdmin } from '@/lib/api/with-security';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 /**
  * GET /api/admin/stats/finance

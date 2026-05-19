@@ -11,7 +11,7 @@
     "type-check": "tsc --noEmit",
     "test": "vitest run",
     "predeploy": "npx tsx scripts/pre-deploy-check.ts",
-    "clean": "rm -rf .next node_modules/.cache",
+    "clean": "npx rimraf .next node_modules/.cache",
     "seed": "npx tsx scripts/seed.ts",
     "forensic:scan": "npx tsx scripts/forensic-scan.ts",
     "forensic:watch": "cross-env ENABLE_FORENSICS=true next dev",

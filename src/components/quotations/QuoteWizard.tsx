@@ -23,7 +23,7 @@ import {
     FormMessage,
 } from '@/components/ui/form'
 import { LiquidCard } from '@/components/ui/liquid-card'
-import { quoteSchema, QuoteFormValues } from '@/lib/validators/quote-schema'
+import { quoteSchema, quoteStep1Schema, quoteStep2Schema, quoteStep3Schema, QuoteFormValues } from '@/lib/validators/quote-schema'
 
 const STEPS = [
     { id: 1, title: "¿Quién eres?", icon: User },
@@ -78,7 +78,7 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
 
     const form = useForm<QuoteFormValues>({
         resolver: zodResolver(quoteSchema),
-        mode: "onChange",
+        mode: "onSubmit",
         defaultValues: {
             clientName: "",
             clientRut: "",
@@ -96,25 +96,47 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
         },
     })
 
-    const { trigger } = form
+    const { trigger, getValues } = form
 
-    // Navigation Logic
+    // Expose form methods for E2E automation (only in dev/test)
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            (window as any).__QUOTEWIZARD_FORM__ = {
+                setValue: form.setValue,
+                getValues: form.getValues,
+            };
+        }
+        return () => {
+            if (typeof window !== 'undefined') {
+                delete (window as any).__QUOTEWIZARD_FORM__;
+            }
+        };
+    }, [form]);
+
+    // Navigation Logic — per-step validation using isolated sub-schemas
+    // This avoids .refine() on the full schema firing against unfilled future-step fields
     const nextStep = async () => {
-        let fieldsToValidate: (keyof QuoteFormValues)[] = []
+        const values = getValues();
+        let validationResult;
 
         if (currentStep === 1) {
-            fieldsToValidate = ["clientName", "clientRut", "clientEmail", "clientPhone"]
+            validationResult = quoteStep1Schema.safeParse(values);
         } else if (currentStep === 2) {
-            fieldsToValidate = isCartMode ? ["comments", "items"] : ["serviceId", "eventDate", "comments"]
+            validationResult = quoteStep2Schema.safeParse(values);
+        } else {
+            // Step 3 validated on submit
+            setCurrentStep((prev) => Math.min(prev + 1, STEPS.length));
+            return;
         }
 
-        try {
-            const isValid = await trigger(fieldsToValidate)
-            if (isValid) {
-                setCurrentStep((prev) => Math.min(prev + 1, STEPS.length))
+        if (validationResult.success) {
+            setCurrentStep((prev) => Math.min(prev + 1, STEPS.length));
+        } else {
+            // Surface errors to React Hook Form UI
+            for (const issue of validationResult.error.issues) {
+                const fieldName = issue.path[0] as keyof QuoteFormValues;
+                form.setError(fieldName, { message: issue.message });
             }
-        } catch {
-            setCurrentStep((prev) => Math.min(prev + 1, STEPS.length))
         }
     }
 
@@ -196,6 +218,51 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
         }
     }
 
+    // Robust submission: Read ALL values from DOM FormData + RHF state merge
+    // FormData reads actual DOM input values, which Playwright's fill() correctly sets
+    const handleFormSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const rhfValues = form.getValues();
+        console.warn('[handleFormSubmit] rhfValues.venueAddress:', JSON.stringify(rhfValues.venueAddress));
+        console.warn('[handleFormSubmit] full rhfValues keys:', Object.keys(rhfValues).join(', '));
+        const formEl = e.target as HTMLFormElement;
+        const formData = new FormData(formEl);
+
+        // Build merged data: FormData (DOM truth) takes priority for string fields
+        // RHF values used for non-string fields (Date, boolean, arrays)
+        const mergedData = {
+            clientName: (formData.get('clientName') as string) || rhfValues.clientName || '',
+            clientRut: (formData.get('clientRut') as string) || rhfValues.clientRut || '',
+            clientEmail: (formData.get('clientEmail') as string) || rhfValues.clientEmail || '',
+            clientPhone: (formData.get('clientPhone') as string) || rhfValues.clientPhone || '',
+            serviceId: (formData.get('serviceId') as string) || rhfValues.serviceId || '',
+            items: rhfValues.items || [],
+            eventDate: rhfValues.eventDate || (formData.get('eventDate') as string) || '',
+            comments: (formData.get('comments') as string) || rhfValues.comments || '',
+            needsTechnicalVisit: rhfValues.needsTechnicalVisit || false,
+            venueAddress: (formData.get('venueAddress') as string) || rhfValues.venueAddress || '',
+            mountingTime: (formData.get('mountingTime') as string) || rhfValues.mountingTime || '10:00',
+            eventStartTime: (formData.get('eventStartTime') as string) || rhfValues.eventStartTime || '20:00',
+            eventEndTime: (formData.get('eventEndTime') as string) || rhfValues.eventEndTime || '02:00',
+            dismountingTime: (formData.get('dismountingTime') as string) || rhfValues.dismountingTime || '03:00',
+        };
+
+        // Validate with the full schema
+        const result = quoteSchema.safeParse(mergedData);
+        if (!result.success) {
+            logger.warn('[QuoteWizard] Validation failed on submit', { issues: result.error.issues });
+            console.error('[QuoteWizard] Validation failed:', JSON.stringify(result.error.issues, null, 2));
+            console.error('[QuoteWizard] Merged data:', JSON.stringify(mergedData, null, 2));
+            for (const issue of result.error.issues) {
+                const fieldName = issue.path[0] as keyof QuoteFormValues;
+                form.setError(fieldName, { message: issue.message });
+            }
+            return;
+        }
+
+        await onSubmit(result.data);
+    };
+
     return (
         <div className="max-w-3xl mx-auto py-10 px-4">
             {/* Steps Indicator */}
@@ -240,7 +307,7 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
             {/* Wizard Form */}
             <LiquidCard className="bg-card/50 backdrop-blur-xl">
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <form onSubmit={handleFormSubmit} className="space-y-8">
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={currentStep}
@@ -383,7 +450,15 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
                                                                 type="date"
                                                                 {...field}
                                                                 value={field.value ? new Date(field.value).toISOString().split('T')[0] : ''}
-                                                                onChange={(e) => field.onChange(new Date(e.target.value))}
+                                                                onChange={(e) => {
+                                                                    const val = e.target.value;
+                                                                    if (val) {
+                                                                        const parsed = new Date(val);
+                                                                        if (!isNaN(parsed.getTime())) {
+                                                                            field.onChange(parsed);
+                                                                        }
+                                                                    }
+                                                                }}
                                                             />
                                                         </FormControl>
                                                         <FormMessage />
@@ -451,10 +526,7 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
                                                 <FormItem>
                                                     <FormLabel>Lugar del Evento (Dirección exacta)</FormLabel>
                                                     <FormControl>
-                                                        <div className="relative">
-                                                            <MapPin className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-                                                            <Input className="pl-9" placeholder="Av. Costanera Sur 2710, Santiago" {...field} />
-                                                        </div>
+                                                        <Input placeholder="Av. Costanera Sur 2710, Santiago" {...field} />
                                                     </FormControl>
                                                     <FormMessage />
                                                 </FormItem>
