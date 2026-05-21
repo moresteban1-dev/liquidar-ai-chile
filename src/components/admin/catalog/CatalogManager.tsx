@@ -309,7 +309,7 @@ export function CatalogManager({ initialItems = [], initialCategories = [] }: Ca
       </div>
 
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="sm:max-w-4xl w-full max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingItem ? 'Editar Catalog Item' : 'Crear Nuevo Item'}

@@ -100,7 +100,7 @@ export function CatalogItemForm({ item, categories, onSuccess, onCancel }: Catal
       formData.append('level', String(data.level || 1));
       formData.append('itemType', data.itemType || 'SERVICE');
       formData.append('status', data.status || 'ACTIVE');
-      if (data.parentId) {
+      if (data.parentId && data.parentId !== 'none') {
         formData.append('parentId', data.parentId);
       }
 
@@ -350,7 +350,7 @@ export function CatalogItemForm({ item, categories, onSuccess, onCancel }: Catal
                 </div>
                 <Dialog open={isNewCategoryOpen} onOpenChange={setIsNewCategoryOpen}>
                   <DialogTrigger asChild>
-                    <Button type="button" variant="outline" className="h-10 px-3 flex gap-1 items-center border-dashed border-indigo-300 hover:border-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400">
+                    <Button type="button" variant="outline" className="h-10 px-3 flex gap-1 items-center border-dashed border-indigo-300 hover:border-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400 shrink-0">
                       <Plus className="h-4 w-4" />
                       <span>Nueva</span>
                     </Button>

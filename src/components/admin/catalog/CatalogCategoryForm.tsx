@@ -49,7 +49,7 @@ export function CatalogCategoryForm({ initialData, categories, onSubmit, isLoadi
         resolver: zodResolver(CatalogCategoryFormSchema),
         defaultValues: initialData ? {
             id: initialData.id,
-            parentId: initialData.parentId,
+            parentId: initialData.parentId || 'none',
             name: initialData.name,
             code: initialData.code,
             slug: initialData.slug,
@@ -63,7 +63,7 @@ export function CatalogCategoryForm({ initialData, categories, onSubmit, isLoadi
             level: 1,
             itemType: 'SERVICE',
             status: 'ACTIVE',
-            parentId: null,
+            parentId: 'none',
         },
     });
 
@@ -156,14 +156,14 @@ export function CatalogCategoryForm({ initialData, categories, onSubmit, isLoadi
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>Categoría Padre</FormLabel>
-                                <Select onValueChange={field.onChange} value={field.value || ""}>
+                                <Select onValueChange={field.onChange} value={field.value || "none"}>
                                     <FormControl>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Ninguna" />
                                         </SelectTrigger>
                                     </FormControl>
                                     <SelectContent>
-                                        <SelectItem value="">Ninguna (Raíz)</SelectItem>
+                                        <SelectItem value="none">Ninguna (Raíz)</SelectItem>
                                         {categories
                                             .filter(c => c.id !== initialData?.id && c.level < 3)
                                             .map(cat => (
