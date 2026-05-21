@@ -237,7 +237,7 @@ export type CommissionMethod = 'MONTO_FIJO' | 'PORCENTAJE' | 'PORCENTAJE_CATEGOR
 // QUOTATION ENTITY
 // ============================================
 
-export interface Quotation {
+export interface QuotationDTO {
     id: string;
     code: string;
     clientId: string;

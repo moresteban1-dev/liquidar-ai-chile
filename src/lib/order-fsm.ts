@@ -1,4 +1,4 @@
-import { Order, OrderEvent, OrderState } from '@/types/order';
+import { OrderDTO, OrderEvent, OrderState } from '@/types/order';
 import { AppError } from '@/core/shared/AppError';
 import { Result, ok, fail } from '@/core/shared/Result';
 
@@ -68,7 +68,7 @@ const TRANSITIONS: Record<OrderState, Partial<Record<OrderEvent['type'], OrderSt
 // GUARD CONDITIONS (Reglas de Negocio)
 // ============================================
 
-function checkGuard(order: Order, event: OrderEvent): Result<void, AppError> {
+function checkGuard(order: OrderDTO, event: OrderEvent): Result<void, AppError> {
     switch (event.type) {
         case 'PAYMENT_CAPTURED':
             // Check handled by Stripe usually, but ensures intent exists
@@ -109,7 +109,7 @@ function checkGuard(order: Order, event: OrderEvent): Result<void, AppError> {
  * @param event El evento que dispara la transición
  * @returns Result con el nuevo estado o AppError
  */
-export function transitionOrder(currentOrder: Order, event: OrderEvent): Result<OrderState, AppError> {
+export function transitionOrder(currentOrder: OrderDTO, event: OrderEvent): Result<OrderState, AppError> {
     const currentState = currentOrder.state;
     const validTransitions = TRANSITIONS[currentState];
 
@@ -136,7 +136,7 @@ export function transitionOrder(currentOrder: Order, event: OrderEvent): Result<
 // UTILITIES
 // ============================================
 
-export function canRefund(order: Order): boolean {
+export function canRefund(order: OrderDTO): boolean {
     // Solo se puede reembolsar si está en disputa y la resolución es a favor del cliente
     // O si está en escrow y no se ha asignado vendor (política de cancelación)
     if (order.state === 'DISPUTED') return true;

@@ -1,7 +1,7 @@
  
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { Quotation, QuotationProviderItem } from '@/lib/types';
+import { QuotationDTO, QuotationProviderItem } from '@/lib/types';
 import { formatDate } from '@/lib/utils';
 import { formatCLP } from '@/lib/quotation-fsm';
 
@@ -20,7 +20,7 @@ export class PdfService {
         // Services instances are created per method call to ensure thread safety and fresh state
     }
 
-    public generateQuotationPdf(quotation: Quotation, items: PdfClientItem[]): void {
+    public generateQuotationPdf(quotation: QuotationDTO, items: PdfClientItem[]): void {
         // Reset doc for each generation to avoid appending pages if singleton is reused improperly
         // However, constructor is called once. 
         // Better pattern: Create a new doc instance per call or method variable.
@@ -203,7 +203,7 @@ export class PdfService {
         doc.save(`Cotizacion-${quotation.code}.pdf`);
     }
 
-    public generateProviderQuotationPdf(quotation: Quotation, providerItems: QuotationProviderItem[]): void {
+    public generateProviderQuotationPdf(quotation: QuotationDTO, providerItems: QuotationProviderItem[]): void {
         const doc = new jsPDF({
             orientation: 'portrait',
             unit: 'mm',

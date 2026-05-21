@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest';
 import { transitionOrder } from './order-fsm';
-import { Order } from '@/types/order';
+import { OrderDTO } from '@/types/order';
 
 describe('Order FSM (Hardened)', () => {
 
     it('should allow valid flow: DRAFT -> PENDIENTE_PAGO -> PAGADA -> ASIGNADA', () => {
-        const order: Order = {
+        const order: OrderDTO = {
             id: '1',
             clientId: 'client1',
             state: 'DRAFT',
@@ -16,14 +16,14 @@ describe('Order FSM (Hardened)', () => {
         expect(res1.isSuccess()).toBe(true);
         expect(res1.getValue()).toBe('PENDING_PAYMENT');
 
-        const orderPaid: Order = { ...order, state: 'PENDING_PAYMENT', amount: 100 } as any;
+        const orderPaid: OrderDTO = { ...order, state: 'PENDING_PAYMENT', amount: 100 } as any;
         const res2 = transitionOrder(orderPaid, { type: 'PAYMENT_CAPTURED', paymentIntentId: 'pi_123' });
         expect(res2.isSuccess()).toBe(true);
         expect(res2.getValue()).toBe('PAID');
     });
 
     it('should BLOCK transition to ENTREGADA (Completed) without signature', () => {
-        const order: Order = {
+        const order: OrderDTO = {
             id: '1',
             clientId: 'c1',
             state: 'UNDER_REVIEW',
@@ -42,7 +42,7 @@ describe('Order FSM (Hardened)', () => {
     });
 
     it('should BLOCK transition to PAGADA without PaymentIntent', () => {
-        const order: Order = {
+        const order: OrderDTO = {
             id: '1',
             clientId: 'client1',
             state: 'PENDING_PAYMENT',
@@ -56,7 +56,7 @@ describe('Order FSM (Hardened)', () => {
     });
 
     it('should NOT allow opening dispute on terminal state', () => {
-        const order: Order = {
+        const order: OrderDTO = {
             id: '1',
             state: 'COMPLETED',
             clientId: 'c1',

@@ -48,7 +48,7 @@ export type OrderEvent =
 // Poka-Yoke: Each state has ONLY valid properties
 // ============================================
 
-export type Order =
+export type OrderDTO =
     | {
         state: 'DRAFT';
         id: string;
@@ -218,15 +218,15 @@ export type Order =
 // TYPE GUARDS (Runtime Validation)
 // ============================================
 
-export function isOrderInEscrow(order: Order): order is Order & { state: 'PAID' } {
+export function isOrderInEscrow(order: OrderDTO): order is OrderDTO & { state: 'PAID' } {
     return order.state === 'PAID';
 }
 
-export function isOrderDisputable(order: Order): boolean {
+export function isOrderDisputable(order: OrderDTO): boolean {
     return ['PAID', 'ASSIGNED', 'IN_PRODUCTION', 'INTERNAL_REVIEW', 'UNDER_REVIEW', 'REVISION_REQUESTED'].includes(order.state);
 }
 
-export function canReleasePayment(order: Order): order is Order & { state: 'DELIVERED' } {
+export function canReleasePayment(order: OrderDTO): order is OrderDTO & { state: 'DELIVERED' } {
     return order.state === 'DELIVERED' && 'clientSignature' in order;
 }
 

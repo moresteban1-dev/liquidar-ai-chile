@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
-import { Quotation } from '@/lib/types';
+import { QuotationDTO } from '@/lib/types';
 import { GatewaySlug } from '@/types/payments';
 import { approveQuote } from '@/actions/quotations';
 
@@ -15,7 +15,7 @@ interface ClientLineItem {
 }
 
 export function useQuotationDetails(id: string) {
-    const [quotation, setQuotation] = useState<Quotation | null>(null);
+    const [quotation, setQuotation] = useState<QuotationDTO | null>(null);
     const [clientItems, setClientItems] = useState<ClientLineItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');

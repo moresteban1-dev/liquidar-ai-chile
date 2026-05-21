@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 
-interface Order {
+interface VendorOrderDTO {
     id: string;
     code: string;
     status: string;
@@ -22,7 +22,7 @@ interface UploadedFile {
 }
 
 export function useVendorOrder(orderId: string) {
-    const [order, setOrder] = useState<Order | null>(null);
+    const [order, setOrder] = useState<VendorOrderDTO | null>(null);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
     const [files, setFiles] = useState<UploadedFile[]>([]);

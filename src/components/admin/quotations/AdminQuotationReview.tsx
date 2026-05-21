@@ -35,7 +35,7 @@ import {
 } from '@/lib/quotation-fsm';
 import { toast } from 'sonner';
 import { DownloadQuoteButton } from '@/components/quotations/DownloadQuoteButton';
-import { Quotation } from '@/lib/types';
+import { QuotationDTO } from '@/lib/types';
 import { TAX_CONFIG } from '@domain/pricing/TaxConfig'
 
 // ============================================
@@ -644,7 +644,7 @@ export function AdminQuotationReview({ quotation, onSuccess, onReturn }: AdminQu
                                 priceTotal: clientTotalWithIva,
                                 issuedAt: new Date(),
                                 // Mock branding props if needed
-                            } as unknown as Quotation}
+                            } as unknown as QuotationDTO}
                             clientItems={clientLines.map(l => ({
                                 description: l.description,
                                 quantity: l.quantity,

@@ -5,11 +5,11 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { FileDown, Loader2 } from 'lucide-react';
 import type { PdfClientItem } from '@core/application/services/PdfService';
-import { Quotation, QuotationProviderItem } from '@/lib/types';
+import { QuotationDTO, QuotationProviderItem } from '@/lib/types';
 import { toast } from 'sonner';
 
 interface DownloadQuoteButtonProps {
-    quotation: Quotation;
+    quotation: QuotationDTO;
     clientItems?: PdfClientItem[];
     providerItems?: QuotationProviderItem[];
     format?: 'CLIENT' | 'PROVIDER';
