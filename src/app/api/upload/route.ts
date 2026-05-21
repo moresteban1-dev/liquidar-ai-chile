@@ -25,7 +25,18 @@ export const POST = withAuth(async (request, _user) => {
     }
 
     // Validar tipo de archivo
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg', 'video/mp4', 'video/webm', 'application/pdf'];
+    const allowedTypes = [
+      'image/jpeg', 
+      'image/png', 
+      'image/webp', 
+      'image/jpg', 
+      'image/gif', 
+      'image/svg+xml', 
+      'video/mp4', 
+      'video/webm', 
+      'video/quicktime', 
+      'application/pdf'
+    ];
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
         { error: 'Tipo de archivo no permitido.' },

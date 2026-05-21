@@ -26,16 +26,30 @@ import {
 } from '@/components/ui/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
-import { createCatalogItemAction, updateCatalogItemAction } from '@/actions/catalog';
+import { 
+  createCatalogItemAction, 
+  updateCatalogItemAction, 
+  generateMarketingAction,
+  createCategoryAction 
+} from '@/actions/catalog';
 import { MediaAsset, CatalogItem, CatalogCategory } from '@core/domain/catalog/CatalogTypes';
-import { Loader2, Wand2 } from 'lucide-react';
+import { Loader2, Wand2, DollarSign, FileText, TrendingUp, Plus } from 'lucide-react';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
-import { generateMarketingAction } from '@/actions/catalog';
+import { useToast } from '@/hooks/use-toast';
+import { CatalogCategoryForm, CatalogCategoryFormData } from './CatalogCategoryForm';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle, 
+  DialogTrigger 
+} from '@/components/ui/dialog';
 
 const MediaAssetSchema = z.object({
   url: z.string().url(),
   type: z.enum(['image', 'video', 'document']),
   altText: z.string().optional(),
+  caption: z.string().optional(),
   order: z.number().default(0),
 });
 
@@ -44,9 +58,9 @@ const CatalogItemFormSchema = z.object({
   type: z.enum(['service', 'product', 'equipment']),
   categoryId: z.string().uuid('Seleccione una categoría válida'),
   description: z.string().min(10, 'La descripción debe tener al menos 10 caracteres').optional().or(z.literal('')),
-  priceSuggested: z.union([z.coerce.number().positive(), z.literal(''), z.null()]).optional(),
-  priceReferenceMin: z.union([z.coerce.number().positive(), z.literal(''), z.null()]).optional(),
-  priceReferenceMax: z.union([z.coerce.number().positive(), z.literal(''), z.null()]).optional(),
+  priceSuggested: z.union([z.coerce.number().min(0, 'El precio debe ser positivo o cero'), z.literal(''), z.null()]).optional(),
+  priceReferenceMin: z.union([z.coerce.number().min(0, 'El precio debe ser positivo o cero'), z.literal(''), z.null()]).optional(),
+  priceReferenceMax: z.union([z.coerce.number().min(0, 'El precio debe ser positivo o cero'), z.literal(''), z.null()]).optional(),
   defaultMarginPercent: z.union([z.coerce.number().min(0).max(100), z.literal(''), z.null()]).optional(),
   images: z.array(MediaAssetSchema).min(1, 'Debe subir al menos una imagen'),
   videos: z.array(MediaAssetSchema).default([]),
@@ -55,6 +69,7 @@ const CatalogItemFormSchema = z.object({
   tags: z.array(z.string()).default([]),
   status: z.enum(['draft', 'active', 'archived']).default('draft'),
   isFeatured: z.boolean().default(false),
+  priceType: z.enum(['FIJO', 'COTIZABLE', 'DESDE']).default('FIJO'),
 });
 
 type CatalogItemFormData = z.infer<typeof CatalogItemFormSchema>;
@@ -67,9 +82,52 @@ interface CatalogItemFormProps {
 }
 
 export function CatalogItemForm({ item, categories, onSuccess, onCancel }: CatalogItemFormProps) {
+  const { toast } = useToast();
   const [isSubmittingForm, setIsSubmittingForm] = useState(false);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const [currentTab, setCurrentTab] = useState('basic');
+  const [isNewCategoryOpen, setIsNewCategoryOpen] = useState(false);
+  const [isCreatingCategory, setIsCreatingCategory] = useState(false);
+  const [localCategories, setLocalCategories] = useState<CatalogCategory[]>(categories);
+
+  const handleCreateCategory = async (data: CatalogCategoryFormData) => {
+    setIsCreatingCategory(true);
+    try {
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('slug', data.slug || '');
+      formData.append('code', data.code || '');
+      formData.append('level', String(data.level || 1));
+      formData.append('itemType', data.itemType || 'SERVICE');
+      formData.append('status', data.status || 'ACTIVE');
+      if (data.parentId) {
+        formData.append('parentId', data.parentId);
+      }
+
+      const result = await createCategoryAction(formData);
+      if (result.success && result.data) {
+        const newCat = result.data as CatalogCategory;
+        const formattedCat: CatalogCategory = {
+          ...newCat,
+          status: 'active'
+        };
+        setLocalCategories(prev => [...prev, formattedCat]);
+        form.setValue('categoryId', newCat.id);
+        setIsNewCategoryOpen(false);
+        toast({
+          title: 'Categoría creada',
+          description: `La categoría "${data.name}" se creó y seleccionó correctamente.`,
+        });
+      } else {
+        alert(result.error || 'Error al crear la categoría');
+      }
+    } catch (error) {
+      logger.error('Error al crear categoría inline:', error);
+      alert('Error inesperado al crear categoría');
+    } finally {
+      setIsCreatingCategory(false);
+    }
+  };
 
   const form = useForm<CatalogItemFormData>({
     resolver: zodResolver(CatalogItemFormSchema),
@@ -98,6 +156,7 @@ export function CatalogItemForm({ item, categories, onSuccess, onCancel }: Catal
       tags: item.tags || [],
       status: (item.status?.toLowerCase() as 'draft' | 'active' | 'archived') || 'draft',
       isFeatured: !!item.isFeatured,
+      priceType: item.priceType || 'FIJO',
     } : {
       images: [],
       videos: [],
@@ -113,11 +172,13 @@ export function CatalogItemForm({ item, categories, onSuccess, onCancel }: Catal
       description: '',
       name: '',
       categoryId: '',
-      technicalSpecs: {}
+      technicalSpecs: {},
+      priceType: 'FIJO'
     },
   });
 
   const watchType = form.watch('type');
+  const watchPriceType = form.watch('priceType') || 'FIJO';
 
   const onSubmit = async (data: CatalogItemFormData) => {
     setIsSubmittingForm(true);
@@ -258,32 +319,56 @@ export function CatalogItemForm({ item, categories, onSuccess, onCancel }: Catal
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="categoryId"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Categoría *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Seleccionar categoría" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {categories
-                          .filter(cat => cat.status === 'active')
-                          .map((cat) => (
-                            <SelectItem key={cat.id} value={cat.id}>
-                              {cat.name}
-                            </SelectItem>
-                          ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="flex items-end gap-2">
+                <div className="flex-1">
+                  <FormField
+                    control={form.control}
+                    name="categoryId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Categoría *</FormLabel>
+                        <Select onValueChange={field.onChange} value={field.value || undefined}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Seleccionar categoría" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {localCategories
+                              .filter(cat => cat.status === 'active' || cat.status === 'ACTIVE')
+                              .map((cat) => (
+                                <SelectItem key={cat.id} value={cat.id}>
+                                  {cat.name}
+                                </SelectItem>
+                              ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <Dialog open={isNewCategoryOpen} onOpenChange={setIsNewCategoryOpen}>
+                  <DialogTrigger asChild>
+                    <Button type="button" variant="outline" className="h-10 px-3 flex gap-1 items-center border-dashed border-indigo-300 hover:border-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400">
+                      <Plus className="h-4 w-4" />
+                      <span>Nueva</span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[500px]">
+                    <DialogHeader>
+                      <DialogTitle>Nueva Categoría</DialogTitle>
+                    </DialogHeader>
+                    <div className="py-4">
+                      <CatalogCategoryForm
+                        categories={localCategories}
+                        onSubmit={handleCreateCategory}
+                        isLoading={isCreatingCategory}
+                      />
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
 
             <FormField
@@ -392,81 +477,196 @@ export function CatalogItemForm({ item, categories, onSuccess, onCancel }: Catal
           </TabsContent>
 
           {/* TAB: Precios */}
-          <TabsContent value="pricing" className="space-y-4 pt-4">
+          <TabsContent value="pricing" className="space-y-6 pt-4">
             <FormField
               control={form.control}
-              name="priceSuggested"
+              name="priceType"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Precio Sugerido (UF)</FormLabel>
+                <FormItem className="space-y-3">
+                  <FormLabel className="text-base font-semibold">Tipo de Publicación de Precio</FormLabel>
                   <FormControl>
-                    <Input 
-                      type="number" 
-                      step="0.01" 
-                      placeholder="Ej: 100.50"
-                      {...field} 
-                      value={(field.value as any) ?? ''}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    Precio base interno.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          field.onChange('FIJO');
+                        }}
+                        className={`flex flex-col items-center justify-center p-4 rounded-xl border text-center transition-all duration-200 cursor-pointer ${
+                          field.value === 'FIJO'
+                            ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400 ring-2 ring-indigo-500/20'
+                            : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-600 dark:text-slate-400'
+                        }`}
+                      >
+                        <DollarSign className="h-6 w-6 mb-2" />
+                        <span className="font-semibold text-sm">Precio Fijo</span>
+                        <span className="text-[11px] text-slate-500 mt-1">Se muestra un precio único exacto</span>
+                      </button>
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="priceReferenceMin"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Precio Mínimo (UF)</FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.01" {...field} value={(field.value as any) ?? ''} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          field.onChange('COTIZABLE');
+                          form.setValue('priceSuggested', '');
+                          form.setValue('priceReferenceMin', '');
+                          form.setValue('priceReferenceMax', '');
+                        }}
+                        className={`flex flex-col items-center justify-center p-4 rounded-xl border text-center transition-all duration-200 cursor-pointer ${
+                          field.value === 'COTIZABLE'
+                            ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400 ring-2 ring-indigo-500/20'
+                            : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-600 dark:text-slate-400'
+                        }`}
+                      >
+                        <FileText className="h-6 w-6 mb-2" />
+                        <span className="font-semibold text-sm">Cotizable</span>
+                        <span className="text-[11px] text-slate-500 mt-1">Requiere cotización personalizada</span>
+                      </button>
 
-              <FormField
-                control={form.control}
-                name="priceReferenceMax"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Precio Máximo (UF)</FormLabel>
-                    <FormControl>
-                      <Input type="number" step="0.01" {...field} value={(field.value as any) ?? ''} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="defaultMarginPercent"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Margen Sugerido (%)</FormLabel>
-                  <FormControl>
-                    <Input 
-                      type="number" 
-                      step="1" 
-                      min="0" 
-                      max="100"
-                      placeholder="Ej: 15"
-                      {...field} 
-                      value={(field.value as any) ?? ''}
-                    />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          field.onChange('DESDE');
+                        }}
+                        className={`flex flex-col items-center justify-center p-4 rounded-xl border text-center transition-all duration-200 cursor-pointer ${
+                          field.value === 'DESDE'
+                            ? 'border-indigo-600 bg-indigo-50/50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400 ring-2 ring-indigo-500/20'
+                            : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-slate-600 dark:text-slate-400'
+                        }`}
+                      >
+                        <TrendingUp className="h-6 w-6 mb-2" />
+                        <span className="font-semibold text-sm">Precio Desde</span>
+                        <span className="text-[11px] text-slate-500 mt-1">Se muestra el precio base de inicio</span>
+                      </button>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {watchPriceType !== 'COTIZABLE' ? (
+              <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="priceSuggested"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="flex items-center gap-1">
+                          <span>Precio Público (CLP)</span>
+                          <span className="text-destructive font-bold">*</span>
+                        </FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <span className="absolute left-3 top-2.5 text-muted-foreground font-semibold">$</span>
+                            <Input 
+                              type="number" 
+                              step="1" 
+                              placeholder="Ej: 1250000"
+                              className="pl-7"
+                              {...field} 
+                              value={(field.value as any) ?? ''}
+                            />
+                          </div>
+                        </FormControl>
+                        <FormDescription>
+                          Monto de publicación principal. Sin decimales.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="defaultMarginPercent"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Margen Sugerido (%)</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="number" 
+                            step="1" 
+                            min="0" 
+                            max="100"
+                            placeholder="Ej: 15"
+                            {...field} 
+                            value={(field.value as any) ?? ''}
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Margen de ganancia interna de referencia.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="priceReferenceMin"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Rango Mínimo (CLP)</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <span className="absolute left-3 top-2.5 text-muted-foreground font-semibold">$</span>
+                            <Input 
+                              type="number" 
+                              step="1" 
+                              placeholder="Ej: 1100000"
+                              className="pl-7"
+                              {...field} 
+                              value={(field.value as any) ?? ''} 
+                            />
+                          </div>
+                        </FormControl>
+                        <FormDescription>
+                          Precio mínimo de referencia comercial.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="priceReferenceMax"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Rango Máximo (CLP)</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <span className="absolute left-3 top-2.5 text-muted-foreground font-semibold">$</span>
+                            <Input 
+                              type="number" 
+                              step="1" 
+                              placeholder="Ej: 1500000"
+                              className="pl-7"
+                              {...field} 
+                              value={(field.value as any) ?? ''} 
+                            />
+                          </div>
+                        </FormControl>
+                        <FormDescription>
+                          Precio máximo de referencia comercial.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center p-8 rounded-xl border border-dashed border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/10 text-center animate-in fade-in duration-200">
+                <FileText className="h-10 w-10 text-slate-400 mb-2" />
+                <h4 className="font-semibold text-slate-700 dark:text-slate-300">Publicación Tipo Cotizable Activa</h4>
+                <p className="text-xs text-slate-500 max-w-sm mt-1">
+                  Los items configurados como cotizables no muestran precio público en el catálogo y requieren que el cliente solicite una cotización detallada. No se requieren valores numéricos.
+                </p>
+              </div>
+            )}
           </TabsContent>
 
           {/* TAB: Avanzado */}

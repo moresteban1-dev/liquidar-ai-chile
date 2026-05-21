@@ -58,6 +58,7 @@ export interface CatalogItem {
     displayOrder: number;
     createdAt: string;
     updatedAt: string;
+    priceType?: 'FIJO' | 'COTIZABLE' | 'DESDE';
     // Optional joined data from relations
     category?: Pick<CatalogCategory, 'id' | 'name' | 'slug'>;
 }
@@ -79,6 +80,7 @@ export interface CreateCatalogItemData {
   tags?: string[];
   status?: CatalogStatus;
   isFeatured?: boolean;
+  priceType?: 'FIJO' | 'COTIZABLE' | 'DESDE';
 }
 
 export type UpdateCatalogItemData = Partial<CreateCatalogItemData>;

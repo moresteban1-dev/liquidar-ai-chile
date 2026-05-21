@@ -19,7 +19,7 @@ export function MediaUploader({
   value = [], 
   onChange, 
   maxFiles = 5,
-  acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
+  acceptedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml', 'image/jpg'],
   label = 'Imágenes'
 }: MediaUploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
@@ -49,9 +49,24 @@ export function MediaUploader({
         const file = files[i];
         if (!file) continue;
         
-        // Validar tipo
-        if (!acceptedTypes.includes(file.type)) {
-          logger.warn(`Archivo ${file.name} ignorado: tipo no permitido`);
+        // Validar tipo robustamente con fallback por extensión
+        const fileTypeLower = file.type.toLowerCase();
+        const ext = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+        const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv'];
+        const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg'];
+        
+        let isAllowed = acceptedTypes.some(t => t.toLowerCase() === fileTypeLower);
+        if (!isAllowed) {
+          if (acceptedTypes.some(t => t.startsWith('video/')) && videoExtensions.includes(ext)) {
+            isAllowed = true;
+          } else if (acceptedTypes.some(t => t.startsWith('image/')) && imageExtensions.includes(ext)) {
+            isAllowed = true;
+          }
+        }
+
+        if (!isAllowed) {
+          logger.warn(`Archivo ${file.name} ignorado: tipo no permitido (${file.type || 'desconocido'})`);
+          alert(`El archivo ${file.name} no es de un tipo permitido.`);
           continue;
         }
 
@@ -153,8 +168,24 @@ export function MediaUploader({
           {value.map((asset, index) => (
             <div key={index} className="relative group bg-gray-50 p-2 rounded-lg border">
               <div className="aspect-square relative overflow-hidden rounded-md bg-gray-100 flex items-center justify-center">
-                {asset.type === 'video' ? (
-                  <video src={asset.url} className="w-full h-full object-cover" muted />
+                {asset.type === 'video' || (asset.type as string) === 'VIDEO' ? (
+                  <div className="relative w-full h-full">
+                    <video 
+                      src={asset.url} 
+                      className="w-full h-full object-cover" 
+                      controls={false}
+                      preload="metadata"
+                      playsInline
+                      muted 
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/45 transition-colors">
+                      <span className="text-white bg-black/60 p-2 rounded-full shadow-md group-hover:scale-110 transition-transform">
+                        <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
                 ) : (asset.type === 'image' || (asset.type as string) === 'IMAGE') ? (
                   <Image
                     src={asset.url}

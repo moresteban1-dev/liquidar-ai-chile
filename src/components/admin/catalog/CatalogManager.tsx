@@ -40,6 +40,11 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 
+const formatCLP = (value: number | null | undefined): string => {
+  if (value === null || value === undefined) return '';
+  return `$${Math.round(value).toLocaleString('es-CL')}`;
+};
+
 interface CatalogManagerProps {
   initialItems?: any[];
   initialCategories?: any[];
@@ -218,13 +223,52 @@ export function CatalogManager({ initialItems = [], initialCategories = [] }: Ca
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {item.priceReferenceMin ? (
-                      <span className="text-sm font-medium">{item.priceReferenceMin} - {item.priceReferenceMax} UF</span>
-                    ) : item.priceSuggested ? (
-                      <span className="text-sm font-medium">{item.priceSuggested} UF</span>
-                    ) : (
-                      <span className="text-xs italic text-muted-foreground">N/A</span>
-                    )}
+                    {(() => {
+                      const priceType = item.priceType || 'FIJO';
+                      
+                      if (priceType === 'COTIZABLE') {
+                        return (
+                          <Badge variant="outline" className="text-xs font-semibold px-2 py-0.5 bg-indigo-50 text-indigo-700 dark:bg-indigo-950/30 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800">
+                            Cotizable
+                          </Badge>
+                        );
+                      }
+                      
+                      if (priceType === 'DESDE') {
+                        return (
+                          <div className="flex flex-col">
+                            <span className="text-[10px] text-indigo-600 dark:text-indigo-400 uppercase font-bold tracking-wider">Desde</span>
+                            <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                              {formatCLP(item.priceSuggested || item.priceReferenceMin)}
+                            </span>
+                          </div>
+                        );
+                      }
+                      
+                      // Default FIJO
+                      if (item.priceReferenceMin && item.priceReferenceMax) {
+                        return (
+                          <div className="flex flex-col">
+                            <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                              {formatCLP(item.priceSuggested || item.priceReferenceMin)}
+                            </span>
+                            <span className="text-[11px] text-muted-foreground">
+                              Rango: {formatCLP(item.priceReferenceMin)} - {formatCLP(item.priceReferenceMax)}
+                            </span>
+                          </div>
+                        );
+                      }
+                      
+                      if (item.priceSuggested) {
+                        return (
+                          <span className="text-sm font-bold text-slate-800 dark:text-slate-200">
+                            {formatCLP(item.priceSuggested)}
+                          </span>
+                        );
+                      }
+                      
+                      return <span className="text-xs italic text-slate-foreground">N/A</span>;
+                    })()}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">

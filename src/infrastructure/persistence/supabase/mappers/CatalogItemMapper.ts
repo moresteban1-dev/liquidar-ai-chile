@@ -9,6 +9,7 @@ export interface CatalogItemMetadata {
   images?: MediaAsset[];
   videos?: MediaAsset[];
   documents?: MediaAsset[];
+  priceType?: 'FIJO' | 'COTIZABLE' | 'DESDE';
 }
 
 export interface CatalogItemRow {
@@ -63,6 +64,7 @@ export class CatalogItemMapper {
       images: row.metadata?.images || [],
       videos: row.metadata?.videos || [],
       documents: row.metadata?.documents || [],
+      priceType: row.metadata?.priceType || 'FIJO',
       createdAt: row.created_at,
       updatedAt: row.updated_at
     };
@@ -94,7 +96,8 @@ export class CatalogItemMapper {
         videos: domain.videos || [],
         documents: domain.documents || [],
         legacyServiceId: domain.legacyServiceId,
-        defaultMarginPercent: domain.defaultMarginPercent
+        defaultMarginPercent: domain.defaultMarginPercent,
+        priceType: domain.priceType || 'FIJO'
       },
       created_at: domain.createdAt || new Date().toISOString(),
       updated_at: domain.updatedAt || new Date().toISOString()

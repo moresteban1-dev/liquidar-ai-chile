@@ -269,8 +269,8 @@ export class CatalogService {
         targetAudience: 'Clientes corporativos y particulares buscando servicios de eventos'
       });
 
-      // We return the data but DON'T save it automatically (Audit & Approve strategy)
-      return Result.ok(marketingData);
+      // We return the data directly as it is already a Result (Audit & Approve strategy)
+      return marketingData;
     } catch (error) {
       this.logger?.error('Error generating AI Marketing', { itemId, error });
       return Result.fail(AppError.internal('Error al generar marketing con IA'));

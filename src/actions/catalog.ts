@@ -26,9 +26,9 @@ const CreateCatalogItemSchema = z.object({
   type: z.enum(['service', 'product', 'equipment']),
   categoryId: z.string().uuid('ID de categoría inválido'),
   description: z.string().optional(),
-  priceSuggested: z.number().positive('El precio debe ser positivo').optional(),
-  priceReferenceMin: z.number().positive('El precio mínimo debe ser positivo').optional(),
-  priceReferenceMax: z.number().positive('El precio máximo debe ser positivo').optional(),
+  priceSuggested: z.number().min(0, 'El precio debe ser positivo o cero').optional(),
+  priceReferenceMin: z.number().min(0, 'El precio mínimo debe ser positivo o cero').optional(),
+  priceReferenceMax: z.number().min(0, 'El precio máximo debe ser positivo o cero').optional(),
   defaultMarginPercent: z.number().min(0).max(100, 'El margen debe estar entre 0 y 100').optional(),
   images: z.array(MediaAssetSchema).default([]),
   videos: z.array(MediaAssetSchema).default([]),
@@ -37,6 +37,7 @@ const CreateCatalogItemSchema = z.object({
   tags: z.array(z.string()).default([]),
   status: z.enum(['draft', 'active', 'archived']).default('draft'),
   isFeatured: z.boolean().default(false),
+  priceType: z.enum(['FIJO', 'COTIZABLE', 'DESDE']).optional(),
 });
 
 const UpdateCatalogItemSchema = CreateCatalogItemSchema.partial();
@@ -82,6 +83,7 @@ export async function createCatalogItemAction(formData: FormData) {
       priceReferenceMax: rawData.priceReferenceMax ? parseFloat(rawData.priceReferenceMax as string) : undefined,
       defaultMarginPercent: rawData.defaultMarginPercent ? parseFloat(rawData.defaultMarginPercent as string) : undefined,
       isFeatured: rawData.isFeatured === 'true',
+      priceType: rawData.priceType ? (rawData.priceType as string) : undefined,
     };
 
     const validatedData = CreateCatalogItemSchema.parse(parsedData);
@@ -147,6 +149,7 @@ export async function updateCatalogItemAction(itemId: string, formData: FormData
       priceReferenceMax: rawData.priceReferenceMax ? parseFloat(rawData.priceReferenceMax as string) : undefined,
       defaultMarginPercent: rawData.defaultMarginPercent ? parseFloat(rawData.defaultMarginPercent as string) : undefined,
       isFeatured: rawData.isFeatured ? rawData.isFeatured === 'true' : undefined,
+      priceType: rawData.priceType ? (rawData.priceType as string) : undefined,
     };
 
     // Remover undefined values
