@@ -17,7 +17,7 @@ export class ToolUsageGuard {
     try {
       const statusResult = await this.repository.getUsageStatus(userId, toolType);
       
-      if (statusResult.isFail()) {
+      if (statusResult.isFailure()) {
         return fail(statusResult.error);
       }
 

@@ -48,7 +48,7 @@ Notas: ${c.additionalNotes || 'N/A'}
     temperature: 0.3
   });
 
-  if (result.isFail()) {
+  if (result.isFailure()) {
     throw new Error(result.error.message);
   }
 
@@ -81,7 +81,7 @@ export const runPromptEvaluationAction = createAction({
     temperature: 0.2
   });
 
-  if (result.isFail()) {
+  if (result.isFailure()) {
     throw new Error(result.error.message);
   }
 
@@ -118,7 +118,7 @@ export const runSEOArchitectAction = createAction({
     temperature: 0.5
   });
 
-  if (result.isFail()) {
+  if (result.isFailure()) {
     throw new Error(result.error.message);
   }
 
