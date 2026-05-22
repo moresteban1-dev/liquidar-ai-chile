@@ -65,6 +65,7 @@ const NAV_ITEMS: Record<'admin' | 'vendor' | 'client', NavItem[]> = {
         { label: 'Finanzas', href: '/admin/finance', icon: <DollarSign className="h-5 w-5" /> },
         { label: 'Pagos', href: '/admin/payments', icon: <CreditCard className="h-5 w-5" /> },
         { label: 'Analíticas', href: '/admin/analytics', icon: <BarChart2 className="h-5 w-5" /> },
+        { label: 'Herramientas IA', href: '/admin/tools', icon: <Settings className="h-5 w-5" /> },
     ],
     vendor: [
         { label: 'Dashboard', href: '/vendor', icon: <LayoutDashboard className="h-5 w-5" /> },
