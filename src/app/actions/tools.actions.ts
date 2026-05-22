@@ -159,7 +159,7 @@ export const runExcelDataEnrichmentAction = createAction({
     temperature: 0.1
   });
 
-  if (result.isFail()) {
+  if (result.isFailure()) {
     throw new Error(result.error.message);
   }
 
