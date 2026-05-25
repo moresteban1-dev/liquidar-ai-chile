@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ExternalLink, ArrowLeft, PenTool, LayoutTemplate, Link as LinkIcon, Download } from 'lucide-react';
+import { ExternalLink, ArrowLeft, PenTool, LayoutTemplate, Link as LinkIcon, Download, Bot } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 
