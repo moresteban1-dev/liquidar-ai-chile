@@ -1,6 +1,7 @@
 import type { IAIToolProvider } from '@core/application/ports/IAIToolProvider';
 import type { AIProviderType } from '@core/domain/tools/tool-execution.types';
 import { GeminiToolProvider } from './providers/GeminiToolProvider';
+import { AppError } from '@core/shared/AppError';
 
 /**
  * AI Provider Factory
@@ -47,7 +48,7 @@ export class AIProviderFactory {
         console.warn(`Provider ${type} not available. Falling back to Gemini.`);
         return fallback;
       }
-      throw new Error(`No AI provider available. Check API keys.`);
+      throw AppError.infrastructure('No AI provider available. Check API keys.');
     }
 
     return provider;
