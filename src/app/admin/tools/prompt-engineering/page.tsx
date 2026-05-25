@@ -15,7 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import { AILoadingState, PromptScoreGauge } from '@/components/admin/tools';
-import { promptEvaluationInputSchema, type PromptEvaluationFormInput, PromptCategory } from '@/lib/validators/tools-validators';
+import { promptEvaluationInputSchema, type PromptEvaluationFormInput } from '@/lib/validators/tools-validators';
 import { runPromptEvaluationAction } from '@/app/actions/tools.actions';
 
 export default function PromptEngineeringPage() {
