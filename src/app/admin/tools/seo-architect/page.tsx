@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 import { AILoadingState, SEOPreview, KeywordBadge } from '@/components/admin/tools';
 import { seoContentInputSchema, type SEOContentFormInput } from '@/lib/validators/tools-validators';

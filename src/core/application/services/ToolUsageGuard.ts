@@ -28,15 +28,14 @@ export class ToolUsageGuard {
           ? 'Límite diario alcanzado' 
           : 'Límite mensual alcanzado';
           
-        return fail(new AppError(
-          `No puedes ejecutar esta herramienta: ${reason}. Actualiza tu plan para continuar.`,
-          'QUOTA_EXCEEDED'
+        return fail(AppError.business(
+          `No puedes ejecutar esta herramienta: ${reason}. Actualiza tu plan para continuar.`
         ));
       }
 
       return ok(status);
     } catch (error: any) {
-      return fail(new AppError(error.message || 'Error checking usage limits', 'USAGE_GUARD_ERROR'));
+      return fail(AppError.infrastructure(error.message || 'Error checking usage limits'));
     }
   }
 

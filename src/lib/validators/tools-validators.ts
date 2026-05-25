@@ -188,7 +188,7 @@ export const seoContentOutputSchema = z.object({
         question: z.string(),
         answer: z.string()
     })),
-    schemaMarkup: z.record(z.unknown()),
+    schemaMarkup: z.record(z.string(), z.unknown()),
     interlinkingStrategy: z.array(z.object({
         anchorText: z.string(),
         suggestedUrl: z.string(),
@@ -242,6 +242,6 @@ export const excelDataEnrichmentOutputSchema = z.array(z.object({
         status: z.enum(['complete', 'partial', 'insufficient']),
         missingCriticalFields: z.array(z.string())
     }),
-    suggestedCorrections: z.record(z.string()),
+    suggestedCorrections: z.record(z.string(), z.string()),
     potentialDuplicate: z.boolean()
 }));

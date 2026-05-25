@@ -13,6 +13,8 @@ import {
   excelImportConfigSchema
 } from '@/lib/validators/tools-validators';
 import { z } from 'zod';
+import { getServerSession } from '@/infrastructure/http/server-data/getServerSession';
+import { AppError } from '@core/shared/AppError';
 
 /**
  * 1. Server Action: Análisis Competitivo
@@ -23,6 +25,11 @@ export const runCompetitiveAnalysisAction = createAction({
   rateLimitKey: 'tools_competitive_analysis',
   rateLimitMax: 5
 }, async (input) => {
+  const session = await getServerSession();
+  if (!session || session.role !== 'ADMIN') {
+    throw AppError.unauthorized('No tienes permisos de administrador para usar esta herramienta.');
+  }
+
   const provider = AIProviderFactory.getProvider('gemini');
   const promptTemplate = PromptRegistry.get('COMPETITIVE_ANALYSIS', 'v1');
   const compiledPrompt = promptTemplate({
@@ -64,6 +71,11 @@ export const runPromptEvaluationAction = createAction({
   rateLimitKey: 'tools_prompt_evaluation',
   rateLimitMax: 10
 }, async (input) => {
+  const session = await getServerSession();
+  if (!session || session.role !== 'ADMIN') {
+    throw AppError.unauthorized('No tienes permisos de administrador para usar esta herramienta.');
+  }
+
   const provider = AIProviderFactory.getProvider('gemini');
   const promptTemplate = PromptRegistry.get('PROMPT_EVALUATION', 'v1');
   const compiledPrompt = promptTemplate({
@@ -97,6 +109,11 @@ export const runSEOArchitectAction = createAction({
   rateLimitKey: 'tools_seo_architect',
   rateLimitMax: 5
 }, async (input) => {
+  const session = await getServerSession();
+  if (!session || session.role !== 'ADMIN') {
+    throw AppError.unauthorized('No tienes permisos de administrador para usar esta herramienta.');
+  }
+
   const provider = AIProviderFactory.getProvider('gemini');
   const promptTemplate = PromptRegistry.get('SEO_CONTENT_GENERATION', 'v1');
   const compiledPrompt = promptTemplate({
@@ -140,6 +157,11 @@ export const runExcelDataEnrichmentAction = createAction({
   rateLimitKey: 'tools_excel_enrichment',
   rateLimitMax: 3
 }, async (input) => {
+  const session = await getServerSession();
+  if (!session || session.role !== 'ADMIN') {
+    throw AppError.unauthorized('No tienes permisos de administrador para usar esta herramienta.');
+  }
+
   const provider = AIProviderFactory.getProvider('gemini');
   const promptTemplate = PromptRegistry.get('EXCEL_DATA_ENRICHMENT', 'v1');
   const compiledPrompt = promptTemplate({

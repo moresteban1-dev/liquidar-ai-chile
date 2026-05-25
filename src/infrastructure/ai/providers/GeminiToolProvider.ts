@@ -3,7 +3,6 @@ import { AppError } from '@core/shared/AppError';
 import type { IAIToolProvider } from '@core/application/ports/IAIToolProvider';
 import type { AIProviderType } from '@core/domain/tools/tool-execution.types';
 import { z } from 'zod';
-import { ResilientGenkitService } from './ResilientGenkitService';
 import { generateText as vercelGenerateText, generateObject as vercelGenerateObject } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 
@@ -46,13 +45,12 @@ export class GeminiToolProvider implements IAIToolProvider {
         prompt: params.prompt,
         system: params.systemPrompt,
         temperature: params.temperature ?? 0.3,
-        maxTokens: params.maxTokens,
       });
 
       return ok(object);
     } catch (error: any) {
       console.error('Gemini Provider Error:', error);
-      return fail(new AppError(error.message || 'Error generating structured output with Gemini', 'AI_PROVIDER_ERROR'));
+      return fail(AppError.infrastructure(error.message || 'Error generating structured output with Gemini'));
     }
   }
 
@@ -71,13 +69,12 @@ export class GeminiToolProvider implements IAIToolProvider {
         prompt: params.prompt,
         system: params.systemPrompt,
         temperature: params.temperature ?? 0.7,
-        maxTokens: params.maxTokens,
       });
 
       return ok(text);
     } catch (error: any) {
       console.error('Gemini Provider Error:', error);
-      return fail(new AppError(error.message || 'Error generating text output with Gemini', 'AI_PROVIDER_ERROR'));
+      return fail(AppError.infrastructure(error.message || 'Error generating text output with Gemini'));
     }
   }
 

@@ -62,13 +62,15 @@ export function ExcelDropZone({
     setIsDragging(false);
     
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      validateAndProcessFile(e.dataTransfer.files[0]);
+      const firstFile = e.dataTransfer.files[0];
+      if (firstFile) validateAndProcessFile(firstFile);
     }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      validateAndProcessFile(e.target.files[0]);
+      const firstFile = e.target.files[0];
+      if (firstFile) validateAndProcessFile(firstFile);
     }
   };
 
