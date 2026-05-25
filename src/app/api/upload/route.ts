@@ -3,17 +3,25 @@ import { createClient } from '@supabase/supabase-js';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { withAuth } from '@/lib/api/with-auth';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+let _supabaseClient: ReturnType<typeof createClient> | null = null;
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase variables for /api/upload');
+function getSupabaseClient() {
+  if (_supabaseClient) return _supabaseClient;
+
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !supabaseKey) {
+    throw new Error('Missing Supabase variables for /api/upload');
+  }
+
+  _supabaseClient = createClient(supabaseUrl, supabaseKey);
+  return _supabaseClient;
 }
-
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 export const POST = withAuth(async (request, _user) => {
   try {
+    const supabase = getSupabaseClient();
     const formData = await request.formData();
     const file = formData.get('file') as File;
 
@@ -99,6 +107,7 @@ export const POST = withAuth(async (request, _user) => {
 
 export const DELETE = withAuth(async (request, _user) => {
   try {
+    const supabase = getSupabaseClient();
     const { searchParams } = new URL(request.url);
     const filePath = searchParams.get('path');
 
