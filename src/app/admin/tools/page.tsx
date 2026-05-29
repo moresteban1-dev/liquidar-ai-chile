@@ -21,8 +21,8 @@ const mockRecentRuns = [
     costEstimate: 0.05,
     durationMs: 8400,
     errorMessage: null,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2),
-    completedAt: new Date()
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString() as any,
+    completedAt: new Date().toISOString() as any
   },
   {
     id: 'run-2',
@@ -36,8 +36,8 @@ const mockRecentRuns = [
     costEstimate: 0.01,
     durationMs: 2100,
     errorMessage: null,
-    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24),
-    completedAt: new Date()
+    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() as any,
+    completedAt: new Date().toISOString() as any
   }
 ];
 

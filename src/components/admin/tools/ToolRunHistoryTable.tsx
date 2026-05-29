@@ -65,6 +65,9 @@ export function ToolRunHistoryTable({ runs, onViewResult }: ToolRunHistoryTableP
           {runs.map((run) => {
             const tool = TOOL_CONFIG[run.toolType];
             const status = STATUS_CONFIG[run.status];
+            const createdAtDate = typeof run.createdAt === 'string' || (run.createdAt as any) instanceof String 
+              ? new Date(run.createdAt) 
+              : run.createdAt;
             
             return (
               <TableRow key={run.id} className="group">
@@ -92,8 +95,8 @@ export function ToolRunHistoryTable({ runs, onViewResult }: ToolRunHistoryTableP
                   </span>
                 </TableCell>
                 <TableCell>
-                  <span className="text-sm text-muted-foreground" title={run.createdAt.toLocaleString()}>
-                    {formatDistanceToNow(run.createdAt, { addSuffix: true, locale: es })}
+                  <span className="text-sm text-muted-foreground" title={createdAtDate?.toLocaleString()}>
+                    {createdAtDate ? formatDistanceToNow(createdAtDate, { addSuffix: true, locale: es }) : '-'}
                   </span>
                 </TableCell>
                 <TableCell className="text-right">
