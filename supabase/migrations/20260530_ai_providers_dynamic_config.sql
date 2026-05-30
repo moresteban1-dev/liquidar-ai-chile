@@ -49,6 +49,6 @@ CREATE POLICY "Admins can modify AI providers"
     EXISTS (
       SELECT 1 FROM public.profiles
       WHERE id = auth.uid()
-      AND (role = 'ADMIN' OR role = 'admin')
+      AND role = 'ADMIN'
     )
   );
