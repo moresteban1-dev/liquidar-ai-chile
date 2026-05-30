@@ -22,9 +22,9 @@ export class GeminiToolProvider implements IAIToolProvider {
 
   private getModelId(complexity?: 'simple' | 'moderate' | 'complex'): string {
     switch (complexity) {
-      case 'simple': return 'gemini-1.5-flash';
-      case 'complex': return 'gemini-1.5-pro';
-      default: return 'gemini-1.5-flash';
+      case 'simple': return 'gemini-2.5-flash';
+      case 'complex': return 'gemini-2.5-pro';
+      default: return 'gemini-2.5-flash';
     }
   }
 
