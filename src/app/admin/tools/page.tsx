@@ -64,7 +64,7 @@ export default async function AdminToolsPage() {
         <ToolCard
           title="Análisis Competitivo"
           description="Extrae patrones, debilidades y oportunidades de reseñas de la competencia."
-          icon={Search}
+          icon="search"
           href="/admin/tools/competitive-analysis"
           badge="IA Avanzada"
           gradientFrom="#6366f1" // indigo-500
@@ -77,7 +77,7 @@ export default async function AdminToolsPage() {
         <ToolCard
           title="Evaluador de Prompts"
           description="Mejora tus prompts con scoring, checklist de calidad y reformulación."
-          icon={Bot}
+          icon="bot"
           href="/admin/tools/prompt-engineering"
           gradientFrom="#3b82f6" // blue-500
           gradientTo="#06b6d4" // cyan-500
@@ -89,7 +89,7 @@ export default async function AdminToolsPage() {
         <ToolCard
           title="Arquitecto SEO"
           description="Genera contenido estructurado optimizado para la primera página de Google."
-          icon={ExternalLink}
+          icon="external-link"
           href="/admin/tools/seo-architect"
           badge="Popular"
           gradientFrom="#10b981" // green-500
@@ -102,7 +102,7 @@ export default async function AdminToolsPage() {
         <ToolCard
           title="Importador Excel"
           description="Enriquece, limpia y clasifica datos de prospectos masivamente."
-          icon={FileSpreadsheet}
+          icon="file-spreadsheet"
           href="/admin/tools/excel-database"
           gradientFrom="#f59e0b" // amber-500
           gradientTo="#ea580c" // orange-600

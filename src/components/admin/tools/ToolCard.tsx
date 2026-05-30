@@ -2,15 +2,22 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { type LucideIcon } from 'lucide-react';
+import { Search, Bot, ExternalLink, FileSpreadsheet, type LucideIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
+const ICON_MAP: Record<string, LucideIcon> = {
+  'search': Search,
+  'bot': Bot,
+  'external-link': ExternalLink,
+  'file-spreadsheet': FileSpreadsheet
+};
+
 interface ToolCardProps {
   title: string;
   description: string;
-  icon: LucideIcon;
+  icon: string;
   href: string;
   badge?: string;
   gradientFrom: string;
@@ -23,7 +30,7 @@ interface ToolCardProps {
 export function ToolCard({
   title,
   description,
-  icon: Icon,
+  icon,
   href,
   badge,
   gradientFrom,
@@ -32,6 +39,8 @@ export function ToolCard({
   statsValue,
   delay = 0,
 }: ToolCardProps) {
+  const Icon = ICON_MAP[icon] || Bot;
+  
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
