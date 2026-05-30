@@ -30,7 +30,7 @@ export const runCompetitiveAnalysisAction = createAction({
     throw AppError.unauthorized('No tienes permisos de administrador para usar esta herramienta.');
   }
 
-  const provider = AIProviderFactory.getProvider('gemini');
+  const provider = await AIProviderFactory.getProvider('gemini');
   const promptTemplate = PromptRegistry.get('COMPETITIVE_ANALYSIS', 'v1');
   const compiledPrompt = promptTemplate({
     businessName: input.businessName,
@@ -76,7 +76,7 @@ export const runPromptEvaluationAction = createAction({
     throw AppError.unauthorized('No tienes permisos de administrador para usar esta herramienta.');
   }
 
-  const provider = AIProviderFactory.getProvider('gemini');
+  const provider = await AIProviderFactory.getProvider('gemini');
   const promptTemplate = PromptRegistry.get('PROMPT_EVALUATION', 'v1');
   const compiledPrompt = promptTemplate({
     originalPrompt: input.originalPrompt,
@@ -114,7 +114,7 @@ export const runSEOArchitectAction = createAction({
     throw AppError.unauthorized('No tienes permisos de administrador para usar esta herramienta.');
   }
 
-  const provider = AIProviderFactory.getProvider('gemini');
+  const provider = await AIProviderFactory.getProvider('gemini');
   const promptTemplate = PromptRegistry.get('SEO_CONTENT_GENERATION', 'v1');
   const compiledPrompt = promptTemplate({
     contentType: input.contentType,
@@ -162,7 +162,7 @@ export const runExcelDataEnrichmentAction = createAction({
     throw AppError.unauthorized('No tienes permisos de administrador para usar esta herramienta.');
   }
 
-  const provider = AIProviderFactory.getProvider('gemini');
+  const provider = await AIProviderFactory.getProvider('gemini');
   const promptTemplate = PromptRegistry.get('EXCEL_DATA_ENRICHMENT', 'v1');
   const compiledPrompt = promptTemplate({
     templateType: input.templateType,
