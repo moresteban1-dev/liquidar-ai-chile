@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/form'
 import { LiquidCard } from '@/components/ui/liquid-card'
 import { quoteSchema, quoteStep1Schema, quoteStep2Schema, quoteStep3Schema, QuoteFormValues } from '@/lib/validators/quote-schema'
+import { RutValidator } from '@/lib/validators/RutValidator'
 
 const STEPS = [
     { id: 1, title: "¿Quién eres?", icon: User },
@@ -344,12 +345,18 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
                                                     <FormItem>
                                                         <FormLabel>RUT Empresa/Persona</FormLabel>
                                                         <FormControl>
-                                                            <Input placeholder="76.123.456-K" {...field} onChange={(e) => {
-                                                                // Basic formatter could go here
-                                                                field.onChange(e)
-                                                            }} />
+                                                            <Input 
+                                                                placeholder="76.123.456-K" 
+                                                                {...field} 
+                                                                onChange={(e) => {
+                                                                    const val = e.target.value;
+                                                                    // Only format if the user is not deleting character at the end (to allow deleting dots/hyphens easily)
+                                                                    const formatted = RutValidator.format(val);
+                                                                    field.onChange(formatted);
+                                                                }} 
+                                                            />
                                                         </FormControl>
-                                                        <FormDescription>Formato con guión: 12345678-9</FormDescription>
+                                                        <FormDescription>Formato estándar: 12.345.678-K o 12345678-9</FormDescription>
                                                         <FormMessage />
                                                     </FormItem>
                                                 )}

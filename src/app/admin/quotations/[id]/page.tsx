@@ -33,7 +33,7 @@ export default async function QuotationDetailPage({ params }: { params: Promise<
         createdAt: rawQuotation.created_at,
         eventStartDate: rawQuotation.event_start_date,
         eventEndDate: rawQuotation.event_end_date,
-        eventLocation: rawQuotation.event_location,
+        eventLocation: rawQuotation.event_address || rawQuotation.event_location,
         eventTime: rawQuotation.event_time,
         setupTime: rawQuotation.setup_time,
         teardownTime: rawQuotation.teardown_time,

@@ -24,7 +24,7 @@ export const GET = withAuth(async (_request, user, params) => {
                 priceNet:price_net, priceIva:price_iva, priceTotal:price_total, 
                 validUntil:valid_until, createdAt:created_at,
                 eventStartDate:event_start_date, eventEndDate:event_end_date, 
-                eventLocation:event_location, eventTime:event_time,
+                eventLocation:event_location, eventAddress:event_address, eventTime:event_time,
                 setupTime:setup_time, teardownTime:teardown_time,
                 service:services(id, name, description, image_url),
                 items:quotation_items(id, description, quantity, category, sort_order),

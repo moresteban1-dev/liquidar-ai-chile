@@ -75,16 +75,16 @@ export default function ClientQuotationDetail({ params }: { params: Promise<{ id
 
             <div id="quotation-printable-area" className="space-y-6">
                 {/* Event Logistics */}
-                {(Boolean(quotation.eventStartDate) || Boolean(quotation.eventLocation)) && (
+                {(Boolean(quotation.eventStartDate) || Boolean(quotation.eventLocation) || Boolean(quotation.eventAddress)) && (
                     <div className="bg-card rounded-xl shadow-sm border border-border p-6 mb-6">
                         <h2 className="text-lg font-semibold text-foreground mb-4 border-b border-border pb-2">
                             📍 Logística del Evento
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {Boolean(quotation.eventLocation) && (
+                            {Boolean(quotation.eventAddress || quotation.eventLocation) && (
                                 <div>
-                                    <p className="text-sm text-muted-foreground mb-1">Ubicación</p>
-                                    <p className="font-medium text-foreground">{quotation.eventLocation as string}</p>
+                                    <p className="text-sm text-muted-foreground mb-1">Dirección / Lugar</p>
+                                    <p className="font-medium text-foreground">{(quotation.eventAddress || quotation.eventLocation) as string}</p>
                                 </div>
                             )}
                             {Boolean(quotation.eventTime) && (

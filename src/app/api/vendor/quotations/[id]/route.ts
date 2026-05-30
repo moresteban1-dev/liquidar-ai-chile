@@ -24,7 +24,7 @@ export const GET = withAuth(async (_request, user, params) => {
             .from('quotations')
             .select(`
                 id, code, brief, requirements, status,
-                event_start_date, event_end_date, event_location, event_time, setup_time, teardown_time,
+                event_start_date, event_end_date, event_location, event_address, event_time, setup_time, teardown_time,
                 technical_visit,
                 service:services(name, category:categories(name)),
                 quotation_items(id, quantity, service:services(name)),
@@ -52,6 +52,7 @@ export const GET = withAuth(async (_request, user, params) => {
             eventStartDate: result.event_start_date,
             eventEndDate: result.event_end_date,
             eventLocation: result.event_location,
+            eventAddress: result.event_address,
             eventTime: result.event_time,
             setupTime: result.setup_time,
             teardownTime: result.teardown_time,

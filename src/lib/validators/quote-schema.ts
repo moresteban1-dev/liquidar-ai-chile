@@ -1,34 +1,5 @@
 import { z } from 'zod';
-
-// Helper for Modular 11 RUT Verification (Chile)
-function validateRut(rut: string): boolean {
-    if (!rut || typeof rut !== 'string') return false;
-    
-    // Clean RUT - remove dots and spaces, uppercase K
-    const cleanRut = rut.replace(/[\.\\s]/g, '').toUpperCase();
-    
-    // Allow formats: 12345678-9, 12345678K, 1-9, 1K
-    if (!/^[0-9]+-[0-9K]$/.test(cleanRut) && !/^[0-9]+[0-9K]$/.test(cleanRut)) {
-        return false;
-    }
-    
-    const [body, dv] = cleanRut.includes('-') ? cleanRut.split('-') : [cleanRut.slice(0, -1), cleanRut.slice(-1)];
-    if (!body || !dv) return false;
-    
-    // Remove leading zeros for calculation
-    const bodyNum = body.replace(/^0+/, '') || '0';
-    
-    let suma = 0;
-    let multiplo = 2;
-    for (let i = bodyNum.length - 1; i >= 0; i--) {
-        suma += parseInt(bodyNum.charAt(i), 10) * multiplo;
-        multiplo = multiplo === 7 ? 2 : multiplo + 1;
-    }
-    
-    const dvEsperado = 11 - (suma % 11);
-    const dvCalculado = dvEsperado === 11 ? '0' : dvEsperado === 10 ? 'K' : String(dvEsperado);
-    return dvCalculado === dv.toUpperCase();
-}
+import { RutValidator } from './RutValidator';
 
 const phoneRegex = /^(?:\+?56)?(?:\s?)(?:9)(?:\s?)[98765432]\d{7}$/;
 
@@ -39,7 +10,7 @@ const phoneRegex = /^(?:\+?56)?(?:\s?)(?:9)(?:\s?)[98765432]\d{7}$/;
 /** Step 1: Client identity fields */
 export const quoteStep1Schema = z.object({
     clientName: z.string().min(2, { message: "El nombre es muy corto" }),
-    clientRut: z.string().refine(validateRut, { message: "RUT inválido (ej: 12345678-9)" }),
+    clientRut: z.string().refine((val) => RutValidator.validate(val), { message: "RUT inválido (ej: 12345678-9)" }),
     clientEmail: z.string().email({ message: "Email inválido" }),
     clientPhone: z.string().min(8, { message: "Teléfono inválido" }),
 });
@@ -74,7 +45,8 @@ export const quoteStep3Schema = z.object({
 export const quoteSchema = z.object({
     // Step 1: Client Identity
     clientName: z.string().min(2, { message: "El nombre es muy corto" }),
-    clientRut: z.string().refine(validateRut, { message: "RUT inválido (ej: 12345678-9)" }),
+    clientRut: z.string().refine((val) => RutValidator.validate(val), { message: "RUT inválido (ej: 12345678-9)" }),
+
     clientEmail: z.string().email({ message: "Email inválido" }),
     clientPhone: z.string().min(8, { message: "Teléfono inválido" }),
 
