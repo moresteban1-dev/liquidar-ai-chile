@@ -24,7 +24,7 @@ export class GeminiToolProvider implements IAIToolProvider {
     switch (complexity) {
       case 'simple': return 'gemini-1.5-flash';
       case 'complex': return 'gemini-1.5-pro';
-      default: return 'gemini-1.5-pro';
+      default: return 'gemini-1.5-flash';
     }
   }
 
