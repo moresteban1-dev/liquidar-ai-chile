@@ -117,7 +117,10 @@ export default function ClientQuotationDetail({ params }: { params: Promise<{ id
                                 <div className="md:col-span-2">
                                     <p className="text-sm text-muted-foreground mb-1">Fechas</p>
                                     <p className="font-medium text-foreground">
-                                        Del {formatDate(quotation.eventStartDate as string)} al {formatDate(quotation.eventEndDate as string)}
+                                        {quotation.eventEndDate && formatDate(quotation.eventEndDate as string) !== 'Fecha inválida'
+                                            ? `Del ${formatDate(quotation.eventStartDate as string)} al ${formatDate(quotation.eventEndDate as string)}`
+                                            : formatDate(quotation.eventStartDate as string)
+                                        }
                                     </p>
                                 </div>
                             )}

@@ -81,13 +81,13 @@ export class PaymentService {
         const isManual = request.gateway_slug === 'manual_transfer';
         const manualConfig = isManual ? (gateway.config as ManualTransferConfig) : null;
 
-        const expiresAt =
-            isManual && manualConfig
-                ? new Date(
-                    Date.now() +
-                    manualConfig.expiration_hours * 60 * 60 * 1000
-                ).toISOString()
-                : new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+        // Defensive calculation to avoid RangeError: Invalid time value if expiration_hours is NaN/undefined
+        const expirationHours = (isManual && manualConfig && typeof manualConfig.expiration_hours === 'number' && !isNaN(manualConfig.expiration_hours))
+            ? manualConfig.expiration_hours
+            : 24;
+
+        const expiresAt = new Date(Date.now() + expirationHours * 60 * 60 * 1000).toISOString();
+
 
         // 3. Crear registro de pago en BD
         const { data: payment, error: payError } = await supabase
