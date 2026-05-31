@@ -88,6 +88,16 @@ export class PaymentService {
 
         const expiresAt = new Date(Date.now() + expirationHours * 60 * 60 * 1000).toISOString();
 
+        // 2b. Cancel any existing pending or processing payment attempts for this order to prevent duplicates in client dashboard
+        try {
+            await supabase
+                .from('payments')
+                .update({ status: 'cancelled' as PaymentStatus, updated_at: new Date().toISOString() })
+                .eq('order_id', request.order_id)
+                .in('status', ['pending', 'processing', 'pending_review']);
+        } catch (cancelErr) {
+            logger.warn(`Failed to cancel older pending payments for order ${request.order_id}`, { error: String(cancelErr) });
+        }
 
         // 3. Crear registro de pago en BD
         const { data: payment, error: payError } = await supabase

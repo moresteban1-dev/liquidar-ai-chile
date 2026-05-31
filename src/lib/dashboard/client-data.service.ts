@@ -384,7 +384,7 @@ export async function getClientFinancialSummary(userId: string): Promise<Financi
                 .eq('status', 'approved'),
             supabase
                 .from('payments')
-                .select('amount')
+                .select('amount, order_id, created_at')
                 .eq('user_id', userId)
                 .in('status', ['pending', 'processing', 'pending_review']),
             supabase
@@ -396,9 +396,22 @@ export async function getClientFinancialSummary(userId: string): Promise<Financi
                 .limit(1),
         ]);
 
-        const totalPaid = paidResult.data?.reduce((s, p) => s + (p.amount || 0), 0) ?? 0;
-        const totalPending = pendingResult.data?.reduce((s, p) => s + (p.amount || 0), 0) ?? 0;
-        const paymentCount = (paidResult.data?.length ?? 0) + (pendingResult.data?.length ?? 0);
+        const totalPaid = paidResult.data?.reduce((s, p) => s + (Number(p.amount) || 0), 0) ?? 0;
+        
+        // Deduplicate pending payments by order_id to prevent summing up multiple checkout attempts for the same quotation
+        const pendingMap = new Map<string, number>();
+        const pendingRows = pendingResult.data || [];
+        
+        // Sort ascending so later attempts overwrite previous ones
+        pendingRows.sort((a, b) => new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime());
+        for (const p of pendingRows) {
+            if (p.order_id) {
+                pendingMap.set(p.order_id, Number(p.amount) || 0);
+            }
+        }
+
+        const totalPending = Array.from(pendingMap.values()).reduce((s, amt) => s + amt, 0);
+        const paymentCount = (paidResult.data?.length ?? 0) + pendingMap.size;
         const lastPaymentDate = lastResult.data?.[0]?.paid_at ?? null;
 
         return { totalPaid, totalPending, paymentCount, lastPaymentDate };
