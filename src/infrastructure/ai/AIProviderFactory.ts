@@ -5,6 +5,7 @@ import { OpenAIToolProvider } from './providers/OpenAIToolProvider';
 import { AnthropicToolProvider } from './providers/AnthropicToolProvider';
 import { PerplexityToolProvider } from './providers/PerplexityToolProvider';
 import { GroqToolProvider } from './providers/GroqToolProvider';
+import { BlackboxToolProvider } from './providers/BlackboxToolProvider';
 import { AppError } from '@core/shared/AppError';
 import { createClient } from '@/lib/supabase/server';
 import { decryptConfig } from '@/lib/payments/encryption';
@@ -141,6 +142,8 @@ export class AIProviderFactory {
         return new PerplexityToolProvider(apiKey, defaultModel || 'sonar-medium-online');
       case 'groq':
         return new GroqToolProvider(apiKey, defaultModel || 'llama3-70b-8192');
+      case 'blackbox':
+        return new BlackboxToolProvider(apiKey, defaultModel || 'blackbox');
       default:
         return null;
     }
@@ -161,6 +164,8 @@ export class AIProviderFactory {
         return process.env.PERPLEXITY_API_KEY;
       case 'groq':
         return process.env.GROQ_API_KEY;
+      case 'blackbox':
+        return process.env.BLACKBOX_API_KEY;
       default:
         return undefined;
     }

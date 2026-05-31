@@ -8,7 +8,7 @@
 // ─── Tipos de Unión (Proveedores y Estados) ─────────────────────────────────
 
 /** Proveedores de IA soportados por la plataforma */
-export type AIProviderType = 'gemini' | 'perplexity' | 'claude' | 'openai' | 'groq';
+export type AIProviderType = 'gemini' | 'perplexity' | 'claude' | 'openai' | 'groq' | 'blackbox';
 
 /** Estado del ciclo de vida de una ejecución de herramienta */
 export type ToolRunStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
