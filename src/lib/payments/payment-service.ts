@@ -177,17 +177,41 @@ export class PaymentService {
     static async getBankData(): Promise<BankAccountData> {
         const supabase = await createClient();
 
+        // Query the organization_settings singleton table where the admin saves bank details
         const { data, error } = await supabase
-            .from('platform_settings')
-            .select('setting_value')
-            .eq('setting_key', 'bank_account_data')
-            .single();
+            .from('organization_settings')
+            .select('*')
+            .eq('id', '00000000-0000-0000-0000-000000000000')
+            .maybeSingle();
 
-        if (error || !data) {
-            throw new Error('Datos bancarios no configurados');
+        if (error || !data || !data.bank_name) {
+            // Fallback defensively to legacy platform_settings if organization_settings has no bank details
+            const { data: legacyData, error: legacyError } = await supabase
+                .from('platform_settings')
+                .select('setting_value')
+                .eq('setting_key', 'bank_account_data')
+                .single();
+
+            if (legacyError || !legacyData) {
+                throw new Error('Datos bancarios no configurados');
+            }
+            return legacyData.setting_value as BankAccountData;
         }
 
-        return data.setting_value as BankAccountData;
+        // Map organization_settings directly to BankAccountData
+        const isCorriente = data.account_type?.toLowerCase().includes('corriente') || data.account_type?.toLowerCase().includes('vista');
+        const isVista = data.account_type?.toLowerCase().includes('vista');
+        const accountTypeMapped: 'corriente' | 'vista' | 'ahorro' = isVista ? 'vista' : (isCorriente ? 'corriente' : 'ahorro');
+
+        return {
+            bank_name: data.bank_name || 'No especificado',
+            account_type: accountTypeMapped,
+            account_number: data.account_number || '',
+            holder_name: data.legal_name || data.company_name || 'No especificado',
+            holder_rut: data.legal_rut || '',
+            holder_email: data.contact_email || '',
+            additional_notes: 'Indicar número de orden en la descripción de la transferencia'
+        };
     }
 
     // ─── Procesar Webhook ──────────────────────────────────────
