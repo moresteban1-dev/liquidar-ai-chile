@@ -219,45 +219,68 @@ export function QuoteWizard({ initialItems }: QuoteWizardProps) {
         }
     }
 
-    // Robust submission: Read ALL values from DOM FormData + RHF state merge
-    // FormData reads actual DOM input values, which Playwright's fill() correctly sets
+    /**
+     * Robust submission handler.
+     * 
+     * WHY NOT FormData? AnimatePresence unmounts Steps 1 & 2 inputs when showing Step 3.
+     * FormData.get() returns null for unmounted inputs, causing false "required" errors.
+     * 
+     * SOLUTION: Use React Hook Form state as the SINGLE source of truth. RHF persists
+     * all field values internally even when the rendered inputs are unmounted.
+     */
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         const rhfValues = form.getValues();
-        console.warn('[handleFormSubmit] rhfValues.venueAddress:', JSON.stringify(rhfValues.venueAddress));
-        console.warn('[handleFormSubmit] full rhfValues keys:', Object.keys(rhfValues).join(', '));
-        const formEl = e.target as HTMLFormElement;
-        const formData = new FormData(formEl);
 
-        // Build merged data: FormData (DOM truth) takes priority for string fields
-        // RHF values used for non-string fields (Date, boolean, arrays)
-        const mergedData = {
-            clientName: (formData.get('clientName') as string) || rhfValues.clientName || '',
-            clientRut: (formData.get('clientRut') as string) || rhfValues.clientRut || '',
-            clientEmail: (formData.get('clientEmail') as string) || rhfValues.clientEmail || '',
-            clientPhone: (formData.get('clientPhone') as string) || rhfValues.clientPhone || '',
-            serviceId: (formData.get('serviceId') as string) || rhfValues.serviceId || '',
+        // Step 3 validation gate — surface errors immediately before full validation
+        const step3Result = quoteStep3Schema.safeParse({
+            venueAddress: rhfValues.venueAddress,
+            mountingTime: rhfValues.mountingTime,
+            eventStartTime: rhfValues.eventStartTime,
+            eventEndTime: rhfValues.eventEndTime,
+            dismountingTime: rhfValues.dismountingTime,
+        });
+
+        if (!step3Result.success) {
+            for (const issue of step3Result.error.issues) {
+                const fieldName = issue.path[0] as keyof QuoteFormValues;
+                form.setError(fieldName, { message: issue.message });
+            }
+            return;
+        }
+
+        // Build submission data from RHF state (the only reliable source)
+        const submissionData = {
+            clientName: rhfValues.clientName || '',
+            clientRut: rhfValues.clientRut || '',
+            clientEmail: rhfValues.clientEmail || '',
+            clientPhone: rhfValues.clientPhone || '',
+            serviceId: rhfValues.serviceId || '',
             items: rhfValues.items || [],
-            eventDate: rhfValues.eventDate || (formData.get('eventDate') as string) || '',
-            comments: (formData.get('comments') as string) || rhfValues.comments || '',
+            eventDate: rhfValues.eventDate || '',
+            comments: rhfValues.comments || '',
             needsTechnicalVisit: rhfValues.needsTechnicalVisit || false,
-            venueAddress: (formData.get('venueAddress') as string) || rhfValues.venueAddress || '',
-            mountingTime: (formData.get('mountingTime') as string) || rhfValues.mountingTime || '10:00',
-            eventStartTime: (formData.get('eventStartTime') as string) || rhfValues.eventStartTime || '20:00',
-            eventEndTime: (formData.get('eventEndTime') as string) || rhfValues.eventEndTime || '02:00',
-            dismountingTime: (formData.get('dismountingTime') as string) || rhfValues.dismountingTime || '03:00',
+            venueAddress: rhfValues.venueAddress || '',
+            mountingTime: rhfValues.mountingTime || '10:00',
+            eventStartTime: rhfValues.eventStartTime || '20:00',
+            eventEndTime: rhfValues.eventEndTime || '02:00',
+            dismountingTime: rhfValues.dismountingTime || '03:00',
         };
 
-        // Validate with the full schema
-        const result = quoteSchema.safeParse(mergedData);
+        // Full schema validation (includes cross-field refinements)
+        const result = quoteSchema.safeParse(submissionData);
         if (!result.success) {
             logger.warn('[QuoteWizard] Validation failed on submit', { issues: result.error.issues });
-            console.error('[QuoteWizard] Validation failed:', JSON.stringify(result.error.issues, null, 2));
-            console.error('[QuoteWizard] Merged data:', JSON.stringify(mergedData, null, 2));
             for (const issue of result.error.issues) {
                 const fieldName = issue.path[0] as keyof QuoteFormValues;
                 form.setError(fieldName, { message: issue.message });
             }
+            // Navigate to the step containing the first error
+            const firstErrorField = result.error.issues[0]?.path[0] as string;
+            const step1Fields = ['clientName', 'clientRut', 'clientEmail', 'clientPhone'];
+            const step2Fields = ['serviceId', 'items', 'eventDate', 'comments', 'needsTechnicalVisit'];
+            if (step1Fields.includes(firstErrorField)) setCurrentStep(1);
+            else if (step2Fields.includes(firstErrorField)) setCurrentStep(2);
             return;
         }
 
