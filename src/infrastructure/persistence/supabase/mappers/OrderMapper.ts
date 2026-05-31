@@ -134,28 +134,29 @@ export class OrderMapper {
    * Domain → Persistence
    */
   public static toPersistence(order: Order): any {
+    /**
+     * CRITICAL: Only send columns that exist in the REAL `orders` table.
+     * The production table is defined by 001_initial_schema.sql which uses:
+     *   - `status` (order_status ENUM: CONFIRMADA, EN_PREPARACION, etc.)
+     *   - `client_notes` (NOT special_instructions)
+     *   - `internal_notes` (NOT admin_notes)
+     *   - NO `state`, `event_type`, `estimated_guests`, `cancelled_at`, `cancellation_reason` columns
+     */
     const raw: any = {
       id: order.id.toString(),
-      code: `ORD-${order.id.toString().substring(0, 8).toUpperCase()}`, // Auto-generate required code
+      code: `ORD-${order.id.toString().substring(0, 8).toUpperCase()}`,
       client_id: order.clientId.toString(),
       provider_id: order.props.providerId?.toString(),
       quotation_id: order.props.quotationId?.toString(),
-      state: order.state, // Map domain state directly for V2
-      status: this.mapToDBStatus(order.state), // Map domain state to DB status for V1
+      status: this.mapToDBStatus(order.state),
       event_date: order.eventDate.toISOString(),
-      event_type: order.props.eventType,
-      estimated_guests: order.props.estimatedGuests,
       delivery_address: order.deliveryAddress,
-      special_instructions: order.props.specialInstructions, // Set both special_instructions
-      client_notes: order.props.specialInstructions, // and client_notes for V1/V2 compatibility
-      admin_notes: order.props.adminNotes, // Set both admin_notes
-      internal_notes: order.props.adminNotes, // and internal_notes for V1/V2 compatibility
+      client_notes: order.props.specialInstructions,
+      internal_notes: order.props.adminNotes,
       created_at: order.createdAt.toISOString(),
       updated_at: order.updatedAt.toISOString(),
       completed_at: order.completedAt?.toISOString(),
-      cancelled_at: order.cancelledAt?.toISOString(),
-      cancellation_reason: order.cancellationReason,
-      // Default values to satisfy NOT NULL constraints from 001_initial_schema
+      // NOT NULL constraints from 001_initial_schema
       price_net: 0,
       price_iva: 0,
       price_total: 0
