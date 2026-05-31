@@ -225,10 +225,10 @@ export default function ClientQuotationDetail({ params }: { params: Promise<{ id
                                 <p className="text-xl font-bold text-indigo-900 mt-2">Total</p>
                             </div>
                             <div className="text-right space-y-1">
-                                <p className="text-sm font-medium text-foreground/80">
+                                <p className="text-sm font-medium text-indigo-800">
                                     {formatCLP(quotation.priceNet || 0)}
                                 </p>
-                                <p className="text-sm font-medium text-foreground/80">
+                                <p className="text-sm font-medium text-indigo-800">
                                     {formatCLP(quotation.priceIva || 0)}
                                 </p>
                                 <p className="text-2xl font-bold text-indigo-600">
