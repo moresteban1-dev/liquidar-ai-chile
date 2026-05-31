@@ -168,14 +168,31 @@ export function ManualTransferForm({
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Banco de origen
                         </label>
-                        <input
-                            type="text"
+                        <select
                             required
                             value={formData.sender_bank}
                             onChange={(e) => setFormData({ ...formData, sender_bank: e.target.value })}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-gray-900
                          focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        />
+                        >
+                            <option value="">Selecciona un banco</option>
+                            <option value="Banco de Chile">Banco de Chile</option>
+                            <option value="Banco Edwards">Banco Edwards</option>
+                            <option value="BancoEstado">BancoEstado</option>
+                            <option value="Banco Santander">Banco Santander</option>
+                            <option value="BCI">Banco de Crédito e Inversiones (BCI)</option>
+                            <option value="Itaú">Banco Itaú</option>
+                            <option value="Scotiabank">Scotiabank</option>
+                            <option value="Banco BICE">Banco BICE</option>
+                            <option value="Banco Security">Banco Security</option>
+                            <option value="Banco Consorcio">Banco Consorcio</option>
+                            <option value="Banco Falabella">Banco Falabella</option>
+                            <option value="Banco Ripley">Banco Ripley</option>
+                            <option value="Tenpo">Tenpo (Prepago)</option>
+                            <option value="MACH">MACH (Prepago)</option>
+                            <option value="Coopeuch">Coopeuch</option>
+                            <option value="Otro">Otro / Internacional</option>
+                        </select>
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
