@@ -14,6 +14,13 @@ export class BlackboxToolProvider implements IAIToolProvider {
   readonly providerType: AIProviderType = 'blackbox';
   private readonly blackbox: ReturnType<typeof createOpenAI>;
 
+  /** 
+   * Modelos válidos conocidos de la API de Blackbox.ai.
+   * El ID de modelo debe incluir el prefijo del proveedor (ej: 'blackboxai/').
+   */
+  private static readonly VALID_MODEL_PREFIX = 'blackboxai/';
+  private static readonly SAFE_FALLBACK_MODEL = 'blackboxai/blackbox-pro';
+
   constructor(private readonly apiKey: string, private readonly defaultModel: string = 'blackboxai/blackbox-pro') {
     this.blackbox = createOpenAI({
       apiKey: this.apiKey,
@@ -21,8 +28,25 @@ export class BlackboxToolProvider implements IAIToolProvider {
     });
   }
 
+  /**
+   * Sanitiza el ID del modelo.
+   * Rechaza valores genéricos o sin prefijo de proveedor que generan
+   * el error: "Invalid model name passed in model=blackbox".
+   */
+  private sanitizeModelId(rawModel?: string): string {
+    const model = rawModel ?? this.defaultModel;
+    if (!model || !model.includes('/')) {
+      console.warn(
+        `[BlackboxToolProvider] Nombre de modelo inválido recibido: "${model}". ` +
+        `Usando fallback seguro: "${BlackboxToolProvider.SAFE_FALLBACK_MODEL}".`
+      );
+      return BlackboxToolProvider.SAFE_FALLBACK_MODEL;
+    }
+    return model;
+  }
+
   private getModelId(complexity?: 'simple' | 'moderate' | 'complex'): string {
-    return this.defaultModel;
+    return this.sanitizeModelId(this.defaultModel);
   }
 
   /**
