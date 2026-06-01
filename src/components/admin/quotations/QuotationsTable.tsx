@@ -151,7 +151,7 @@ export const columns: ColumnDef<QuotationViewModel>[] = [
             return (
                 <div className="text-right">
                     <div className="font-medium text-foreground">{amount}</div>
-                    {row.original.priceCost && (
+                    {typeof row.original.priceCost === 'number' && row.original.priceCost > 0 && (
                         <div className="text-xs text-muted-foreground">
                             Costo: {new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(row.original.priceCost)}
                         </div>

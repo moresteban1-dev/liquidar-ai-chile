@@ -263,13 +263,17 @@ export class PdfService {
 
         // --- Table ---
         const tableHeaders = [['Categoría', 'Concepto', 'Cant.', 'Costo Unit. (Neto)', 'Total (Neto)']];
-        const tableBody = providerItems.map(item => [
-            item.category,
-            item.concept,
-            item.quantity.toString(),
-            formatCLP(item.unitPriceNet),
-            formatCLP(item.totalPriceNet)
-        ]);
+        const tableBody = providerItems.map(item => {
+            const unitPrice = item.unitPriceNet ?? (item as any).unit_price_net;
+            const totalPrice = item.totalPriceNet ?? (item as any).total_price_net;
+            return [
+                item.category,
+                item.concept,
+                item.quantity.toString(),
+                formatCLP(unitPrice),
+                formatCLP(totalPrice)
+            ];
+        });
 
         autoTable(doc, {
             startY: currentY,
@@ -306,7 +310,10 @@ export class PdfService {
         doc.setFont('helvetica', 'bold');
         doc.text('COSTO TOTAL NETO:', totalsX, currentY);
 
-        const totalCost = providerItems.reduce((acc, item) => acc + (Number(item.totalPriceNet) || 0), 0);
+        const totalCost = providerItems.reduce((acc, item) => {
+            const totalPrice = item.totalPriceNet ?? (item as any).total_price_net;
+            return acc + (Number(totalPrice) || 0);
+        }, 0);
         doc.text(formatCLP(totalCost), pageWidth - margin, currentY, { align: 'right' });
 
         // --- Footer ---

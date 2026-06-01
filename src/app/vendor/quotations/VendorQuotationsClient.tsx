@@ -68,7 +68,7 @@ function VendorQuotationCard({ quote, onQuote }: { quote: any; onQuote: (id: str
                     </p>
                 </div>
 
-                {hasQuoted && quote.priceCost && (
+                {hasQuoted && typeof quote.priceCost === 'number' && quote.priceCost > 0 && (
                     <div className="flex items-center gap-3 text-xs bg-emerald-500/5 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 p-3 rounded-xl">
                         <CheckCircle className="h-4 w-4" />
                         <span className="font-medium">Presupuesto: <strong className="text-sm">{formatCLP(quote.priceCost)}</strong></span>

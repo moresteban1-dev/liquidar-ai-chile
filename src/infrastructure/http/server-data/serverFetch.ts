@@ -310,6 +310,7 @@ export interface QuotationListData {
   readonly teardownTime: string | null;
   readonly eventEndTime: string | null;
   readonly technicalVisit: boolean;
+  readonly provider_bids?: { id: string }[];
 }
 
 export async function fetchAdminQuotations(): Promise<QuotationListData[]> {
@@ -321,7 +322,8 @@ export async function fetchAdminQuotations(): Promise<QuotationListData[]> {
       id, code, brief, status, public_status, price_cost, price_total, created_at,
       service:services(name),
       client:profiles!quotations_client_id_fkey(name, email),
-      provider:profiles!quotations_assigned_provider_id_fkey(name)
+      provider:profiles!quotations_assigned_provider_id_fkey(name),
+      provider_bids(id)
     `)
     .order('created_at', { ascending: false });
 
@@ -351,6 +353,7 @@ export async function fetchAdminQuotations(): Promise<QuotationListData[]> {
     teardownTime: null,
     eventEndTime: null,
     technicalVisit: false,
+    provider_bids: q.provider_bids || [],
   }));
 }
 

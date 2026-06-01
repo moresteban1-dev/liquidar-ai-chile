@@ -100,6 +100,27 @@ export class CreateQuotationRequestHandler {
             const quoteSaveRes = await this.quotationRepository.save(quotation);
             if (quoteSaveRes.isFailure()) return fail(quoteSaveRes.getError());
 
+            // Persistir de forma defensiva el teléfono y nombre en profiles para mantener la integridad de los datos
+            const clientIdStr = command.clientId || order.clientId.toString();
+            if (clientIdStr && clientIdStr !== 'system-client' && (command.clientPhone || command.clientName)) {
+                try {
+                    const { createServiceRoleClient } = await import('@/lib/supabase/api');
+                    const supabase = createServiceRoleClient();
+                    const updates: Record<string, string> = {};
+                    if (command.clientPhone) updates.phone = command.clientPhone;
+                    if (command.clientName) updates.name = command.clientName;
+                    
+                    if (Object.keys(updates).length > 0) {
+                        await supabase
+                            .from('profiles')
+                            .update(updates)
+                            .eq('id', clientIdStr);
+                    }
+                } catch (err) {
+                    // Fallback silencioso para no bloquear la creación de cotizaciones
+                }
+            }
+
             return ok({
                 quotationId: quotation.id.toString(),
                 code: quotation.code

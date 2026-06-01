@@ -54,7 +54,8 @@ export function AdminQuotationsClient({ quotations }: AdminQuotationsClientProps
         createdAt: q.createdAt,
         service: q.service || { name: 'Servicio General' },
         client: q.client || { name: 'Cliente Externo', email: '' },
-        assignedProvider: q.assignedProvider || null
+        assignedProvider: q.assignedProvider || null,
+        provider_bids: q.provider_bids || []
     }));
 
     return (
