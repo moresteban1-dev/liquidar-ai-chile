@@ -53,6 +53,7 @@ export function AdminOrdersClient({ orders }: AdminOrdersClientProps) {
                 service: i.service ?? undefined,
             })),
             client: o.client ?? undefined,
+            provider: o.provider ?? undefined,
             quotation: o.quotation ?? undefined,
             slaRisk: slaRisks[o.id]
         })) as OrderViewModel[];

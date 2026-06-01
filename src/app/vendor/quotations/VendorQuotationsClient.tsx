@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { ProviderQuotationForm } from '@/components/vendor/ProviderQuotationForm';
 import { useVendorRealtime } from './hooks/useVendorRealtime';
+import Link from 'next/link';
 
 interface VendorQuotationsClientProps {
     quotations: any[];
@@ -84,8 +85,10 @@ function VendorQuotationCard({ quote, onQuote }: { quote: any; onQuote: (id: str
                         Cotizar Proyecto
                     </Button>
                 ) : (
-                    <Button variant="outline" className="w-full rounded-xl text-xs font-semibold opacity-60" disabled>
-                        En Proceso
+                    <Button variant="outline" className="w-full rounded-xl text-xs font-semibold hover:bg-accent/40" asChild>
+                        <Link href={`/vendor/quotations/${quote.id}`}>
+                            Ver Propuesta Enviada
+                        </Link>
                     </Button>
                 )}
             </div>

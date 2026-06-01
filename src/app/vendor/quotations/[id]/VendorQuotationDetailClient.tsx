@@ -8,8 +8,9 @@ import { formatCLP, formatProviderBidData } from '@/lib/quotation-fsm';
 import { formatDate } from '@/lib/utils';
 import { SkeletonLine } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
-import { ArrowLeft, Send, MapPin, Calendar, Clock, Info } from 'lucide-react';
+import { ArrowLeft, Send, MapPin, Calendar, Clock, Info, CheckCircle2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { useState, useEffect } from 'react';
 
 const ProviderQuotationForm = dynamic(
     () => import('@/components/vendor/ProviderQuotationForm').then(mod => mod.ProviderQuotationForm),
@@ -24,8 +25,21 @@ interface Props {
     quotation: QuotationDetail;
 }
 
-export function VendorQuotationDetailClient({ id: _id, quotation }: Props) {
+export function VendorQuotationDetailClient({ id, quotation }: Props) {
     const router = useRouter();
+    const [providerItems, setProviderItems] = useState<any[]>([]);
+    const [loadingItems, setLoadingItems] = useState(false);
+
+    useEffect(() => {
+        if (quotation.status !== 'PENDING_PROVIDER_BID' && quotation.status !== 'PROVIDER_COTIZANDO') {
+            setLoadingItems(true);
+            fetch(`/api/quotations/${quotation.id}/provider-items`)
+                .then(res => res.ok ? res.json() : [])
+                .then(data => setProviderItems(data))
+                .catch(() => toast.error('Error al cargar ítems cotizados'))
+                .finally(() => setLoadingItems(false));
+        }
+    }, [quotation.id, quotation.status]);
 
     const handleSuccess = () => {
         toast.success('Propuesta enviada con éxito');
@@ -119,16 +133,72 @@ export function VendorQuotationDetailClient({ id: _id, quotation }: Props) {
                                 />
                             </div>
                         ) : (
-                            <div className="bg-card rounded-xl p-6 shadow-sm border border-border opacity-90">
-                                <h2 className="font-semibold text-lg mb-4">Propuesta Enviada</h2>
-                                <p className="text-sm text-muted-foreground mb-4">
-                                    Ya has enviado una propuesta para esta cotización. El administrador la está revisando.
-                                </p>
-                                <div className="bg-muted p-4 rounded-lg">
-                                    <div className="flex justify-between font-bold text-lg">
-                                        <span>Total Neto:</span>
-                                        <span>{formatCLP((quotation.subtotalServicesProvider || 0) + (quotation.subtotalLogisticsProvider || 0))}</span>
+                            <div className="bg-card rounded-xl p-6 shadow-sm border border-border">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-950/30 flex items-center justify-center text-emerald-600">
+                                        <CheckCircle2 className="w-6 h-6" />
                                     </div>
+                                    <div>
+                                        <h2 className="font-semibold text-lg text-foreground">Propuesta Enviada</h2>
+                                        <p className="text-xs text-muted-foreground">
+                                            Tu propuesta está en revisión por el administrador.
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div className="space-y-4 border-t border-border/60 pt-4">
+                                    <h3 className="text-sm font-bold text-foreground/80 tracking-wide uppercase">Detalle del Presupuesto Enviado</h3>
+                                    
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-sm">
+                                            <thead>
+                                                <tr className="border-b border-border/50 text-left text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                                                    <th className="py-2 px-1">Categoría</th>
+                                                    <th className="py-2 px-1">Concepto</th>
+                                                    <th className="py-2 px-1 text-center">Cant.</th>
+                                                    <th className="py-2 px-1 text-right">Costo Unit.</th>
+                                                    <th className="py-2 px-1 text-right">Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-border/30">
+                                                {loadingItems ? (
+                                                    <tr>
+                                                        <td colSpan={5} className="py-6 text-center text-muted-foreground animate-pulse">Cargando desglose...</td>
+                                                    </tr>
+                                                ) : providerItems.length === 0 ? (
+                                                    <tr>
+                                                        <td colSpan={5} className="py-6 text-center text-muted-foreground italic">Sin desglose disponible</td>
+                                                    </tr>
+                                                ) : (
+                                                    providerItems.map((item) => {
+                                                        const unitPrice = item.unitPriceNet ?? item.unit_price_net ?? 0;
+                                                        const totalPrice = item.totalPriceNet ?? item.total_price_net ?? 0;
+                                                        return (
+                                                            <tr key={item.id} className="text-foreground/85 text-xs">
+                                                                <td className="py-3 px-1 font-semibold text-[10px] tracking-wider text-muted-foreground uppercase">{item.category}</td>
+                                                                <td className="py-3 px-1">{item.concept}</td>
+                                                                <td className="py-3 px-1 text-center">{item.quantity}</td>
+                                                                <td className="py-3 px-1 text-right">{formatCLP(unitPrice)}</td>
+                                                                <td className="py-3 px-1 text-right font-semibold">{formatCLP(totalPrice)}</td>
+                                                            </tr>
+                                                        );
+                                                    })
+                                                )}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <div className="bg-muted/40 p-4 rounded-xl border border-border/40 flex justify-between items-center font-bold text-sm mt-2">
+                                        <span className="text-muted-foreground">COSTO TOTAL NETO COTIZADO:</span>
+                                        <span className="text-foreground text-base tracking-tight">{formatCLP((quotation.subtotalServicesProvider || 0) + (quotation.subtotalLogisticsProvider || 0))}</span>
+                                    </div>
+                                    
+                                    {quotation.providerNotes && (
+                                        <div className="bg-muted/30 border border-border/30 rounded-xl p-4 mt-4">
+                                            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block mb-2">Tus Comentarios / Notas</span>
+                                            <p className="text-xs text-foreground/80 whitespace-pre-wrap leading-relaxed">{quotation.providerNotes}</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}

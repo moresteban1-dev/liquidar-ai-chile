@@ -20,6 +20,7 @@ export interface OrderData {
     createdAt: string;
     deliveryDate: string | null;
     client: { id: string; name: string; email: string } | null;
+    provider?: { name: string } | null;
     quotation: { code: string; brief: string } | null;
     items: { id: string; quantity: number; service: { id: string; name: string } | null }[];
 }
@@ -39,35 +40,45 @@ export async function getAdminOrders(): Promise<OrderData[]> {
         .select(`
             *,
             client:profiles!orders_client_id_fkey(id, name, email),
+            provider:profiles!orders_provider_id_fkey(id, name),
             items:order_items(*, service:services(id, name)),
-            quotation:quotations!orders_quotation_id_fkey(code, brief)
+            quotation:quotations!orders_quotation_id_fkey(
+                code, brief, price_total, price_cost, price_net, markup_amount, markup_percentage,
+                provider:profiles!quotations_assigned_provider_id_fkey(id, name)
+            )
         `)
         .order('created_at', { ascending: false });
 
     if (error || !orders) return [];
 
-    return orders.map((o: Record<string, unknown>) => ({
-        id: o.id as string,
-        code: o.code as string,
-        status: o.status as string,
-        priceTotal: (o.price_total as number) || 0,
-        priceNet: (o.price_net as number) || 0,
-        priceCost: (o.price_cost as number) || 0,
-        marginAmount: (o.margin_amount as number) || 0,
-        marginPercentage: (o.margin_percentage as number) || 0,
-        createdAt: o.created_at as string,
-        deliveryDate: (o.delivery_date as string) || null,
-        client: o.client as OrderData['client'],
-        quotation: o.quotation as OrderData['quotation'],
-        items: ((o.items as unknown[]) || []).map((item: unknown) => {
-            const i = item as Record<string, unknown>;
-            return {
-                id: i.id as string,
-                quantity: (i.quantity as number) || 1,
-                service: i.service as { id: string; name: string } | null,
-            };
-        }),
-    }));
+    return orders.map((o: any) => {
+        const q = o.quotation;
+        const providerData = o.provider || q?.provider || null;
+
+        return {
+            id: o.id as string,
+            code: o.code as string,
+            status: o.status as string,
+            priceTotal: (o.price_total as number) || (q?.price_total as number) || 0,
+            priceNet: (o.price_net as number) || (q?.price_net as number) || 0,
+            priceCost: (o.price_cost as number) || (q?.price_cost as number) || 0,
+            marginAmount: (o.margin_amount as number) || (q?.markup_amount as number) || 0,
+            marginPercentage: (o.margin_percentage as number) || (q?.markup_percentage as number) || 0,
+            createdAt: o.created_at as string,
+            deliveryDate: (o.delivery_date as string) || null,
+            client: o.client as OrderData['client'],
+            provider: providerData ? { name: providerData.name || providerData.full_name } : null,
+            quotation: q ? { code: q.code, brief: q.brief } : null,
+            items: ((o.items as unknown[]) || []).map((item: unknown) => {
+                const i = item as Record<string, unknown>;
+                return {
+                    id: i.id as string,
+                    quantity: (i.quantity as number) || 1,
+                    service: i.service as { id: string; name: string } | null,
+                };
+            }),
+        };
+    });
 }
 
 /**
