@@ -48,9 +48,10 @@ export class GeminiToolProvider implements IAIToolProvider {
       });
 
       return ok(object);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('Gemini Provider Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating structured output with Gemini'));
+      return fail(AppError.infrastructure(message || 'Error generating structured output with Gemini'));
     }
   }
 
@@ -72,9 +73,10 @@ export class GeminiToolProvider implements IAIToolProvider {
       });
 
       return ok(text);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('Gemini Provider Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating text output with Gemini'));
+      return fail(AppError.infrastructure(message || 'Error generating text output with Gemini'));
     }
   }
 

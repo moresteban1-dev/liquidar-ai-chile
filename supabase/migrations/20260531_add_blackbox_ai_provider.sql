@@ -5,5 +5,5 @@
 -- ============================================================
 
 INSERT INTO public.ai_providers (name, slug, default_model, is_active)
-VALUES ('Blackbox.ai', 'blackbox', 'blackbox', false)
+VALUES ('Blackbox.ai', 'blackbox', 'blackboxai/blackbox-pro', false)
 ON CONFLICT (slug) DO NOTHING;

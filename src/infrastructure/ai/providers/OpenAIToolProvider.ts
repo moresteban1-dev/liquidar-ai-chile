@@ -50,9 +50,10 @@ export class OpenAIToolProvider implements IAIToolProvider {
       });
 
       return ok(object);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('OpenAI Provider Structured Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating structured output with OpenAI'));
+      return fail(AppError.infrastructure(message || 'Error generating structured output with OpenAI'));
     }
   }
 
@@ -77,9 +78,10 @@ export class OpenAIToolProvider implements IAIToolProvider {
       });
 
       return ok(text);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('OpenAI Provider Text Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating text output with OpenAI'));
+      return fail(AppError.infrastructure(message || 'Error generating text output with OpenAI'));
     }
   }
 

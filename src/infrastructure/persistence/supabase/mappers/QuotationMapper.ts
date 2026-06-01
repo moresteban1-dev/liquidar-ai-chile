@@ -68,6 +68,7 @@ export interface QuotationPersistence {
   approved_at?: string
   rejected_at?: string
   paid_at?: string
+  items?: any[]
 }
 
 export class QuotationMapper {
@@ -195,6 +196,7 @@ export class QuotationMapper {
       price_total: quotation.props.totalWithIva.amount,
       // Timestamps
       created_at: quotation.props.createdAt.toISOString(),
+      items: quotation.props.items
     };
 
     // Optional fields — only set if present to avoid PostgREST schema issues

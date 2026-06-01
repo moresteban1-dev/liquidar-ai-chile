@@ -50,9 +50,10 @@ export class AnthropicToolProvider implements IAIToolProvider {
       });
 
       return ok(object);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('Anthropic Provider Structured Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating structured output with Anthropic'));
+      return fail(AppError.infrastructure(message || 'Error generating structured output with Anthropic'));
     }
   }
 
@@ -77,9 +78,10 @@ export class AnthropicToolProvider implements IAIToolProvider {
       });
 
       return ok(text);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('Anthropic Provider Text Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating text output with Anthropic'));
+      return fail(AppError.infrastructure(message || 'Error generating text output with Anthropic'));
     }
   }
 

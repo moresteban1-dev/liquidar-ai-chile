@@ -51,9 +51,10 @@ export class GroqToolProvider implements IAIToolProvider {
       });
 
       return ok(object);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('Groq Provider Structured Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating structured output with Groq'));
+      return fail(AppError.infrastructure(message || 'Error generating structured output with Groq'));
     }
   }
 
@@ -78,9 +79,10 @@ export class GroqToolProvider implements IAIToolProvider {
       });
 
       return ok(text);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('Groq Provider Text Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating text output with Groq'));
+      return fail(AppError.infrastructure(message || 'Error generating text output with Groq'));
     }
   }
 

@@ -143,7 +143,7 @@ export class AIProviderFactory {
       case 'groq':
         return new GroqToolProvider(apiKey, defaultModel || 'llama3-70b-8192');
       case 'blackbox':
-        return new BlackboxToolProvider(apiKey, defaultModel || 'blackbox');
+        return new BlackboxToolProvider(apiKey, defaultModel || 'blackboxai/blackbox-pro');
       default:
         return null;
     }

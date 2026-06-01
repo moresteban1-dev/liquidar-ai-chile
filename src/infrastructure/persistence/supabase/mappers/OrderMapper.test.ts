@@ -96,7 +96,7 @@ describe('OrderMapper', () => {
       const persistence = OrderMapper.toPersistence(order);
 
       expect(persistence.client_id).toBe('client-123');
-      expect(persistence.state).toBe('DRAFT');
+      expect(persistence.status).toBe('EN_REVISION');
       expect(persistence.delivery_address).toBe('Av. Reforma 123, CDMX');
     });
 
@@ -116,7 +116,7 @@ describe('OrderMapper', () => {
       const persistence = OrderMapper.toPersistence(order);
 
       expect(persistence.provider_id).toBe('provider-456');
-      expect(persistence.special_instructions).toBe('Call before delivery');
+      expect(persistence.client_notes).toBe('Call before delivery');
     });
   });
 
@@ -125,7 +125,7 @@ describe('OrderMapper', () => {
       // Domain → Persistence → Domain
       const originalResult = Order.create({
         clientId: new UniqueEntityID('client-123'),
-        state: 'DRAFT',
+        state: 'QUOTATION_PENDING',
         eventDate: new Date('2026-06-15'),
         deliveryAddress: 'Av. Reforma 123',
         createdAt: new Date('2026-03-19'),

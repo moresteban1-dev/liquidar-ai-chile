@@ -14,7 +14,7 @@ export class BlackboxToolProvider implements IAIToolProvider {
   readonly providerType: AIProviderType = 'blackbox';
   private readonly blackbox: ReturnType<typeof createOpenAI>;
 
-  constructor(private readonly apiKey: string, private readonly defaultModel: string = 'blackbox') {
+  constructor(private readonly apiKey: string, private readonly defaultModel: string = 'blackboxai/blackbox-pro') {
     this.blackbox = createOpenAI({
       apiKey: this.apiKey,
       baseURL: 'https://api.blackbox.ai/v1',
@@ -48,9 +48,10 @@ export class BlackboxToolProvider implements IAIToolProvider {
       });
 
       return ok(object);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('Blackbox Provider Structured Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating structured output with Blackbox.ai'));
+      return fail(AppError.infrastructure(message || 'Error generating structured output with Blackbox.ai'));
     }
   }
 
@@ -75,9 +76,10 @@ export class BlackboxToolProvider implements IAIToolProvider {
       });
 
       return ok(text);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('Blackbox Provider Text Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating text output with Blackbox.ai'));
+      return fail(AppError.infrastructure(message || 'Error generating text output with Blackbox.ai'));
     }
   }
 

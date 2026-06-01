@@ -49,9 +49,10 @@ export class PerplexityToolProvider implements IAIToolProvider {
       });
 
       return ok(object);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('Perplexity Provider Structured Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating structured output with Perplexity'));
+      return fail(AppError.infrastructure(message || 'Error generating structured output with Perplexity'));
     }
   }
 
@@ -76,9 +77,10 @@ export class PerplexityToolProvider implements IAIToolProvider {
       });
 
       return ok(text);
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
       console.error('Perplexity Provider Text Error:', error);
-      return fail(AppError.infrastructure(error.message || 'Error generating text output with Perplexity'));
+      return fail(AppError.infrastructure(message || 'Error generating text output with Perplexity'));
     }
   }
 
