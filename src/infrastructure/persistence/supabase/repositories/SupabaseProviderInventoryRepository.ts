@@ -22,7 +22,7 @@ export class SupabaseProviderInventoryRepository implements ProviderInventoryRep
                 name: d.name,
                 role: d.role
             })));
-        } catch (e: any) {
+        } catch (e: unknown) {
             return fail(e instanceof Error ? e : new Error(String(e)));
         }
     }
@@ -42,7 +42,7 @@ export class SupabaseProviderInventoryRepository implements ProviderInventoryRep
                 .join(', ');
 
             return ok(expertise || 'Ninguna especificada');
-        } catch (e: any) {
+        } catch (e: unknown) {
             return fail(e instanceof Error ? e : new Error(String(e)));
         }
     }
@@ -56,7 +56,7 @@ export class SupabaseProviderInventoryRepository implements ProviderInventoryRep
 
             if (error) return fail(new Error(error.message));
             return ok((data || []).map(this.mapToDomain));
-        } catch (e: any) {
+        } catch (e: unknown) {
             return fail(e instanceof Error ? e : new Error(String(e)));
         }
     }
@@ -72,7 +72,7 @@ export class SupabaseProviderInventoryRepository implements ProviderInventoryRep
 
             if (error) return fail(new Error(error.message));
             return ok(data ? this.mapToDomain(data) : null);
-        } catch (e: any) {
+        } catch (e: unknown) {
             return fail(e instanceof Error ? e : new Error(String(e)));
         }
     }
@@ -98,7 +98,7 @@ export class SupabaseProviderInventoryRepository implements ProviderInventoryRep
 
             if (error) return fail(new Error(error.message));
             return ok(this.mapToDomain(data));
-        } catch (e: any) {
+        } catch (e: unknown) {
             return fail(e instanceof Error ? e : new Error(String(e)));
         }
     }
@@ -112,7 +112,7 @@ export class SupabaseProviderInventoryRepository implements ProviderInventoryRep
 
             if (error) return fail(new Error(error.message));
             return ok(undefined);
-        } catch (e: any) {
+        } catch (e: unknown) {
             return fail(e instanceof Error ? e : new Error(String(e)));
         }
     }
@@ -126,7 +126,7 @@ export class SupabaseProviderInventoryRepository implements ProviderInventoryRep
 
             if (error) return fail(new Error(error.message));
             return ok(undefined);
-        } catch (e: any) {
+        } catch (e: unknown) {
             return fail(e instanceof Error ? e : new Error(String(e)));
         }
     }
@@ -150,7 +150,7 @@ export class SupabaseProviderInventoryRepository implements ProviderInventoryRep
                 totalValue,
                 averageCost: items.length > 0 ? totalValue / items.length : 0
             });
-        } catch (e: any) {
+        } catch (e: unknown) {
             return fail(e instanceof Error ? e : new Error(String(e)));
         }
     }
@@ -186,7 +186,7 @@ export class SupabaseProviderInventoryRepository implements ProviderInventoryRep
                 availableQuantity: d.available_quantity,
                 rating: 0
             })));
-        } catch (e: any) {
+        } catch (e: unknown) {
             return fail(e instanceof Error ? e : new Error(String(e)));
         }
     }

@@ -42,10 +42,10 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
         .select('id')
         .single();
 
-      if (error) return fail(AppError.internal(`Database error: ${error.message}`));
+      if (error) return fail(AppError.internal(`Database error: ${(error instanceof Error ? error.message : String(error))}`));
       return ok(data.id);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('Error salvando QuoteSession:', error);
       return fail(AppError.from(error));
     }
@@ -62,10 +62,10 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
           custom_name: item.customName
         })));
 
-      if (error) return fail(AppError.internal(`Database error: ${error.message}`));
+      if (error) return fail(AppError.internal(`Database error: ${(error instanceof Error ? error.message : String(error))}`));
       return ok(undefined);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('Error agregando ítems a QuoteSession:', error);
       return fail(AppError.from(error));
     }
@@ -84,10 +84,10 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
           included_catalog_items: opt.includedCatalogItems || []
         })));
 
-      if (error) return fail(AppError.internal(`Database error saving options: ${error.message}`));
+      if (error) return fail(AppError.internal(`Database error saving options: ${(error instanceof Error ? error.message : String(error))}`));
       return ok(undefined);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('Error guardando opciones de QuoteSession:', error);
       return fail(AppError.from(error));
     }
@@ -103,7 +103,7 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
 
       if (error) {
         if (error.code === 'PGRST116') return ok(null);
-        return fail(AppError.internal(`Database error: ${error.message}`));
+        return fail(AppError.internal(`Database error: ${(error instanceof Error ? error.message : String(error))}`));
       }
 
       const session: QuoteSession = {
@@ -142,7 +142,7 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
 
       return ok(session);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('Error buscando QuoteSession:', error);
       return fail(AppError.from(error));
     }
@@ -165,7 +165,7 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
 
       const { data, error } = await query;
 
-      if (error) return fail(AppError.internal(`Database error: ${error.message}`));
+      if (error) return fail(AppError.internal(`Database error: ${(error instanceof Error ? error.message : String(error))}`));
 
       const sessions: QuoteSession[] = (data || []).map((d: any) => ({
         id: d.id,
@@ -188,7 +188,7 @@ export class SupabaseQuoteSessionRepository implements IQuoteSessionRepository {
 
       return ok(sessions);
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       logger.error('Error listando QuoteSessions:', error);
       return fail(AppError.from(error));
     }

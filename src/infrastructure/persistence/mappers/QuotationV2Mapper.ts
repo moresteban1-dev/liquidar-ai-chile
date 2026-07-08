@@ -315,14 +315,14 @@ export class QuotationV2Mapper {
                     price_total: quotation.totalWithIva.amount
                 },
                 requestedItems: quotation.requestedItems.map(i => ({
-                    id: i.id,
+                    id: i.id.toString(),
                     quotation_id: quotation.quotationId.toString(),
                     item_name: i.itemName,
                     quantity: i.quantity,
                     sort_order: i.sortOrder
                 })),
                 providerItems: quotation.providerItems.map(i => ({
-                    id: i.id,
+                    id: i.id.toString(),
                     quotation_id: quotation.quotationId.toString(),
                     item_name: i.concept,
                     quantity: i.quantity,
@@ -332,7 +332,7 @@ export class QuotationV2Mapper {
                     category: i.category
                 })),
                 clientItems: quotation.clientItems.map(i => ({
-                    id: i.id,
+                    id: i.id.toString(),
                     quotation_id: quotation.quotationId.toString(),
                     item_name: i.description,
                     quantity: i.quantity,

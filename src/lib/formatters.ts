@@ -57,14 +57,7 @@ export function formatCurrencyCompact(amount: number, currency?: SupportedCurren
     return `${symbol}${amount}`;
 }
 
-/**
- * Format a number as Chilean Pesos (CLP).
- * Backward-compatible alias for `formatCurrency(amount, 'CLP')`.
- * @example formatCLP(150000) => "$150.000"
- */
-export function formatCLP(amount: number): string {
-    return formatCurrency(amount, 'CLP');
-}
+export { formatCLP } from '@/core/shared/formatters';
 
 /**
  * Format a date string in short Chilean format (DD/MM/YYYY)

@@ -5,7 +5,7 @@ import { encryptConfig, decryptConfig } from '@/lib/payments/encryption';
 import { withAdmin } from '@/lib/api/with-auth';
 import { AIProviderFactory } from '@infrastructure/ai/AIProviderFactory';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 // GET: Listar todos los proveedores de IA con credenciales desencriptadas para el Admin
 export const GET = withAdmin(async () => {
@@ -37,9 +37,9 @@ export const GET = withAdmin(async () => {
         });
 
         return NextResponse.json({ providers: decryptedProviders });
-    } catch (err: any) {
-        logger.error('Error in GET /api/admin/ai-providers:', err);
-        return NextResponse.json({ error: err.message || 'Internal Server Error' }, { status: 500 });
+    } catch (err: unknown) {
+        logger.error('Error in GET /api/admin/ai-providers:', err instanceof Error ? err.message : String(err));
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 });
 
@@ -102,9 +102,9 @@ export const PUT = withAdmin(async (request) => {
             provider: data,
             message: `Proveedor ${data.name} actualizado exitosamente.`
         });
-    } catch (err: any) {
-        logger.error('Error in PUT /api/admin/ai-providers:', err);
-        return NextResponse.json({ error: err.message || 'Internal Server Error' }, { status: 500 });
+    } catch (err: unknown) {
+        logger.error('Error in PUT /api/admin/ai-providers:', err instanceof Error ? err.message : String(err));
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 });
 
@@ -147,8 +147,8 @@ export const POST = withAdmin(async (request) => {
             latencyMs: duration,
             message: 'Conexión probada con éxito.'
         });
-    } catch (err: any) {
-        logger.error('Error in POST /api/admin/ai-providers:', err);
-        return NextResponse.json({ success: false, error: err.message || 'Excepción de Red/Infraestructura' });
+    } catch (err: unknown) {
+        logger.error('Error in POST /api/admin/ai-providers:', err instanceof Error ? err.message : String(err));
+        return NextResponse.json({ success: false, error: 'Excepción de Red/Infraestructura' }, { status: 500 });
     }
 });

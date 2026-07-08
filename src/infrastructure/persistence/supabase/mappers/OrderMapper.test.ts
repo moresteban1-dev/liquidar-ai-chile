@@ -10,7 +10,7 @@ describe('OrderMapper', () => {
     id: '123e4567-e89b-12d3-a456-426614174000',
     client_id: '123e4567-e89b-12d3-a456-426614174001',
     state: 'DRAFT',
-    event_date: '2026-06-15T00:00:00.000Z',
+    event_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
     delivery_address: 'Av. Reforma 123, CDMX',
     created_at: '2026-03-19T00:00:00.000Z',
     updated_at: '2026-03-19T00:00:00.000Z'
@@ -84,7 +84,7 @@ describe('OrderMapper', () => {
       const orderResult = Order.create({
         clientId: new UniqueEntityID('client-123'),
         state: 'DRAFT',
-        eventDate: new Date('2026-06-15'),
+        eventDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         deliveryAddress: 'Av. Reforma 123, CDMX',
         createdAt: new Date('2026-03-19'),
         updatedAt: new Date('2026-03-19')
@@ -105,7 +105,7 @@ describe('OrderMapper', () => {
         clientId: new UniqueEntityID('client-123'),
         providerId: new UniqueEntityID('provider-456'),
         state: 'DRAFT',
-        eventDate: new Date('2026-06-15'),
+        eventDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         deliveryAddress: 'Av. Reforma 123',
         specialInstructions: 'Call before delivery',
         createdAt: new Date(),
@@ -126,7 +126,7 @@ describe('OrderMapper', () => {
       const originalResult = Order.create({
         clientId: new UniqueEntityID('client-123'),
         state: 'QUOTATION_PENDING',
-        eventDate: new Date('2026-06-15'),
+        eventDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         deliveryAddress: 'Av. Reforma 123',
         createdAt: new Date('2026-03-19'),
         updatedAt: new Date('2026-03-19')

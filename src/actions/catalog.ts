@@ -9,6 +9,7 @@ import { DI_KEYS } from '@/infrastructure/di/DIKeys';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { requireRole } from '@/lib/supabase/api';
 import { UserRole } from '@/core/domain/auth/UserRole';
+import { CreateCatalogCategoryData } from '@/core/domain/catalog/CatalogTypes';
 
 // ============ SCHEMAS ============
 
@@ -337,9 +338,11 @@ export async function createCategoryAction(formData: FormData) {
     const validatedData = CreateCategorySchema.parse(parsedData);
     
     // exactOptionalPropertyTypes compliance
-    const categoryData = {
+    const categoryData: CreateCatalogCategoryData = {
       name: validatedData.name,
-      order: validatedData.order,
+      displayOrder: validatedData.order,
+      level: 1,
+      itemType: 'service',
       ...(validatedData.slug ? { slug: validatedData.slug } : {}),
       ...(validatedData.description ? { description: validatedData.description } : {}),
       ...(validatedData.icon ? { icon: validatedData.icon } : {}),

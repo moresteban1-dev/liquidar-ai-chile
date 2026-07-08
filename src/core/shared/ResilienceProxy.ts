@@ -23,12 +23,12 @@ export class ResilienceProxy {
         private readonly resetTimeoutMs: number = 10000
     ) {}
 
-    async execute<T>(fn: () => Promise<Result<T, any>>): Promise<Result<T, any>> {
+    async execute<T, E = Error>(fn: () => Promise<Result<T, E>>): Promise<Result<T, E>> {
         if (this.state === CircuitState.OPEN) {
             if (Date.now() > (this.nextAttemptTime || 0)) {
                 this.state = CircuitState.HALF_OPEN;
             } else {
-                return fail(new Error('Circuit Breaker is OPEN. Operation aborted.'));
+                return fail(new Error('Circuit Breaker is OPEN. Operation aborted.') as unknown as E);
             }
         }
 
@@ -39,14 +39,14 @@ export class ResilienceProxy {
                 this.reset();
                 return result;
             } else {
-                return this.handleFailure(result.getError());
+                return this.handleFailure<T, E>(result.getError() as unknown as E);
             }
         } catch (error) {
-            return this.handleFailure(error);
+            return this.handleFailure<T, E>(error as E);
         }
     }
 
-    private handleFailure(error: any): Result<any, any> {
+    private handleFailure<T, E>(error: E): Result<T, E> {
         this.failureCount++;
         this._lastFailureTime = Date.now();
 

@@ -4,6 +4,31 @@ import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { createApiClient, createServiceRoleClient, requireRole, getAuthUser } from '@/lib/supabase/api';
 import { UserRole } from '@/core/domain/auth/UserRole';
 import { ActionResponse } from '@/types/actions';
+import { z } from 'zod';
+
+/** Schema: User profile update (self-service) */
+const UpdateUserProfileSchema = z.object({
+    name: z.string().min(2, 'Nombre muy corto').max(100, 'Nombre muy largo').trim(),
+    phone: z.string().min(8, 'Teléfono inválido').max(20, 'Teléfono inválido').trim(),
+    billing_rut: z.string().max(12, 'RUT inválido').trim().optional().nullable(),
+    billing_company_name: z.string().max(200, 'Nombre de empresa muy largo').trim().optional().nullable(),
+    billing_address: z.string().max(300, 'Dirección muy larga').trim().optional().nullable(),
+});
+
+/** Schema: Provider bank details */
+const UpdateProviderBankDetailsSchema = z.object({
+    rut: z.string().min(8, 'RUT inválido').max(12, 'RUT inválido').trim(),
+    bank_name: z.string().min(2, 'Nombre de banco requerido').max(100, 'Nombre de banco muy largo').trim(),
+    bank_account_type: z.enum(['CORRIENTE', 'VISTA', 'AHORRO'], { message: 'Tipo de cuenta inválido' }),
+    bank_account_number: z.string().min(5, 'Número de cuenta inválido').max(30, 'Número de cuenta inválido').trim(),
+});
+
+/** Schema: Admin user update */
+const AdminUpdateUserSchema = z.object({
+    name: z.string().min(2, 'Nombre muy corto').max(100, 'Nombre muy largo').trim(),
+    phone: z.string().min(8, 'Teléfono inválido').max(20, 'Teléfono inválido').trim(),
+});
+
 
 /**
  * Get all users (Admin only)
@@ -161,6 +186,11 @@ export async function impersonateUserAction(targetUserId: string): Promise<Actio
  */
 export async function updateUserProfile(data: { name: string; phone: string; billing_rut?: string; billing_company_name?: string; billing_address?: string }): Promise<ActionResponse> {
     try {
+        const parsed = UpdateUserProfileSchema.safeParse(data);
+        if (!parsed.success) {
+            return { success: false, error: `Datos inválidos: ${parsed.error.issues[0]?.message}` };
+        }
+
         const userRes = await getAuthUser();
         if (userRes.isFailure()) return { success: false, error: 'Unauthorized' };
         const user = userRes.getValue();
@@ -171,13 +201,12 @@ export async function updateUserProfile(data: { name: string; phone: string; bil
         const { error } = await supabase
             .from('profiles')
             .update({
-                name: data.name,
-                // full_name: data.name, // Removed: Column does not exist
-                phone: data.phone,
+                name: parsed.data.name,
+                phone: parsed.data.phone,
                 updated_at: new Date().toISOString(),
-                billing_rut: data.billing_rut,
-                billing_company_name: data.billing_company_name,
-                billing_address: data.billing_address
+                billing_rut: parsed.data.billing_rut,
+                billing_company_name: parsed.data.billing_company_name,
+                billing_address: parsed.data.billing_address
             })
             .eq('id', user.id);
 
@@ -195,6 +224,11 @@ export async function updateUserProfile(data: { name: string; phone: string; bil
  */
 export async function updateProviderBankDetails(data: { rut: string; bank_name: string; bank_account_type: string; bank_account_number: string; }): Promise<ActionResponse> {
     try {
+        const parsed = UpdateProviderBankDetailsSchema.safeParse(data);
+        if (!parsed.success) {
+            return { success: false, error: `Datos inválidos: ${parsed.error.issues[0]?.message}` };
+        }
+
         const userRes = await getAuthUser();
         if (userRes.kind === 'failure') return { success: false, error: 'Unauthorized' };
         const user = userRes.getValue();
@@ -209,20 +243,20 @@ export async function updateProviderBankDetails(data: { rut: string; bank_name: 
         let error;
         if (existing) {
             const result = await supabase.from('provider_profiles').update({
-                rut: data.rut,
-                bank_name: data.bank_name,
-                bank_account_type: data.bank_account_type,
-                bank_account_number: data.bank_account_number,
+                rut: parsed.data.rut,
+                bank_name: parsed.data.bank_name,
+                bank_account_type: parsed.data.bank_account_type,
+                bank_account_number: parsed.data.bank_account_number,
                 updated_at: new Date().toISOString()
             }).eq('user_id', user.id);
             error = result.error;
         } else {
             const result = await supabase.from('provider_profiles').insert({
                 user_id: user.id,
-                rut: data.rut,
-                bank_name: data.bank_name,
-                bank_account_type: data.bank_account_type,
-                bank_account_number: data.bank_account_number,
+                rut: parsed.data.rut,
+                bank_name: parsed.data.bank_name,
+                bank_account_type: parsed.data.bank_account_type,
+                bank_account_number: parsed.data.bank_account_number,
             });
             error = result.error;
         }
@@ -311,6 +345,11 @@ export async function toggleUserBan(userId: string, input: { shouldBan: boolean;
  */
 export async function adminUpdateUser(userId: string, data: { name: string; phone: string }): Promise<ActionResponse> {
     try {
+        const parsed = AdminUpdateUserSchema.safeParse(data);
+        if (!parsed.success) {
+            return { success: false, error: `Datos inválidos: ${parsed.error.issues[0]?.message}` };
+        }
+
         const authRes = await requireRole(UserRole.ADMIN);
         if (authRes.kind === 'failure') return { success: false, error: 'Unauthorized' };
         const adminSupabase = createServiceRoleClient();
@@ -318,9 +357,8 @@ export async function adminUpdateUser(userId: string, data: { name: string; phon
         const { error } = await adminSupabase
             .from('profiles')
             .update({
-                name: data.name,
-                // full_name: data.name, // Removed: Column does not exist
-                phone: data.phone,
+                name: parsed.data.name,
+                phone: parsed.data.phone,
                 updated_at: new Date().toISOString(),
             })
             .eq('id', userId);

@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 import { withAuth } from '@/lib/api/with-auth';
 
 // Permitir respuesta rápida tipo Edge para streaming real-time
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 const SYSTEM_PROMPT = `
 Eres DROPSERVICE_AI, el Gerente de Cuentas Premium de EventHub (la plataforma líder en producción de eventos y B2B).

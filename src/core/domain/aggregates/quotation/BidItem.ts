@@ -1,7 +1,8 @@
 
-import { Entity } from '../../Entity';
+import { Entity } from '@shared/Entity';
 import { Money } from '../../value-objects/Money';
 import { Result } from '../../../shared/Result';
+import { UniqueEntityID } from '@shared/UniqueEntityID';
 
 export interface BidItemProps {
     description: string;
@@ -11,7 +12,7 @@ export interface BidItemProps {
 }
 
 export class BidItem extends Entity<BidItemProps> {
-    private constructor(props: BidItemProps, id?: string) {
+    private constructor(props: BidItemProps, id?: UniqueEntityID) {
         super(props, id);
     }
 
@@ -35,7 +36,7 @@ export class BidItem extends Entity<BidItemProps> {
     }
 
     public static reconstitute(props: BidItemProps, id: string): BidItem {
-        return new BidItem(props, id);
+        return new BidItem(props, new UniqueEntityID(id));
     }
 
     get description(): string { return this.props.description; }

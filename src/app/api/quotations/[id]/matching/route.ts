@@ -88,7 +88,7 @@ export async function GET(
         });
 
         return NextResponse.json({ results });
-    } catch (error: any) {
+    } catch (error: unknown) {
         logger.error('Error interno del motor de matching', error);
         return NextResponse.json(
             { error: 'Error interno del motor de matching' },

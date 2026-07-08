@@ -4,7 +4,7 @@ import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { FileDown, Loader2 } from 'lucide-react';
-import type { PdfClientItem } from '@core/application/services/PdfService';
+import type { PdfClientItem } from '@infrastructure/services/PdfService';
 import { QuotationDTO, QuotationProviderItem } from '@/lib/types';
 import { toast } from 'sonner';
 
@@ -31,7 +31,7 @@ export function DownloadQuoteButton({
         setGenerating(true);
         try {
             // Lazy load the PDF package to keep it out of the Main Thread early rendering!
-            const { pdfService } = await import('@core/application/services/PdfService');
+            const { pdfService } = await import('@infrastructure/services/PdfService');
 
             if (format === 'PROVIDER') {
                 let itemsToPrint = providerItems;

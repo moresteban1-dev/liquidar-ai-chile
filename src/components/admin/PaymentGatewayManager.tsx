@@ -31,8 +31,8 @@ export function PaymentGatewayManager() {
 
             setGateways(data.gateways || []);
          
-        } catch (error: any) {
-            toast.error(error.message || 'Error cargando gateways desde API');
+        } catch (error: unknown) {
+            toast.error((error instanceof Error ? error.message : String(error)) || 'Error cargando gateways desde API');
         } finally {
             setLoading(false);
         }
@@ -58,12 +58,12 @@ export function PaymentGatewayManager() {
 
             toast.success(`Gateway ${!currentState ? 'activado' : 'desactivado'}`);
          
-        } catch (error: any) {
+        } catch (error: unknown) {
             // Revert
             setGateways(gws => gws.map(gw =>
                 gw.id === id ? { ...gw, is_active: currentState } : gw
             ));
-            toast.error(error.message || 'Error al cambiar estado');
+            toast.error((error instanceof Error ? error.message : String(error)) || 'Error al cambiar estado');
         }
     }
 
@@ -90,8 +90,8 @@ export function PaymentGatewayManager() {
             setEditingId(null);
             fetchGateways(); // Actualizar para obtener nuevas versiones (si cambiaron)
          
-        } catch (error: any) {
-            toast.error(error.message || 'Error al guardar configuración');
+        } catch (error: unknown) {
+            toast.error((error instanceof Error ? error.message : String(error)) || 'Error al guardar configuración');
         }
     }
 

@@ -43,14 +43,14 @@ export class ResilienceFactory {
         lastError = result.getError()
         this.logger.warn(`Operation ${name} failed at domain level (attempt ${attempt + 1}/${retries + 1}): ${lastError.message}`)
 
-      } catch (error: any) {
+      } catch (error: unknown) {
         const appErr = AppError.from(error)
         lastError = appErr
         
-        if (error.name === 'TimeoutError') {
+        if (error instanceof Error && error.name === 'TimeoutError') {
           this.logger.warn(`Operation ${name} timed out (attempt ${attempt + 1}/${retries + 1})`)
         } else {
-          this.logger.warn(`Operation ${name} failed (attempt ${attempt + 1}/${retries + 1}): ${error.message}`)
+          this.logger.warn(`Operation ${name} failed (attempt ${attempt + 1}/${retries + 1}): ${(error instanceof Error ? error.message : String(error))}`)
         }
       }
 

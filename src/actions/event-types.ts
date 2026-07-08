@@ -24,8 +24,8 @@ export async function getEventTypesAction() {
         description: et.description
       }))
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error in getEventTypesAction:', error);
-    return { success: false, message: error.message || 'Error al obtener tipos de eventos.' };
+    return { success: false, message: (error instanceof Error ? error.message : String(error)) || 'Error al obtener tipos de eventos.' };
   }
 }

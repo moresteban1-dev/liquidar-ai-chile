@@ -7,7 +7,7 @@ import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { NextResponse } from 'next/server';
 import { PaymentService } from '@/lib/payments/payment-service';
 import { withWebhookAuth } from '@/lib/api/with-auth';
-import { createHmac } from 'crypto';
+import { createHmac, timingSafeEqual } from 'node:crypto';
 
 /**
  * Verifies Flow webhook signature using HMAC-SHA256.
@@ -18,16 +18,29 @@ function verifyFlowSignature(
     signature: string | null,
     secretKey: string | null
 ): boolean {
-    if (!signature || !secretKey) {
-        logger.warn('[Flow Webhook] Missing signature or secret_key — skipping verification in dev');
-        return !secretKey; // Allow if no secret configured (dev mode)
+    if (!secretKey) {
+        logger.error('[Flow Webhook] CRITICAL: FLOW_WEBHOOK_SECRET is not configured. Rejecting all requests for safety.');
+        return false;
+    }
+
+    if (!signature) {
+        logger.warn('[Flow Webhook] Missing x-flow-signature header');
+        return false;
     }
 
     const expectedSignature = createHmac('sha256', secretKey)
         .update(rawBody)
         .digest('hex');
 
-    return signature === expectedSignature;
+    try {
+        return timingSafeEqual(
+            Buffer.from(signature, 'hex'),
+            Buffer.from(expectedSignature, 'hex'),
+        );
+    } catch (e) {
+        logger.error('[Flow Webhook] Error comparing signatures', e as Error);
+        return false;
+    }
 }
 
 export const POST = withWebhookAuth(async (request) => {

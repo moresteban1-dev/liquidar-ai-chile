@@ -41,19 +41,6 @@ const STATUS_LABELS: Record<QuotationStatusValue, string> = {
   COMPLETED:          'Completada',
 };
 
-const STATUS_COLORS: Record<QuotationStatusValue, string> = {
-  DRAFT:              'gray',
-  PENDING_REVIEW:     'yellow',
-  AWAITING_PROVIDER:  'orange',
-  NEGOTIATING:        'blue',
-  APPROVED:           'green',
-  REJECTED:           'red',
-  SENT_TO_CLIENT:     'indigo',
-  AWAITING_PAYMENT:   'amber',
-  PAID:               'emerald',
-  CANCELLED:          'red',
-  COMPLETED:          'green',
-};
 
 /**
  * Mapa de compatibilidad: valores en español → inglés.
@@ -121,10 +108,6 @@ export class QuotationStatus {
     return STATUS_LABELS[this._value];
   }
 
-  get color(): string {
-    return STATUS_COLORS[this._value];
-  }
-
   canTransitionTo(newStatus: QuotationStatusValue): boolean {
     return VALID_TRANSITIONS[this._value].includes(newStatus);
   }
@@ -176,7 +159,6 @@ export class QuotationStatus {
     return {
       value: this._value,
       label: this.label,
-      color: this.color,
       isTerminal: this.isTerminal(),
       allowedTransitions: this.allowedTransitions(),
     };

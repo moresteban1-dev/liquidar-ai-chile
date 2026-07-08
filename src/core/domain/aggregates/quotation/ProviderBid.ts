@@ -1,7 +1,8 @@
-import { Entity } from '../../Entity';
+import { Entity } from '@shared/Entity';
 import { Result, ok } from '@core/shared/Result';
 import { AppError } from '@core/shared/AppError';
 import { BidItem } from './BidItem';
+import { UniqueEntityID } from '@shared/UniqueEntityID';
 
 export interface ProviderBidProps {
     providerId: string;
@@ -12,7 +13,7 @@ export interface ProviderBidProps {
 }
 
 export class ProviderBid extends Entity<ProviderBidProps> {
-    private constructor(props: ProviderBidProps, id?: string) {
+    private constructor(props: ProviderBidProps, id?: UniqueEntityID) {
         super(props, id);
     }
 
@@ -32,7 +33,7 @@ export class ProviderBid extends Entity<ProviderBidProps> {
     }
 
     public static reconstitute(props: ProviderBidProps, id: string): Result<ProviderBid, AppError> {
-        return ok(new ProviderBid(props, id));
+        return ok(new ProviderBid(props, new UniqueEntityID(id)));
     }
 
     get providerId(): string { return this.props.providerId; }

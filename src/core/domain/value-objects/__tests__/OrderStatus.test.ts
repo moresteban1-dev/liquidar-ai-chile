@@ -172,10 +172,9 @@ describe('OrderStatus', () => {
   });
 
   describe('metadata', () => {
-    it('should provide label and color', () => {
+    it('should provide label', () => {
       const status = OrderStatus.create('PAID').getValue();
       expect(status.label).toBe('Pagada');
-      expect(status.color).toBe('blue');
     });
 
     it('should serialize to JSON with metadata', () => {

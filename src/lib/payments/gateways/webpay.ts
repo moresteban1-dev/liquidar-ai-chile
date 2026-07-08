@@ -106,10 +106,10 @@ export class WebpayService implements IPaymentGatewayService {
                     wp_token: token
                 },
             };
-        } catch (error: any) {
+        } catch (error: unknown) {
             // Forensic Remediation: Error de idempotencia en Webpay
             // Si el token ya fue usado (doble-click o webhook paralelo), no marcar como rechazado
-            const errorMessage = error?.message || String(error);
+            const errorMessage = error instanceof Error ? error.message : String(error);
             const isAlreadyCaptured = errorMessage.toLowerCase().includes('already') || 
                                      errorMessage.toLowerCase().includes('used');
 

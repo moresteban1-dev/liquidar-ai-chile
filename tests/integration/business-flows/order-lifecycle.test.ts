@@ -131,7 +131,7 @@ describe('Order Lifecycle — Full Integration', () => {
   it('should reject invalid state transition: DRAFT → COMPLETED', async () => {
     const createResult = await createOrder.execute({
       clientId: TEST_IDS.client,
-      eventDate: '2026-07-01T10:00:00Z',
+      eventDate: '2026-12-01T10:00:00Z',
       deliveryAddress: 'Draft St 1',
     });
 

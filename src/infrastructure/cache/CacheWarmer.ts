@@ -45,7 +45,7 @@ export class CacheWarmer {
         this.logger.error('Failed to warm dashboard stats', new Error(statsResult.getError().message));
         failed++;
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.logger.error('Unexpected error warming dashboard stats', error);
       failed++;
     }
@@ -76,7 +76,7 @@ export class CacheWarmer {
         this.logger.error('Failed to warm recent orders', new Error(recentOrdersResult.getError().message));
         failed++;
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       this.logger.error('Unexpected error warming recent orders', error);
       failed++;
     }

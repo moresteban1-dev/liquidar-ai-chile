@@ -2,7 +2,7 @@ import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { NextResponse } from 'next/server';
 import { PaymentService } from '@/lib/payments/payment-service';
 import { withWebhookAuth } from '@/lib/api/with-auth';
-import { createHmac } from 'crypto';
+import { createHmac, timingSafeEqual } from 'node:crypto';
 
 /**
  * Verifies Khipu webhook signature using HMAC-SHA256.
@@ -13,16 +13,29 @@ function verifyKhipuSignature(
     signature: string | null,
     secret: string | null
 ): boolean {
-    if (!signature || !secret) {
-        logger.warn('[Khipu Webhook] Missing signature or secret — skipping verification in dev');
-        return !secret; // Allow if no secret configured (dev mode)
+    if (!secret) {
+        logger.error('[Khipu Webhook] CRITICAL: KHIPU_WEBHOOK_SECRET is not configured. Rejecting all requests for safety.');
+        return false;
+    }
+
+    if (!signature) {
+        logger.warn('[Khipu Webhook] Missing x-khipu-signature header');
+        return false;
     }
 
     const expectedSignature = createHmac('sha256', secret)
         .update(rawBody)
         .digest('hex');
 
-    return signature === expectedSignature;
+    try {
+        return timingSafeEqual(
+            Buffer.from(signature, 'hex'),
+            Buffer.from(expectedSignature, 'hex'),
+        );
+    } catch (e) {
+        logger.error('[Khipu Webhook] Error comparing signatures', e as Error);
+        return false;
+    }
 }
 
 export const POST = withWebhookAuth(async (request) => {

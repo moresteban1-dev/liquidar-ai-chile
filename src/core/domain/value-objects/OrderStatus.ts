@@ -63,25 +63,6 @@ const STATUS_LABELS: Record<OrderStatusValue, string> = {
   DISPUTED:        'En Disputa',
 };
 
-/**
- * Colores para UI (Tailwind-compatible).
- */
-const STATUS_COLORS: Record<OrderStatusValue, string> = {
-  DRAFT:           'gray',
-  PENDING_PAYMENT: 'yellow',
-  PAYMENT_FAILED:  'red',
-  PAID:            'blue',
-  ASSIGNED:        'indigo',
-  IN_PRODUCTION:   'orange',
-  INTERNAL_REVIEW: 'purple',
-  UNDER_REVIEW:    'cyan',
-  REVISION_REQUESTED: 'amber',
-  DELIVERED:       'teal',
-  COMPLETED:       'green',
-  CANCELLED:       'red',
-  REFUNDED:        'pink',
-  DISPUTED:        'red',
-};
 
 /**
  * Contexto para evaluar una transición.
@@ -246,10 +227,6 @@ export class OrderStatus {
     return STATUS_LABELS[this._value];
   }
 
-  get color(): string {
-    return STATUS_COLORS[this._value];
-  }
-
   // ═══════════════════════════════════════════
   // Transiciones
   // ═══════════════════════════════════════════
@@ -381,14 +358,12 @@ export class OrderStatus {
   toJSON(): {
     value: OrderStatusValue;
     label: string;
-    color: string;
     isTerminal: boolean;
     allowedTransitions: OrderStatusValue[];
   } {
     return {
       value: this._value,
       label: this.label,
-      color: this.color,
       isTerminal: this.isTerminal(),
       allowedTransitions: this.allowedTransitions(),
     };

@@ -26,8 +26,8 @@ function sanitizeRedisUrl(rawUrl: string): string {
 
     try {
         connectionString = decodeURIComponent(connectionString);
-    } catch {
-        // Fallback if decoding fails — use raw string
+    } catch (err) {
+        console.debug('[Redis] decodeURIComponent failed, using raw string', err instanceof Error ? err.message : String(err));
     }
 
     // Extract the actual redis:// or rediss:// URL, discarding CLI noise

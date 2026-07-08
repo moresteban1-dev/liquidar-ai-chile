@@ -97,7 +97,7 @@ export async function generateIntelligentConfiguration(
       inferredGraph: inferredNodes
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('Error generando configuración:', error);
     return { success: false, message: 'Error interno del motor de inferencia.' };
   }
@@ -155,7 +155,7 @@ export async function requestQuotationAction(
       sessionId: result.getValue()
     };
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     logger.error('Error en requestQuotationAction:', error);
     return { success: false, message: 'Error al procesar la solicitud.' };
   }

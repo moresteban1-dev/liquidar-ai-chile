@@ -1,9 +1,9 @@
- 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { QuotationDTO, QuotationProviderItem } from '@/lib/types';
 import { formatDate } from '@/lib/utils';
 import { formatCLP } from '@/lib/quotation-fsm';
+import { COMPANY_CONFIG } from '@/config/company-config';
 
 // Defines the Item structure for the PDF (Client-facing view)
 // Matches the API response from /api/quotations/[id]/client-items
@@ -36,41 +36,41 @@ export class PdfService {
 
         const pageWidth = doc.internal.pageSize.width;
         const pageHeight = doc.internal.pageSize.height;
-        const margin = 15;
+        const margin = COMPANY_CONFIG.PDF.MARGIN;
         let currentY = 15;
 
         // --- Header ---
-        doc.setFontSize(18);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.TITLE);
         doc.text('COTIZACIÓN', pageWidth - margin, currentY, { align: 'right' });
 
-        doc.setFontSize(10);
-        doc.setTextColor(100);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.BODY);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_MUTED);
         doc.text(quotation.code || 'N/A', pageWidth - margin, currentY + 6, { align: 'right' });
 
         // Logo Placeholder (Text for now)
-        doc.setTextColor(0);
-        doc.setFontSize(14);
-        doc.text('Eventos Chile', margin, currentY);
-        doc.setFontSize(9);
-        doc.setTextColor(100);
-        doc.text('Servicios de Eventos Profesionales', margin, currentY + 5);
-        doc.text('contacto@eventoschile.cl', margin, currentY + 10);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_PRIMARY);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.SUBTITLE);
+        doc.text(COMPANY_CONFIG.IDENTITY.NAME, margin, currentY);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.BODY);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_MUTED);
+        doc.text(COMPANY_CONFIG.IDENTITY.TAGLINE, margin, currentY + 5);
+        doc.text(COMPANY_CONFIG.CONTACT.EMAIL, margin, currentY + 10);
 
         currentY += 25;
 
         // --- Client Info ---
         doc.setDrawColor(200);
-        doc.setFillColor(250, 250, 250);
+        doc.setFillColor(...COMPANY_CONFIG.PDF.COLORS.CLIENT_INFO_FILL);
         doc.rect(margin, currentY, pageWidth - (margin * 2), 35, 'FD');
 
-        doc.setFontSize(11);
-        doc.setTextColor(0);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.SECTION_HEADER);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_PRIMARY);
         const labelX = Number(margin + 5);
         const labelY = Number(currentY + 8);
         (doc as any).text('Información del Cliente', labelX, labelY);
 
-        doc.setFontSize(9);
-        doc.setTextColor(80);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.BODY);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_SECONDARY);
         // Left Column
         // Handle potentially missing client name
         const clientName = quotation.client?.name || 'Cliente';
@@ -94,12 +94,12 @@ export class PdfService {
         currentY += 45;
 
         // --- Description ---
-        doc.setFontSize(11);
-        doc.setTextColor(0);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.SECTION_HEADER);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_PRIMARY);
         doc.text('Detalle del Servicio', margin, currentY);
         currentY += 5;
-        doc.setFontSize(9);
-        doc.setTextColor(80);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.BODY);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_SECONDARY);
 
         const splitDesc = doc.splitTextToSize(quotation.service?.name || 'Servicio General', pageWidth - (margin * 2));
         doc.text(splitDesc, margin, currentY);
@@ -120,12 +120,12 @@ export class PdfService {
             body: tableBody,
             theme: 'striped',
             headStyles: {
-                fillColor: [63, 81, 181], // Indigo-ish
+                fillColor: [...COMPANY_CONFIG.PDF.COLORS.CLIENT_HEADER],
                 textColor: 255,
                 fontStyle: 'bold'
             },
             styles: {
-                fontSize: 9,
+                fontSize: COMPANY_CONFIG.PDF.FONT_SIZE.BODY,
                 cellPadding: 3
             },
             columnStyles: {
@@ -143,18 +143,18 @@ export class PdfService {
         // --- Totals ---
         const totalsX = pageWidth - margin - 60;
 
-        doc.setFontSize(9);
-        doc.setTextColor(80);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.BODY);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_SECONDARY);
         doc.text('Subtotal Neto:', totalsX, currentY);
         doc.text(formatCLP(quotation.priceNet || 0), pageWidth - margin, currentY, { align: 'right' });
 
         currentY += 6;
-        doc.text('IVA (19%):', totalsX, currentY);
+        doc.text(COMPANY_CONFIG.TAX.IVA_LABEL + ':', totalsX, currentY);
         doc.text(formatCLP(quotation.priceIva || 0), pageWidth - margin, currentY, { align: 'right' });
 
         currentY += 8;
-        doc.setFontSize(12);
-        doc.setTextColor(0);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.SUBTITLE);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_PRIMARY);
         doc.setFont('helvetica', 'bold');
         doc.text('TOTAL:', totalsX, currentY);
 
@@ -171,32 +171,31 @@ export class PdfService {
                 currentY = 20;
             }
 
-            doc.setDrawColor(100, 200, 100); // Greenish
-            doc.setFillColor(240, 255, 240);
+            doc.setDrawColor(...COMPANY_CONFIG.PDF.COLORS.BANK_BORDER);
+            doc.setFillColor(...COMPANY_CONFIG.PDF.COLORS.BANK_FILL);
             doc.roundedRect(margin, currentY, pageWidth - (margin * 2), 35, 3, 3, 'FD');
 
-            doc.setFontSize(10);
-            doc.setTextColor(0, 100, 0);
+            doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.BODY);
+            doc.setTextColor(...COMPANY_CONFIG.PDF.COLORS.BANK_TEXT);
             doc.text('Datos de Transferencia', margin + 5, currentY + 8);
 
-            doc.setFontSize(9);
-            // doc.setTextColor(50); // This might be interpreting 50 as grayscale 0-255? jspdf basic text color is usually string or r,g,b.
-            doc.setTextColor(50, 50, 50);
+            doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.BODY);
+            doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_SECONDARY);
 
-            doc.text('Banco: Banco de Chile', margin + 5, currentY + 16);
-            doc.text('Tipo: Cuenta Corriente', margin + 5, currentY + 22);
-            doc.text('Nº: 00-123-45678-09', margin + 60, currentY + 16);
-            doc.text('RUT: 76.123.456-K', margin + 60, currentY + 22);
-            doc.text('Mail: pagos@eventoschile.cl', margin + 5, currentY + 28);
+            doc.text(`Banco: ${COMPANY_CONFIG.BANK.BANK_NAME}`, margin + 5, currentY + 16);
+            doc.text(`Tipo: ${COMPANY_CONFIG.BANK.ACCOUNT_TYPE}`, margin + 5, currentY + 22);
+            doc.text(`Nº: ${COMPANY_CONFIG.BANK.ACCOUNT_NUMBER}`, margin + 60, currentY + 16);
+            doc.text(`RUT: ${COMPANY_CONFIG.IDENTITY.RUT}`, margin + 60, currentY + 22);
+            doc.text(`Mail: ${COMPANY_CONFIG.CONTACT.PAYMENTS_EMAIL}`, margin + 5, currentY + 28);
         }
 
         // --- Footer ---
         const footerY = pageHeight - 10;
-        doc.setFontSize(8);
-        doc.setTextColor(150);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.FOOTER);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_LIGHT);
         doc.setFont('helvetica', 'normal');
         const today = new Date().toLocaleDateString();
-        const footerStr = `Generado el ${today} | Eventos Chile`;
+        const footerStr = `Generado el ${today} | ${COMPANY_CONFIG.IDENTITY.NAME}`;
         doc.text(footerStr, margin, footerY);
 
         // Save
@@ -212,34 +211,34 @@ export class PdfService {
 
         const pageWidth = doc.internal.pageSize.width;
         const pageHeight = doc.internal.pageSize.height;
-        const margin = 15;
+        const margin = COMPANY_CONFIG.PDF.MARGIN;
         let currentY = 15;
 
         // --- Header ---
-        doc.setFontSize(18);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.TITLE);
         doc.text('COTIZACIÓN DE PROVEEDOR', pageWidth - margin, currentY, { align: 'right' });
 
-        doc.setFontSize(10);
-        doc.setTextColor(100);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.BODY);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_MUTED);
         doc.text(quotation.code || 'N/A', pageWidth - margin, currentY + 6, { align: 'right' });
 
-        doc.setTextColor(0);
-        doc.setFontSize(14);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_PRIMARY);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.SUBTITLE);
         doc.text('Desglose de Costos de Servicio', margin, currentY);
 
         currentY += 25;
 
         // --- Event Info (No Client Name) ---
         doc.setDrawColor(200);
-        doc.setFillColor(245, 245, 250);
+        doc.setFillColor(...COMPANY_CONFIG.PDF.COLORS.PROVIDER_INFO_FILL);
         doc.rect(margin, currentY, pageWidth - (margin * 2), 35, 'FD');
 
-        doc.setFontSize(11);
-        doc.setTextColor(0);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.SECTION_HEADER);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_PRIMARY);
         (doc as any).text('Detalles del Requerimiento', margin + 5, currentY + 8);
 
-        doc.setFontSize(9);
-        doc.setTextColor(80);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.BODY);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_SECONDARY);
 
         const dateStr = quotation.issuedAt
             ? formatDate(typeof quotation.issuedAt === 'string' ? quotation.issuedAt : new Date(quotation.issuedAt).toISOString())
@@ -281,12 +280,12 @@ export class PdfService {
             body: tableBody,
             theme: 'striped',
             headStyles: {
-                fillColor: [70, 70, 70], // Dark gray
+                fillColor: [...COMPANY_CONFIG.PDF.COLORS.PROVIDER_HEADER],
                 textColor: 255,
                 fontStyle: 'bold'
             },
             styles: {
-                fontSize: 9,
+                fontSize: COMPANY_CONFIG.PDF.FONT_SIZE.BODY,
                 cellPadding: 3
             },
             columnStyles: {
@@ -305,8 +304,8 @@ export class PdfService {
         // --- Totals ---
         const totalsX = pageWidth - margin - 60;
 
-        doc.setFontSize(11);
-        doc.setTextColor(0);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.SECTION_HEADER);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_PRIMARY);
         doc.setFont('helvetica', 'bold');
         doc.text('COSTO TOTAL NETO:', totalsX, currentY);
 
@@ -318,8 +317,8 @@ export class PdfService {
 
         // --- Footer ---
         const footerY = pageHeight - 10;
-        doc.setFontSize(8);
-        doc.setTextColor(150);
+        doc.setFontSize(COMPANY_CONFIG.PDF.FONT_SIZE.FOOTER);
+        doc.setTextColor(COMPANY_CONFIG.PDF.COLORS.TEXT_LIGHT);
         doc.setFont('helvetica', 'normal');
         const today = new Date().toLocaleDateString();
         doc.text(`Generado el ${today} | Confidencial - Solo Proveedor`, margin, footerY);

@@ -57,7 +57,9 @@ export function useClientNotifications(isOpen: boolean): UseClientNotificationsR
       if (!res.ok) return;
       const data = await res.json();
       setUnreadCount(data.unreadCount ?? 0);
-    } catch { /* silent */ }
+    } catch (err) {
+      console.warn('[useClientNotifications] Failed to poll unread notifications count', err);
+    }
   }, []);
 
   useEffect(() => {

@@ -3,6 +3,8 @@ import {
   CatalogCategory,
   CreateCatalogItemData, 
   UpdateCatalogItemData,
+  CreateCatalogCategoryData,
+  UpdateCatalogCategoryData,
   CatalogItemType,
   CatalogFilters
 } from '@core/domain/catalog/CatalogTypes';
@@ -194,14 +196,14 @@ export class CatalogService {
     return this.repository.deleteItem(itemId);
   }
 
-  async createCategory(data: any): Promise<Result<CatalogCategory, AppError>> {
+  async createCategory(data: CreateCatalogCategoryData): Promise<Result<CatalogCategory, AppError>> {
     if (!data.slug) {
       data.slug = this.generateSlug(data.name);
     }
     return this.repository.createCategory(data);
   }
 
-  async updateCategory(categoryId: string, data: any): Promise<Result<CatalogCategory, AppError>> {
+  async updateCategory(categoryId: string, data: UpdateCatalogCategoryData): Promise<Result<CatalogCategory, AppError>> {
     return this.repository.updateCategory(categoryId, data);
   }
 

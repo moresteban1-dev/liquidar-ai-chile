@@ -333,7 +333,8 @@ export class CacheManager {
       estimate += key.length * 2; // UTF-16
       try {
         estimate += JSON.stringify(entry.value).length * 2;
-      } catch {
+      } catch (err) {
+        this.logger.debug('Memory estimation fallback triggered for cache entry', { error: err instanceof Error ? err.message : String(err) });
         estimate += 500; // Fallback for circular references or complex objects
       }
       estimate += 100; // Overhead per entry (tags, timestamps)

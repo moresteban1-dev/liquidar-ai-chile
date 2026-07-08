@@ -180,17 +180,4 @@ export function applyIVA(amount: number): number {
     return calculateGrossFromNet(amount);
 }
 
-/**
- * Formats a CLP amount for display.
- *
- * @param amount - Amount in CLP (integer)
- * @returns Formatted string (e.g., "$1.234.567")
- */
-export function formatCLP(amount: number | null | undefined): string {
-    if (amount === null || amount === undefined) return '-';
-    return new Intl.NumberFormat('es-CL', {
-        style: 'currency',
-        currency: 'CLP',
-        minimumFractionDigits: 0,
-    }).format(amount);
-}
+export { formatCLP } from '@/core/shared/formatters';

@@ -90,7 +90,9 @@ export class AIProviderFactory {
           try {
             const decrypted = decryptConfig({ api_key: fallbackConfig.api_key });
             decryptedKey = String(decrypted.api_key || '');
-          } catch {}
+          } catch (decErr) {
+            console.warn('[AIProviderFactory] Error decrypting fallback key', decErr);
+          }
         }
 
         if (decryptedKey) {
@@ -112,14 +114,14 @@ export class AIProviderFactory {
       }
 
       throw AppError.infrastructure('Ningún proveedor de IA está activo ni configurado.');
-    } catch (err: any) {
-      console.error('[AIProviderFactory] Excepción fatal resolviendo proveedor:', err);
+    } catch (err: unknown) {
+      console.error('[AIProviderFactory] Excepción fatal resolviendo proveedor:', err instanceof Error ? err.message : String(err));
       // Retornar Gemini estático si hay credenciales para mitigar caídas en producción
       const fallbackKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENAI_API_KEY;
       if (fallbackKey) {
         return new GeminiToolProvider(fallbackKey);
       }
-      throw AppError.infrastructure(`Error crítico en la infraestructura de IA: ${err.message}`);
+      throw AppError.infrastructure(`Error crítico en la infraestructura de IA: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
 

@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { withAdmin } from '@/lib/api/with-auth';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 export const GET = withAdmin(async (request) => {
     const supabase = await createClient();

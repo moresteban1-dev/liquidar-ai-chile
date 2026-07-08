@@ -34,8 +34,8 @@ export class ToolUsageGuard {
       }
 
       return ok(status);
-    } catch (error: any) {
-      return fail(AppError.infrastructure(error.message || 'Error checking usage limits'));
+    } catch (error: unknown) {
+      return fail(AppError.infrastructure((error instanceof Error ? error.message : String(error)) || 'Error checking usage limits'));
     }
   }
 

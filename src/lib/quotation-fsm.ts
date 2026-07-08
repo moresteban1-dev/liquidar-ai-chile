@@ -1,6 +1,12 @@
 import { QuotationInternalStatus, QuotationPublicStatus } from '@/lib/types';
 import { DEFAULT_IVA_RATE } from '@core/domain/pricing/TaxConfig';
-import { calculateMarkup } from '@core/domain/pricing/PricingCalculator';
+import { 
+    calculateMarkup, 
+    calculateCommission, 
+    type CommissionInput, 
+    type CommissionResult, 
+    type CommissionMethod 
+} from '@core/domain/pricing/PricingCalculator';
 
 /**
  * CONFIGURACIÓN DE LA MÁQUINA DE ESTADOS (FSM)
@@ -114,105 +120,17 @@ export function calculatePricing(priceCost: number, markupPercentage: number) {
     };
 }
 
-// ============================================
-// MOTOR DE CÁLCULO V2 — Comisión Flexible
-// ============================================
+// ============================================================
+// MOTOR DE CÁLCULO V2 — Re-exported from domain/pricing
+// ============================================================
 
-/** @deprecated Use DEFAULT_IVA_RATE from TaxConfig instead */
-const IVA_RATE = DEFAULT_IVA_RATE;
-
-export type CommissionMethod = 'MONTO_FIJO' | 'PORCENTAJE' | 'PORCENTAJE_CATEGORIA' | 'MIXTO';
-
-export interface CommissionInput {
-    method: CommissionMethod;
-    subtotalServicesProvider: number;
-    subtotalLogisticsProvider: number;
-    /** Para MONTO_FIJO o MIXTO */
-    fixedCommissionServices?: number;
-    fixedCommissionLogistics?: number;
-    /** Para PORCENTAJE (global) */
-    globalPercentage?: number;
-    /** Para PORCENTAJE_CATEGORIA */
-    servicesPercentage?: number;
-    logisticsPercentage?: number;
-}
-
-export interface CommissionResult {
-    subtotalServicesProvider: number;
-    subtotalLogisticsProvider: number;
-    totalProviderNet: number;
-    commissionServicesNet: number;
-    commissionLogisticsNet: number;
-    totalCommissionNet: number;
-    totalNet: number;
-    totalIva: number;
-    totalWithIva: number;
-}
-
-/**
- * Calcula la comisión según el método elegido por el admin.
- * Todos los valores son NETO (sin IVA). IVA se calcula al final.
- */
-export function calculateCommission(input: CommissionInput): CommissionResult {
-    const { method, subtotalServicesProvider, subtotalLogisticsProvider } = input;
-    const totalProviderNet = subtotalServicesProvider + subtotalLogisticsProvider;
-
-    let commissionServicesNet = 0;
-    let commissionLogisticsNet = 0;
-
-    switch (method) {
-        case 'MONTO_FIJO':
-            commissionServicesNet = input.fixedCommissionServices ?? 0;
-            commissionLogisticsNet = input.fixedCommissionLogistics ?? 0;
-            break;
-
-        case 'PORCENTAJE': {
-            const pct = (input.globalPercentage ?? 0) / 100;
-            commissionServicesNet = Math.round(subtotalServicesProvider * pct);
-            commissionLogisticsNet = Math.round(subtotalLogisticsProvider * pct);
-            break;
-        }
-
-        case 'PORCENTAJE_CATEGORIA': {
-            const pctServ = (input.servicesPercentage ?? 0) / 100;
-            const pctLog = (input.logisticsPercentage ?? 0) / 100;
-            commissionServicesNet = Math.round(subtotalServicesProvider * pctServ);
-            commissionLogisticsNet = Math.round(subtotalLogisticsProvider * pctLog);
-            break;
-        }
-
-        case 'MIXTO':
-            commissionServicesNet = input.fixedCommissionServices ?? 0;
-            commissionLogisticsNet = input.fixedCommissionLogistics ?? 0;
-            break;
-    }
-
-    const totalCommissionNet = commissionServicesNet + commissionLogisticsNet;
-    const totalNet = totalProviderNet + totalCommissionNet;
-    const totalIva = Math.round(totalNet * IVA_RATE);
-    const totalWithIva = totalNet + totalIva;
-
-    return {
-        subtotalServicesProvider,
-        subtotalLogisticsProvider,
-        totalProviderNet,
-        commissionServicesNet,
-        commissionLogisticsNet,
-        totalCommissionNet,
-        totalNet,
-        totalIva,
-        totalWithIva,
-    };
-}
-
-export function formatCLP(amount: number | null | undefined): string {
-    if (amount === null || amount === undefined) return '-';
-    return new Intl.NumberFormat('es-CL', {
-        style: 'currency',
-        currency: 'CLP',
-        minimumFractionDigits: 0,
-    }).format(amount);
-}
+export { formatCLP } from '@/core/shared/formatters';
+export { 
+    calculateCommission, 
+    type CommissionInput, 
+    type CommissionResult, 
+    type CommissionMethod 
+} from '@core/domain/pricing/PricingCalculator';
 
 /**
  * Mapea una cotización a los datos iniciales que el formulario de proveedor espera.

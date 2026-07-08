@@ -56,7 +56,7 @@ async function main() {
     } else {
       console.log('Transition succeeded! New status:', result.getValue().status);
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Crash:', err);
   }
 }

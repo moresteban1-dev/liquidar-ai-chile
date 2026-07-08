@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server';
 import { encryptConfig, decryptConfig } from '@/lib/payments/encryption';
 import { withAdmin } from '@/lib/api/with-auth';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 // GET: Listar todos los gateways (con config completa para admin)
 export const GET = withAdmin(async () => {

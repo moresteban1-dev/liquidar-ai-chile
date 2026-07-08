@@ -61,5 +61,5 @@ export interface AIBrokerPort {
         options: { depth: 'quick' | 'standard' | 'deep'; language: string }
     ): Promise<Result<BiasAnalysisOutput, AppError>>;
 
-    analyzeBias(quotation: any): Promise<Result<BiasAnalysisOutput, AppError>>;
+    analyzeBias(quotation: unknown): Promise<Result<BiasAnalysisOutput, AppError>>;
 }

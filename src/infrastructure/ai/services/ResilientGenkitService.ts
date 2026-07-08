@@ -105,7 +105,9 @@ export async function executeAIFlow<
                         loggerCtx.info('Cache HIT');
                         return ok(valid.data);
                     }
-                } catch { /* ignore */ }
+                } catch (err) {
+                    loggerCtx.warn('Cache parsing failed', { error: err instanceof Error ? err.message : String(err) });
+                }
             }
         }
 

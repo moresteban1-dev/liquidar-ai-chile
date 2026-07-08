@@ -82,7 +82,7 @@ export class ProviderInventoryService {
             }
 
             return ok(suggestions);
-        } catch (e: any) {
+        } catch (e: unknown) {
             return fail(e instanceof Error ? e : new Error(String(e)));
         }
     }

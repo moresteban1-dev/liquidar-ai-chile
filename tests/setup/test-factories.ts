@@ -43,7 +43,7 @@ export function createTestOrder(overrides: OrderOverrides = {}): Order {
   const result = Order.create({
     clientId: new UniqueEntityID(overrides.clientId ?? TEST_IDS.client),
     state: overrides.state ?? 'DRAFT',
-    eventDate: overrides.eventDate ?? new Date('2026-06-15T10:00:00Z'),
+    eventDate: overrides.eventDate ?? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days in the future
     deliveryAddress: 'Test Address 123',
     createdAt: new Date(),
     updatedAt: new Date(),

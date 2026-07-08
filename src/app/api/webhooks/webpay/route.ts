@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { PaymentService } from '@/lib/payments/payment-service';
-import { createHmac, timingSafeEqual } from 'crypto';
+import { createHmac, timingSafeEqual } from 'node:crypto';
 import { logger } from '@/infrastructure/telemetry/StructuredLogger';
 import { withWebhookAuth } from '@/lib/api/with-auth';
 import { createServiceRoleClient } from '@/lib/supabase/api';

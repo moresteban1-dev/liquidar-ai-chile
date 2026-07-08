@@ -1,6 +1,7 @@
-import { Entity } from '../../Entity';
+import { Entity } from '@shared/Entity';
 import { Result, ok, fail } from '@core/shared/Result';
 import { Money } from '../../value-objects/Money';
+import { UniqueEntityID } from '@shared/UniqueEntityID';
 
 export interface QuotationClientItemProps {
     description: string;
@@ -11,7 +12,7 @@ export interface QuotationClientItemProps {
 }
 
 export class QuotationClientItem extends Entity<QuotationClientItemProps> {
-    private constructor(props: QuotationClientItemProps, id?: string) {
+    private constructor(props: QuotationClientItemProps, id?: UniqueEntityID) {
         super(props, id);
     }
 
@@ -37,7 +38,7 @@ export class QuotationClientItem extends Entity<QuotationClientItemProps> {
     }
 
     public static reconstitute(props: QuotationClientItemProps, id: string): QuotationClientItem {
-        return new QuotationClientItem(props, id);
+        return new QuotationClientItem(props, new UniqueEntityID(id));
     }
 
     get description(): string { return this.props.description; }

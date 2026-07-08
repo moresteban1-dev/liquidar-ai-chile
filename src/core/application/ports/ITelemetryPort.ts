@@ -3,10 +3,10 @@ export interface ISpan {
 }
 
 export interface ILoggerPort {
-  info(msg: string, ctx?: any): void;
-  warn(msg: string, ctx?: any): void;
-  error(msg: string, error?: any, ctx?: any): void;
-  debug(msg: string, ctx?: any): void;
+  info(msg: string, ctx?: Record<string, unknown>): void;
+  warn(msg: string, ctx?: Record<string, unknown>): void;
+  error(msg: string, error?: unknown, ctx?: Record<string, unknown>): void;
+  debug(msg: string, ctx?: Record<string, unknown>): void;
 }
 
 export interface IMetricsPort {

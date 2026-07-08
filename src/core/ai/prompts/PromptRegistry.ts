@@ -97,7 +97,7 @@ Output JSON: BiasAnalysisOutput schema.
     },
 
     SERVICE_MATCHING: {
-        v1: (ctx: { items: any[]; categories: string[] }) => `
+        v1: (ctx: { items: unknown[]; categories: string[] }) => `
 Eres un Orquestador de Servicios de Drop-servicing.
 Tu tarea es emparejar los ítems solicitados con las categorías disponibles.
 Categorías disponibles: ${ctx.categories.join(', ')}
