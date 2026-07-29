@@ -1,0 +1,14 @@
+# Supabase CLI Project Configuration for Liquidar AI Chile
+project_id = "bxhlusdpmjldqbsdztyg"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+
+[db]
+port = 54322
+
+[studio]
+enabled = true
+port = 54323
