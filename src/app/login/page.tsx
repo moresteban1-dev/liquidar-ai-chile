@@ -133,14 +133,12 @@ function LoginForm() {
         <div className="w-full max-w-md relative z-10">
             {/* Logo */}
             <div className="text-center mb-8">
-                <Link href="/" className="inline-flex items-center gap-3 group">
-                    <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform duration-300">
-                        <span className="text-white font-bold text-xl">DS</span>
-                    </div>
-                    <div className="text-left">
-                        <span className="font-bold text-2xl text-white block tracking-tight">DropService</span>
-                        <span className="text-xs text-indigo-300 font-medium tracking-wide">Eventos & Equipamiento</span>
-                    </div>
+                <Link href="/" className="inline-flex items-center justify-center group">
+                    <img
+                        src="/logo-liquidar.png"
+                        alt="Liquidar.cl"
+                        className="h-14 w-auto object-contain bg-white/90 p-2 rounded-xl shadow-xl shadow-amber-500/10 group-hover:scale-105 transition-transform duration-300"
+                    />
                 </Link>
             </div>
 

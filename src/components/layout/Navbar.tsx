@@ -50,10 +50,11 @@ export function Navbar() {
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">DS</span>
-                        </div>
-                        <span className="font-bold text-xl text-foreground">Dropservice</span>
+                        <img
+                            src="/logo-liquidar.png"
+                            alt="Liquidar.cl"
+                            className="h-10 w-auto object-contain py-1 brightness-110"
+                        />
                     </Link>
 
                     {/* Desktop Navigation */}

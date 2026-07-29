@@ -46,13 +46,14 @@ export default function ContactSection() {
                     <div className="grid md:grid-cols-4 gap-8 mb-8">
                         <div>
                             <div className="flex items-center gap-2 mb-4">
-                                <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-                                    <span className="text-white font-bold text-sm">EH</span>
-                                </div>
-                                <span className="text-white font-bold">{siteConfig.name}</span>
+                                <img
+                                    src="/logo-liquidar.png"
+                                    alt="Liquidar.cl"
+                                    className="h-10 w-auto object-contain bg-white/90 p-1.5 rounded-lg"
+                                />
                             </div>
                             <p className="text-slate-400 text-sm">
-                                Servicios de producción técnica y arriendo de equipamiento.
+                                Plataforma B2B de subastas de liquidación de stock paletizado e individual de grandes retailers en Chile.
                             </p>
                         </div>
                         <div>

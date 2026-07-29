@@ -66,12 +66,13 @@ function SidebarContent({ role }: { role: UserRole }) {
         <div className="flex h-full flex-col">
             {/* Logo Area */}
             <div className="flex h-16 items-center px-4">
-                <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold">
-                        DS
-                    </div>
-                    <span className="font-bold text-lg tracking-tight text-foreground">Dropservice</span>
-                </div>
+                <Link href="/" className="flex items-center gap-2">
+                    <img
+                        src="/logo-liquidar.png"
+                        alt="Liquidar.cl"
+                        className="h-9 w-auto object-contain bg-white/90 p-1 rounded-md"
+                    />
+                </Link>
             </div>
 
             {/* Search Trigger */}
@@ -128,12 +129,13 @@ export function AppSidebar({ role, className }: AppSidebarProps) {
         <>
             {/* Mobile Header (Solid Background - No Blur) */}
             <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 h-16 bg-white border-b border-indigo-200 dark:bg-[#1a1f3d] dark:border-[#2e345a]">
-                <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold">
-                        DS
-                    </div>
-                    <span className="font-bold text-lg text-foreground">Dropservice</span>
-                </div>
+                <Link href="/" className="flex items-center gap-2">
+                    <img
+                        src="/logo-liquidar.png"
+                        alt="Liquidar.cl"
+                        className="h-8 w-auto object-contain"
+                    />
+                </Link>
 
                 <Sheet>
                     <SheetTrigger asChild>
