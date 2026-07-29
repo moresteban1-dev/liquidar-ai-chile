@@ -1,6 +1,7 @@
 export const siteConfig = {
-    name: "EventHub",
-    description: "Plataforma de gestión de eventos y servicios.",
+    name: "Liquidar.cl",
+    description: "Plataforma B2B de Subastas de Liquidación de Retailers Chilenos.",
+    version: "2.1.0",
     company: {
         name: "Esteban Moreno",
         // Email de contacto administrativo e ingresos (No es necesariamente el Admin del Sistema)
