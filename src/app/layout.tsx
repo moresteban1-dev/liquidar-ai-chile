@@ -21,29 +21,25 @@ export const runtime = 'nodejs';
 
 export const metadata: Metadata = {
   title: {
-    default: "Dropservice Platform — Gestión de Servicios",
-    template: "%s | Dropservice Platform"
+    default: "Liquidar.cl — Subastas B2B de Liquidación de Stock",
+    template: "%s | Liquidar.cl Platform"
   },
-  description: "Plataforma SaaS de Dropservice para gestionar cotizaciones, proveedores y pedidos de manera eficiente.",
-  keywords: ["dropservice", "servicios", "cotizaciones", "proveedores", "eventos", "gestión"],
-  authors: [{ name: "EventHub Utils" }],
-  creator: "EventHub Utils",
+  description: "Plataforma B2B líder en Chile para la comercialización de stock paletizado e individual mediante subastas y precio fijo.",
+  keywords: ["subastas", "liquidación", "lotes", "pallets", "retailers", "Chile", "B2B", "Liquidar.cl"],
+  authors: [{ name: "Liquidar.cl" }],
+  creator: "Liquidar.cl",
   openGraph: {
     type: "website",
     locale: "es_CL",
-    url: "https://dropservice.vercel.app",
-    title: "Dropservice Platform — Gestión Inteligente",
-    description: "La solución integral para administrar tu negocio de servicios. Cotiza, asigna y entrega.",
-    siteName: "Dropservice Platform",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Dropservice Platform",
-    description: "Gestión eficiente de servicios y proveedores.",
-    creator: "@eventhub",
+    url: "https://liquidar-ai-chile-lk6mrv8n5-esteban-dev.vercel.app",
+    title: "Liquidar.cl — Plataforma de Subastas B2B",
+    description: "Comercialización de stock paletizado e individual de grandes retailers en Chile.",
+    siteName: "Liquidar.cl",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/logo-liquidar.png",
+    shortcut: "/logo-liquidar.png",
+    apple: "/logo-liquidar.png",
   },
 };
 
