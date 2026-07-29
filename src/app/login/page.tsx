@@ -12,6 +12,7 @@ import { Mail, Lock, ShieldCheck, ArrowRight } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton';
 import { LiquidCard } from '@/components/ui/liquid-card';
+import { BrandLogo } from '@/components/shared/BrandLogo';
 import { UserRole, normalizeRole } from '@/core/domain/auth/UserRole';
 import { validateRedirectUrl } from '@/lib/security/redirect-validator';
 
@@ -129,13 +130,9 @@ function LoginForm() {
         <div className="w-full max-w-md relative z-10">
             {/* Dedicated Header & Brand Logo */}
             <div className="text-center mb-8">
-                <Link href="/" className="inline-flex items-center justify-center group mb-3">
-                    <img
-                        src="/logo-liquidar.png"
-                        alt="Liquidar.cl"
-                        className="h-16 w-auto object-contain bg-white/95 p-2.5 rounded-2xl shadow-2xl shadow-amber-500/20 group-hover:scale-105 transition-all duration-300 border border-white/20"
-                    />
-                </Link>
+                <div className="inline-flex items-center justify-center mb-3">
+                    <BrandLogo variant="white" size="xl" />
+                </div>
                 <div className="flex items-center justify-center gap-1.5 text-xs text-amber-400 font-semibold tracking-wider uppercase mt-1">
                     <ShieldCheck className="w-3.5 h-3.5" />
                     Plataforma Oficial B2B Subastas Chile

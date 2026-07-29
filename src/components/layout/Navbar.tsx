@@ -9,6 +9,7 @@ import { User } from '@supabase/supabase-js';
 import { Bell } from 'lucide-react';
 import { useNotifications } from '@/context/NotificationContext';
 import { UserRole, normalizeRole } from '@/core/domain/auth/UserRole';
+import { BrandLogo } from '@/components/shared/BrandLogo';
 
 export function Navbar() {
     const pathname = usePathname();
@@ -55,13 +56,9 @@ export function Navbar() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2">
-                        <img
-                            src="/logo-liquidar.png"
-                            alt="Liquidar.cl"
-                            className="h-10 w-auto object-contain py-1 brightness-110"
-                        />
-                    </Link>
+                    <div className="flex items-center gap-2">
+                        <BrandLogo variant="white" size="md" />
+                    </div>
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center gap-8">

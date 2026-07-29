@@ -9,6 +9,7 @@ import { Suspense, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { LiquidCard } from '@/components/ui/liquid-card';
+import { BrandLogo } from '@/components/shared/BrandLogo';
 
 function RegisterForm() {
     const router = useRouter();
@@ -72,15 +73,11 @@ function RegisterForm() {
 
     return (
         <div className="w-full max-w-md relative z-10">
-            {/* Logo */}
+            {/* Dedicated Header & Brand Logo */}
             <div className="text-center mb-8">
-                <Link href="/" className="inline-flex items-center justify-center group">
-                    <img
-                        src="/logo-liquidar.png"
-                        alt="Liquidar.cl"
-                        className="h-14 w-auto object-contain bg-white/90 p-2 rounded-xl shadow-xl shadow-amber-500/10 group-hover:scale-105 transition-transform duration-300"
-                    />
-                </Link>
+                <div className="inline-flex items-center justify-center mb-2">
+                    <BrandLogo variant="white" size="xl" />
+                </div>
             </div>
 
             {/* Premium Card */}

@@ -2,9 +2,8 @@
 
 import Link from 'next/link';
 import { MapPin, Mail, Phone } from 'lucide-react';
-
-
 import { siteConfig } from '@/config/site';
+import { BrandLogo } from '@/components/shared/BrandLogo';
 
 export default function ContactSection() {
     const { company } = siteConfig;
@@ -46,11 +45,7 @@ export default function ContactSection() {
                     <div className="grid md:grid-cols-4 gap-8 mb-8">
                         <div>
                             <div className="flex items-center gap-2 mb-4">
-                                <img
-                                    src="/logo-liquidar.png"
-                                    alt="Liquidar.cl"
-                                    className="h-10 w-auto object-contain bg-white/90 p-1.5 rounded-lg"
-                                />
+                                <BrandLogo variant="white" size="md" />
                             </div>
                             <p className="text-slate-400 text-sm">
                                 Plataforma B2B de subastas de liquidación de stock paletizado e individual de grandes retailers en Chile.

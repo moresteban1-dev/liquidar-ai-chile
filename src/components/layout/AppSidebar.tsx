@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { UserRole } from '@/core/domain/auth/UserRole';
+import { BrandLogo } from '@/components/shared/BrandLogo';
 
 // --- Types ---
 // type UserRole = 'admin' | 'vendor' | 'client'; // REMOVED
@@ -66,13 +67,7 @@ function SidebarContent({ role }: { role: UserRole }) {
         <div className="flex h-full flex-col">
             {/* Logo Area */}
             <div className="flex h-16 items-center px-4">
-                <Link href="/" className="flex items-center gap-2">
-                    <img
-                        src="/logo-liquidar.png"
-                        alt="Liquidar.cl"
-                        className="h-9 w-auto object-contain bg-white/90 p-1 rounded-md"
-                    />
-                </Link>
+                <BrandLogo variant="auto" size="md" />
             </div>
 
             {/* Search Trigger */}
@@ -129,13 +124,9 @@ export function AppSidebar({ role, className }: AppSidebarProps) {
         <>
             {/* Mobile Header (Solid Background - No Blur) */}
             <div className="lg:hidden fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 h-16 bg-white border-b border-indigo-200 dark:bg-[#1a1f3d] dark:border-[#2e345a]">
-                <Link href="/" className="flex items-center gap-2">
-                    <img
-                        src="/logo-liquidar.png"
-                        alt="Liquidar.cl"
-                        className="h-8 w-auto object-contain"
-                    />
-                </Link>
+                <div className="flex items-center gap-2">
+                    <BrandLogo variant="auto" size="sm" />
+                </div>
 
                 <Sheet>
                     <SheetTrigger asChild>
