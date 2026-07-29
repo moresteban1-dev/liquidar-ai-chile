@@ -39,8 +39,14 @@ export function Navbar() {
         checkUser();
     }, [supabase, supabase.auth]);
 
-    // Don't show Navbar on dashboard pages (they have their own sidebar)
-    if (pathname.startsWith('/admin') || pathname.startsWith('/vendor') || pathname.startsWith('/client')) {
+    // Don't show Navbar on dashboard, login, or register pages
+    if (
+        pathname.startsWith('/admin') ||
+        pathname.startsWith('/vendor') ||
+        pathname.startsWith('/client') ||
+        pathname === '/login' ||
+        pathname === '/register'
+    ) {
         return null;
     }
 

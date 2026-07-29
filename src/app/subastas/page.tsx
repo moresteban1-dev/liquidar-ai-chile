@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Filter, Tag, MapPin, DollarSign, ArrowUpDown, RotateCcw, Search } from 'lucide-react';
 import { MOCK_LOTES } from '@/lib/chile/mock-lotes';
 import { CATEGORIA_LABELS } from '@/types/liquidar';
 import type { CategoriaLote, FiltrosSubasta } from '@/types/liquidar';
@@ -79,120 +80,168 @@ export default async function SubastasPage({ searchParams }: SubastasPageProps) 
       break;
   }
 
-  const hasFilters = !!(filters.categoria || filters.precioMin || filters.precioMax || filters.region);
+  const activeFilterCount = [filters.categoria, filters.precioMin, filters.precioMax, filters.region].filter(Boolean).length;
+  const hasFilters = activeFilterCount > 0;
 
   return (
     <div className="min-h-screen bg-background pt-20">
       <div className="max-w-7xl mx-auto px-6 py-10">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            Subastas Activas
-          </h1>
-          <p className="text-muted-foreground">
-            {lotes.length} lote{lotes.length !== 1 ? 's' : ''} disponible{lotes.length !== 1 ? 's' : ''}
-            {hasFilters && (
-              <span className="ml-2 text-amber-400 text-sm font-medium">— filtrado</span>
-            )}
-          </p>
+        <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 tracking-tight">
+              Subastas Activas
+            </h1>
+            <p className="text-muted-foreground text-sm">
+              {lotes.length} lote{lotes.length !== 1 ? 's' : ''} disponible{lotes.length !== 1 ? 's' : ''} en liquidación
+              {hasFilters && (
+                <span className="ml-2 inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-500/10 border border-amber-500/30 text-amber-400">
+                  <Filter className="w-3 h-3" />
+                  {activeFilterCount} filtro{activeFilterCount !== 1 ? 's' : ''} activo{activeFilterCount !== 1 ? 's' : ''}
+                </span>
+              )}
+            </p>
+          </div>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* ─── Sidebar Filters ───────────────────────────────────────────────── */}
-          <aside className="w-full lg:w-64 flex-shrink-0">
-            <form method="GET" className="bg-card border border-white/8 rounded-2xl p-5 space-y-5 sticky top-24">
-              <h2 className="text-white font-semibold text-sm">Filtros</h2>
+          <aside className="w-full lg:w-72 flex-shrink-0">
+            <form method="GET" className="bg-card/90 backdrop-blur-xl border border-white/10 rounded-2xl p-6 space-y-5 sticky top-24 shadow-2xl">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <h2 className="text-white font-bold text-base flex items-center gap-2">
+                  <Filter className="w-4 h-4 text-amber-400" />
+                  Filtros de Búsqueda
+                </h2>
+                {hasFilters && (
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">
+                    Filtrado
+                  </span>
+                )}
+              </div>
 
               {/* Categoría */}
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1.5">Categoría</label>
-                <select
-                  name="categoria"
-                  defaultValue={filters.categoria ?? ''}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30"
-                >
-                  <option value="">Todas</option>
-                  {(Object.entries(CATEGORIA_LABELS) as [CategoriaLote, string][]).map(([k, v]) => (
-                    <option key={k} value={k}>
-                      {v}
-                    </option>
-                  ))}
-                </select>
+                <label className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground mb-2">
+                  <Tag className="w-3.5 h-3.5 text-amber-400/80" />
+                  Categoría
+                </label>
+                <div className="relative">
+                  <select
+                    name="categoria"
+                    defaultValue={filters.categoria ?? ''}
+                    className="w-full bg-slate-950/70 border border-white/15 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer appearance-none [&>option]:bg-slate-900 [&>option]:text-white [&>option]:py-2"
+                  >
+                    <option value="" className="bg-slate-900 text-white font-medium">Todas las Categorías</option>
+                    {(Object.entries(CATEGORIA_LABELS) as [CategoriaLote, string][]).map(([k, v]) => (
+                      <option key={k} value={k} className="bg-slate-900 text-white font-medium py-2">
+                        {v}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground">
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+                  </div>
+                </div>
               </div>
 
               {/* Región */}
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1.5">Región</label>
-                <select
-                  name="region"
-                  defaultValue={filters.region ?? ''}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30"
-                >
-                  <option value="">Todas las regiones</option>
-                  {REGIONES.map((r) => (
-                    <option key={r.value} value={r.value}>
-                      {r.label}
-                    </option>
-                  ))}
-                </select>
+                <label className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground mb-2">
+                  <MapPin className="w-3.5 h-3.5 text-amber-400/80" />
+                  Ubicación / Región
+                </label>
+                <div className="relative">
+                  <select
+                    name="region"
+                    defaultValue={filters.region ?? ''}
+                    className="w-full bg-slate-950/70 border border-white/15 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer appearance-none [&>option]:bg-slate-900 [&>option]:text-white [&>option]:py-2"
+                  >
+                    <option value="" className="bg-slate-900 text-white font-medium">Todas las Regiones</option>
+                    {REGIONES.map((r) => (
+                      <option key={r.value} value={r.value} className="bg-slate-900 text-white font-medium py-2">
+                        {r.label}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground">
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+                  </div>
+                </div>
               </div>
 
-              {/* Precio */}
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1.5">Precio mínimo (CLP)</label>
-                <input
-                  type="number"
-                  name="precioMin"
-                  defaultValue={filters.precioMin}
-                  placeholder="$0"
-                  min={0}
-                  step={10000}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-amber-500/30"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1.5">Precio máximo (CLP)</label>
-                <input
-                  type="number"
-                  name="precioMax"
-                  defaultValue={filters.precioMax}
-                  placeholder="Sin límite"
-                  min={0}
-                  step={10000}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-amber-500/30"
-                />
+              {/* Precio Rango */}
+              <div className="space-y-3">
+                <label className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
+                  <DollarSign className="w-3.5 h-3.5 text-amber-400/80" />
+                  Rango de Precio (CLP)
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <input
+                      type="number"
+                      name="precioMin"
+                      defaultValue={filters.precioMin}
+                      placeholder="Mín ($0)"
+                      min={0}
+                      step={10000}
+                      className="w-full bg-slate-950/70 border border-white/15 rounded-xl px-3 py-2 text-white text-xs placeholder:text-muted-foreground/60 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="number"
+                      name="precioMax"
+                      defaultValue={filters.precioMax}
+                      placeholder="Máx ($)"
+                      min={0}
+                      step={10000}
+                      className="w-full bg-slate-950/70 border border-white/15 rounded-xl px-3 py-2 text-white text-xs placeholder:text-muted-foreground/60 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Ordenar */}
               <div>
-                <label className="block text-xs font-medium text-muted-foreground mb-1.5">Ordenar por</label>
-                <select
-                  name="ordenar"
-                  defaultValue={filters.ordenar}
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/30"
-                >
-                  {ORDENAR_OPTIONS.map((o) => (
-                    <option key={o.value} value={o.value}>
-                      {o.label}
-                    </option>
-                  ))}
-                </select>
+                <label className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground mb-2">
+                  <ArrowUpDown className="w-3.5 h-3.5 text-amber-400/80" />
+                  Ordenar resultados
+                </label>
+                <div className="relative">
+                  <select
+                    name="ordenar"
+                    defaultValue={filters.ordenar}
+                    className="w-full bg-slate-950/70 border border-white/15 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 cursor-pointer appearance-none [&>option]:bg-slate-900 [&>option]:text-white [&>option]:py-2"
+                  >
+                    {ORDENAR_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value} className="bg-slate-900 text-white font-medium py-2">
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-muted-foreground">
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+                  </div>
+                </div>
               </div>
 
               {/* Actions */}
-              <div className="space-y-2 pt-2">
+              <div className="space-y-2.5 pt-2">
                 <button
                   type="submit"
-                  className="w-full py-2 px-4 bg-amber-600 hover:bg-amber-500 text-white font-semibold rounded-lg text-sm transition-colors"
+                  className="w-full py-2.5 px-4 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold rounded-xl text-sm transition-all shadow-md shadow-amber-500/20 cursor-pointer flex items-center justify-center gap-2"
                 >
-                  Aplicar filtros
+                  <Search className="w-4 h-4" />
+                  Aplicar Filtros
                 </button>
                 {hasFilters && (
                   <a
                     href="/subastas"
-                    className="block w-full py-2 px-4 bg-white/5 hover:bg-white/10 text-muted-foreground hover:text-white font-medium rounded-lg text-sm text-center transition-colors"
+                    className="w-full py-2 px-4 bg-white/5 hover:bg-white/10 text-muted-foreground hover:text-white font-medium rounded-xl text-xs flex items-center justify-center gap-2 transition-colors border border-white/5"
                   >
-                    Limpiar filtros
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    Limpiar Filtros
                   </a>
                 )}
               </div>
@@ -202,14 +251,18 @@ export default async function SubastasPage({ searchParams }: SubastasPageProps) 
           {/* ─── Lots Grid ────────────────────────────────────────────────────── */}
           <main className="flex-1">
             {lotes.length === 0 ? (
-              <div className="bg-card border border-white/8 rounded-2xl p-12 text-center">
-                <p className="text-4xl mb-4">🔍</p>
-                <h3 className="text-white font-semibold text-lg mb-2">Sin resultados</h3>
-                <p className="text-muted-foreground mb-4">
-                  No hay lotes que coincidan con tus filtros.
+              <div className="bg-card border border-white/8 rounded-2xl p-12 text-center shadow-xl">
+                <p className="text-4xl mb-4">📦</p>
+                <h3 className="text-white font-bold text-xl mb-2">Sin Resultados de Subastas</h3>
+                <p className="text-muted-foreground text-sm mb-6 max-w-md mx-auto">
+                  No encontramos lotes que coincidan con los criterios aplicados. Intenta ajustar el rango de precios o seleccionar otra categoría.
                 </p>
-                <a href="/subastas" className="text-amber-400 hover:text-amber-300 transition-colors text-sm">
-                  Ver todos los lotes
+                <a
+                  href="/subastas"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs rounded-xl transition-all shadow-md"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Ver Todos los Lotes Disponibles
                 </a>
               </div>
             ) : (
