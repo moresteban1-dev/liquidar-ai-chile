@@ -13,6 +13,10 @@ export type VendedorEstado = 'activo' | 'inactivo' | 'suspendido';
 export type MetodoPago = 'webpay' | 'khipu' | 'transferencia_manual';
 export type PagoEstado = 'pendiente' | 'pendiente_verificacion' | 'completado' | 'fallido' | 'reembolsado';
 
+export type TamanoLote = 'unidad_individual' | 'palet_completo' | 'camion_truckload' | 'item_voluminoso';
+export type FormatoVenta = 'subasta_estandar' | 'precio_fijo' | 'sobre_cerrado' | 'formato_mixto';
+export type TerminoDespacho = 'retiro_bodega' | 'despacho_liquidar' | 'flete_comprador' | 'despacho_vendedor';
+
 export type CategoriaLote =
   | 'electronica'
   | 'ropa'
@@ -76,6 +80,12 @@ export interface Lote {
   pesoKg?: number;
   volumenM3?: number;
   condicion: LoteCondicion;
+  tamanoLote?: TamanoLote;
+  formatoVenta?: FormatoVenta;
+  precioCompraYa?: number;
+  msrpTotal?: number;
+  manifestUrl?: string;
+  terminoDespacho?: TerminoDespacho;
   retailerOrigen: string;
   totalPujas: number;
   imagenes?: ImagenLote[];
