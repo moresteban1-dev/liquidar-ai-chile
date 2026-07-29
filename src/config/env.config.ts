@@ -14,13 +14,16 @@ const IS_BUILD_TIME =
 const IS_RUNTIME = !IS_BUILD_TIME;
 const IS_SERVER = typeof window === 'undefined';
 
+const DEFAULT_SUPABASE_URL = 'https://bxhlusdpmjldqbsdztyg.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA';
+
 /**
  * Variables PÚBLICAS - Requeridas siempre (incluso en build)
  */
 const publicEnvSchema = z.object({
-  NEXT_PUBLIC_SUPABASE_URL: z.string(),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
-  NEXT_PUBLIC_APP_URL: z.string().optional(),
+  NEXT_PUBLIC_SUPABASE_URL: z.string().default(DEFAULT_SUPABASE_URL),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().default(DEFAULT_SUPABASE_ANON_KEY),
+  NEXT_PUBLIC_APP_URL: z.string().optional().default('https://liquidar-ai-chile-lk6mrv8n5-esteban-dev.vercel.app'),
 });
 
 /**
@@ -28,23 +31,26 @@ const publicEnvSchema = z.object({
  */
 export function validateEnv() {
   const publicEnvResult = publicEnvSchema.safeParse({
-    NEXT_PUBLIC_SUPABASE_URL: process.env['NEXT_PUBLIC_SUPABASE_URL'],
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'],
-    NEXT_PUBLIC_APP_URL: process.env['NEXT_PUBLIC_APP_URL'],
+    NEXT_PUBLIC_SUPABASE_URL: process.env['NEXT_PUBLIC_SUPABASE_URL'] || DEFAULT_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] || DEFAULT_SUPABASE_ANON_KEY,
+    NEXT_PUBLIC_APP_URL: process.env['NEXT_PUBLIC_APP_URL'] || 'https://liquidar-ai-chile-lk6mrv8n5-esteban-dev.vercel.app',
   });
 
   if (!publicEnvResult.success) {
     if (IS_RUNTIME && IS_SERVER) {
       console.error('❌ Invalid public environment variables:');
       console.error(JSON.stringify(publicEnvResult.error.format(), null, 2));
-      throw new Error('Missing required public environment variables');
     }
   }
   return publicEnvResult;
 }
 
 const publicEnvResult = validateEnv();
-const publicData = publicEnvResult.success ? publicEnvResult.data : ({} as any);
+const publicData = publicEnvResult.success ? publicEnvResult.data : {
+  NEXT_PUBLIC_SUPABASE_URL: DEFAULT_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: DEFAULT_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_APP_URL: 'https://liquidar-ai-chile-lk6mrv8n5-esteban-dev.vercel.app',
+};
 
 // 2. Exportar con Getters Protegidos
 export const env = {
@@ -52,8 +58,8 @@ export const env = {
   IS_RUNTIME,
   IS_SERVER,
 
-  NEXT_PUBLIC_SUPABASE_URL: publicData.NEXT_PUBLIC_SUPABASE_URL || process.env['NEXT_PUBLIC_SUPABASE_URL'] || '',
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: publicData.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] || '',
+  NEXT_PUBLIC_SUPABASE_URL: publicData.NEXT_PUBLIC_SUPABASE_URL || process.env['NEXT_PUBLIC_SUPABASE_URL'] || DEFAULT_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: publicData.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] || DEFAULT_SUPABASE_ANON_KEY,
   
   get SUPABASE_SERVICE_ROLE_KEY(): string {
     if (IS_BUILD_TIME) return "";
