@@ -22,6 +22,7 @@ export default function ManifestModal({
   retailerOrigen,
 }: ManifestModalProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   // Mock itemized manifest items based on lot
   const manifestItems = [
@@ -31,105 +32,129 @@ export default function ManifestModal({
     { id: 4, sku: 'SKU-66304', descripcion: `${retailerOrigen} Clearance Accessories`, cantidad: 25, condicion: 'Caja Abierta', msrpUnit: 15000 },
   ];
 
-  const handleDownloadPDF = () => {
-    const doc = new jsPDF();
-
-    // ─── Header Section (Corporate Dark & Amber) ──────────────────────────────
-    doc.setFillColor(15, 23, 42); // #0F172A
-    doc.rect(0, 0, 210, 40, 'F');
-
-    // Brand Title
-    doc.setTextColor(245, 158, 11); // #F59E0B Amber
-    doc.setFontSize(22);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Liquidar.cl', 14, 18);
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.text('Plataforma B2B Oficial de Subastas y Liquidación de Retailers', 14, 26);
-    doc.text(`Fecha de Emisión: ${new Date().toLocaleDateString('es-CL')}`, 145, 26);
-
-    // Accent Bar
-    doc.setFillColor(245, 158, 11);
-    doc.rect(0, 39, 210, 2, 'F');
-
-    // ─── Lot Information Summary Box ─────────────────────────────────────────
-    doc.setFillColor(248, 250, 252);
-    doc.setDrawColor(226, 232, 240);
-    doc.roundedRect(14, 48, 182, 32, 3, 3, 'FD');
-
-    doc.setTextColor(15, 23, 42);
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'bold');
-    doc.text(`MANIFIESTO OFICIAL DE INVENTARIO — LOTE N° ${loteNumero}`, 18, 57);
-
-    doc.setFontSize(9);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(71, 85, 105);
-    doc.text(`Título del Lote: ${tituloLote}`, 18, 65);
-    doc.text(`Retailer de Origen: ${retailerOrigen}`, 18, 72);
-
-    if (msrpTotal) {
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(180, 83, 9);
-      doc.text(`Valor MSRP Total: ${CLPFormatter.format(msrpTotal)}`, 130, 72);
-    }
-
-    // ─── Items Table ──────────────────────────────────────────────────────────
-    const tableRows = manifestItems.map((item) => [
-      item.sku,
-      item.descripcion,
-      item.cantidad.toString(),
-      item.condicion,
-      CLPFormatter.format(item.msrpUnit),
-      CLPFormatter.format(item.msrpUnit * item.cantidad),
-    ]);
-
-    autoTable(doc, {
-      startY: 87,
-      head: [['SKU / CÓDIGO', 'DESCRIPCIÓN DE PRODUCTO', 'CANT.', 'CONDICIÓN', 'MSRP UNIT.', 'SUBTOTAL MSRP']],
-      body: tableRows,
-      theme: 'grid',
-      headStyles: {
-        fillColor: [15, 23, 42],
-        textColor: [245, 158, 11],
-        fontStyle: 'bold',
-        fontSize: 8,
-        halign: 'center',
-      },
-      columnStyles: {
-        0: { fontStyle: 'bold', halign: 'left' },
-        2: { halign: 'center' },
-        3: { halign: 'center' },
-        4: { halign: 'right' },
-        5: { halign: 'right', fontStyle: 'bold' },
-      },
-      styles: {
-        fontSize: 8,
-        cellPadding: 4,
-      },
-      alternateRowStyles: {
-        fillColor: [248, 250, 252],
-      },
+  // Helper to load logo image into PDF
+  const loadLogoImage = (): Promise<HTMLImageElement> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = (e) => reject(e);
+      img.src = '/logo-liquidar-official.png';
     });
+  };
 
-    // ─── Footer & Certification ──────────────────────────────────────────────
-    const finalY = (doc as any).lastAutoTable?.finalY || 160;
-    doc.setDrawColor(226, 232, 240);
-    doc.line(14, finalY + 12, 196, finalY + 12);
+  const handleDownloadPDF = async () => {
+    setIsGenerating(true);
+    try {
+      const doc = new jsPDF();
 
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'italic');
-    doc.setTextColor(148, 163, 184);
-    doc.text(
-      'Documento oficial generado por Liquidar.cl. Validez certificada para la auditoría y recepción de lotes de liquidación.',
-      14,
-      finalY + 20
-    );
+      // ─── Header Section (Corporate Dark & Amber) ──────────────────────────────
+      doc.setFillColor(15, 23, 42); // #0F172A Dark Slate Header
+      doc.rect(0, 0, 210, 44, 'F');
 
-    // Save as PDF
-    doc.save(`Manifiesto_Oficial_${loteNumero}.pdf`);
+      // Insert Official Brand Logo Image into PDF Header
+      try {
+        const logoImg = await loadLogoImage();
+        doc.addImage(logoImg, 'PNG', 14, 7, 52, 17);
+      } catch (err) {
+        // Fallback text branding if image fails
+        doc.setTextColor(245, 158, 11);
+        doc.setFontSize(20);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Liquidar.cl', 14, 18);
+      }
+
+      doc.setTextColor(226, 232, 240);
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Plataforma B2B Oficial de Subastas y Liquidación de Retailers', 14, 32);
+      doc.text(`Fecha de Emisión: ${new Date().toLocaleDateString('es-CL')}`, 145, 32);
+
+      // Gold Accent Bar
+      doc.setFillColor(245, 158, 11);
+      doc.rect(0, 43, 210, 2.5, 'F');
+
+      // ─── Lot Information Summary Box ─────────────────────────────────────────
+      doc.setFillColor(248, 250, 252);
+      doc.setDrawColor(226, 232, 240);
+      doc.roundedRect(14, 52, 182, 34, 3, 3, 'FD');
+
+      doc.setTextColor(15, 23, 42);
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`MANIFIESTO OFICIAL DE INVENTARIO — LOTE N° ${loteNumero}`, 18, 62);
+
+      doc.setFontSize(9);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(71, 85, 105);
+      doc.text(`Título del Lote: ${tituloLote}`, 18, 70);
+      doc.text(`Retailer de Origen: ${retailerOrigen}`, 18, 78);
+
+      if (msrpTotal) {
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(180, 83, 9);
+        doc.text(`Valor MSRP Total: ${CLPFormatter.format(msrpTotal)}`, 130, 78);
+      }
+
+      // ─── Items Table ──────────────────────────────────────────────────────────
+      const tableRows = manifestItems.map((item) => [
+        item.sku,
+        item.descripcion,
+        item.cantidad.toString(),
+        item.condicion,
+        CLPFormatter.format(item.msrpUnit),
+        CLPFormatter.format(item.msrpUnit * item.cantidad),
+      ]);
+
+      autoTable(doc, {
+        startY: 93,
+        head: [['SKU / CÓDIGO', 'DESCRIPCIÓN DE PRODUCTO', 'CANT.', 'CONDICIÓN', 'MSRP UNIT.', 'SUBTOTAL MSRP']],
+        body: tableRows,
+        theme: 'grid',
+        headStyles: {
+          fillColor: [15, 23, 42],
+          textColor: [245, 158, 11],
+          fontStyle: 'bold',
+          fontSize: 8,
+          halign: 'center',
+        },
+        columnStyles: {
+          0: { fontStyle: 'bold', halign: 'left' },
+          2: { halign: 'center' },
+          3: { halign: 'center' },
+          4: { halign: 'right' },
+          5: { halign: 'right', fontStyle: 'bold' },
+        },
+        styles: {
+          fontSize: 8,
+          cellPadding: 4,
+        },
+        alternateRowStyles: {
+          fillColor: [248, 250, 252],
+        },
+      });
+
+      // ─── Footer & Certification ──────────────────────────────────────────────
+      const finalY = (doc as any).lastAutoTable?.finalY || 170;
+      doc.setDrawColor(226, 232, 240);
+      doc.line(14, finalY + 12, 196, finalY + 12);
+
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'italic');
+      doc.setTextColor(148, 163, 184);
+      doc.text(
+        'Documento oficial generado por Liquidar.cl. Validez certificada para la auditoría y recepción de lotes de liquidación.',
+        14,
+        finalY + 20
+      );
+
+      // Save as PDF
+      doc.save(`Manifiesto_Oficial_${loteNumero}.pdf`);
+    } catch (err) {
+      console.error('Error al generar PDF:', err);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -183,10 +208,11 @@ export default function ManifestModal({
                 </div>
                 <button
                   onClick={handleDownloadPDF}
-                  className="inline-flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs rounded-xl transition-all shadow-lg shadow-amber-500/20 flex-shrink-0 cursor-pointer"
+                  disabled={isGenerating}
+                  className="inline-flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs rounded-xl transition-all shadow-lg shadow-amber-500/20 flex-shrink-0 cursor-pointer disabled:opacity-50"
                 >
                   <Download className="w-4 h-4" />
-                  Descargar Manifiesto PDF
+                  {isGenerating ? 'Generando PDF...' : 'Descargar Manifiesto PDF'}
                 </button>
               </div>
 
