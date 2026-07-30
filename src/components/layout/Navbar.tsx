@@ -61,15 +61,18 @@ export function Navbar() {
                     </div>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center gap-8">
-                        <Link href="#servicios" className="text-sm font-medium text-muted-foreground hover:text-indigo-600 transition-colors">
-                            Servicios
+                    <div className="hidden md:flex items-center gap-7">
+                        <Link href="/subastas" className="text-sm font-semibold text-muted-foreground hover:text-amber-400 transition-colors">
+                            Subastas
                         </Link>
-                        <Link href="#proceso" className="text-sm font-medium text-muted-foreground hover:text-indigo-600 transition-colors">
-                            Cómo funciona
+                        <Link href="/sobre-nosotros" className="text-sm font-semibold text-muted-foreground hover:text-amber-400 transition-colors">
+                            Sobre Nosotros
                         </Link>
-                        <Link href="#testimonios" className="text-sm font-medium text-muted-foreground hover:text-indigo-600 transition-colors">
-                            Testimonios
+                        <Link href="/vender" className="text-sm font-semibold text-muted-foreground hover:text-amber-400 transition-colors">
+                            Vender Stock
+                        </Link>
+                        <Link href="/como-funciona" className="text-sm font-semibold text-muted-foreground hover:text-amber-400 transition-colors">
+                            Cómo Funciona
                         </Link>
                     </div>
 

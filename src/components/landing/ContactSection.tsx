@@ -52,29 +52,30 @@ export default function ContactSection() {
                             </p>
                         </div>
                         <div>
-                            <h4 className="text-white font-semibold mb-4">Equipos</h4>
-                            <ul className="space-y-2 text-sm">
-                                <li><Link href="#" className="text-slate-400 hover:text-white">Escenarios</Link></li>
-                                <li><Link href="#" className="text-slate-400 hover:text-white">Iluminación</Link></li>
-                                <li><Link href="#" className="text-slate-400 hover:text-white">Audio Pro</Link></li>
-                                <li><Link href="#" className="text-slate-400 hover:text-white">Pantallas LED</Link></li>
+                            <h4 className="text-white font-semibold mb-4">Categorías</h4>
+                            <ul className="space-y-2 text-xs md:text-sm">
+                                <li><Link href="/subastas?categoria=ELECTRONICA" className="text-slate-400 hover:text-amber-400 transition-colors">Electrónica & Tecnología</Link></li>
+                                <li><Link href="/subastas?categoria=MODA" className="text-slate-400 hover:text-amber-400 transition-colors">Vestuario & Calzado</Link></li>
+                                <li><Link href="/subastas?categoria=HOGAR" className="text-slate-400 hover:text-amber-400 transition-colors">Hogar & Electrodomésticos</Link></li>
+                                <li><Link href="/subastas?categoria=HERRAMIENTAS" className="text-slate-400 hover:text-amber-400 transition-colors">Herramientas & Construcción</Link></li>
                             </ul>
                         </div>
                         <div>
                             <h4 className="text-white font-semibold mb-4">Empresa</h4>
-                            <ul className="space-y-2 text-sm">
-                                <li><Link href="#" className="text-slate-400 hover:text-white">Quiénes Somos</Link></li>
-                                <li><Link href="#" className="text-slate-400 hover:text-white">Proyectos</Link></li>
-                                <li><Link href="#" className="text-slate-400 hover:text-white">Blog</Link></li>
-                                <li><Link href="#" className="text-slate-400 hover:text-white">Trabaja con Nosotros</Link></li>
+                            <ul className="space-y-2 text-xs md:text-sm">
+                                <li><Link href="/sobre-nosotros" className="text-slate-400 hover:text-amber-400 transition-colors">Sobre Nosotros</Link></li>
+                                <li><Link href="/vender" className="text-slate-400 hover:text-amber-400 transition-colors">Por Qué Vender</Link></li>
+                                <li><Link href="/subastas" className="text-slate-400 hover:text-amber-400 transition-colors">Subastas Activas</Link></li>
+                                <li><Link href="/como-funciona" className="text-slate-400 hover:text-amber-400 transition-colors">Cómo Funciona</Link></li>
                             </ul>
                         </div>
                         <div>
-                            <h4 className="text-white font-semibold mb-4">Ayuda</h4>
-                            <ul className="space-y-2 text-sm">
-                                <li><Link href="#" className="text-slate-400 hover:text-white">Preguntas Frecuentes</Link></li>
-                                <li><Link href="#" className="text-slate-400 hover:text-white">Términos y Condiciones</Link></li>
-                                <li><Link href="#" className="text-slate-400 hover:text-white">Zonas de Despacho</Link></li>
+                            <h4 className="text-white font-semibold mb-4">Vendedores & Ayuda</h4>
+                            <ul className="space-y-2 text-xs md:text-sm">
+                                <li><Link href="/vender#contacto-vendedores" className="text-slate-400 hover:text-amber-400 transition-colors">Registrarse como Vendedor</Link></li>
+                                <li><Link href="/register" className="text-slate-400 hover:text-amber-400 transition-colors">Registro de Comprador</Link></li>
+                                <li><Link href="/login" className="text-slate-400 hover:text-amber-400 transition-colors">Portal de Acceso B2B</Link></li>
+                                <li><Link href="#" className="text-slate-400 hover:text-amber-400 transition-colors">Términos y Despacho Chile</Link></li>
                             </ul>
                         </div>
                     </div>
