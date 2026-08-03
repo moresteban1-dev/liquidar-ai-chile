@@ -63,7 +63,13 @@ const config: NextConfig = {
     // Server Actions config
     serverActions: {
       bodySizeLimit: '2mb',
-      allowedOrigins: ['dropservice-platform.vercel.app', 'localhost:3000'],
+      allowedOrigins: [
+        'liquidar-ai-chile.vercel.app',
+        'liquidar.cl',
+        'www.liquidar.cl',
+        'dropservice-platform.vercel.app',
+        'localhost:3000',
+      ],
     },
     // Stale Times (Cache Client-side)
     staleTimes: {

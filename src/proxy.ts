@@ -1,12 +1,11 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
-import { metrics } from './infrastructure/telemetry/MetricsService';
-import { logger } from './infrastructure/telemetry/StructuredLogger';
 import { UserRole, normalizeRole } from './core/domain/auth/UserRole';
 import { validateRedirectUrl } from './lib/security/redirect-validator';
 
 const DEFAULT_SUPABASE_URL = 'https://bxhlusdpmjldqbsdztyg.supabase.co';
 const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA';
+const ADMIN_EMAILS = ['moresteban1@gmail.com', 'admin@liquidar.cl'];
 
 /**
  * Configuración de rutas protegidas por rol.
@@ -68,8 +67,14 @@ const rateLimitMap = new Map<string, { count: number; reset: number }>();
 const RATE_LIMIT = 60; // 60 peticiones
 const RATE_WINDOW = 60 * 1000; // por minuto
 
+function resolveUserRole(user: { email?: string; app_metadata?: any; user_metadata?: any }): UserRole {
+  if (user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+    return UserRole.ADMIN;
+  }
+  return normalizeRole(user?.app_metadata?.role || user?.user_metadata?.role);
+}
+
 export async function proxy(request: NextRequest) {
-  const start = Date.now();
   const { pathname } = request.nextUrl;
   const ip = request.headers.get('x-forwarded-for') || 'anonymous';
 
@@ -89,7 +94,7 @@ export async function proxy(request: NextRequest) {
     rateLimitMap.set(rateKey, record);
 
     if (record.count > RATE_LIMIT) {
-      logger.warn(`[SECURITY] Rate Limit exceeded for IP: ${ip} on ${pathname}`);
+      console.warn(`[SECURITY] Rate Limit exceeded for IP: ${ip} on ${pathname}`);
       return NextResponse.json(
         { error: 'Too many requests', message: 'Por favor, reintente en un minuto.' },
         { status: 429 }
@@ -114,7 +119,6 @@ export async function proxy(request: NextRequest) {
 
   // 1. Permitir rutas públicas sin verificación
   if (PUBLIC_ROUTES.some((pattern) => pattern.test(pathname))) {
-    recordTelemetry(start, pathname, request.method, response.status.toString());
     return response;
   }
 
@@ -150,7 +154,7 @@ export async function proxy(request: NextRequest) {
         }
         const loginUrl = new URL('/login', request.url);
         
-        // 🛡️ Layer 3: Redirect Sanitization (Anti-Open Redirect)
+        // 🛡️ Redirect Sanitization (Anti-Open Redirect)
         const safeRedirect = validateRedirectUrl(pathname, '/client');
         loginUrl.searchParams.set('redirect', safeRedirect);
         
@@ -158,15 +162,6 @@ export async function proxy(request: NextRequest) {
       }
       return response;
     }
-
-const ADMIN_EMAILS = ['moresteban1@gmail.com', 'admin@liquidar.cl'];
-
-function resolveUserRole(user: { email?: string; app_metadata?: any; user_metadata?: any }): UserRole {
-  if (user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
-    return UserRole.ADMIN;
-  }
-  return normalizeRole(user?.app_metadata?.role || user?.user_metadata?.role);
-}
 
     // 4. Verificar roles para rutas protegidas
     const isProtectedRoute = PROTECTED_ROUTES.find((r) => r.pattern.test(pathname));
@@ -185,28 +180,12 @@ function resolveUserRole(user: { email?: string; app_metadata?: any; user_metada
       }
     }
   } catch (err) {
-    logger.error('[Middleware Error] Supabase auth check failed:', err);
+    console.error('[Edge Proxy Error] Supabase auth check failed:', err);
     // Safe fallback: allow public or redirect to login if protected
     if (PROTECTED_ROUTES.some((r) => r.pattern.test(pathname))) {
       return NextResponse.redirect(new URL('/login', request.url));
     }
   }
 
-  recordTelemetry(start, pathname, request.method, response.status.toString());
   return response;
 }
-
-/**
- * Telemetry helper
- */
-function recordTelemetry(start: number, path: string, method: string, status: string) {
-    const duration = Date.now() - start;
-    metrics.increment('tech.http.requests', 1, { path, method, status });
-    metrics.record('tech.http.latency', duration, { path, method });
-}
-
-export const config = {
-  matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
-};
