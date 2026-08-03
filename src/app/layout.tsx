@@ -17,7 +17,7 @@ import { GeistMono } from 'geist/font/mono';
 // Deshabilitar Static Generation en todo el árbol debido a Auth de Edge conflictivos con Vercel Functions
 export const dynamic = 'force-dynamic';
 // Retornar explícitamente a Node JS runtime global as an escape hatch para los fetch failed timeout
-export const runtime = 'nodejs';
+
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://liquidar-ai-chile.vercel.app"),

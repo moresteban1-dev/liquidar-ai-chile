@@ -1,6 +1,5 @@
 'use client';
 
-import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { useEffect, useState } from 'react';
 
 /**
@@ -8,6 +7,9 @@ import { useEffect, useState } from 'react';
  *
  * This is the LAST LINE OF DEFENSE. It wraps the entire <html> element.
  * If this triggers, the root layout itself crashed.
+ * 
+ * REGLA CRÍTICA: Este archivo NO DEBE importar módulos externos que puedan fallar.
+ * Usar solo console.* nativo y fetch del navegador.
  */
 export default function GlobalError({
     error,
@@ -24,7 +26,8 @@ export default function GlobalError({
     } | null>(null);
 
     useEffect(() => {
-        logger.error('GLOBAL ROOT ERROR:', error);
+        // Logging directo con console — NUNCA importar módulos externos en global-error
+        console.error('[GLOBAL ROOT ERROR]', error.message, error.stack);
 
         // Report to forensic system for diagnosis
         fetch('/api/forensics/report', {

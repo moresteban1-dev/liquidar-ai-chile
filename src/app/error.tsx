@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { AlertCircle, RefreshCcw } from 'lucide-react';
-import { logger } from '@infrastructure/telemetry/StructuredLogger';
 
 export default function GlobalError({
     error,
@@ -13,9 +12,9 @@ export default function GlobalError({
     reset: () => void;
 }) {
     useEffect(() => {
-        // Log the error to an error reporting service
-        // Aquí es donde en el futuro inyectaremos Sentry
-        logger.error('🚨 [Global Error Boundary] Caught exception:', error);
+        // Log directamente con console — NUNCA importar módulos externos aquí
+        // para evitar un doble-crash si el módulo de logging también falla
+        console.error('🚨 [Error Boundary] Caught exception:', error.message, error.stack);
     }, [error]);
 
     return (
