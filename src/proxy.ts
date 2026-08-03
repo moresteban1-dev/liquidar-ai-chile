@@ -5,6 +5,9 @@ import { logger } from './infrastructure/telemetry/StructuredLogger';
 import { UserRole, normalizeRole } from './core/domain/auth/UserRole';
 import { validateRedirectUrl } from './lib/security/redirect-validator';
 
+const DEFAULT_SUPABASE_URL = 'https://bxhlusdpmjldqbsdztyg.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA';
+
 /**
  * Configuración de rutas protegidas por rol.
  */
@@ -36,18 +39,25 @@ const PROTECTED_ROUTES: Array<{
 ];
 
 /**
- * Rutas públicas que NO requieren autenticación.
+ * Rutas públicas que NO requieren autenticación en middleware.
  */
 const PUBLIC_ROUTES = [
   /^\/$/,
   /^\/login/,
   /^\/register/,
+  /^\/sobre-nosotros/,
+  /^\/vender/,
+  /^\/subastas/,
+  /^\/como-funciona/,
+  /^\/cotizador/,
+  /^\/forgot-password/,
   /^\/api\/auth/,
   /^\/api\/webhooks/,
   /^\/api\/health/,
   /^\/_next/,
   /^\/favicon/,
   /^\/public/,
+  /^\/logo/,
 ];
 
 // PROTECCIÓN AAA: Rate Limiting en memoria para el Middleware (Edge Compatible)
@@ -105,78 +115,68 @@ export async function proxy(request: NextRequest) {
     return response;
   }
 
-  // 2. Crear cliente Supabase
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  // 2. Crear cliente Supabase con Fallback Resiliente
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
   
-  // Structured logging — only in development to avoid leaking env status in production
-  if (process.env.NODE_ENV === 'development') {
-    logger.debug('[Middleware] Supabase env check', {
-      hasUrl: !!supabaseUrl,
-      hasKey: !!supabaseKey,
-      supabaseEnvKeys: Object.keys(process.env).filter(k => k.includes('SUPABASE')),
-    });
-  }
-  
-  if (!supabaseUrl || !supabaseKey) {
-    logger.error('Missing Supabase env vars in middleware', {
-      hasUrl: !!supabaseUrl,
-      hasKey: !!supabaseKey,
-      availableKeys: Object.keys(process.env).filter(k => k.includes('SUPABASE'))
-    });
-    return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
-  }
-
-  const supabase = createServerClient(
-    supabaseUrl,
-    supabaseKey,
-    {
-      cookies: {
-        getAll() { return request.cookies.getAll(); },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          response = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+  try {
+    const supabase = createServerClient(
+      supabaseUrl,
+      supabaseKey,
+      {
+        cookies: {
+          getAll() { return request.cookies.getAll(); },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+            response = NextResponse.next({ request });
+            cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+          },
         },
       },
-    },
-  );
+    );
 
-  // 3. Verificar sesión
-  const { data: { user }, error: authError } = await supabase.auth.getUser();
+    // 3. Verificar sesión
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-  if (authError || !user) {
-    const isProtected = PROTECTED_ROUTES.some((r) => r.pattern.test(pathname));
+    if (authError || !user) {
+      const isProtected = PROTECTED_ROUTES.some((r) => r.pattern.test(pathname));
 
-    if (isProtected) {
-      if (pathname.startsWith('/api/')) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      if (isProtected) {
+        if (pathname.startsWith('/api/')) {
+          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+        const loginUrl = new URL('/login', request.url);
+        
+        // 🛡️ Layer 3: Redirect Sanitization (Anti-Open Redirect)
+        const safeRedirect = validateRedirectUrl(pathname, '/client');
+        loginUrl.searchParams.set('redirect', safeRedirect);
+        
+        return NextResponse.redirect(loginUrl);
       }
-      const loginUrl = new URL('/login', request.url);
-      
-      // 🛡️ Layer 3: Redirect Sanitization (Anti-Open Redirect)
-      const safeRedirect = validateRedirectUrl(pathname, '/client');
-      loginUrl.searchParams.set('redirect', safeRedirect);
-      
-      return NextResponse.redirect(loginUrl);
+      return response;
     }
-    return response;
-  }
 
-  // 4. Verificar roles para rutas protegidas
-  const isProtectedRoute = PROTECTED_ROUTES.find((r) => r.pattern.test(pathname));
-  
-  if (isProtectedRoute) {
-    const userRole = normalizeRole(user.app_metadata?.role || user.user_metadata?.role);
+    // 4. Verificar roles para rutas protegidas
+    const isProtectedRoute = PROTECTED_ROUTES.find((r) => r.pattern.test(pathname));
+    
+    if (isProtectedRoute) {
+      const userRole = normalizeRole(user.app_metadata?.role || user.user_metadata?.role);
 
-    if (!isProtectedRoute.roles.includes(userRole)) {
-      if (pathname.startsWith('/api/')) {
-        return NextResponse.json({ error: 'Forbidden', message: `Acceso denegado` }, { status: 403 });
+      if (!isProtectedRoute.roles.includes(userRole)) {
+        if (pathname.startsWith('/api/')) {
+          return NextResponse.json({ error: 'Forbidden', message: `Acceso denegado` }, { status: 403 });
+        }
+        
+        // Redirect al dashboard apropiado según su rol para evitar bucles
+        const target = userRole === UserRole.ADMIN ? '/admin' : userRole === UserRole.VENDOR ? '/vendor' : '/client';
+        return NextResponse.redirect(new URL(target, request.url));
       }
-      
-      // Redirect al dashboard apropiado según su rol para evitar bucles
-      const target = userRole === UserRole.ADMIN ? '/admin' : userRole === UserRole.VENDOR ? '/vendor' : '/client';
-      return NextResponse.redirect(new URL(target, request.url));
+    }
+  } catch (err) {
+    logger.error('[Middleware Error] Supabase auth check failed:', err);
+    // Safe fallback: allow public or redirect to login if protected
+    if (PROTECTED_ROUTES.some((r) => r.pattern.test(pathname))) {
+      return NextResponse.redirect(new URL('/login', request.url));
     }
   }
 
@@ -185,7 +185,7 @@ export async function proxy(request: NextRequest) {
 }
 
 /**
- * NASA-Grade Telemetry helper
+ * Telemetry helper
  */
 function recordTelemetry(start: number, path: string, method: string, status: string) {
     const duration = Date.now() - start;
