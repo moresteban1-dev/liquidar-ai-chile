@@ -26,11 +26,11 @@ export default async function AdminDashboardPage() {
   return (
     <div className="space-y-6">
       <DashboardHeader
-        name="Administrador"
-        subtitle="Visión general y optimización de la plataforma inteligente"
+        name="Administrador Broker"
+        subtitle="Centro de Control de Subastas, Curaduría de Lotes, Custodia Escrow y Mediación"
         actions={
-            <span className="px-4 py-1.5 bg-emerald-500/10 text-emerald-500 text-xs font-bold rounded-full border border-emerald-500/20 shadow-sm shadow-emerald-500/5 flex items-center justify-center h-9">
-                SYSTEM ONLINE
+            <span className="px-4 py-1.5 bg-amber-500/10 text-amber-400 text-xs font-bold rounded-full border border-amber-500/20 shadow-sm flex items-center justify-center h-9">
+                ESCROW ONLINE
             </span>
         }
       />

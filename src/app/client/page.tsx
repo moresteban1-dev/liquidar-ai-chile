@@ -40,8 +40,8 @@ export default async function ClientDashboardPage() {
         <div className="space-y-6">
             {/* Header */}
             <DashboardHeader
-                name="Cliente"
-                subtitle="Gestiona tus eventos y cotizaciones desde un solo lugar."
+                name="Comprador B2B"
+                subtitle="Centro de Control de Subastas, Pujas Activas, Garantías Escrow y Manifiestos PDF"
                 actions={
                     <div className="flex items-center gap-2">
                         <Button variant="outline" size="sm" className="gap-2 border-border/60 hover:bg-accent/50 transition-all font-medium rounded-lg" asChild>
