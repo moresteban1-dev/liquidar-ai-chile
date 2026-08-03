@@ -6,7 +6,7 @@ export class StructuredLogger {
 
   constructor(name?: string) {
     const pinoOptions: pino.LoggerOptions = {
-      name: name || 'dropservice',
+      name: name || 'liquidar-cl',
       level: process.env['LOG_LEVEL'] || 'info',
       mixin: () => {
         const span = trace.getActiveSpan()

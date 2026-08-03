@@ -85,7 +85,7 @@ export default function EnterpriseErrorBoundary({
         
         <div className="px-8 py-4 bg-neutral-50 dark:bg-neutral-950 border-t border-neutral-100 dark:border-neutral-800">
           <p className="text-[10px] text-neutral-400 uppercase tracking-tighter text-center">
-            Dropservice Platform — Deep Clean Protection V2
+            Liquidar.cl Platform - Deep Clean Protection V2
           </p>
         </div>
       </motion.div>

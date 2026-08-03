@@ -11,8 +11,9 @@
 
 const ALLOWED_HOSTS = new Set([
     'localhost',
-    'dropservice.platform', // Production domain (placeholder)
-    // Add production/staging domains here
+    'liquidar.cl',
+    'www.liquidar.cl',
+    'liquidar-ai-chile.vercel.app',
 ]);
 
 const ALLOWED_PROTOCOLS = new Set(['https:']);
