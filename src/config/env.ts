@@ -5,7 +5,7 @@ import { z } from 'zod';
  */
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
-  NEXT_PUBLIC_APP_URL: z.string().default('https://liquidar-ai-chile-lk6mrv8n5-esteban-dev.vercel.app'),
+  NEXT_PUBLIC_APP_URL: z.string().default('https://liquidar-ai-chile.vercel.app'),
   NEXT_PUBLIC_SUPABASE_URL: z
     .string()
     .default(process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://bxhlusdpmjldqbsdztyg.supabase.co'),

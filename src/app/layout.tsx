@@ -20,20 +20,21 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://liquidar-ai-chile.vercel.app"),
   title: {
-    default: "Liquidar.cl — Subastas B2B de Liquidación de Stock",
-    template: "%s | Liquidar.cl Platform"
+    default: "Liquidar.cl | Plataforma Oficial B2B de Subastas de Inventario y Liquidador Chile",
+    template: "%s | Liquidar.cl Chile"
   },
-  description: "Plataforma B2B líder en Chile para la comercialización de stock paletizado e individual mediante subastas y precio fijo.",
+  description: "Plataforma B2B líder en Chile para la compraventa y subastas de lotes al por mayor, retornos de retail, inventario excedente y liquidaciones corporativas con custodia Escrow segura.",
   keywords: ["subastas", "liquidación", "lotes", "pallets", "retailers", "Chile", "B2B", "Liquidar.cl"],
   authors: [{ name: "Liquidar.cl" }],
   creator: "Liquidar.cl",
   openGraph: {
     type: "website",
     locale: "es_CL",
-    url: "https://liquidar-ai-chile-lk6mrv8n5-esteban-dev.vercel.app",
-    title: "Liquidar.cl — Plataforma de Subastas B2B",
-    description: "Comercialización de stock paletizado e individual de grandes retailers en Chile.",
+    url: "https://liquidar-ai-chile.vercel.app",
+    title: "Liquidar.cl | B2B Subastas y Liquidaciones Corporativas Chile",
+    description: "Transforme su inventario excedente en efectivo. Subastas transparentes B2B de retornos, tecnología y marcas en Chile.",
     siteName: "Liquidar.cl",
   },
   icons: {
