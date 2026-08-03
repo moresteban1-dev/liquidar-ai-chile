@@ -41,6 +41,7 @@ import {
 } from 'lucide-react';
 import { useNotifications } from '@/context/NotificationContext';
 import { NotificationCenter } from '@/app/client/components/v2/notification-center';
+import { BrandLogo } from '@/components/shared/BrandLogo';
 
 interface NavItem {
     label: string;
@@ -132,10 +133,7 @@ export function ShadcnDashboardLayout({ children, role, userName = 'Usuario', us
                 {/* Logo */}
                 <div className="flex h-16 items-center justify-between px-4 border-b border-border">
                     <Link href={`/${role}`} className="flex items-center gap-2">
-                        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">DS</span>
-                        </div>
-                        <span className="font-semibold text-foreground">Dropservice</span>
+                        <BrandLogo variant="white" size="sm" />
                     </Link>
                     <Button
                         variant="ghost"

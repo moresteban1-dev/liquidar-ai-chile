@@ -142,18 +142,28 @@ export async function getUserProfile() {
         const user = userRes.getValue();
 
         const apiRes = await createApiClient();
-        if (apiRes.kind === 'failure') return null;
+        if (apiRes.kind === 'failure') {
+            return { id: user.id, email: user.email, name: user.name || user.email, role: user.role };
+        }
         const supabase = apiRes.getValue();
-        const { data: profile, error } = await supabase
+        const { data: profile } = await supabase
             .from('profiles')
             .select(`
                 *,
                 providerProfiles:provider_profiles(*)
             `)
             .eq('id', user.id)
-            .single();
+            .maybeSingle();
 
-        if (error) throw error;
+        if (!profile) {
+            return {
+                id: user.id,
+                email: user.email,
+                name: user.name || user.email.split('@')[0],
+                role: user.role,
+            };
+        }
+
         return profile;
     } catch (error) {
         logger.error('[getUserProfile] Error:', error);
