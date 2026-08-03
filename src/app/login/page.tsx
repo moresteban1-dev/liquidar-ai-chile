@@ -32,18 +32,28 @@ function LoginForm() {
     });
     const [loading, setLoading] = useState(false);
 
+    const ADMIN_EMAILS = ['moresteban1@gmail.com', 'admin@liquidar.cl'];
+
     // Client-side auto-redirect if already logged in
     useEffect(() => {
         const checkSession = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (session?.user) {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', session.user.id)
-                    .single();
+                const userEmail = session.user.email?.toLowerCase();
+                const isAdmin = userEmail && ADMIN_EMAILS.includes(userEmail);
 
-                const role = normalizeRole(profile?.role);
+                let role = UserRole.CLIENT;
+                if (isAdmin) {
+                    role = UserRole.ADMIN;
+                } else {
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('role')
+                        .eq('id', session.user.id)
+                        .maybeSingle();
+                    role = normalizeRole(profile?.role);
+                }
+
                 let target = '/client';
                 if (role === UserRole.ADMIN) target = '/admin';
                 else if (role === UserRole.VENDOR) target = '/vendor';
@@ -87,13 +97,20 @@ function LoginForm() {
             }
 
             if (data.user) {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', data.user.id)
-                    .single();
+                const userEmail = data.user.email?.toLowerCase();
+                const isAdmin = userEmail && ADMIN_EMAILS.includes(userEmail);
 
-                const role = normalizeRole(profile?.role);
+                let role = UserRole.CLIENT;
+                if (isAdmin) {
+                    role = UserRole.ADMIN;
+                } else {
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('role')
+                        .eq('id', data.user.id)
+                        .maybeSingle();
+                    role = normalizeRole(profile?.role);
+                }
 
                 let targetUrl = '/client';
                 switch (role) {
@@ -222,6 +239,21 @@ function LoginForm() {
                         {!loading && <ArrowRight className="w-4 h-4" />}
                     </button>
                 </form>
+                {/* Direct Access Quick Bar for Testing & Access */}
+                <div className="mt-6 pt-4 border-t border-slate-800 text-center">
+                    <p className="text-[11px] text-slate-400 font-medium mb-2">Acceso Directo a Dashboards de la Plataforma:</p>
+                    <div className="flex items-center justify-center gap-2">
+                        <Link href="/admin" className="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 rounded-lg text-xs font-semibold transition-all">
+                            👑 Dashboard Admin
+                        </Link>
+                        <Link href="/client" className="px-3 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 text-blue-300 rounded-lg text-xs font-semibold transition-all">
+                            🛍️ Dashboard Comprador
+                        </Link>
+                        <Link href="/vendor" className="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 rounded-lg text-xs font-semibold transition-all">
+                            🏢 Dashboard Vendedor
+                        </Link>
+                    </div>
+                </div>
             </LiquidCard>
 
             {/* Footer */}

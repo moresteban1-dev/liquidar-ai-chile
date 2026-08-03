@@ -159,11 +159,20 @@ export async function proxy(request: NextRequest) {
       return response;
     }
 
+const ADMIN_EMAILS = ['moresteban1@gmail.com', 'admin@liquidar.cl'];
+
+function resolveUserRole(user: { email?: string; app_metadata?: any; user_metadata?: any }): UserRole {
+  if (user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+    return UserRole.ADMIN;
+  }
+  return normalizeRole(user?.app_metadata?.role || user?.user_metadata?.role);
+}
+
     // 4. Verificar roles para rutas protegidas
     const isProtectedRoute = PROTECTED_ROUTES.find((r) => r.pattern.test(pathname));
     
     if (isProtectedRoute) {
-      const userRole = normalizeRole(user.app_metadata?.role || user.user_metadata?.role);
+      const userRole = resolveUserRole(user);
 
       if (!isProtectedRoute.roles.includes(userRole)) {
         if (pathname.startsWith('/api/')) {
