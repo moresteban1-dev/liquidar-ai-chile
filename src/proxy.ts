@@ -142,7 +142,12 @@ export async function proxy(request: NextRequest) {
       },
     );
 
-    // 3. Verificar sesión
+    // 3. Verificar sesión o cookie de acceso directo / demo
+    const demoRole = request.cookies.get('demo_role')?.value;
+    if (demoRole) {
+      return response;
+    }
+
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {

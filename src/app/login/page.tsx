@@ -143,6 +143,12 @@ function LoginForm() {
         }
     };
 
+    const handleDirectAccess = (roleName: string, targetPath: string) => {
+        document.cookie = `demo_role=${roleName}; path=/; max-age=86400; SameSite=Lax`;
+        router.push(targetPath as any);
+        router.refresh();
+    };
+
     return (
         <div className="w-full max-w-md relative z-10">
             {/* Dedicated Header & Brand Logo */}
@@ -239,19 +245,32 @@ function LoginForm() {
                         {!loading && <ArrowRight className="w-4 h-4" />}
                     </button>
                 </form>
-                {/* Direct Access Quick Bar for Testing & Access */}
+
+                {/* Direct Access Quick Bar for Testing & Instant Access */}
                 <div className="mt-6 pt-4 border-t border-slate-800 text-center">
-                    <p className="text-[11px] text-slate-400 font-medium mb-2">Acceso Directo a Dashboards de la Plataforma:</p>
-                    <div className="flex items-center justify-center gap-2">
-                        <Link href="/admin" className="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 rounded-lg text-xs font-semibold transition-all">
+                    <p className="text-[11px] text-amber-400 font-bold mb-2 uppercase tracking-wider">🚀 Acceso Directo e Inmediato a Dashboards:</p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
+                        <button
+                            type="button"
+                            onClick={() => handleDirectAccess('admin', '/admin')}
+                            className="w-full sm:w-auto px-3.5 py-2 bg-amber-500/20 hover:bg-amber-500/40 border border-amber-500/50 text-amber-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+                        >
                             👑 Dashboard Admin
-                        </Link>
-                        <Link href="/client" className="px-3 py-1.5 bg-blue-500/20 hover:bg-blue-500/30 border border-blue-500/40 text-blue-300 rounded-lg text-xs font-semibold transition-all">
-                            🛍️ Dashboard Comprador
-                        </Link>
-                        <Link href="/vendor" className="px-3 py-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 rounded-lg text-xs font-semibold transition-all">
-                            🏢 Dashboard Vendedor
-                        </Link>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => handleDirectAccess('client', '/client')}
+                            className="w-full sm:w-auto px-3.5 py-2 bg-blue-500/20 hover:bg-blue-500/40 border border-blue-500/50 text-blue-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+                        >
+                            🛍️ Comprador B2B
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => handleDirectAccess('vendor', '/vendor')}
+                            className="w-full sm:w-auto px-3.5 py-2 bg-emerald-500/20 hover:bg-emerald-500/40 border border-emerald-500/50 text-emerald-300 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-sm flex items-center justify-center gap-1.5"
+                        >
+                            🏢 Vendedor
+                        </button>
                     </div>
                 </div>
             </LiquidCard>
