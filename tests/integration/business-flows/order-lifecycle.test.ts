@@ -151,7 +151,7 @@ describe('Order Lifecycle — Full Integration', () => {
   it('should handle cancellation from any non-terminal state', async () => {
     const createResult = await createOrder.execute({
       clientId: TEST_IDS.client,
-      eventDate: '2026-08-01T10:00:00Z',
+      eventDate: '2026-12-01T10:00:00Z',
       deliveryAddress: 'Cancel Rd 2',
     });
 
