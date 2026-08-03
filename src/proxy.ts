@@ -17,22 +17,22 @@ const PROTECTED_ROUTES: Array<{
   redirectTo: string;
 }> = [
   {
-    pattern: /^\/admin/,
+    pattern: /^\/admin(\/.*)?$/,
     roles: [UserRole.ADMIN],
     redirectTo: '/login?error=unauthorized',
   },
   {
-    pattern: /^\/api\/admin/,
+    pattern: /^\/api\/admin(\/.*)?$/,
     roles: [UserRole.ADMIN],
     redirectTo: '', // API routes retornan 403, no redirigen
   },
   {
-    pattern: /^\/vendor/,
+    pattern: /^\/vendor(\/.*)?$/,
     roles: [UserRole.ADMIN, UserRole.VENDOR],
     redirectTo: '/login',
   },
   {
-    pattern: /^\/client/,
+    pattern: /^\/client(\/.*)?$/,
     roles: [UserRole.ADMIN, UserRole.CLIENT],
     redirectTo: '/login',
   },
@@ -47,17 +47,20 @@ const PUBLIC_ROUTES = [
   /^\/register/,
   /^\/sobre-nosotros/,
   /^\/vender/,
-  /^\/subastas/,
+  /^\/subastas(\/.*)?$/,
   /^\/como-funciona/,
   /^\/cotizador/,
   /^\/forgot-password/,
-  /^\/api\/auth/,
-  /^\/api\/webhooks/,
+  /^\/api\/auth(\/.*)?$/,
+  /^\/api\/webhooks(\/.*)?$/,
   /^\/api\/health/,
-  /^\/_next/,
+  /^\/_next(\/.*)?$/,
   /^\/favicon/,
   /^\/public/,
   /^\/logo/,
+  /^\/.*\.png$/,
+  /^\/.*\.jpg$/,
+  /^\/.*\.ico$/,
 ];
 
 // PROTECCIÓN AAA: Rate Limiting en memoria para el Middleware (Edge Compatible)
@@ -182,6 +185,10 @@ export async function proxy(request: NextRequest) {
 
   recordTelemetry(start, pathname, request.method, response.status.toString());
   return response;
+}
+
+export async function middleware(request: NextRequest) {
+  return proxy(request);
 }
 
 /**
