@@ -27,6 +27,7 @@ export interface User {
  * Official Admin Emails for Automatic Admin Dashboard Access
  */
 export const ADMIN_EMAILS = [
+    'inversionsanagustin@gmail.com',
     'moresteban1@gmail.com',
     'admin@liquidar.cl',
 ];

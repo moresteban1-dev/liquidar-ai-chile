@@ -32,7 +32,7 @@ function LoginForm() {
     });
     const [loading, setLoading] = useState(false);
 
-    const ADMIN_EMAILS = ['moresteban1@gmail.com', 'admin@liquidar.cl'];
+    const ADMIN_EMAILS = ['inversionsanagustin@gmail.com', 'moresteban1@gmail.com', 'admin@liquidar.cl'];
 
     // Client-side auto-redirect if already logged in
     useEffect(() => {

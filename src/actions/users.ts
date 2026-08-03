@@ -147,8 +147,8 @@ export async function getUserProfile() {
             const role = (demoRole as any) || UserRole.ADMIN;
             return {
                 id: 'demo-user-id',
-                email: 'moresteban1@gmail.com',
-                name: 'Esteban (Administrador)',
+                email: 'inversionsanagustin@gmail.com',
+                name: 'Administrador (Inversiones San Agustín)',
                 role: role,
             };
         }
@@ -182,8 +182,8 @@ export async function getUserProfile() {
         logger.error('[getUserProfile] Error:', error);
         return {
             id: 'demo-user-id',
-            email: 'moresteban1@gmail.com',
-            name: 'Esteban (Administrador)',
+            email: 'inversionsanagustin@gmail.com',
+            name: 'Administrador (Inversiones San Agustín)',
             role: UserRole.ADMIN,
         };
     }

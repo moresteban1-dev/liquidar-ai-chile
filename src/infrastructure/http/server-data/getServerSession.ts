@@ -16,6 +16,7 @@ export interface ServerSession {
 }
 
 export const ADMIN_EMAILS = [
+  'inversionsanagustin@gmail.com',
   'moresteban1@gmail.com',
   'admin@liquidar.cl',
 ];
