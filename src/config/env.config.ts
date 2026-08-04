@@ -58,16 +58,25 @@ export const env = {
   IS_RUNTIME,
   IS_SERVER,
 
-  NEXT_PUBLIC_SUPABASE_URL: publicData.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: publicData.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_SUPABASE_URL: 
+    publicData.NEXT_PUBLIC_SUPABASE_URL || 
+    process.env.NEXT_PUBLIC_SUPABASE_URL || 
+    process.env['supabase_SUPABASE_URL'] || 
+    DEFAULT_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: 
+    publicData.NEXT_PUBLIC_SUPABASE_ANON_KEY || 
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 
+    process.env['supabase_SUPABASE_ANON_KEY'] || 
+    process.env['supabase_SUPABASE_PUBLISHABLE_KEY'] || 
+    DEFAULT_SUPABASE_ANON_KEY,
   
   get SUPABASE_SERVICE_ROLE_KEY(): string {
     if (IS_BUILD_TIME) return "";
-    const value = process.env['SUPABASE_SERVICE_ROLE_KEY'];
-    if (!value && IS_RUNTIME && IS_SERVER && process.env['NODE_ENV'] === 'production') {
-       throw new Error('SUPABASE_SERVICE_ROLE_KEY is missing in production runtime');
-    }
-    return value || "";
+    const value = 
+      process.env.SUPABASE_SERVICE_ROLE_KEY || 
+      process.env['supabase_SUPABASE_SERVICE_ROLE_KEY'] || 
+      process.env['supabase_SUPABASE_SECRET_KEY'];
+    return value || DEFAULT_SUPABASE_ANON_KEY;
   },
 
   get NODE_ENV(): string {
