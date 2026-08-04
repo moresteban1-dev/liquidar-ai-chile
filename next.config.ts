@@ -64,6 +64,7 @@ const config: NextConfig = {
     serverActions: {
       bodySizeLimit: '2mb',
       allowedOrigins: [
+        '*.vercel.app',
         'liquidar-ai-chile.vercel.app',
         'liquidar.cl',
         'www.liquidar.cl',

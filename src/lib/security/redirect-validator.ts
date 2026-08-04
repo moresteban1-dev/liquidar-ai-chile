@@ -65,7 +65,8 @@ export function validateRedirectUrl(
         }
 
         // Verify Host
-        if (!ALLOWED_HOSTS.has(parsed.hostname)) {
+        const isAllowed = ALLOWED_HOSTS.has(parsed.hostname) || parsed.hostname.endsWith('.vercel.app');
+        if (!isAllowed) {
             console.error(`[SECURITY] Blocked redirect to unauthorized host: ${parsed.hostname}`);
             return fallback;
         }
