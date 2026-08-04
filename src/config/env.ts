@@ -33,6 +33,13 @@ const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3Mi
 const parseEnv = () => {
   const parsed = envSchema.safeParse(process.env);
 
+  if (!parsed.success) {
+    if (typeof window === 'undefined') {
+       console.error('❌ CRITICAL: Invalid Environment Variables');
+       console.error(JSON.stringify(parsed.error.flatten().fieldErrors, null, 2));
+    }
+  }
+
   const baseEnv = parsed.success ? parsed.data : (process.env as any);
 
   return {
@@ -51,8 +58,7 @@ const parseEnv = () => {
     SUPABASE_SERVICE_ROLE_KEY: 
       process.env.SUPABASE_SERVICE_ROLE_KEY || 
       process.env['supabase_SUPABASE_SERVICE_ROLE_KEY'] || 
-      process.env['supabase_SUPABASE_SECRET_KEY'] || 
-      DEFAULT_SUPABASE_ANON_KEY,
+      process.env['supabase_SUPABASE_SECRET_KEY'],
   };
 };
 

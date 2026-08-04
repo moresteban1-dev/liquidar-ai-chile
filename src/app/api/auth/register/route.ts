@@ -168,15 +168,17 @@ export async function POST(request: NextRequest) {
                     name,
                     role
                 });
-        } catch {
-            // Non-blocking profile sync warning
+        } catch (err) {
+            logger.warn('[REGISTER] Non-blocking profile sync failed', err);
         }
 
         // Create provider profile if needed
         if (role === UserRole.VENDOR) {
             try {
                 await supabaseAdmin.from('provider_profiles').upsert({ user_id: userId });
-            } catch {}
+            } catch (err) {
+                logger.warn('[REGISTER] Non-blocking provider profile creation failed', err);
+            }
         }
 
         return NextResponse.json({
