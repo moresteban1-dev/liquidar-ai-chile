@@ -27,9 +27,6 @@ const envSchema = z.object({
   NEXT_PHASE: z.string().optional(),
 });
 
-const DEFAULT_SUPABASE_URL = 'https://bxhlusdpmjldqbsdztyg.supabase.co';
-const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA';
-
 const parseEnv = () => {
   const parsed = envSchema.safeParse(process.env);
 
@@ -49,12 +46,12 @@ const parseEnv = () => {
     NEXT_PUBLIC_SUPABASE_URL: 
       process.env.NEXT_PUBLIC_SUPABASE_URL || 
       process.env['supabase_SUPABASE_URL'] || 
-      DEFAULT_SUPABASE_URL,
+      '',
     NEXT_PUBLIC_SUPABASE_ANON_KEY: 
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 
       process.env['supabase_SUPABASE_ANON_KEY'] || 
       process.env['supabase_SUPABASE_PUBLISHABLE_KEY'] || 
-      DEFAULT_SUPABASE_ANON_KEY,
+      '',
     SUPABASE_SERVICE_ROLE_KEY: 
       process.env.SUPABASE_SERVICE_ROLE_KEY || 
       process.env['supabase_SUPABASE_SERVICE_ROLE_KEY'] || 
