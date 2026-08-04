@@ -1,6 +1,6 @@
 import { trace, Span, SpanStatusCode } from '@opentelemetry/api'
 
-const TRACER_NAME = 'dropservice-platform'
+const TRACER_NAME = 'liquidar-cl'
 
 export function getTracer() {
   return trace.getTracer(TRACER_NAME)

@@ -68,7 +68,6 @@ const config: NextConfig = {
         'liquidar-ai-chile.vercel.app',
         'liquidar.cl',
         'www.liquidar.cl',
-        'dropservice-platform.vercel.app',
         'localhost:3000',
       ],
     },

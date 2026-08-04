@@ -15,7 +15,7 @@ export function initObservability() {
 
   // Usamos una configuración minimalista que no requiere la clase Resource explícita
   const sdk = new NodeSDK({
-    serviceName: 'dropservice-platform',
+    serviceName: 'liquidar-cl',
     traceExporter: new ConsoleSpanExporter(),
   })
 

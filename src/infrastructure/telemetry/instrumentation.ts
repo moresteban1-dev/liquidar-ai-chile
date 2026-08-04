@@ -13,7 +13,7 @@ import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import type { SpanProcessor } from '@opentelemetry/sdk-trace-base';
 
 const isProduction = process.env['NODE_ENV'] === 'production';
-const serviceName = 'dropservice-platform';
+const serviceName = 'liquidar-cl';
 const serviceVersion = process.env['npm_package_version'] || '2.0.0';
 
 /**

@@ -2,7 +2,7 @@
 import { trace, SpanStatusCode, Span } from '@opentelemetry/api';
 import { logger } from '../logger';
 
-const tracer = trace.getTracer('dropservice-platform');
+const tracer = trace.getTracer('liquidar-cl');
 
 export function withTracing<T>(
     name: string,

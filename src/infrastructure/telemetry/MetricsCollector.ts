@@ -21,7 +21,7 @@ export interface MetricsCollector {
 }
 
 export class MetricsCollectorImpl implements MetricsCollector { constructor() { }
-  private readonly meter = metrics.getMeter('dropservice-platform');
+  private readonly meter = metrics.getMeter('liquidar-cl');
   private readonly ordersCreated = this.meter.createCounter('business.orders.created');
   private readonly quotationsCreated = this.meter.createCounter('business.quotations.created');
   private readonly quotationsApproved = this.meter.createCounter('business.quotations.approved');

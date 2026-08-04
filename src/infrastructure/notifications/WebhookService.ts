@@ -36,7 +36,7 @@ export class WebhookService {
           headers: {
             'Content-Type': 'application/json',
             'X-Webhook-Secret': this.secret,
-            'X-Source': 'Dropservice-Platform'
+            'X-Source': 'Liquidar-Platform'
           },
           body: JSON.stringify(payload)
         })

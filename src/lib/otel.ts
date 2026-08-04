@@ -11,7 +11,7 @@ export async function withTracing<T>(
     name: string, 
     fn: (span: Span) => Promise<T>
 ): Promise<T> {
-    const tracer: Tracer = trace.getTracer('dropservice-platform');
+    const tracer: Tracer = trace.getTracer('liquidar-cl');
     
     return await tracer.startActiveSpan(name, async (span) => {
         try {
