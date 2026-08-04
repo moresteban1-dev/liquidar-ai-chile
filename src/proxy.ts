@@ -67,11 +67,19 @@ const rateLimitMap = new Map<string, { count: number; reset: number }>();
 const RATE_LIMIT = 60; // 60 peticiones
 const RATE_WINDOW = 60 * 1000; // por minuto
 
-function resolveUserRole(user: { email?: string; app_metadata?: any; user_metadata?: any }): UserRole {
+async function resolveUserRole(user: { id?: string; email?: string; app_metadata?: any; user_metadata?: any }, supabase: any): Promise<UserRole> {
   if (user?.email && ADMIN_EMAILS.includes(user.email.toLowerCase())) {
     return UserRole.ADMIN;
   }
-  return normalizeRole(user?.app_metadata?.role || user?.user_metadata?.role);
+  let role = normalizeRole(user?.app_metadata?.role || user?.user_metadata?.role);
+  if (role === UserRole.CLIENT && user?.id) {
+      // Fallback: If metadata failed to sync, read from profiles table directly
+      const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle();
+      if (profile?.role) {
+          role = normalizeRole(profile.role);
+      }
+  }
+  return role;
 }
 
 export async function proxy(request: NextRequest) {
@@ -172,7 +180,7 @@ export async function proxy(request: NextRequest) {
     const isProtectedRoute = PROTECTED_ROUTES.find((r) => r.pattern.test(pathname));
     
     if (isProtectedRoute) {
-      const userRole = resolveUserRole(user);
+      const userRole = await resolveUserRole(user, supabase);
 
       if (!isProtectedRoute.roles.includes(userRole)) {
         if (pathname.startsWith('/api/')) {

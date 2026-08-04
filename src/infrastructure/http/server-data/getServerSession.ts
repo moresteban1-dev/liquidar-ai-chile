@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 import { UserRole, normalizeRole } from '@/core/domain/auth/UserRole';
+import { env } from '@/config/env';
 
 /**
  * Server-only session resolver for Next.js App Router.
@@ -25,8 +26,8 @@ export async function getServerSession(): Promise<ServerSession | null> {
   try {
     const cookieStore = await cookies();
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) return null;
 

@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
-import { requireRole } from '@/lib/supabase/api';
+import { getAuthUser } from '@/lib/supabase/api';
 import { UserRole } from '@/core/domain/auth/UserRole';
 import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 import { Button } from '@/components/ui/button';
@@ -32,9 +32,16 @@ export const dynamic = 'force-dynamic';
  * active quotations with action alerts, and Suspense streaming.
  */
 export default async function ClientDashboardPage() {
-    const auth = await requireRole(UserRole.CLIENT);
-    if (auth.isFailure()) redirect('/login');
-    const { user } = auth.getValue();
+    const authRes = await getAuthUser();
+    if (authRes.isFailure()) redirect('/login');
+    
+    const user = authRes.getValue();
+    
+    if (user.role === UserRole.ADMIN) {
+        redirect('/admin');
+    } else if (user.role !== UserRole.CLIENT) {
+        redirect('/login');
+    }
 
     return (
         <div className="space-y-6">

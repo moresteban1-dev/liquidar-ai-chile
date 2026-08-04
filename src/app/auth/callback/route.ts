@@ -62,17 +62,21 @@ export async function GET(request: NextRequest) {
         const user = session.user;
 
         // Check if profile exists
-        const { data: profile } = await supabase
+        const { data: profile, error: profileErr } = await supabase
             .from('profiles')
             .select('role')
             .eq('id', user.id)
             .maybeSingle();
 
+        if (profileErr) {
+            console.warn('[Auth Callback] Could not fetch profile, RLS may be blocking:', profileErr.message);
+        }
+
         let role = profile?.role || UserRole.CLIENT;
 
         // Create profile if it doesn't exist
         if (!profile) {
-            await supabase
+            const { error: insertErr } = await supabase
                 .from('profiles')
                 .insert({
                     id: user.id,
@@ -81,6 +85,9 @@ export async function GET(request: NextRequest) {
                     role: role,
                     created_at: new Date().toISOString()
                 });
+            if (insertErr) {
+                console.warn('[Auth Callback] Profile creation failed. Relying on fallback role:', insertErr.message);
+            }
         }
 
         // 🔄 Sync Role to Auth Metadata safely
@@ -91,10 +98,14 @@ export async function GET(request: NextRequest) {
                 { cookies: { getAll() { return []; }, setAll() {} } }
             );
 
-            await supabaseAdmin.auth.admin.updateUserById(user.id, {
+            const { error: adminAuthErr } = await supabaseAdmin.auth.admin.updateUserById(user.id, {
                 user_metadata: { role: role },
                 app_metadata: { role: role }
             });
+            
+            if (adminAuthErr) {
+                console.warn('[Auth Callback Warning] Admin metadata update failed:', adminAuthErr.message);
+            }
         } catch (adminErr) {
             console.warn('[Auth Callback Warning] Admin metadata update skipped:', adminErr);
         }
