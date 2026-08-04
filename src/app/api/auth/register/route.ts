@@ -17,6 +17,8 @@ const RegisterSchema = z.object({
 
 async function verifyCaptcha(token: string | undefined): Promise<boolean> {
     if (process.env.NODE_ENV === 'development') return true;
+    // If Cloudflare Turnstile secret key is not configured, bypass CAPTCHA requirement
+    if (!process.env.TURNSTILE_SECRET_KEY) return true;
     if (!token) return false;
 
     try {
