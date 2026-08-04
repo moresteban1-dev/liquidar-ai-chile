@@ -20,7 +20,7 @@ export function registerBindings(c: IContainer): void {
     const logger = StructuredLogger.create({ component: 'EmailService' });
     return new EmailService(
       process.env['RESEND_API_KEY'] || '',
-      process.env['DEFAULT_FROM_EMAIL'] || 'noreply@dropservice.cl',
+      process.env['DEFAULT_FROM_EMAIL'] || 'noreply@liquidar.cl',
       logger
     );
   }, { singleton: true });

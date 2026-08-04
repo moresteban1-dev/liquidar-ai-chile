@@ -2,7 +2,7 @@ import React from 'react';
 import WizardContainer from '@/components/quoter/WizardContainer';
 
 export const metadata = {
-    title: 'Cotizador Inteligente | Dropservice Eventos',
+    title: 'Cotizador Inteligente | Liquidar.cl Subastas y Liquidaciones',
     description: 'Obtén una cotización inmediata y personalizada para la producción técnica de tu evento.',
 };
 

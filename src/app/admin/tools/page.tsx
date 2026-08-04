@@ -3,7 +3,7 @@ import { Search, Bot, ExternalLink, FileSpreadsheet } from 'lucide-react';
 import { ToolCard, ToolRunHistoryTable } from '@/components/admin/tools';
 
 export const metadata: Metadata = {
-  title: 'Herramientas Inteligentes | Dropservice',
+  title: 'Herramientas Inteligentes | Liquidar.cl',
   description: 'Centro de herramientas impulsadas por IA para análisis y optimización',
 };
 

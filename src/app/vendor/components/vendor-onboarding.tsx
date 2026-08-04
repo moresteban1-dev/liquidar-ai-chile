@@ -87,7 +87,7 @@ export function VendorOnboarding({ hasProfile, hasInventory, hasBids }: {
             <CardHeader className="pb-4 flex flex-row items-start justify-between">
                 <div className="space-y-1">
                     <CardTitle className="text-xl font-black tracking-tighter text-foreground flex items-center gap-2">
-                        🚀 ¡Bienvenido a DropService!
+                        🚀 ¡Bienvenido a Liquidar.cl!
                     </CardTitle>
                     <CardDescription className="text-xs font-bold text-muted-foreground/80 uppercase tracking-widest">
                         Completa tu configuración para vender

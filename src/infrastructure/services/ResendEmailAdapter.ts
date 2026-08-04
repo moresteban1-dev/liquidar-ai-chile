@@ -3,7 +3,7 @@ import { logger } from '@infrastructure/telemetry/StructuredLogger';
 
 export class ResendEmailAdapter implements EmailPort {
     private readonly apiKey = process.env.RESEND_API_KEY;
-    private readonly fromEmail = process.env.NEXT_PUBLIC_SENDER_EMAIL || 'no-reply@dropservice.app';
+    private readonly fromEmail = process.env.NEXT_PUBLIC_SENDER_EMAIL || 'no-reply@liquidar.cl';
 
     async sendEmail(payload: EmailPayload): Promise<boolean> {
         try {

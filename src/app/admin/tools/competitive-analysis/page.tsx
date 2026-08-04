@@ -127,7 +127,7 @@ export default function CompetitiveAnalysisPage() {
             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="businessName">Nombre del Negocio</Label>
-                <Input id="businessName" placeholder="Ej: DropService Plataforma" {...register('businessName')} />
+                <Input id="businessName" placeholder="Ej: Liquidar.cl Plataforma" {...register('businessName')} />
                 {errors.businessName && <span className="text-xs text-red-500">{errors.businessName.message}</span>}
               </div>
               <div className="space-y-2">

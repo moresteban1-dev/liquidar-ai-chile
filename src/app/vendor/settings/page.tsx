@@ -61,7 +61,7 @@ export default function VendorSettingsPage() {
                     <ProviderBankForm profile={profile} />
                     <div className="pt-6 border-t border-border">
                         <h2 className="text-xl font-semibold mb-4 text-foreground/80">
-                            Datos Bancarios de DropService (Para Facturación/Comisiones)
+                            Datos Bancarios de Liquidar.cl (Para Facturación/Comisiones)
                         </h2>
                         <BankInfoCard />
                     </div>

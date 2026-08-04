@@ -13,7 +13,7 @@ import {
 } from '@/infrastructure/http/server-data/serverFetch';
 
 export const metadata: Metadata = {
-    title: 'Mi Inventario | Dropservice Vendor',
+    title: 'Mi Inventario | Liquidar Vendor',
     description: 'Gestiona tus equipos y servicios para recibir solicitudes de cotización.',
 };
 

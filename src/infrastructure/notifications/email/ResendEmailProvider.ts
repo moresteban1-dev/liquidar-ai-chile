@@ -26,7 +26,7 @@ export class ResendEmailProvider implements IEmailProvider {
     this.metrics = deps.metrics;
     this.apiKey = deps.apiKey;
     this.fromAddress = deps.fromAddress;
-    this.fromName = deps.fromName ?? 'DropService Platform';
+    this.fromName = deps.fromName ?? 'Liquidar.cl Platform';
     this.timeoutMs = deps.timeoutMs ?? 10_000;
   }
 

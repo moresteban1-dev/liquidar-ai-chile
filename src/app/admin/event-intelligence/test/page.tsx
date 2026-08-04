@@ -40,7 +40,7 @@ export default async function InferenceTestPage() {
       </Suspense>
 
       <footer className="pt-8 border-t border-border/50 text-[10px] text-muted-foreground flex justify-between items-center text-center">
-        <p>© 2026 Dropservice Platform — Event Intelligence Engine v2.0</p>
+        <p>© 2026 Liquidar.cl Platform — Event Intelligence Engine v2.0</p>
         <div className="flex gap-4">
             <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Repository Online</span>
             <span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Inference Engine READY</span>

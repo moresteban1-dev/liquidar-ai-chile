@@ -69,7 +69,7 @@ export function ChatInterface() {
                     <div className="space-y-4" ref={scrollRef}>
                         {messages.length === 0 && (
                             <div className="text-center text-muted-foreground mt-20">
-                                Start a conversation with the Dropservice Agent.
+                                Start a conversation with the Liquidar.cl Agent.
                             </div>
                         )}
 

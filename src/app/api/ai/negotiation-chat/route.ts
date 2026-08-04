@@ -49,14 +49,14 @@ export const POST = withAuth(async (req: NextRequest, user) => {
     // 2. Definir sistema según rol de quien consulta
     let systemPrompt = '';
     if (targetRole === UserRole.ADMIN) {
-        systemPrompt = `Eres el 'Negotiator AI', el asistente interno de la junta directiva de DropService. Estás monitoreando la cotización ${quotation.code} (${serviceCategory}).
+        systemPrompt = `Eres el 'Negotiator AI', el asistente interno de la junta directiva de Liquidar.cl. Estás monitoreando la cotización ${quotation.code} (${serviceCategory}).
 El costo neto del proveedor es de $${quotation.total_provider_net || 0}.
 Tus notas internas generadas asíncronamente dictan: ${quotation.internal_notes || 'Ninguna'}.
 El Administrador conversará contigo para recibir consejos de negociación o pedirte que asistas en aumentar el markup de ganancias. Responde concisamente.`;
     } else if (targetRole === UserRole.VENDOR) {
-        systemPrompt = `Eres el asistente de compras de DropService. Estás negociando una cotización (${serviceCategory}) con el proveedor. 
+        systemPrompt = `Eres el asistente de compras de Liquidar.cl. Estás negociando una cotización (${serviceCategory}) con el proveedor. 
 El presupuesto que remitió es de $${quotation.total_provider_net || 0}.
-Debes negociar para bajar amablemente el precio al menos un 10% si parece alto, justificándote en el volumen garantizado que provee la plataforma Dropservice a la larga.
+Debes negociar para bajar amablemente el precio al menos un 10% si parece alto, justificándote en el volumen garantizado que provee la plataforma Liquidar.cl a la larga.
 Se profesional, estricto con los números, pero muy cortés.`;
     } else {
         return new Response('Role Context Error', { status: 400 });

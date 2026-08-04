@@ -3,7 +3,7 @@ import { trace, SpanKind, SpanStatusCode } from '@opentelemetry/api'
 import { logger } from '@/infrastructure/telemetry/StructuredLogger'
 import { metricsCollector } from '@/infrastructure/telemetry/MetricsCollector'
 
-const tracer = trace.getTracer('dropservice-api')
+const tracer = trace.getTracer('liquidar-api')
 
 export function withTelemetry<T extends Record<string, string> = Record<string, string>>(
   handler: (request: NextRequest, context: { params: Promise<T> }) => Promise<NextResponse>

@@ -29,7 +29,7 @@ export function getBaseLayout(): string {
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                   <td style="color:#555;font-size:12px;line-height:18px;">
-                    <p style="margin:0;">DropService Platform &copy; {{YEAR}}</p>
+                    <p style="margin:0;">Liquidar.cl Platform &copy; {{YEAR}}</p>
                     <p style="margin:4px 0 0;">Este email fue enviado automáticamente. No respondas directamente.</p>
                   </td>
                 </tr>

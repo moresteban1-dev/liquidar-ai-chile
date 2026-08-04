@@ -56,7 +56,7 @@ export async function resetPasswordAction(email: string): Promise<ActionResponse
                         console.info('[resetPasswordAction] User is Google-only. Sending login reminder.');
                         await sendEmail({
                             to: email,
-                            subject: 'Accede con Google - DropService',
+                            subject: 'Accede con Google - Liquidar.cl',
                             html: `
                                 <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
                                     <h2 style="color: #4F46E5;">Recuperación de Cuenta</h2>
@@ -92,7 +92,7 @@ export async function resetPasswordAction(email: string): Promise<ActionResponse
             // Send email via Resend
             const emailResult = await sendEmail({
                 to: email,
-                subject: 'Recuperación de Contraseña - DropService',
+                subject: 'Recuperación de Contraseña - Liquidar.cl',
                 html: `
                     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
                         <h2 style="color: #4F46E5;">Recupera tu contraseña</h2>

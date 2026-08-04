@@ -21,7 +21,7 @@ export const EmailTemplates = {
       <p>Monto total: <strong>$${total.toLocaleString()}</strong></p>
       <p>Estamos procesando tu solicitud y te avisaremos cuando haya actualizaciones.</p>
       <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-      <p style="font-size: 0.8em; color: #888;">© Dropservice Platform</p>
+      <p style="font-size: 0.8em; color: #888;">© Liquidar.cl Platform</p>
     </div>
   `
 }

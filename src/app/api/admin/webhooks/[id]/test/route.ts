@@ -25,7 +25,7 @@ export const POST = adminRoute(async (req: NextRequest, _ctx: MiddlewareContext)
       body: JSON.stringify({
         event: 'test.ping',
         timestamp: new Date().toISOString(),
-        payload: { message: 'This is a test notification from Dropservice Operations Center' }
+        payload: { message: 'This is a test notification from Liquidar.cl Operations Center' }
       })
     });
 

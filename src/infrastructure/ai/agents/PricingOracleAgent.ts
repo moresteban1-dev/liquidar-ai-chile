@@ -31,7 +31,7 @@ export class PricingOracleAgent {
             : 0;
 
         const prompt = `
-          Eres el "Pricing Oracle" de una plataforma de Dropservice.
+          Eres el "Pricing Oracle" de una plataforma de Liquidar.cl.
           Tu objetivo es predecir el precio y costo óptimo basado en datos históricos y tendencias.
 
           DATOS HISTÓRICOS:

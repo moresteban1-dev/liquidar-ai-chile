@@ -13,7 +13,7 @@ export class QuotationNotificationHandler implements EventHandler<QuotationStatu
         private notificationService: NotificationService,
         private emailService: EmailService,
         private logger: Logger,
-        private readonly baseUrl: string = process.env.NEXT_PUBLIC_APP_URL || 'https://dropservice.cl'
+        private readonly baseUrl: string = process.env.NEXT_PUBLIC_APP_URL || 'https://liquidar.cl'
     ) { }
 
     async handle(event: QuotationStatusChanged | QuotationBidReceived): Promise<void> {

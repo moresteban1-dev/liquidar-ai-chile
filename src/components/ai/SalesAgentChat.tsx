@@ -19,7 +19,7 @@ export function SalesAgentChat() {
             {
                 id: '1',
                 role: 'assistant',
-                content: '¡Hola! Soy el agente corporativo de DropService. ¿En qué te puedo asesorar para tu próximo evento o solicitud?',
+                content: '¡Hola! Soy el agente corporativo de Liquidar.cl. ¿En qué te puedo asesorar para tu próximo evento o solicitud?',
             }
         ],
     } as any) as any;
@@ -63,7 +63,7 @@ export function SalesAgentChat() {
                         <div className="flex items-center gap-2">
                             <Bot size={20} />
                             <div>
-                                <h3 className="text-sm font-semibold">DropService AI</h3>
+                                <h3 className="text-sm font-semibold">Liquidar.cl AI</h3>
                                 <p className="text-[10px] text-indigo-100 uppercase tracking-wider">Smart Assistant</p>
                             </div>
                         </div>

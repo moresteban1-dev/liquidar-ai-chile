@@ -17,7 +17,7 @@ export class SLAGuardianAgent {
         const { orderId, createdAt, eventDate, deliveryDays, providerHistory } = input;
 
         const prompt = `
-          Eres el "SLA Guardian" de una plataforma de Dropservice.
+          Eres el "SLA Guardian" de una plataforma de Liquidar.cl.
           Tu objetivo es predecir riesgos de retraso en la producción de pedidos.
 
           DATOS DEL PEDIDO:

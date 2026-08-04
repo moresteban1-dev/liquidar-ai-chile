@@ -73,7 +73,7 @@ export class AIBrokerService {
                 const expertise = expertiseResult.isSuccess() ? expertiseResult.value : 'No disponible';
 
                 const prompt = `
-          Eres el "Dropservice AI Broker".
+          Eres el "Liquidar.cl AI Broker".
           Tu objetivo es calificar del 0 al 100 qué tan idóneo es un Proveedor para ejecutar el requerimiento del Cliente.
           
           --- REQUERIMIENTO DEL CLIENTE:

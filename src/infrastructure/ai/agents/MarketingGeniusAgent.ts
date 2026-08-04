@@ -18,7 +18,7 @@ export class MarketingGeniusAgent {
 
         // Note: For now we'll use a direct prompt, but eventually this should be in PromptRegistry
         const prompt = `
-          Eres un experto en Marketing Digital y SEO para plataformas de "Dropservice".
+          Eres un experto en Marketing Digital y SEO para plataformas de "Liquidar.cl Subastas y Liquidaciones B2B".
           Tu objetivo es generar contenido persuasivo y optimizado para el siguiente servicio:
 
           SERVICIO: ${serviceName}

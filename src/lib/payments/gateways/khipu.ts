@@ -50,7 +50,7 @@ export class KhipuService implements IPaymentGatewayService {
             amount: String(Math.round(Number(payment.amount))),
             transaction_id: payment.id,
             custom: payment.id,
-            body: `Pago orden ${payment.order_id.slice(0, 8)} — DropService`,
+            body: `Pago orden ${payment.order_id.slice(0, 8)} — Liquidar.cl`,
             return_url: `${returnUrl}?payment_id=${payment.id}`,
             cancel_url: `${cancelUrl}?payment_id=${payment.id}`,
             notify_url: webhookUrl,

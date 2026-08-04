@@ -122,8 +122,8 @@ function SuccessContent() {
                 {/* Footer */}
                 <p className="text-center text-sm text-slate-500 mt-6">
                     ¿Tienes preguntas? Escríbenos a{' '}
-                    <a href="mailto:contacto@dropservice.cl" className="text-blue-600 underline">
-                        contacto@dropservice.cl
+                    <a href="mailto:contacto@liquidar.cl" className="text-blue-600 underline">
+                        contacto@liquidar.cl
                     </a>
                 </p>
             </div>
