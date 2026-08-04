@@ -5,7 +5,7 @@ import { z } from 'zod';
  */
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
-  NEXT_PUBLIC_APP_URL: z.string().default('https://liquidar-ai-chile-vert.vercel.app'),
+  NEXT_PUBLIC_APP_URL: z.string().optional(),
   NEXT_PUBLIC_SUPABASE_URL: z.string().optional(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
@@ -45,7 +45,7 @@ const parseEnv = () => {
   return {
     ...baseEnv,
     NODE_ENV: process.env.NODE_ENV || 'development',
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'https://liquidar-ai-chile-vert.vercel.app',
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'),
     NEXT_PUBLIC_SUPABASE_URL: 
       process.env.NEXT_PUBLIC_SUPABASE_URL || 
       process.env['supabase_SUPABASE_URL'] || 

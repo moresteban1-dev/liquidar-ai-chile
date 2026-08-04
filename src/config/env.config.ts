@@ -24,7 +24,7 @@ const publicEnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().default(DEFAULT_SUPABASE_URL),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().default(DEFAULT_SUPABASE_ANON_KEY),
   NEXT_PUBLIC_APP_URL: 
-    z.string().optional().default('https://liquidar-ai-chile-vert.vercel.app'),
+    z.string().optional(),
 });
 
 /**
@@ -34,7 +34,7 @@ export function validateEnv() {
   const publicEnvResult = publicEnvSchema.safeParse({
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY,
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'https://liquidar-ai-chile.vercel.app',
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined),
   });
 
   if (!publicEnvResult.success) {
@@ -50,7 +50,7 @@ const publicEnvResult = validateEnv();
 const publicData = publicEnvResult.success ? publicEnvResult.data : {
   NEXT_PUBLIC_SUPABASE_URL: DEFAULT_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_ANON_KEY: DEFAULT_SUPABASE_ANON_KEY,
-  NEXT_PUBLIC_APP_URL: 'https://liquidar-ai-chile.vercel.app',
+  NEXT_PUBLIC_APP_URL: undefined,
 };
 
 // 2. Exportar con Getters Protegidos
