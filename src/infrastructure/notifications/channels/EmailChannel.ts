@@ -5,9 +5,14 @@ import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger';
 import { MetricsCollector } from '@/infrastructure/telemetry/MetricsCollector';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env['NEXT_PUBLIC_SUPABASE_URL'] || '';
-const supabaseKey = process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] || '';
-const supabase = createClient(supabaseUrl, supabaseKey);
+const DEFAULT_SUPABASE_URL = 'https://bxhlusdpmjldqbsdztyg.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA';
+
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
+  return createClient(supabaseUrl, supabaseKey);
+}
 
 export class EmailChannel implements INotificationChannel {
   readonly channelType: NotificationChannelType = 'email';
@@ -135,7 +140,7 @@ export class EmailChannel implements INotificationChannel {
 
       if (result.error) logData.error_message = result.error;
 
-      await supabase.from('notification_log').insert(logData);
+      await getSupabaseClient().from('notification_log').insert(logData);
     } catch (err) {
       const errorStr = err instanceof Error ? err.message : 'Unknown log error';
       this.logger.error('Failed to log notification', new Error(errorStr));

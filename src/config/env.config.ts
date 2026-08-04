@@ -31,9 +31,9 @@ const publicEnvSchema = z.object({
  */
 export function validateEnv() {
   const publicEnvResult = publicEnvSchema.safeParse({
-    NEXT_PUBLIC_SUPABASE_URL: process.env['NEXT_PUBLIC_SUPABASE_URL'] || DEFAULT_SUPABASE_URL,
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] || DEFAULT_SUPABASE_ANON_KEY,
-    NEXT_PUBLIC_APP_URL: process.env['NEXT_PUBLIC_APP_URL'] || 'https://liquidar-ai-chile.vercel.app',
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL || 'https://liquidar-ai-chile.vercel.app',
   });
 
   if (!publicEnvResult.success) {
@@ -58,8 +58,8 @@ export const env = {
   IS_RUNTIME,
   IS_SERVER,
 
-  NEXT_PUBLIC_SUPABASE_URL: publicData.NEXT_PUBLIC_SUPABASE_URL || process.env['NEXT_PUBLIC_SUPABASE_URL'] || DEFAULT_SUPABASE_URL,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: publicData.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY'] || DEFAULT_SUPABASE_ANON_KEY,
+  NEXT_PUBLIC_SUPABASE_URL: publicData.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL,
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: publicData.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY,
   
   get SUPABASE_SERVICE_ROLE_KEY(): string {
     if (IS_BUILD_TIME) return "";

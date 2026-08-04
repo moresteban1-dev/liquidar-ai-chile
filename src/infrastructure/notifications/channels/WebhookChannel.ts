@@ -5,7 +5,14 @@ import { WebhookDispatcher, WebhookConfig } from '../webhook/WebhookDispatcher';
 import { StructuredLogger } from '@/infrastructure/telemetry/StructuredLogger';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(process.env['NEXT_PUBLIC_SUPABASE_URL']!, process.env['NEXT_PUBLIC_SUPABASE_ANON_KEY']!);
+const DEFAULT_SUPABASE_URL = 'https://bxhlusdpmjldqbsdztyg.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA';
+
+function getSupabaseClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
+  return createClient(url, key);
+}
 
 export class WebhookChannel implements INotificationChannel {
   readonly channelType: NotificationChannelType = 'webhook';
@@ -23,7 +30,7 @@ export class WebhookChannel implements INotificationChannel {
 
   async send(notification: ChannelNotification): Promise<ChannelResult> {
     // Buscar webhooks activos suscritos al evento
-    const { data: webhooks, error } = await supabase
+    const { data: webhooks, error } = await getSupabaseClient()
       .from('webhooks')
       .select('*')
       .contains('events', [notification.eventType])

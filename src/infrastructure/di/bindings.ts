@@ -95,9 +95,11 @@ export function registerBindings(c: IContainer): void {
   c.register('SupabaseClient', async () => {
     const { createClient } = await import('@supabase/supabase-js');
     
-    // Usamos variables de entorno seguras (Getters del nuevo env.config)
-    const url = process.env['NEXT_PUBLIC_SUPABASE_URL'] || '';
-    const serviceKey = process.env['SUPABASE_SERVICE_ROLE_KEY'] || '';
+    const DEFAULT_SUPABASE_URL = 'https://bxhlusdpmjldqbsdztyg.supabase.co';
+    const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA';
+
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
     
     return createClient(url, serviceKey, {
       auth: {
