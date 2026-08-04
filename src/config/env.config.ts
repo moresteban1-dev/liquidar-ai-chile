@@ -23,7 +23,8 @@ const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3Mi
 const publicEnvSchema = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string().default(DEFAULT_SUPABASE_URL),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().default(DEFAULT_SUPABASE_ANON_KEY),
-  NEXT_PUBLIC_APP_URL: z.string().optional().default('https://liquidar-ai-chile.vercel.app'),
+  NEXT_PUBLIC_APP_URL: 
+    z.string().optional().default('https://liquidar-ai-chile-vert.vercel.app'),
 });
 
 /**
