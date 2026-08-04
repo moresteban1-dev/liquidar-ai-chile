@@ -1,3 +1,4 @@
+import { env } from '@/config/env';
 /**
  * Item Proposals Admin API
  * GET: List all proposals (admin only)
@@ -12,7 +13,7 @@ import { withAdmin } from '@/lib/api/with-auth';
 // Helper for admin operations (RLS bypass)
 const createAdminClient = () => createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    env.SUPABASE_SERVICE_ROLE_KEY,
     { cookies: { getAll: () => [], setAll: () => {} } }
 );
 

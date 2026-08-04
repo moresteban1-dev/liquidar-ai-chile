@@ -1,3 +1,4 @@
+import { env } from '@/config/env';
 import { NextRequest } from 'next/server';
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
@@ -34,7 +35,7 @@ export const POST = withAuth(async (req: NextRequest, _user) => {
     // Initialize Supabase admin client to fetch services bypass RLS
     const supabase = createClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.SUPABASE_SERVICE_ROLE_KEY!
+        env.SUPABASE_SERVICE_ROLE_KEY
     );
 
     // Fetch dynamic knowledge

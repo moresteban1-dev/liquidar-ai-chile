@@ -72,7 +72,7 @@ export async function createApiClient(): Promise<Result<any, AppError>> {
  */
 export function createServiceRoleClient() {
     const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const supabaseServiceKey = env.SUPABASE_SERVICE_ROLE_KEY || env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     return createServerClient(supabaseUrl, supabaseServiceKey, {
         cookies: {
@@ -88,7 +88,7 @@ export function createServiceRoleClient() {
 export async function createServiceRoleClientAction() {
     const cookieStore = await cookies();
     const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const supabaseServiceKey = env.SUPABASE_SERVICE_ROLE_KEY || env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     return createServerClient(supabaseUrl, supabaseServiceKey, {
         cookies: {

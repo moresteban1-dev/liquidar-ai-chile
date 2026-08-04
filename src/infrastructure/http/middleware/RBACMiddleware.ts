@@ -1,3 +1,4 @@
+import { env } from '@/config/env';
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { logger } from '@/infrastructure/telemetry/StructuredLogger'
@@ -55,7 +56,7 @@ export async function extractUser(request: NextRequest): Promise<AuthenticatedUs
     // Obtener rol del usuario de la base de datos interna usando Service Role (bypass RLS para validación)
     const serviceClient = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
+      env.SUPABASE_SERVICE_ROLE_KEY
     )
 
     const { data: userData, error: userError } = await serviceClient

@@ -1,3 +1,4 @@
+import { env } from '@/config/env';
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
@@ -12,7 +13,7 @@ function getSupabaseClient() {
   if (_supabaseClient) return _supabaseClient;
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
+  const supabaseKey = env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
 
   _supabaseClient = createClient(supabaseUrl, supabaseKey);
   return _supabaseClient;
