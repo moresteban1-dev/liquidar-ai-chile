@@ -318,7 +318,7 @@ describe('Money Value Object', () => {
       expect(totalResult.getValue().amount).toBe(1160);
     });
 
-    it('should calculate commission for dropservice platform', () => {
+    it('should calculate commission for Liquidar platform', () => {
       const providerCost = Money.create(10000, 'USD').getValue();
       const commissionRate = 30; // 30%
       

@@ -3,7 +3,7 @@
 /**
  * @file HeroSection.tsx
  * @description Liquidar Platform Chile — Hero section for the auction homepage.
- * Replaces the previous dropservice hero with auction-focused content.
+ * Replaces the previous platform hero with auction-focused content.
  */
 
 import Link from 'next/link';

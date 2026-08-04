@@ -23,12 +23,12 @@ const AgentOutputSchema = z.object({
 });
 
 /**
- * Main Drop Service Supervisor Flow
+ * Main Liquidar.cl Supervisor Flow
  * Orchestrates specialized agents.
  */
-export const dropServiceAgent = ai.defineFlow(
+export const liquidarAgent = ai.defineFlow(
   {
-    name: "dropServiceAgent",
+    name: "liquidarAgent",
     inputSchema: AgentInputSchema,
     outputSchema: AgentOutputSchema,
   },
@@ -42,7 +42,7 @@ export const dropServiceAgent = ai.defineFlow(
     });
 
     const routingPrompt = PromptRegistry.get('SUPERVISOR_ROUTING', 'v1')({
-      systemPrompt: "You are the Supervisor of a Drop - Servicing Platform.",
+      systemPrompt: "You are the Supervisor of Liquidar.cl Platform.",
       data,
       lastMessage: messages[messages.length - 1].content
     });

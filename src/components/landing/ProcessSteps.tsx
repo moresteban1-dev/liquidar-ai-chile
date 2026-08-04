@@ -3,7 +3,7 @@
 /**
  * @file ProcessSteps.tsx
  * @description "Cómo Funciona" section for Liquidar Platform Chile.
- * Replaces dropservice steps with auction-specific flow.
+ * Replaces platform steps with auction-specific flow.
  */
 
 import { motion } from 'framer-motion';

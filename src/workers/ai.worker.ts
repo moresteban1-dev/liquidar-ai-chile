@@ -1,7 +1,7 @@
 import { Worker, Job, ConnectionOptions } from 'bullmq';
 import { QUEUE_NAMES } from '@infrastructure/queue/queue.factory';
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
-import { dropServiceAgent } from '@/lib/ai/flow'; // Import the flow to execute
+import { liquidarAgent } from '@/lib/ai/flow'; // Import the flow to execute
 
 // Define Job Data Structure
 interface AIJobData {
@@ -28,8 +28,8 @@ export const createAIWorker = () => {
 
         try {
             // Dispatch based on flow name
-            if (flowName === 'dropServiceAgent') {
-                const result = await dropServiceAgent(input);
+            if (flowName === 'liquidarAgent') {
+                const result = await liquidarAgent(input);
                 return result;
             }
 

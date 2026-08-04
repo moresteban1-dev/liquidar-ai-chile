@@ -36,8 +36,8 @@ export const POST = withAuth(async (request, _user) => {
 
         // Add to Queue instead of awaiting directly
         const queue = getQueue(QUEUE_NAMES.AI_PROCESSING);
-        const job = await queue.add('dropServiceAgent', {
-            flowName: 'dropServiceAgent',
+        const job = await queue.add('liquidarAgent', {
+            flowName: 'liquidarAgent',
             input: flowInput,
             correlationId
         });

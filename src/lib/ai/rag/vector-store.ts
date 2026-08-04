@@ -4,7 +4,7 @@ export const pinecone = process.env.PINECONE_API_KEY
     ? new Pinecone({ apiKey: process.env.PINECONE_API_KEY })
     : null;
 
-export const INDEX_NAME = "dropservice-knowledge";
+export const INDEX_NAME = "liquidar-knowledge";
 
 export const getIndex = () => {
     if (!pinecone) {
