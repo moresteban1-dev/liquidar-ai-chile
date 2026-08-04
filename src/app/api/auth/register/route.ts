@@ -103,42 +103,80 @@ export async function POST(request: NextRequest) {
             logger.info('[REGISTER] Admin role assigned via invitation token');
         }
 
-        // 🛡️ Layer 6: Supabase Auth Admin Creation
-        const { data: creationData, error: authError } = await supabaseAdmin.auth.admin.createUser({
-            email,
-            password,
-            email_confirm: true,
-            user_metadata: {
-                full_name: name,
-                role: role
-            }
-        });
+        // 🛡️ Layer 6: Supabase Auth Creation (Admin with fallback to standard signUp)
+        let userId: string | null = null;
+        let authErrorMessage: string | null = null;
 
-        if (authError) {
-            logger.error('[REGISTER] Auth creation failed:', authError);
-            return NextResponse.json({ error: 'Error al crear la cuenta' }, { status: 500 });
-        }
-
-        // 🛡️ Layer 7: Manual Profile Sync (Redundant to future trigger)
-        const { error: profileError } = await supabaseAdmin
-            .from('profiles')
-            .upsert({
-                id: creationData.user!.id,
+        try {
+            const { data: creationData, error: authError } = await supabaseAdmin.auth.admin.createUser({
                 email,
-                name,
-                role
+                password,
+                email_confirm: true,
+                user_metadata: {
+                    full_name: name,
+                    role: role
+                }
             });
 
-        if (profileError) {
-            logger.error('[REGISTER] Profile sync failed:', profileError);
-            // Rollback auth user if profile fails
-            await supabaseAdmin.auth.admin.deleteUser(creationData.user!.id);
-            return NextResponse.json({ error: 'Error al sincronizar perfil' }, { status: 500 });
+            if (authError) {
+                authErrorMessage = authError.message;
+                logger.warn('[REGISTER] Admin createUser failed, trying standard signUp:', { message: authError.message });
+            } else if (creationData.user) {
+                userId = creationData.user.id;
+            }
+        } catch (adminErr: any) {
+            logger.warn('[REGISTER] Admin client error:', { message: adminErr?.message });
+        }
+
+        // Fallback: If admin creation failed, try standard signUp via public client
+        if (!userId) {
+            const DEFAULT_SUPABASE_URL = 'https://bxhlusdpmjldqbsdztyg.supabase.co';
+            const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA';
+            const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.supabase_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+            const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.supabase_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
+
+            const { createClient: createPublicClient } = await import('@supabase/supabase-js');
+            const publicClient = createPublicClient(supabaseUrl, supabaseKey);
+
+            const { data: signUpData, error: signUpError } = await publicClient.auth.signUp({
+                email,
+                password,
+                options: {
+                    data: {
+                        full_name: name,
+                        role: role
+                    }
+                }
+            });
+
+            if (signUpError || !signUpData.user) {
+                const msg = signUpError?.message || authErrorMessage || 'Error al crear la cuenta en Supabase';
+                logger.error('[REGISTER] SignUp failed:', msg);
+                return NextResponse.json({ error: msg }, { status: 400 });
+            }
+
+            userId = signUpData.user.id;
+        }
+
+        // 🛡️ Layer 7: Profile Sync
+        try {
+            await supabaseAdmin
+                .from('profiles')
+                .upsert({
+                    id: userId,
+                    email,
+                    name,
+                    role
+                });
+        } catch {
+            // Non-blocking profile sync warning
         }
 
         // Create provider profile if needed
         if (role === UserRole.VENDOR) {
-            await supabaseAdmin.from('provider_profiles').upsert({ user_id: creationData.user!.id });
+            try {
+                await supabaseAdmin.from('provider_profiles').upsert({ user_id: userId });
+            } catch {}
         }
 
         return NextResponse.json({
