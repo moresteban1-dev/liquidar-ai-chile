@@ -12,9 +12,20 @@ export default function GlobalError({
     reset: () => void;
 }) {
     useEffect(() => {
-        // Log directamente con console — NUNCA importar módulos externos aquí
-        // para evitar un doble-crash si el módulo de logging también falla
         console.error('🚨 [Error Boundary] Caught exception:', error.message, error.stack);
+        
+        fetch('/api/forensics/report', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                digest: error.digest,
+                name: error.name,
+                message: error.message,
+                stack: error.stack,
+                url: typeof window !== 'undefined' ? window.location.href : 'unknown',
+                timestamp: new Date().toISOString(),
+            }),
+        }).catch(() => { /* Silent failure */ });
     }, [error]);
 
     return (

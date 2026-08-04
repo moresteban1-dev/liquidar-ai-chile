@@ -85,14 +85,16 @@ export const container = new Container();
 export const getContainer = async (): Promise<Container> => {
     // Si el repositorio no está registrado, ejecutamos el bootstrap estático (SAFE TIER)
     if (!container.has('CatalogRepository')) {
-        const DEFAULT_SUPABASE_URL = 'https://bxhlusdpmjldqbsdztyg.supabase.co';
-        const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA';
-
-        const url = process.env.NEXT_PUBLIC_SUPABASE_URL || DEFAULT_SUPABASE_URL;
-        const key = env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
-        
         // Registro Manual/Estático para máxima confiabilidad en Vercel
-        container.register('SupabaseClient', () => createClient(url, key), { singleton: true });
+        container.register('SupabaseFactory', () => {
+            const { SupabaseFactory } = require('@/infrastructure/di/SupabaseFactory');
+            return new SupabaseFactory();
+        }, { singleton: true });
+
+        container.register('SupabaseClient', async () => {
+            const factory = await container.resolve<any>('SupabaseFactory');
+            return factory.getAdminClient();
+        }, { singleton: true });
         
         container.register('CatalogRepository', async () => {
             const supabase = await container.resolve<any>('SupabaseClient');

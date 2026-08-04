@@ -1,6 +1,7 @@
 import { logger } from '@infrastructure/telemetry/StructuredLogger';
 import { NextRequest, NextResponse } from 'next/server';
-import { createServiceRoleClient } from '@/lib/supabase/api';
+import { getContainer } from '@/infrastructure/di/Container';
+import { ISupabaseFactory } from '@/infrastructure/di/ISupabaseFactory';
 import { UserRole } from '@/core/domain/auth/UserRole';
 import { z } from 'zod';
 import { rateLimit } from '@/lib/security/rate-limiter';
@@ -71,7 +72,9 @@ export async function POST(request: NextRequest) {
 
         const { name, email, password, isProvider, adminInvitationToken } = validation.data;
 
-        const supabaseAdmin = createServiceRoleClient();
+        const container = await getContainer();
+        const factory = await container.resolve<ISupabaseFactory>('SupabaseFactory');
+        const supabaseAdmin = factory.getAdminClient();
 
         // 🛡️ Layer 5: Enumeration Prevention
         // We check if user exists but return a generic success message
@@ -130,13 +133,7 @@ export async function POST(request: NextRequest) {
 
         // Fallback: If admin creation failed, try standard signUp via public client
         if (!userId) {
-            const DEFAULT_SUPABASE_URL = 'https://bxhlusdpmjldqbsdztyg.supabase.co';
-            const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA';
-            const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.supabase_SUPABASE_URL || DEFAULT_SUPABASE_URL;
-            const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.supabase_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
-
-            const { createClient: createPublicClient } = await import('@supabase/supabase-js');
-            const publicClient = createPublicClient(supabaseUrl, supabaseKey);
+            const publicClient = factory.getPublicClient();
 
             const { data: signUpData, error: signUpError } = await publicClient.auth.signUp({
                 email,
@@ -168,16 +165,16 @@ export async function POST(request: NextRequest) {
                     name,
                     role
                 });
-        } catch (err) {
-            logger.warn('[REGISTER] Non-blocking profile sync failed', err);
+        } catch (err: unknown) {
+            logger.warn('[REGISTER] Non-blocking profile sync failed', { error: err instanceof Error ? err.message : String(err) });
         }
 
         // Create provider profile if needed
         if (role === UserRole.VENDOR) {
             try {
                 await supabaseAdmin.from('provider_profiles').upsert({ user_id: userId });
-            } catch (err) {
-                logger.warn('[REGISTER] Non-blocking provider profile creation failed', err);
+            } catch (err: unknown) {
+                logger.warn('[REGISTER] Non-blocking provider profile creation failed', { error: err instanceof Error ? err.message : String(err) });
             }
         }
 
