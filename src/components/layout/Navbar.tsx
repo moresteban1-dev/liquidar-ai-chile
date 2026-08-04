@@ -16,10 +16,10 @@ export function Navbar() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
     const [userRole, setUserRole] = useState<UserRole>(UserRole.CLIENT);
-    const supabase = createClient();
     const { unreadCount } = useNotifications();
 
     useEffect(() => {
+        const supabase = createClient();
         const checkUser = async () => {
             const { data: { user } } = await supabase.auth.getUser();
             setUser(user);
@@ -38,7 +38,7 @@ export function Navbar() {
             setLoading(false);
         };
         checkUser();
-    }, [supabase, supabase.auth]);
+    }, []);
 
     // Don't show Navbar on dashboard, login, or register pages
     if (

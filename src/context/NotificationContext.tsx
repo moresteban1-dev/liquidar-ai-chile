@@ -13,10 +13,10 @@ const NotificationContext = createContext<NotificationContextType | undefined>(u
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
     const [unreadCount, setUnreadCount] = useState(0);
-    const supabase = createClient();
     const router = useRouter();
 
     useEffect(() => {
+        const supabase = createClient();
         const setupRealtime = async () => {
             const { data: { session } } = await supabase.auth.getSession();
             if (!session?.user) return;
@@ -96,7 +96,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
         };
 
         setupRealtime();
-    }, [supabase, router]);
+    }, [router]);
 
     return (
         <NotificationContext.Provider value={{ unreadCount }}>

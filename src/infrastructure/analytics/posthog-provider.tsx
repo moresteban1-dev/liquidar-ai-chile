@@ -15,9 +15,9 @@ if (typeof window !== 'undefined') {
 }
 
 export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
-    useEffect(() => {
-        // For App Router, we just rely on autocapture or manual triggers mostly
-    }, []);
+    if (!process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+        return <>{children}</>;
+    }
 
     return <PostHogProvider client={posthog}>{children}</PostHogProvider>;
 }
