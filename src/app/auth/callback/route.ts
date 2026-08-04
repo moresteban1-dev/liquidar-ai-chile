@@ -29,9 +29,16 @@ export async function GET(request: NextRequest) {
     try {
         const cookieStore = await cookies();
 
+        const DEFAULT_SUPABASE_URL = 'https://bxhlusdpmjldqbsdztyg.supabase.co';
+        const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA';
+
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.supabase_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+        const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.supabase_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY;
+        const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.supabase_SUPABASE_SERVICE_ROLE_KEY || supabaseKey;
+
         const supabase = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            supabaseUrl,
+            supabaseKey,
             {
                 cookies: {
                     getAll() {
@@ -50,6 +57,7 @@ export async function GET(request: NextRequest) {
         const { data: { session }, error } = await supabase.auth.exchangeCodeForSession(code);
 
         if (error || !session) {
+            console.error('[Auth Callback Error] Code exchange failed:', error);
             return NextResponse.redirect(new URL('/login?error=auth_failed', request.url));
         }
 
@@ -60,7 +68,7 @@ export async function GET(request: NextRequest) {
             .from('profiles')
             .select('role')
             .eq('id', user.id)
-            .single();
+            .maybeSingle();
 
         let role = profile?.role || UserRole.CLIENT;
 
@@ -77,17 +85,21 @@ export async function GET(request: NextRequest) {
                 });
         }
 
-        // 🔄 Sync Role to Auth Metadata
-        const supabaseAdmin = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.SUPABASE_SERVICE_ROLE_KEY!,
-            { cookies: { getAll() { return []; }, setAll() {} } }
-        );
+        // 🔄 Sync Role to Auth Metadata safely
+        try {
+            const supabaseAdmin = createServerClient(
+                supabaseUrl,
+                serviceKey,
+                { cookies: { getAll() { return []; }, setAll() {} } }
+            );
 
-        await supabaseAdmin.auth.admin.updateUserById(user.id, {
-            user_metadata: { role: role },
-            app_metadata: { role: role }
-        });
+            await supabaseAdmin.auth.admin.updateUserById(user.id, {
+                user_metadata: { role: role },
+                app_metadata: { role: role }
+            });
+        } catch (adminErr) {
+            console.warn('[Auth Callback Warning] Admin metadata update skipped:', adminErr);
+        }
 
         // 🛡️ Final Redirection Logic
         // If 'next' was provided, use it (sanitized), otherwise use role-based default
