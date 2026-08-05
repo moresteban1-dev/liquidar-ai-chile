@@ -51,7 +51,7 @@ const parseEnv = () => {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 
       process.env['supabase_SUPABASE_ANON_KEY'] || 
       process.env['supabase_SUPABASE_PUBLISHABLE_KEY'] || 
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMDI2MDAsImV4cCI6MjA1Njc3ODYwMH0.1D-_u16f3M0eZl0FshgK3t_-f7YQ2Gg9Z6c0oY9LwX8',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ4aGx1c2RwbWpsZHFic2R6dHlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAwMzc0NzQsImV4cCI6MjA4NTYxMzQ3NH0.v9MrG2kIDmQ_Kf3NJ-1l2Em99u2NrsOb8_fBh18eIgA',
     SUPABASE_SERVICE_ROLE_KEY: 
       process.env.SUPABASE_SERVICE_ROLE_KEY || 
       process.env['supabase_SUPABASE_SERVICE_ROLE_KEY'] || 
