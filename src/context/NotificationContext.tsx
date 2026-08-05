@@ -16,86 +16,96 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     const router = useRouter();
 
     useEffect(() => {
-        const supabase = createClient();
+        let cleanup: (() => void) | undefined;
+
         const setupRealtime = async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (!session?.user) return;
+            try {
+                const supabase = createClient();
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session?.user) return;
 
-            const userId = session.user.id;
+                const userId = session.user.id;
 
-            // Channel for Order Updates
-            const channel = supabase
-                .channel('realtime:orders')
-                .on(
-                    'postgres_changes',
-                    {
-                        event: 'UPDATE',
-                        schema: 'public',
-                        table: 'orders',
-                        filter: `clientId=eq.${userId}`, // Listen for Client's orders
-                    },
-                    (payload: { new: { id: string, status?: string }; old: { status?: string } }) => {
-                        const newStatus = payload.new.status;
-                        const oldStatus = payload.old.status;
+                // Channel for Order Updates
+                const channel = supabase
+                    .channel('realtime:orders')
+                    .on(
+                        'postgres_changes',
+                        {
+                            event: 'UPDATE',
+                            schema: 'public',
+                            table: 'orders',
+                            filter: `clientId=eq.${userId}`, // Listen for Client's orders
+                        },
+                        (payload: { new: { id: string, status?: string }; old: { status?: string } }) => {
+                            const newStatus = payload.new.status;
+                            const oldStatus = payload.old.status;
 
-                        if (newStatus !== oldStatus) {
-                            toast.info(`Actualización de Orden: ${newStatus}`, {
-                                description: `Tu orden ha cambiado de estado de ${oldStatus} a ${newStatus}`,
+                            if (newStatus !== oldStatus) {
+                                toast.info(`Actualización de Orden: ${newStatus}`, {
+                                    description: `Tu orden ha cambiado de estado de ${oldStatus} a ${newStatus}`,
+                                    action: {
+                                        label: 'Ver',
+                                        onClick: () => router.push(`/client/orders/${payload.new.id}`)
+                                    }
+                                });
+                                setUnreadCount(prev => prev + 1);
+                            }
+                        }
+                    )
+                    .on(
+                        'postgres_changes',
+                        {
+                            event: 'UPDATE',
+                            schema: 'public',
+                            table: 'orders',
+                            filter: `vendorId=eq.${userId}`, // Listen for Vendor's orders
+                        },
+                        (payload: { new: { id: string, status?: string }; old: { status?: string } }) => {
+                            toast.success('¡Nueva asignación o actualización!', {
+                                description: `Revisa tus órdenes asignadas via dashboard.`,
                                 action: {
                                     label: 'Ver',
-                                    onClick: () => router.push(`/client/orders/${payload.new.id}`)
+                                    onClick: () => router.push(`/vendor/orders/${payload.new.id}`)
                                 }
                             });
                             setUnreadCount(prev => prev + 1);
                         }
-                    }
-                )
-                .on(
-                    'postgres_changes',
-                    {
-                        event: 'UPDATE',
-                        schema: 'public',
-                        table: 'orders',
-                        filter: `vendorId=eq.${userId}`, // Listen for Vendor's orders
-                    },
-                    (payload: { new: { id: string, status?: string }; old: { status?: string } }) => {
-                        toast.success('¡Nueva asignación o actualización!', {
-                            description: `Revisa tus órdenes asignadas via dashboard.`,
-                            action: {
-                                label: 'Ver',
-                                onClick: () => router.push(`/vendor/orders/${payload.new.id}`)
-                            }
-                        });
-                        setUnreadCount(prev => prev + 1);
-                    }
-                )
-                .on(
-                    'postgres_changes',
-                    {
-                        event: 'INSERT', // New assignments
-                        schema: 'public',
-                        table: 'orders',
-                        filter: `vendorId=eq.${userId}`,
-                    },
-                    (payload: { new: { id: string, status?: string }; old: { status?: string } }) => {
-                        toast.success('¡Nueva Orden Asignada!', {
-                            description: `Se te ha asignado una nueva orden.`,
-                            action: {
-                                label: 'Ver',
-                                onClick: () => router.push(`/vendor/orders/${payload.new.id}`)
-                            }
-                        });
-                        setUnreadCount(prev => prev + 1);
-                    }
-                )
-                .subscribe();
+                    )
+                    .on(
+                        'postgres_changes',
+                        {
+                            event: 'INSERT', // New assignments
+                            schema: 'public',
+                            table: 'orders',
+                            filter: `vendorId=eq.${userId}`,
+                        },
+                        (payload: { new: { id: string, status?: string }; old: { status?: string } }) => {
+                            toast.success('¡Nueva Orden Asignada!', {
+                                description: `Se te ha asignado una nueva orden.`,
+                                action: {
+                                    label: 'Ver',
+                                    onClick: () => router.push(`/vendor/orders/${payload.new.id}`)
+                                }
+                            });
+                            setUnreadCount(prev => prev + 1);
+                        }
+                    )
+                    .subscribe();
 
-            return () => {
-                supabase.removeChannel(channel);
-            };
+                cleanup = () => {
+                    supabase.removeChannel(channel);
+                };
+            } catch (error) {
+                console.error('Error in NotificationProvider setupRealtime:', error);
+            }
         };
 
         setupRealtime();
+
+        return () => {
+            if (cleanup) cleanup();
+        };
     }, [router]);
 
     return (

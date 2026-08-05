@@ -19,23 +19,27 @@ export function Navbar() {
     const { unreadCount } = useNotifications();
 
     useEffect(() => {
-        const supabase = createClient();
         const checkUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser();
-            setUser(user);
+            try {
+                const supabase = createClient();
+                const { data: { user } } = await supabase.auth.getUser();
+                setUser(user);
 
-            if (user) {
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', user.id)
-                    .single();
+                if (user) {
+                    const { data: profile } = await supabase
+                        .from('profiles')
+                        .select('role')
+                        .eq('id', user.id)
+                        .single();
 
-                const role = normalizeRole(profile?.role);
-                setUserRole(role);
+                    const role = normalizeRole(profile?.role);
+                    setUserRole(role);
+                }
+            } catch (error) {
+                console.error('Error initializing Supabase client or fetching user in Navbar:', error);
+            } finally {
+                setLoading(false);
             }
-
-            setLoading(false);
         };
         checkUser();
     }, []);
